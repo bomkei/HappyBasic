@@ -139,7 +139,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="expr.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="tokenize.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
