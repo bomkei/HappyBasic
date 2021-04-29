@@ -73,7 +73,7 @@ int main()
 
   auto node = Parse(std::move(tokens));
 
-
+  RunStmt(node);
 
 }
 

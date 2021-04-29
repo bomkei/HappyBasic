@@ -134,6 +134,44 @@ struct Object
     return *this;
   }
 
+  std::string to_string() const
+  {
+    switch( type )
+    {
+      case Int:
+        return std::to_string(v_int);
+
+      case Float:
+        return std::to_string(v_float);
+
+      case Char:
+        return std::string(1, v_char);
+
+      case Array:
+      {
+        std::string s = "";
+
+        if( is_string() )
+        {
+          for( auto&& c : list )
+            s += c.v_char;
+
+          return s;
+        }
+
+        for( int i = 0; i < list.size(); i++ )
+        {
+          s += list[i].to_string();
+          if( i < list.size() - 1 ) s += ", ";
+        }
+
+        return  "[" + s + "]";
+      }
+    }
+
+    return "";
+  }
+
   static void Clear(Object& obj)
   {
     obj.type = Int;
@@ -292,6 +330,7 @@ std::vector<Token> Tokenize(std::string&& source);
 
 Node* Parse(std::vector<Token>&& tokens);
 
+Object Callfunc(Node* node);
 Object RunExpr(Node* node);
 Object RunStmt(Node* node);
 

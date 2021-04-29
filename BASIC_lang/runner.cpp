@@ -2,7 +2,21 @@
 
 Object Callfunc(Node *node)
 {
+  auto const& name = node->tok.str;
+  auto const& args = node->list;
+  
+  if( name == "print" )
+  {
+    for( auto&& i : args )
+    {
+      std::cout << RunExpr(i).to_string();
+    }
 
+    std::cout << '\n';
+    return { };
+  }
+
+  return { };
 }
 
 Object RunExpr(Node* node)
@@ -23,7 +37,29 @@ Object RunExpr(Node* node)
 
     default:
     {
+      auto&& lhs = std::move(RunExpr(node->lhs));
+      auto&& rhs = std::move(RunExpr(node->rhs));
 
+      switch( node->type )
+      {
+        case Node::Add:
+          lhs.v_int += rhs.v_int;
+          break;
+
+        case Node::Sub:
+          lhs.v_int -= rhs.v_int;
+          break;
+
+        case Node::Mul:
+          lhs.v_int *= rhs.v_int;
+          break;
+
+        case Node::Div:
+          lhs.v_int /= rhs.v_int;
+          break;
+      }
+
+      return lhs;
     }
   }
 
