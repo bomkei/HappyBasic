@@ -108,11 +108,13 @@ std::vector<Token> Tokenize(std::string&& src)
       tok.type = Token::String;
 
       next();
+      tok.str += '"';
 
       while( check() && (c = peek()) != '"' )
         tok.str += c, next();
 
       next();
+      tok.str += '"';
     }
     else
     {

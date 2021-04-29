@@ -28,8 +28,8 @@ auto readfile(std::string const& path)
   while( std::getline(ifs, line) )
   {
     // 文字が無ければスキップ
-    if( is_empty(line) )
-      continue;
+    //if( is_empty(line) )
+    //  continue;
 
     // 右端の空白以下の文字を削除
     while( line.length() && line[line.length() - 1] <= ' ' )

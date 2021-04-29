@@ -88,6 +88,23 @@ Node* Primary()
     return x;
   }
 
+  if( curtok().type == Token::String )
+  {
+    auto x = new Node;
+    x->tok.obj.type = Object::Array;
+
+    for( int i = 1; i < curtok().str.length() - 1; i++ )
+    {
+      Object ch;
+      ch.type = Object::Char;
+      ch.v_char = curtok().str[i];
+      x->tok.obj.list.emplace_back(ch);
+    }
+
+    next();
+    return x;
+  }
+
   if( curtok().type == Token::Ident )
   {
     auto x = new Node(Node::Variable);
@@ -156,19 +173,20 @@ Node* Stmt()
 {
   if( consume("if") )
   {
-    auto cond = Expr();
-    expect("then");
-    expect("\n");
-
     auto node = new Node(Node::If);
     node->tok = *csmtok;
 
+    node->lhs = Expr();
+    expect("then");
+    expect("\n");
+
     auto closed = false;
 
-    while( 1 )
+    while( check() )
     {
       if( consume("endif") )
       {
+        expect("\n");
         closed = true;
         break;
       }
@@ -224,6 +242,16 @@ Node* Stmt()
 Node* Parse(std::vector<Token>&& tokens)
 {
   g_tokens = std::move(tokens);
+
+  for( int i = 0; i < g_tokens.size() - 1; )
+  {
+    if( g_tokens[i].str == "\n" && g_tokens[i + 1].str == "\n" )
+    {
+      g_tokens.erase(g_tokens.begin() + i);
+    }
+    else
+      i++;
+  }
 
   auto node = new Node(Node::Block);
 
