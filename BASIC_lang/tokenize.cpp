@@ -91,6 +91,7 @@ std::vector<Token> Tokenize(std::string&& src)
     auto pos = srcpos;
 
     Token tok;
+    tok.srcpos = pos;
 
     if( isdigit(c) )
     {
@@ -135,7 +136,7 @@ std::vector<Token> Tokenize(std::string&& src)
 
       if( hit == false )
       {
-        Error(pos, "unknown token");
+        tok.Error("unknown token");
       }
     }
 
