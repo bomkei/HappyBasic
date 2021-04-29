@@ -273,7 +273,7 @@ Node* Stmt()
   //
   // ‘ã“üŽ®‚Å‚È‚¯‚ê‚ÎAŠÖ”ŒÄ‚Ño‚µ
   
-  auto node = new Node(Node::Callfunc);
+  auto node = new Node(Node::Instruction);
   node->tok = curtok();
 
   next();

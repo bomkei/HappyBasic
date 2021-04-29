@@ -314,6 +314,7 @@ struct Node
     
 
     Immidiate,
+    Instruction,
     Callfunc,
     Variable
   };

@@ -5,6 +5,38 @@ Object Callfunc(Node *node)
   auto const& name = node->tok.str;
   auto const& args = node->list;
   
+  Object ret;
+
+  if( name == "range" )
+  {
+    ret.type = Object::Array;
+
+    if( args.size() != 1 )
+      node->tok.Error("illegal call function");
+
+    auto max = RunExpr(args[0]);
+
+    if( max.type != Object::Int )
+      node->tok.Error("parameter is must be a integer");
+
+    for( int i = 0; i < max.v_int; i++ )
+    {
+      Object x;
+      x.v_int = i;
+      ret.list.emplace_back(x);
+    }
+
+    return ret;
+  }
+
+  node->tok.Error("undefined function");
+}
+
+void Instruction(Node* node)
+{
+  auto const& name = node->tok.str;
+  auto const& args = node->list;
+
   if( name == "print" )
   {
     for( auto&& i : args )
@@ -13,10 +45,12 @@ Object Callfunc(Node *node)
     }
 
     std::cout << '\n';
-    return { };
+    return;
   }
 
-  node->tok.Error("undefined function");
+
+
+  node->tok.Error("undefined instruction");
 }
 
 Object RunExpr(Node* node)
@@ -87,6 +121,10 @@ Object RunStmt(Node* node)
       for( auto&& x : node->list )
         RunStmt(x);
 
+      break;
+
+    case Node::Instruction:
+      Instruction(node);
       break;
 
     case Node::If:
