@@ -86,8 +86,10 @@ struct Object
   char v_char;
   std::vector<Object> list;
 
+  Object* var_ptr;
+
   Object(Type type = Int)
-    :type(type), v_int(0), v_float(0), v_char(0)
+    :type(type), v_int(0), v_float(0), v_char(0), var_ptr(nullptr)
   {
 
   }
@@ -111,6 +113,7 @@ struct Object
 
     name = obj.name;
     list = obj.list;
+    var_ptr = obj.var_ptr;
 
     return *this;
   }
@@ -124,6 +127,7 @@ struct Object
 
     name = std::move(obj.name);
     list = std::move(obj.list);
+    var_ptr = obj.var_ptr;
 
     Object::Clear(obj);
 
