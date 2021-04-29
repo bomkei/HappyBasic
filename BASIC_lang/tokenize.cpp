@@ -143,6 +143,7 @@ std::vector<Token> Tokenize(std::string&& src)
     else if( c == '"' )
     {
       tok.type = Token::String;
+      tok.obj.type = Object::Array;
 
       next();
       tok.str += '"';

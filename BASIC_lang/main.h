@@ -194,7 +194,15 @@ struct Object
 
   bool eval() const
   {
+    switch( type )
+    {
+      case Int: return v_int != 0;
+      case Float: return v_float != 0;
+      case Char: return v_char != 0;
+      case Array: return list.size() != 0;
+    }
 
+    return false;
   }
 };
 
