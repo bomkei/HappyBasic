@@ -124,12 +124,13 @@ Object RunStmt(Node* node)
   {
     case Node::Assign:
     {
-      auto& var = g_variables[node->lhs->varIndex];
-      var.var_ptr = &var;
+      auto var = RunExpr(node->lhs);
 
-      var = RunExpr(node->rhs);
+      if( var.var_ptr == nullptr )
+        node->tok.Error("cannot assignment to not a lvalue object");
 
-      return var;
+      *var.var_ptr = RunExpr(node->rhs);
+      break;
     }
 
     case Node::Block:
