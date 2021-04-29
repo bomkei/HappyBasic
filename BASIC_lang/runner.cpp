@@ -69,6 +69,17 @@ Object RunExpr(Node* node)
     case Node::Variable:
       return g_variables[node->varIndex];
 
+    case Node::Array:
+    {
+      Object obj;
+      obj.type = Object::Array;
+
+      for( auto&& i : node->list )
+        obj.list.emplace_back(RunExpr(i));
+
+      return obj;
+    }
+
     default:
     {
       auto&& lhs = std::move(RunExpr(node->lhs));

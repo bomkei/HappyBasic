@@ -87,6 +87,22 @@ Node* Primary()
     return x;
   }
 
+  if( consume("[") )
+  {
+    auto x = new Node(Node::Array);
+
+    if( !consume("]") )
+    {
+      do
+      {
+        x->list.emplace_back(Expr());
+      } while( consume(",") );
+      expect("]");
+    }
+
+    return x;
+  }
+
   switch( curtok().type )
   {
     case Token::Number:

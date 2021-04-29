@@ -313,10 +313,11 @@ struct Node
     If,
     For,
 
+    Array,
     Immidiate,
+    Variable,
     Instruction,
     Callfunc,
-    Variable
   };
 
   Type type;
