@@ -1,5 +1,22 @@
 #include "main.h"
 
+auto& string_replace(std::string& str, std::string const& find, std::string const& replace)
+{
+  for( int i = 0; i < str.length() - find.length(); )
+  {
+    if( str.substr(i, find.length()) == find )
+    {
+      str.erase(i, find.length());
+      str.insert(i, replace);
+      i += replace.length();
+    }
+    else
+      i++;
+  }
+
+  return str;
+}
+
 auto readfile(std::string const& path)
 {
   static auto is_empty = [](std::string const& str)
@@ -21,19 +38,21 @@ auto readfile(std::string const& path)
 
   while( std::getline(ifs, line) )
   {
-    //if( is_empty(line) )
-    //  continue;
+    if( is_empty(line) )
+      continue;
 
-    //while( *line.end() <= ' ' )
-    //  line.pop_back();
-    //
-    //while( *line.begin() <= ' ' )
-    //  line.erase(line.begin());
+    while( line.length() && line[line.length() - 1] <= ' ' )
+      line.pop_back();
+
+    while( line.length() && line[0] <= ' ' )
+      line.erase(line.begin());
 
     ret += line + '\n';
   }
 
-  if( ret.empty() )
+  string_replace(ret, "\\\n", "");
+
+  if( is_empty(ret) )
   {
     std::cout << "empty source file";
     exit(1);
@@ -49,21 +68,18 @@ void RunProgram()
 
 int main()
 {
-  alart;
-
-  auto&& source = std::move(readfile("C:/users/mrzkr/desktop/test.txt"));
+  auto source = std::move(readfile("C:/users/mrzkr/desktop/test.txt"));
   std::cout << source << '\n';
-
-  alart;
 
   auto tokens = std::move(Tokenize(std::move(source)));
 
   for( auto&& tok : tokens )
   {
-    std::cout << tok.str << '\n';
+    std::cout << ":" << tok.str << '\n';
   }
 
 
 
-  alart;
 }
+
+

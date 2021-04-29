@@ -5,10 +5,9 @@
 #include <string>
 #include <vector>
   
-inline auto __FILE__Ex()
+inline auto GetFileName(const char* s)
 {
-  auto s = __FILE__;
-  auto i = strlen(s) - 1;
+  auto i = strlen(s);
 
   while( s[i] != '\\' )
     i--;
@@ -16,7 +15,7 @@ inline auto __FILE__Ex()
   return s + i + 1;
 }
 
-#define  alart fprintf(stderr,"\t%s:%d\n",__FILE__Ex(),__LINE__)
+#define  alart fprintf(stderr,"\t%s:%d\n",GetFileName(__FILE__),__LINE__)
 
 typedef int8_t i8;
 typedef int16_t i16;

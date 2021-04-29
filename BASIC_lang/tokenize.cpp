@@ -7,21 +7,59 @@ namespace
 
   auto op_tokens =
   {
+    "...",
+    "&=",
+    "|=",
+    "^=",
+    "+=",
+    "-=",
+    "*=",
+    "/=",
+    "%=",
+    ">>",
+    "<<",
+    "==",
+    "!=",
+    ">=",
+    "<=",
+    "&&",
+    "||",
+    "!",
+    "~",
+    "&",
+    "|",
+    ">",
+    "<",
+    "=",
     "+",
     "-",
     "*",
     "/",
+    "%",
+    "(",
+    ")",
+    "[",
+    "]",
+    "{",
+    "}",
+    ",",
+    ".",
+    ";",
+    ":",
+    "\n",
   };
 }
 
 void Error(i64 errpos, std::string msg)
 {
-  
+  std::cout << errpos << ": " << msg << '\n';
+  exit(1);
 }
 
 std::vector<Token> Tokenize(std::string&& src)
 {
   source = std::move(src);
+  srcpos = 0;
 
   std::vector<Token> tokens;
 
@@ -42,8 +80,13 @@ std::vector<Token> Tokenize(std::string&& src)
 
   static auto pass_space = []
   {
-    while( peek() <= ' ' )
+    while( peek() != '\n' && peek() <= ' ' )
       next();
+  };
+
+  static auto isident = [](char c)
+  {
+    return isalnum(c) || c == '_';
   };
 
   pass_space();
@@ -55,19 +98,24 @@ std::vector<Token> Tokenize(std::string&& src)
 
     Token tok;
 
-    alart;
-
     if( isdigit(c) )
     {
-      alart;
+      tok.type = Token::Number;
+
       while( check() && isdigit(c = peek()) )
-      {
-        tok.str += c;
-        next();
-      }
+        tok.str += c, next();
+    }
+    else if( isident(c) )
+    {
+      tok.type = Token::Ident;
+
+      while( check() && isident(c = peek()) )
+        tok.str += c, next();
     }
     else if( c == '"' )
     {
+      tok.type = Token::String;
+
       next();
 
       while( check() && (c = peek()) != '"' )
@@ -78,6 +126,7 @@ std::vector<Token> Tokenize(std::string&& src)
     else
     {
       auto hit = false;
+      tok.type = Token::Operator;
 
       for( std::string str : op_tokens )
       {
