@@ -277,12 +277,7 @@ Node* Stmt()
   if( consume("for") )
   {
     auto tk = csmtok;
-    auto var = Primary();
-
-    if( var->type != Node::Variable )
-    {
-      tk->Error("expect variable after this token");
-    }
+    auto var = Expr();
 
     expect("in");
     auto list = Expr();
