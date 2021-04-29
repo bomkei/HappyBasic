@@ -222,6 +222,10 @@ struct Node
 
   i64 varIndex;
   std::vector<Node*> list;
+
+  Node(Type type = Immidiate);
+  Node(Type type, Node* lhs, Node* rhs);
+
 };
 
 
