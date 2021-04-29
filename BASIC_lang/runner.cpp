@@ -67,7 +67,11 @@ Object RunExpr(Node* node)
       return Callfunc(node);
 
     case Node::Variable:
-      return g_variables[node->varIndex];
+    {
+      auto &var = g_variables[node->varIndex];
+      var.var_ptr = &var;
+      return var;
+    }
 
     case Node::Array:
     {
@@ -154,14 +158,18 @@ Object RunStmt(Node* node)
 
     case Node::For:
     {
+      auto it = RunExpr(node->lhs);
       auto arr = RunExpr(node->rhs);
+
+      if( it.var_ptr == nullptr )
+        node->lhs->tok.Error("cannot use not a lvalue for iterator");
 
       if( arr.type != Object::Array )
         node->rhs->tok.Error("cannot iterate not array object");
 
       for( auto&& i : arr.list )
       {
-        g_variables[node->lhs->varIndex] = i;
+        *it.var_ptr = i;
         RunStmt(node->list[0]);
       }
 
