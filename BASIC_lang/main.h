@@ -197,6 +197,18 @@ struct Token
 
     return *this;
   }
+  
+  [[noreturn]]
+  void Error(std::string const& msg)
+  {
+    std::cout
+      << srcpos
+      << ": "
+      << msg
+      << '\n';
+
+    exit(1);
+  }
 };
 
 

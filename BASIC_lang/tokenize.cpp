@@ -50,12 +50,6 @@ namespace
   };
 }
 
-void Error(i64 errpos, std::string msg)
-{
-  std::cout << errpos << ": " << msg << '\n';
-  exit(1);
-}
-
 std::vector<Token> Tokenize(std::string&& src)
 {
   source = std::move(src);
