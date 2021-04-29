@@ -47,6 +47,12 @@ Object RunStmt(Node* node)
       return var;
     }
 
+    case Node::Block:
+      for( auto&& x : node->list )
+        RunStmt(x);
+
+      break;
+
     case Node::If:
     {
       if( RunExpr(node->lhs).eval() )
