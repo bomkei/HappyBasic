@@ -89,6 +89,24 @@ struct Object
 
   Object(Object&& obj)
   {
+    *this = std::move(obj);
+  }
+
+  Object& operator = (Object const& obj)
+  {
+    type = obj.type;
+    v_int = obj.v_int;
+    v_float = obj.v_float;
+    v_char = obj.v_char;
+
+    name = obj.name;
+    list = obj.list;
+
+    return *this;
+  }
+  
+  Object& operator = (Object&& obj)
+  {
     type = obj.type;
     v_int = obj.v_int;
     v_float = obj.v_float;
@@ -98,15 +116,7 @@ struct Object
     list = std::move(obj.list);
 
     Object::Clear(obj);
-  }
 
-  Object& operator = (Object const& obj)
-  {
-    auto na = this->name;
-
-    *this = obj;
-    
-    this->name = na;
     return *this;
   }
 
@@ -166,8 +176,7 @@ struct Token
 
   Token(Token&& tok)
   {
-    type = tok.type;
-
+    *this = std::move(tok);
   }
 
   Token& operator = (Token const& tok)
@@ -175,6 +184,15 @@ struct Token
     type = tok.type;
     str = tok.str;
     obj = tok.obj;
+
+    return *this;
+  }
+
+  Token& operator = (Token&& tok)
+  {
+    type = tok.type;
+    str = std::move(tok.str);
+    obj = std::move(tok.obj);
 
     return *this;
   }
@@ -204,20 +222,6 @@ struct Node
 
   i64 varIndex;
   std::vector<Node*> list;
-
-  Node(Type type = Immidiate)
-    :type(type), lhs(nullptr), rhs(nullptr), varIndex(0)
-  {
-
-  }
-
-  Node(Type type, Node* lhs, Node* rhs, Token const& tok)
-    :Node(type)
-  {
-    this->lhs = lhs;
-    this->rhs = rhs;
-    this->tok = tok;
-  }
 };
 
 

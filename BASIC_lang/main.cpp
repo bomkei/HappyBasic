@@ -60,14 +60,14 @@ auto readfile(std::string const& path)
 int main()
 {
   auto source = std::move(readfile("C:/users/mrzkr/desktop/test.txt"));
-  std::cout << source << '\n';
+  //std::cout << source << '\n';
 
   auto tokens = std::move(Tokenize(std::move(source)));
 
-  for( auto&& tok : tokens )
-  {
-    std::cout << ":" << tok.str << '\n';
-  }
+  //for( auto&& tok : tokens )
+  //{
+  //  std::cout << ":" << tok.str << '\n';
+  //}
 
 
 
