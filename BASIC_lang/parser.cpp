@@ -275,6 +275,7 @@ Node* Stmt()
     auto node = new Node(Node::For);
     bool closed = false;
 
+    node->tok = *tk;
     node->lhs = var;
     node->rhs = list;
     node->list.emplace_back(new Node(Node::Block));
