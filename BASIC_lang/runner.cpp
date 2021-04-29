@@ -157,7 +157,7 @@ Object RunStmt(Node* node)
       auto arr = RunExpr(node->rhs);
 
       if( arr.type != Object::Array )
-        node->rhs->tok.Error("cannot iterate not an array object");
+        node->rhs->tok.Error("cannot iterate not array object");
 
       for( auto&& i : arr.list )
       {
