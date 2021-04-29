@@ -57,11 +57,11 @@ Object RunStmt(Node* node)
     {
       if( RunExpr(node->lhs).eval() )
       {
-
+        RunStmt(node->rhs);
       }
       else
       {
-
+        RunStmt(node->list[0]);
       }
 
       break;
