@@ -104,6 +104,24 @@ Node* Primary()
       auto x = new Node(Node::Variable);
       x->tok = curtok();
 
+      next();
+
+      if( consume("(") )
+      {
+        x->type = Node::Callfunc;
+
+        if( !consume(")") )
+        {
+          do
+          {
+            x->list.emplace_back(Expr());
+          } while( consume(",") );
+          expect(")");
+        }
+
+        return x;
+      }
+
       auto find = find_var(x->tok.str);
 
       if( find == -1 )
@@ -117,7 +135,6 @@ Node* Primary()
 
       x->varIndex = find;
 
-      next();
       return x;
     }
   }
