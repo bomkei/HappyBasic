@@ -37,7 +37,10 @@ namespace
   {
     if( consume(str) == false )
     {
-
+      if( str == "\n" )
+        curtok().Error("expect new line");
+      else
+        curtok().Error("expect '" + str + "'");
     }
   }
 }
