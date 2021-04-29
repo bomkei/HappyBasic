@@ -53,6 +53,11 @@ typedef int16_t i16;
 typedef int32_t i32;
 typedef int64_t i64;
 
+
+//
+// オブジェクト
+// 即値や変数、文字列などとして使用する
+// さらに、動的な型変更もこれにより実現されている
 struct Object
 {
   enum Type
@@ -99,6 +104,9 @@ struct Object
   }
 };
 
+
+//
+// トークン
 struct Token
 {
   enum Type
