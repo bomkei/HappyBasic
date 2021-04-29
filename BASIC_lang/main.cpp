@@ -45,7 +45,9 @@ auto readfile(std::string const& path)
 
 
   // 行をつなげる記号
-  string_replace<std::string>(ret, "\\\n", "");
+  //  TODO: 行番号がずれる問題
+  //string_replace<std::string>(ret, "\\\n", "");
+
 
   // ソースが空
   if( is_empty(ret) )
