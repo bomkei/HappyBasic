@@ -11,7 +11,8 @@
 // 
 //  注意   第一引数に渡した文字列は変更されます
 // ----------------------------------------------- //
-auto& string_replace(std::string& str, std::string const& find, std::string const& replace)
+template <class STR>
+auto& string_replace(STR& str, STR find, STR replace)
 {
   for( int i = 0; i < str.length() - find.length(); )
   {
@@ -74,7 +75,7 @@ auto readfile(std::string const& path)
 
 
   // 行をつなげる記号
-  string_replace(ret, "\\\n", "");
+  string_replace<std::string>(ret, "\\\n", "");
 
   // ソースが空
   if( is_empty(ret) )
