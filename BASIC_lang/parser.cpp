@@ -79,52 +79,39 @@ Node::Node(Node::Type type, Node* lhs, Node* rhs)
 
 Node* Primary()
 {
-  if( curtok().type == Token::Number )
+  switch( curtok().type )
   {
-    auto x = new Node;
-    x->tok = curtok();
-
-    next();
-    return x;
-  }
-
-  if( curtok().type == Token::String )
-  {
-    auto x = new Node;
-    x->tok.obj.type = Object::Array;
-
-    for( int i = 1; i < curtok().str.length() - 1; i++ )
+    case Token::Number:
+    case Token::String:
     {
-      Object ch;
-      ch.type = Object::Char;
-      ch.v_char = curtok().str[i];
-      x->tok.obj.list.emplace_back(ch);
+      auto x = new Node;
+      x->tok = curtok();
+
+      next();
+      return x;
     }
 
-    next();
-    return x;
-  }
-
-  if( curtok().type == Token::Ident )
-  {
-    auto x = new Node(Node::Variable);
-    x->tok = curtok();
-
-    auto find = find_var(x->tok.str);
-
-    if( find == -1 )
+    case Token::Ident:
     {
-      find = g_variables.size();
+      auto x = new Node(Node::Variable);
+      x->tok = curtok();
 
-      Object obj;
-      obj.name = x->tok.str;
-      g_variables.emplace_back(obj);
+      auto find = find_var(x->tok.str);
+
+      if( find == -1 )
+      {
+        find = g_variables.size();
+
+        Object obj;
+        obj.name = x->tok.str;
+        g_variables.emplace_back(obj);
+      }
+
+      x->varIndex = find;
+
+      next();
+      return x;
     }
-
-    x->varIndex = find;
-
-    next();
-    return x;
   }
 
   curtok().Error("syntax error");
