@@ -16,7 +16,7 @@ Object Callfunc(Node *node)
     return { };
   }
 
-  return { };
+  node->tok.Error("undefined function");
 }
 
 Object RunExpr(Node* node)
