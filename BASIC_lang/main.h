@@ -311,7 +311,7 @@ struct Node
 
     Block,
     If,
-    
+    For,
 
     Immidiate,
     Instruction,

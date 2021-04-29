@@ -141,6 +141,22 @@ Object RunStmt(Node* node)
       break;
     }
 
+    case Node::For:
+    {
+      auto arr = RunExpr(node->rhs);
+
+      if( arr.type != Object::Array )
+        node->tok.Error("iterator is must be a array");
+
+      for( auto&& i : arr.list )
+      {
+        g_variables[node->lhs->varIndex] = i;
+        RunStmt(node->list[0]);
+      }
+
+      break;
+    }
+
     default:
       return RunExpr(node);
   }

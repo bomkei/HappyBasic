@@ -183,6 +183,8 @@ Node* Expr()
 
 Node* Stmt()
 {
+  //
+  // if
   if( consume("if") )
   {
     auto tk = csmtok;
@@ -250,6 +252,47 @@ Node* Stmt()
     node->rhs = trueN;
     node->list.emplace_back(elseN);
 
+
+    return node;
+  }
+
+  //
+  // for
+  if( consume("for") )
+  {
+    auto tk = csmtok;
+    auto var = Primary();
+
+    if( var->type != Node::Variable )
+    {
+      tk->Error("expect variable after this token");
+    }
+
+    expect("in");
+    auto list = Expr();
+    expect("\n");
+
+    auto node = new Node(Node::For);
+    bool closed = false;
+
+    node->lhs = var;
+    node->rhs = list;
+    node->list.emplace_back(new Node(Node::Block));
+
+    while( check() )
+    {
+      if( consume("next") )
+      {
+        closed = true;
+        expect("\n");
+        break;
+      }
+
+      node->list[0]->list.emplace_back(Stmt());
+    }
+
+    if( closed == false )
+      tk->Error("not closed");
 
     return node;
   }
