@@ -4,6 +4,24 @@
 #include <fstream>
 #include <string>
 #include <vector>
+  
+inline auto __FILE__Ex()
+{
+  auto s = __FILE__;
+  auto i = strlen(s) - 1;
+
+  while( s[i] != '\\' )
+    i--;
+
+  return s + i + 1;
+}
+
+#define  alart fprintf(stderr,"\t%s:%d\n",__FILE__Ex(),__LINE__)
+
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
 
 struct Object
 {
@@ -70,7 +88,7 @@ struct Token
 
 
 
-Object Expr(std::string const& str);
+Object Expr();
 
-std::vector<Token> Tokenize(std::string& source);
+std::vector<Token> Tokenize(std::string&& source);
 

@@ -1,43 +1,103 @@
 #include "main.h"
 
-std::vector<Token> Tokenize(std::string& source)
+namespace
 {
-  static size_t pos = 0;
+  std::string source;
+  size_t srcpos;
 
-  static auto peek = [&]
+  auto op_tokens =
   {
-    return source[pos];
+    "+",
+    "-",
+    "*",
+    "/",
+  };
+}
+
+void Error(i64 errpos, std::string msg)
+{
+  
+}
+
+std::vector<Token> Tokenize(std::string&& src)
+{
+  source = std::move(src);
+
+  std::vector<Token> tokens;
+
+  static auto peek = []
+  {
+    return source[srcpos];
   };
 
-  static auto check = [&]
+  static auto check = []
   {
-    return pos < source.length();
+    return srcpos < source.length();
   };
 
-  static auto next = [&](int n = 1)
+  static auto next = [](int n = 1)
   {
-    pos += n;
+    srcpos += n;
   };
 
-  static auto pass_space = [&]
+  static auto pass_space = []
   {
     while( peek() <= ' ' )
       next();
   };
-
-  std::vector<Token> tokens;
-  Token tok;
 
   pass_space();
 
   while( check() )
   {
     auto c = peek();
+    auto pos = srcpos;
+
+    Token tok;
+
+    alart;
 
     if( isdigit(c) )
     {
-
+      alart;
+      while( check() && isdigit(c = peek()) )
+      {
+        tok.str += c;
+        next();
+      }
     }
+    else if( c == '"' )
+    {
+      next();
+
+      while( check() && (c = peek()) != '"' )
+        tok.str += c, next();
+
+      next();
+    }
+    else
+    {
+      auto hit = false;
+
+      for( std::string str : op_tokens )
+      {
+        if( srcpos + str.length() <= source.length() && source.substr(srcpos, str.length()) == str )
+        {
+          next(str.length());
+          hit = true;
+          tok.str = str;
+          break;
+        }
+      }
+
+      if( hit == false )
+      {
+        Error(pos, "unknown token");
+      }
+    }
+
+    tokens.emplace_back(tok);
+    pass_space();
   }
 
   return tokens;
