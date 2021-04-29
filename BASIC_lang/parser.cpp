@@ -160,31 +160,71 @@ Node* Stmt()
 {
   if( consume("if") )
   {
-    auto node = new Node(Node::If);
-    node->tok = *csmtok;
+    auto tk = csmtok;
 
-    node->lhs = Expr();
+    auto cond = Expr();
     expect("then");
     expect("\n");
 
-    auto closed = false;
+    std::vector<Node*> true_block;
+
+    bool have_else = false;
+    bool closed = false;
+
+    Node* elseN = nullptr;
 
     while( check() )
     {
       if( consume("endif") )
       {
-        expect("\n");
         closed = true;
+        expect("\n");
+        break;
+      }
+      else if( consume("else") )
+      {
+        if( curtok().str == "if" )
+        {
+          elseN = Stmt();
+          closed = true;
+        }
+        else
+        {
+          elseN = new Node(Node::Block);
+          expect("\n");
+
+          while( check() )
+          {
+            if( consume("endif") )
+            {
+              closed = true;
+              expect("\n");
+              break;
+            }
+
+            elseN->list.emplace_back(Stmt());
+          }
+        }
+
         break;
       }
 
-      node->list.emplace_back(Stmt());
+      true_block.emplace_back(Stmt());
     }
 
     if( closed == false )
     {
-      node->tok.Error("not closed with 'endif'");
+      tk->Error("not closed");
     }
+
+    auto trueN = new Node(Node::Block);
+    trueN->list = std::move(true_block);
+
+    auto node = new Node(Node::If);
+    node->lhs = cond;
+    node->rhs = trueN;
+    node->list.emplace_back(elseN);
+
 
     return node;
   }
