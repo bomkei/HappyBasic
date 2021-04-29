@@ -1,35 +1,5 @@
 #include "main.h"
 
-// ----------------------------------------------- //
-//  文字列置き換え
-// 
-//  str       = 置き換えを実行する文字列
-//  find      = 検索する文字列
-//  replace   = 新しく置き換える文字列
-// 
-//  戻り      = すべての find が replace として置き換えられた文字列
-// 
-//  注意   第一引数に渡した文字列は変更されます
-// ----------------------------------------------- //
-template <class STR>
-auto& string_replace(STR& str, STR find, STR replace)
-{
-  for( int i = 0; i < str.length() - find.length(); )
-  {
-    // find と一致したら
-    if( str.substr(i, find.length()) == find )
-    {
-      str.erase(i, find.length());  // 元の文字列を削除
-      str.insert(i, replace);       // 新しい文字列を挿入
-      i += replace.length();        // 操作位置を、挿入した文字列の長さの分進める
-    }
-    else
-      i++;
-  }
-
-  return str;
-}
-
 
 // ----------------------------------------------- //
 //  ファイルの中身をソースコードとして読み取る
