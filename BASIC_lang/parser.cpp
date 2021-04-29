@@ -77,8 +77,16 @@ Node::Node(Node::Type type, Node* lhs, Node* rhs)
 }
 
 
+Node* Expr();
 Node* Primary()
 {
+  if( consume("(") )
+  {
+    auto x = Expr();
+    expect(")");
+    return x;
+  }
+
   switch( curtok().type )
   {
     case Token::Number:
