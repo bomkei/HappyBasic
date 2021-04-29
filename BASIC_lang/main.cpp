@@ -19,7 +19,7 @@ auto& string_replace(std::string& str, std::string const& find, std::string cons
     if( str.substr(i, find.length()) == find )
     {
       str.erase(i, find.length());  // 元の文字列を削除
-      str.insert(i, replace);       // 置き換えする文字列を挿入
+      str.insert(i, replace);       // 新しい文字列を挿入
       i += replace.length();        // 操作位置を、挿入した文字列の長さの分進める
     }
     else
