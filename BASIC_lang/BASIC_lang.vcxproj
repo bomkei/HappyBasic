@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="expr.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="parser.cpp" />
     <ClCompile Include="tokenize.cpp" />
   </ItemGroup>
   <ItemGroup>

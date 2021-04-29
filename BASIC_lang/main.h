@@ -76,6 +76,30 @@ struct Object
   char v_char;
   std::vector<Object> list;
 
+  Object(Type type = Int)
+    :type(type), v_int(0), v_float(0), v_char(0)
+  {
+
+  }
+
+  Object(Object const& obj)
+  {
+    *this = obj;
+  }
+
+  Object(Object&& obj)
+  {
+    type = obj.type;
+    v_int = obj.v_int;
+    v_float = obj.v_float;
+    v_char = obj.v_char;
+
+    name = std::move(obj.name);
+    list = std::move(obj.list);
+
+    Object::Clear(obj);
+  }
+
   Object& operator = (Object const& obj)
   {
     auto na = this->name;
@@ -84,6 +108,14 @@ struct Object
     
     this->name = na;
     return *this;
+  }
+
+  static void Clear(Object& obj)
+  {
+    obj.type = Int;
+    obj.v_int = obj.v_float = obj.v_char = 0;
+    obj.list.clear();
+    obj.name.clear();
   }
 
   bool is_string() const
@@ -117,13 +149,76 @@ struct Token
     Operator
   };
 
-  Type type;
+  Type type = Number;
   std::string str;
 
   Object obj;
   
+  Token()
+  {
+
+  }
+
+  Token(Token const& tok)
+  {
+    *this = tok;
+  }
+
+  Token(Token&& tok)
+  {
+    type = tok.type;
+
+  }
+
+  Token& operator = (Token const& tok)
+  {
+    type = tok.type;
+    str = tok.str;
+    obj = tok.obj;
+
+    return *this;
+  }
 };
 
+
+//
+// ÉmÅ[Éh
+// ç\ï∂ñÿÇé¿åªÇ∑ÇÈ
+struct Node
+{
+  enum Type
+  {
+    Add,
+    Sub,
+    Mul,
+    Div,
+
+    Immidiate,
+    Callfunc
+  };
+
+  Type type;
+  Node* lhs;
+  Node* rhs;
+  Token tok;
+
+  i64 varIndex;
+  std::vector<Node*> list;
+
+  Node(Type type = Immidiate)
+    :type(type), lhs(nullptr), rhs(nullptr), varIndex(0)
+  {
+
+  }
+
+  Node(Type type, Node* lhs, Node* rhs, Token const& tok)
+    :Node(type)
+  {
+    this->lhs = lhs;
+    this->rhs = rhs;
+    this->tok = tok;
+  }
+};
 
 
 Object Expr();
