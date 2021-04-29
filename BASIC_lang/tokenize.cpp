@@ -97,6 +97,8 @@ std::vector<Token> Tokenize(std::string&& src)
       // "0x" ‚ª‚ ‚ê‚Î 16 i”
       if( srcpos + 2 <= g_source.length() && g_source.substr(srcpos, 2) == "0x" )
       {
+        next(2);
+
         while( check() && (isdigit(c = peek()) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f')) )
           tok.str += c, next();
 
