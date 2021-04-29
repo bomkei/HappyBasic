@@ -1,11 +1,8 @@
 #include "main.h"
 
-Object Primary()
+Object Expr(Node* node)
 {
 
 }
 
-Object Expr()
-{
 
-}

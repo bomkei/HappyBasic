@@ -1,70 +1,67 @@
 #include "main.h"
 
-namespace
-{
-  std::string source;
-  size_t srcpos;
+std::string g_source;
+size_t srcpos;
 
-  auto op_tokens =
-  {
-    "...",
-    "&=",
-    "|=",
-    "^=",
-    "+=",
-    "-=",
-    "*=",
-    "/=",
-    "%=",
-    ">>",
-    "<<",
-    "==",
-    "!=",
-    ">=",
-    "<=",
-    "&&",
-    "||",
-    "!",
-    "~",
-    "&",
-    "|",
-    ">",
-    "<",
-    "=",
-    "+",
-    "-",
-    "*",
-    "/",
-    "%",
-    "(",
-    ")",
-    "[",
-    "]",
-    "{",
-    "}",
-    ",",
-    ".",
-    ";",
-    ":",
-    "\n",
-  };
-}
+static auto op_tokens =
+{
+  "...",
+  "&=",
+  "|=",
+  "^=",
+  "+=",
+  "-=",
+  "*=",
+  "/=",
+  "%=",
+  ">>",
+  "<<",
+  "==",
+  "!=",
+  ">=",
+  "<=",
+  "&&",
+  "||",
+  "!",
+  "~",
+  "&",
+  "|",
+  ">",
+  "<",
+  "=",
+  "+",
+  "-",
+  "*",
+  "/",
+  "%",
+  "(",
+  ")",
+  "[",
+  "]",
+  "{",
+  "}",
+  ",",
+  ".",
+  ";",
+  ":",
+  "\n",
+};
 
 std::vector<Token> Tokenize(std::string&& src)
 {
-  source = std::move(src);
+  g_source = std::move(src);
   srcpos = 0;
 
   std::vector<Token> tokens;
 
   static auto peek = []
   {
-    return source[srcpos];
+    return g_source[srcpos];
   };
 
   static auto check = []
   {
-    return srcpos < source.length();
+    return srcpos < g_source.length();
   };
 
   static auto next = [](int n = 1)
@@ -125,7 +122,7 @@ std::vector<Token> Tokenize(std::string&& src)
 
       for( std::string str : op_tokens )
       {
-        if( srcpos + str.length() <= source.length() && source.substr(srcpos, str.length()) == str )
+        if( srcpos + str.length() <= g_source.length() && g_source.substr(srcpos, str.length()) == str )
         {
           next(str.length());
           hit = true;
