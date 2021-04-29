@@ -269,7 +269,9 @@ struct Node
 };
 
 
-Object Expr();
+
 
 std::vector<Token> Tokenize(std::string&& source);
+
+Object RunExpr(Node* node);
 

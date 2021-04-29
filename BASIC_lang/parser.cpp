@@ -58,3 +58,29 @@ Node::Node(Node::Type type, Node* lhs, Node* rhs)
   this->rhs = rhs;
 }
 
+
+Node* Primary()
+{
+
+}
+
+Node* Mul()
+{
+
+}
+
+Node* Add()
+{
+
+}
+
+Node* Expr()
+{
+
+}
+
+Node* Stmt()
+{
+
+}
+

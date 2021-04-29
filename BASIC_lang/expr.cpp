@@ -1,8 +1,6 @@
 #include "main.h"
 
-Object Expr(Node* node)
+Object RunExpr(Node* node)
 {
 
 }
-
-
