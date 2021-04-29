@@ -163,6 +163,7 @@ struct Token
   std::string str;
 
   Object obj;
+  size_t srcpos;
   
   Token()
   {
