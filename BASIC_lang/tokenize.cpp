@@ -85,10 +85,9 @@ std::vector<Token> Tokenize(std::string&& src)
   while( check() )
   {
     auto c = peek();
-    auto pos = srcpos;
 
     Token tok;
-    tok.srcpos = pos;
+    tok.srcpos = srcpos;
 
     if( isdigit(c) )
     {

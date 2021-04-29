@@ -58,6 +58,11 @@ typedef int64_t i64;
 // ソースコード
 extern std::string g_source;
 
+//
+// 変数
+struct Object;
+extern std::vector<Object> g_variables;
+
 
 //
 // オブジェクト
@@ -169,7 +174,7 @@ struct Token
 
   Object obj;
   size_t srcpos;
-  
+
   Token()
   {
 
@@ -190,6 +195,7 @@ struct Token
     type = tok.type;
     str = tok.str;
     obj = tok.obj;
+    srcpos = tok.srcpos;
 
     return *this;
   }
@@ -199,6 +205,7 @@ struct Token
     type = tok.type;
     str = std::move(tok.str);
     obj = std::move(tok.obj);
+    srcpos = tok.srcpos;
 
     return *this;
   }
@@ -250,9 +257,15 @@ struct Node
     Sub,
     Mul,
     Div,
+    Assign,
+
+    Block,
+    If,
+    
 
     Immidiate,
-    Callfunc
+    Callfunc,
+    Variable
   };
 
   Type type;
@@ -273,5 +286,8 @@ struct Node
 
 std::vector<Token> Tokenize(std::string&& source);
 
+Node* Parse(std::vector<Token>&& tokens);
+
 Object RunExpr(Node* node);
+Object RunStmt(Node* node);
 

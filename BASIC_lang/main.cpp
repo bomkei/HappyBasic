@@ -69,6 +69,8 @@ int main()
   //  std::cout << ":" << tok.str << '\n';
   //}
 
+  auto node = Parse(std::move(tokens));
+
 
 
 }
