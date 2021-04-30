@@ -239,6 +239,45 @@ Node* Expr()
   return Add();
 }
 
+Node* Instruction(bool expect_new_line = true)
+{
+  if( curtok().type != Token::Ident )
+    curtok().Error("syntax error");
+
+  // トークンの先読みをして、代入式かどうか確認する
+  if( tkIndex + 1 < g_tokens.size() && g_tokens[tkIndex + 1].str == "=" )
+  {
+    auto var = Primary();
+    next();
+
+    auto expr = Expr();
+    expect("\n");
+
+    return new Node(Node::Assign, var, expr);
+  }
+
+  //
+  // 代入式でなければ、命令文
+
+  auto node = new Node(Node::Instruction);
+  node->tok = curtok();
+
+  next();
+
+  if( !consume("\n") )
+  {
+    do
+    {
+      node->list.emplace_back(Expr());
+    } while( consume(",") );
+
+    if( expect_new_line )
+      expect("\n");
+  }
+
+  return node;
+}
+
 Node* Stmt()
 {
   //
@@ -249,7 +288,30 @@ Node* Stmt()
 
     auto cond = Expr();
     expect("then");
-    expect("\n");
+    
+    // ?
+    if( consume("endif") )
+    {
+      expect("\n");
+      return nullptr;
+    }
+
+    if( !consume("\n") )
+    {
+      auto xx = new Node(Node::If);
+      xx->lhs = cond;
+      xx->rhs = Instruction(false);
+
+      if( consume("else") )
+        xx->list.emplace_back(Instruction());
+      else
+      {
+        expect("\n");
+        xx->list.emplace_back(nullptr);
+      }
+
+      return xx;
+    }
 
     std::vector<Node*> true_block;
 
@@ -351,40 +413,7 @@ Node* Stmt()
   }
 
 
-  if( curtok().type != Token::Ident )
-    curtok().Error("syntax error");
-
-  // トークンの先読みをして、代入式かどうか確認する
-  if( tkIndex + 1 < g_tokens.size() && g_tokens[tkIndex + 1].str == "=" )
-  {
-    auto var = Primary();
-    next();
-
-    auto expr = Expr();
-    expect("\n");
-
-    return new Node(Node::Assign, var, expr);
-  }
-
-  //
-  // 代入式でなければ、関数呼び出し
-  
-  auto node = new Node(Node::Instruction);
-  node->tok = curtok();
-
-  next();
-
-  if( !consume("\n") )
-  {
-    do
-    {
-      node->list.emplace_back(Expr());
-    } while( consume(",") );
-
-    expect("\n");
-  }
-
-  return node;
+  return Instruction();
 }
 
 Node* Parse(std::vector<Token>&& tokens)
