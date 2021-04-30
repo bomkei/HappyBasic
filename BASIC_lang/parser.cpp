@@ -67,13 +67,16 @@ Node::Node(Node::Type type)
 
 }
 
-Node::Node(Node::Type type, Node* lhs, Node* rhs)
-  :Node(type)
+Node::Node(Node::Type type, Node* lhs, Node* rhs, Token* tok)
+  : Node(type)
 {
   this->lhs = lhs;
   this->rhs = rhs;
 
-  this->tok.srcpos = csmtok->srcpos;
+  if( tok != nullptr )
+    this->tok = *tok;
+  else
+    this->tok = *csmtok;
 }
 
 
@@ -90,6 +93,7 @@ Node* Primary()
   if( consume("[") )
   {
     auto x = new Node(Node::Array);
+    x->tok = *csmtok;
 
     if( !consume("]") )
     {
@@ -167,7 +171,7 @@ Node* IndexRef()
   {
     if( consume("[") )
     {
-      x = new Node(Node::IndexRef, x, Expr());
+      x = new Node(Node::IndexRef, x, Expr(), csmtok);
       expect("]");
     }
     else
@@ -184,7 +188,7 @@ Node* MemberAccess()
   while( check() )
   {
     if( consume(".") )
-      x = new Node(Node::MemberAccess, x, IndexRef());
+      x = new Node(Node::MemberAccess, x, IndexRef(), csmtok);
     else
       break;
   }
@@ -195,7 +199,7 @@ Node* MemberAccess()
 Node* Unary()
 {
   if( consume("-") )
-    return new Node(Node::Sub, Node::FromInt(0), MemberAccess());
+    return new Node(Node::Sub, Node::FromInt(0), MemberAccess(), csmtok);
 
   return MemberAccess();
 }
@@ -207,9 +211,9 @@ Node* Mul()
   while( check() )
   {
     if( consume("*") )
-      x = new Node(Node::Mul, x, Unary());
+      x = new Node(Node::Mul, x, Unary(), csmtok);
     else if( consume("/") )
-      x = new Node(Node::Div, x, Unary());
+      x = new Node(Node::Div, x, Unary(), csmtok);
     else
       break;
   }
@@ -224,9 +228,9 @@ Node* Add()
   while( check() )
   {
     if( consume("+") )
-      x = new Node(Node::Add, x, Mul());
+      x = new Node(Node::Add, x, Mul(), csmtok);
     else if( consume("-") )
-      x = new Node(Node::Sub, x, Mul());
+      x = new Node(Node::Sub, x, Mul(), csmtok);
     else
       break;
   }

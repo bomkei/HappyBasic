@@ -172,7 +172,7 @@ struct Node
   std::vector<Node*> list;
 
   Node(Type type = Immidiate);
-  Node(Type type, Node* lhs, Node* rhs);
+  Node(Type type, Node* lhs, Node* rhs, Token* tok = nullptr);
 
   static Node* FromInt(int v)
   {
