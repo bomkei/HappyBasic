@@ -153,7 +153,12 @@ std::vector<Token> Tokenize(std::string&& src)
       tok.type = Token::Ident;
 
       while( check() && isident(c = peek()) )
+      {
+        if( c >= 'A' && c <= 'Z' )
+          c += ('a' - 'A');
+
         tok.str += c, next();
+      }
     }
 
     // •¶Žš
