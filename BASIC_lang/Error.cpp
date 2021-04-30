@@ -10,16 +10,16 @@ void SetConsoleColor(int col)
 
   if( col & COL_INTENSITY )        // 高輝度ビットが立っていれば
     attr |= FOREGROUND_INTENSITY;  // アトリビュートの高輝度ビットを立てる
-  
+
   if( col & COL_RED_MASK )
     attr |= FOREGROUND_RED;
-  
+
   if( col & COL_GREEN_MASK )
     attr |= FOREGROUND_GREEN;
-  
+
   if( col & COL_BLUE_MASK )
     attr |= FOREGROUND_BLUE;
-  
+
   // 色指定
   SetConsoleTextAttribute(hCons, attr);
 }

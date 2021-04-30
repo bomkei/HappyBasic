@@ -64,7 +64,7 @@ std::vector<Token> Tokenize(std::string&& src)
     return srcpos < g_source.length();
   };
 
-  static auto next = [](int n = 1)
+  static auto next = [](size_t n = 1)
   {
     srcpos += n;
   };
@@ -184,7 +184,7 @@ std::vector<Token> Tokenize(std::string&& src)
       while( check() && (c = peek()) != '"' )
       {
         tok.str += c;
-        
+
         Object ch;
         ch.type = Object::Char;
         ch.v_char = c;

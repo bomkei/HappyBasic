@@ -234,7 +234,7 @@ Node* Add()
     else
       break;
   }
-  
+
   return x;
 }
 
@@ -296,7 +296,7 @@ Node* Stmt()
 
     auto cond = Expr();
     expect("then");
-    
+
     // ?
     if( consume("endif") )
     {

@@ -38,7 +38,7 @@ auto readfile(std::string const& path)
     // 改行文字をつけて ret に追加する
     ret += line + '\n';
   }
-  
+
   // ソースが空
   if( is_empty(ret) )
   {
@@ -52,7 +52,7 @@ auto readfile(std::string const& path)
 int main()
 {
   auto source = std::move(readfile("C:/users/mrzkr/desktop/test.txt"));
-  
+
   auto tokens = std::move(Tokenize(std::move(source)));
 
   auto node = Parse(std::move(tokens));

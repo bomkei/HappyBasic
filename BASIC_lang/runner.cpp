@@ -1,10 +1,10 @@
 #include "main.h"
 
-Object Callfunc(Node *node)
+Object Callfunc(Node* node)
 {
   auto const& name = node->tok.str;
   auto const& args = node->list;
-  
+
   Object ret;
 
   //
@@ -77,7 +77,7 @@ Object Callfunc(Node *node)
       // hex
       if( is_hex(str) )
         ret.v_int = std::stoi(str, nullptr, 16);
-      
+
       // dec
       else
         ret.v_int = std::stoi(str);
@@ -125,7 +125,7 @@ bool AdjustObjectType(Object& a, Object& b)
     for( auto&& x : { &a, &b } )
     {
       if( x->type == Object::Int )
-        x->v_float = x->v_int;
+        x->v_float = (float)x->v_int;
       else if( x->type == Object::Char )
         x->v_float = x->v_char;
 
@@ -161,7 +161,7 @@ Object RunExpr(Node* node)
 
     case Node::Variable:
     {
-      auto &var = g_variables[node->varIndex];
+      auto& var = g_variables[node->varIndex];
       var.var_ptr = &var;
       return var;
     }
