@@ -408,5 +408,7 @@ Node* Parse(std::vector<Token>&& tokens)
     node->list.emplace_back(Stmt());
   }
 
+  g_tokens.clear();
+
   return node;
 }
