@@ -31,7 +31,7 @@ Token& Token::operator = (Token&& tok)
 }
 
 
-Object::Object(Type type)
+Object::Object(Object::Type type)
   :type(type), v_int(0), v_float(0), v_char(0), var_ptr(nullptr)
 {
 
