@@ -84,6 +84,31 @@ Object RunExpr(Node* node)
       return obj;
     }
 
+    case Node::IndexRef:
+    {
+      auto obj = RunExpr(node->lhs);
+
+      if( obj.type != Object::Array )
+        node->tok.Error("this is not array");
+
+      auto index = RunExpr(node->rhs);
+
+      if( index.type != Object::Int )
+        node->rhs->tok.Error("subscript is must be a integer");
+
+      if( index.v_int < 0 || index.v_int >= obj.list.size() )
+        node->rhs->tok.Error("subscript out of range");
+
+      return obj.list[index.v_int];
+    }
+
+    case Node::MemberAccess:
+    {
+      auto obj = RunExpr(node->lhs);
+
+      node->tok.Error("not implemented");
+    }
+
     default:
     {
       auto&& lhs = std::move(RunExpr(node->lhs));

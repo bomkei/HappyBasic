@@ -314,10 +314,12 @@ struct Node
     For,
 
     Array,
+    IndexRef,
     Immidiate,
     Variable,
     Instruction,
     Callfunc,
+    MemberAccess
   };
 
   Type type;
@@ -331,6 +333,12 @@ struct Node
   Node(Type type = Immidiate);
   Node(Type type, Node* lhs, Node* rhs);
 
+  static Node* FromInt(int v)
+  {
+    auto n = new Node;
+    n->tok.obj.v_int = v;
+    return n;
+  }
 };
 
 

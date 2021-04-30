@@ -158,16 +158,57 @@ Node* Primary()
   curtok().Error("syntax error");
 }
 
-Node* Mul()
+Node* IndexRef()
 {
   auto x = Primary();
 
   while( check() )
   {
+    if( consume("[") )
+    {
+      x = new Node(Node::IndexRef, x, Expr());
+      expect("]");
+    }
+    else
+      break;
+  }
+
+  return x;
+}
+
+Node* MemberAccess()
+{
+  auto x = IndexRef();
+
+  while( check() )
+  {
+    if( consume(".") )
+      x = new Node(Node::MemberAccess, x, IndexRef());
+    else
+      break;
+  }
+
+  return x;
+}
+
+Node* Unary()
+{
+  if( consume("-") )
+    return new Node(Node::Sub, Node::FromInt(0), MemberAccess());
+
+  return MemberAccess();
+}
+
+Node* Mul()
+{
+  auto x = Unary();
+
+  while( check() )
+  {
     if( consume("*") )
-      x = new Node(Node::Mul, x, Primary());
+      x = new Node(Node::Mul, x, Unary());
     else if( consume("/") )
-      x = new Node(Node::Div, x, Primary());
+      x = new Node(Node::Div, x, Unary());
     else
       break;
   }
