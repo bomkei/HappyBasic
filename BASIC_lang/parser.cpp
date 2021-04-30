@@ -51,7 +51,7 @@ namespace
 
   i64 find_var(std::string const& name)
   {
-    for( i64 i = 0; i < g_variables.size(); i++ )
+    for( size_t i = 0; i < g_variables.size(); i++ )
     {
       if( g_variables[i].name == name )
         return i;
