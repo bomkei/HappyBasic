@@ -115,6 +115,38 @@ void Instruction(Node* node)
   node->tok.Error("undefined instruction");
 }
 
+bool AdjustObjectType(Object& a, Object& b)
+{
+  if( (a.type == Object::Array) != (b.type == Object::Array) )
+    return false;
+
+  if( a.type == Object::Float || b.type == Object::Float )
+  {
+    for( auto&& x : { &a,&b } )
+    {
+      if( x->type == Object::Int )
+        x->v_float = x->v_int;
+      else if( x->type == Object::Char )
+        x->v_char = x->v_char;
+
+      x->type = Object::Float;
+    }
+  }
+  else if( a.type != b.type )
+  {
+    for( auto&& x : { &a,&b } )
+    {
+      if( x->type == Object::Char )
+      {
+        x->v_int = x->v_char;
+        x->type = Object::Int;
+      }
+    }
+  }
+
+  return true;
+}
+
 Object RunExpr(Node* node)
 {
   if( node == nullptr )
@@ -176,23 +208,35 @@ Object RunExpr(Node* node)
       auto&& lhs = std::move(RunExpr(node->lhs));
       auto&& rhs = std::move(RunExpr(node->rhs));
 
+      if( AdjustObjectType(lhs, rhs) == false )
+        node->tok.Error("type mismatch");
+
       switch( node->type )
       {
         case Node::Add:
           lhs.v_int += rhs.v_int;
+          lhs.v_char += rhs.v_char;
+          lhs.v_float += rhs.v_float;
           break;
 
         case Node::Sub:
           lhs.v_int -= rhs.v_int;
+          lhs.v_char -= rhs.v_char;
+          lhs.v_float -= rhs.v_float;
           break;
 
         case Node::Mul:
           lhs.v_int *= rhs.v_int;
+          lhs.v_char *= rhs.v_char;
+          lhs.v_float *= rhs.v_float;
           break;
 
         case Node::Div:
           lhs.v_int /= rhs.v_int;
+          lhs.v_char /= rhs.v_char;
+          lhs.v_float /= rhs.v_float;
           break;
+
       }
 
       return lhs;

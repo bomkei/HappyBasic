@@ -6,7 +6,7 @@
 void SetConsoleColor(int col)
 {
   HANDLE hCons = GetStdHandle(STD_OUTPUT_HANDLE);    // コンソールハンドル取得
-  WORD attr = 0;                                     //  API に渡すアトリビュート
+  WORD attr = 0;                                     // API に渡すアトリビュート
 
   if( col & COL_INTENSITY )        // 高輝度ビットが立っていれば
     attr |= FOREGROUND_INTENSITY;  // アトリビュートの高輝度ビットを立てる
