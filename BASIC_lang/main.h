@@ -75,7 +75,8 @@ struct Object
     Int,
     Float,
     Char,
-    Array
+    Array,
+    Pointer
   };
 
   Type type;
@@ -156,6 +157,7 @@ struct Node
 
     Array,
     IndexRef,
+    Reference,
     Immidiate,
     Variable,
     Instruction,

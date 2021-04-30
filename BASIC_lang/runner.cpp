@@ -60,7 +60,7 @@ Object Callfunc(Node* node)
 
     }
 
-    node->tok.Error("illegal call function");
+    node->tok.Error("invalid call function");
   }
 
   //
@@ -68,7 +68,7 @@ Object Callfunc(Node* node)
   if( name == "int" )
   {
     if( args.size() != 1 )
-      node->tok.Error("illegal call function");
+      node->tok.Error("invalid call function");
 
     auto str = RunExpr(args[0]).to_string();
 
@@ -110,7 +110,28 @@ void Instruction(Node* node)
     return;
   }
 
+  if (name == "pointer")
+  {
+    if (args.size() != 2)
+      node->tok.Error("invalid instruction");
 
+    if (args[0]->type != Node::Variable)
+      args[0]->tok.Error("pointer is must be a variable");
+
+    auto var = RunExpr(args[0]);
+    auto ptr = RunExpr(args[1]);
+
+    if (ptr.var_ptr == nullptr)
+      args[1]->tok.Error("cannot make pointer from lvalue");
+    
+    var.var_ptr->type = Object::Pointer;
+    var.var_ptr->var_ptr = ptr.var_ptr;
+
+   /* std::cout << var.var_ptr->to_string() << '\n';
+    exit(123);*/
+
+    return;
+  }
 
   node->tok.Error("undefined instruction");
 }
@@ -162,7 +183,10 @@ Object RunExpr(Node* node)
     case Node::Variable:
     {
       auto& var = g_variables[node->varIndex];
-      var.var_ptr = &var;
+
+      if (var.type != Object::Pointer)
+        var.var_ptr = &var;
+      
       return var;
     }
 
@@ -195,6 +219,16 @@ Object RunExpr(Node* node)
       return obj.list[index.v_int];
     }
 
+    case Node::Reference:
+    {
+      auto obj = RunExpr(node->lhs);
+
+      if (obj.type != Object::Pointer)
+        node->lhs->tok.Error("this is not a pointer");
+
+      return *(obj.var_ptr);
+    }
+
     case Node::MemberAccess:
     {
       auto obj = RunExpr(node->lhs);
@@ -206,6 +240,9 @@ Object RunExpr(Node* node)
     {
       auto&& lhs = std::move(RunExpr(node->lhs));
       auto&& rhs = std::move(RunExpr(node->rhs));
+
+      if (lhs.type == Object::Pointer || rhs.type == Object::Pointer)
+        node->tok.Error("cannot use pointer in expression");
 
       if( AdjustObjectType(lhs, rhs) == false )
         node->tok.Error("type mismatch");

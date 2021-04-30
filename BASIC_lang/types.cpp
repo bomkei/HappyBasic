@@ -110,6 +110,9 @@ std::string Object::to_string() const
 
       return  "[" + s + "]";
     }
+
+    case Pointer:
+      return "{" + var_ptr->to_string() + "}";
   }
 
   return "";

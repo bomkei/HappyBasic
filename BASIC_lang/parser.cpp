@@ -201,6 +201,10 @@ Node* Unary()
   if( consume("-") )
     return new Node(Node::Sub, Node::FromInt(0), MemberAccess(), csmtok);
 
+  if (consume("ref"))
+    return new Node(Node::Reference, MemberAccess(), nullptr, csmtok);
+
+
   return MemberAccess();
 }
 
