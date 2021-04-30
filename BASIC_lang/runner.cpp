@@ -121,9 +121,9 @@ void Instruction(Node* node)
   auto const& name = node->tok.str;
   auto const& args = node->list;
 
-  if( name == "print" )
+  if (name == "print")
   {
-    for( auto&& i : args )
+    for (auto&& i : args)
     {
       std::cout << RunExpr(i).to_string();
     }
@@ -145,12 +145,33 @@ void Instruction(Node* node)
 
     if (ptr.var_ptr == nullptr)
       args[1]->tok.Error("cannot make pointer from lvalue");
-    
+
     var.var_ptr->type = Object::Pointer;
     var.var_ptr->var_ptr = ptr.var_ptr;
 
-   /* std::cout << var.var_ptr->to_string() << '\n';
-    exit(123);*/
+    /* std::cout << var.var_ptr->to_string() << '\n';
+     exit(123);*/
+
+    return;
+  }
+
+  if( name == "append" )
+  {
+    if( args.size() < 2 )
+      node->tok.Error("invalid instruction");
+
+    auto arr = RunExpr(args[0]);
+
+    if( arr.type != Object::Array )
+      args[0]->tok.Error("this is not array");
+
+    if( arr.var_ptr == nullptr )
+      args[0]->tok.Error("cannot append object to rvalue");
+
+    for( int i = 1; i < args.size(); i++ )
+    {
+      arr.var_ptr->list.emplace_back(RunExpr(args[i]));
+    }
 
     return;
   }
