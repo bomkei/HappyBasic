@@ -310,7 +310,6 @@ Node* Stmt()
     node->rhs = trueN;
     node->list.emplace_back(elseN);
 
-
     return node;
   }
 

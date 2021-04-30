@@ -69,10 +69,25 @@ std::vector<Token> Tokenize(std::string&& src)
     srcpos += n;
   };
 
+  static auto match = [](std::string const& s)
+  {
+    return
+      srcpos + s.length() <= g_source.length()
+      &&
+      g_source.substr(srcpos, s.length()) == s;
+  };
+
   static auto pass_space = []
   {
-    while( peek() != '\n' && peek() <= ' ' )
-      next();
+    while( check() )
+    {
+      if( match("\\\n") )
+        srcpos += 2;
+      else if( peek() <= ' ' && peek() != '\n' )
+        srcpos++;
+      else
+        break;
+    }
   };
 
   static auto isident = [](char c)
