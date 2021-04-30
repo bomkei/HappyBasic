@@ -64,8 +64,8 @@ Object Callfunc(Node* node)
   }
 
   //
-  // casting to integer
-  if( name == "int" )
+  // convert to integer
+  if( name == "to_int" )
   {
     if( args.size() != 1 )
       node->tok.Error("invalid call function");
@@ -87,6 +87,28 @@ Object Callfunc(Node* node)
       args[0]->tok.Error("cannot cast to integer");
     }
 
+    return ret;
+  }
+
+  //
+  // convert to string
+  if (name == "to_string")
+  {
+    if (args.size() != 1)
+      node->tok.Error("invalid call function");
+
+    auto str = RunExpr(args[0]).to_string();
+
+    ret.type = Object::Array;
+
+    for (auto&& c : str)
+    {
+      Object ch;
+      ch.type = Object::Char;
+      ch.v_char = c;
+      ret.list.emplace_back(ch);
+    }
+    
     return ret;
   }
 
