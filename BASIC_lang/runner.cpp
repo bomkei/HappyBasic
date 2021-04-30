@@ -127,20 +127,21 @@ bool AdjustObjectType(Object& a, Object& b)
       if( x->type == Object::Int )
         x->v_float = x->v_int;
       else if( x->type == Object::Char )
-        x->v_char = x->v_char;
+        x->v_float = x->v_char;
 
       x->type = Object::Float;
     }
   }
-  else if( a.type != b.type )
+  else
   {
     for( auto&& x : { &a,&b } )
     {
       if( x->type == Object::Char )
       {
         x->v_int = x->v_char;
-        x->type = Object::Int;
       }
+
+      x->type = Object::Int;
     }
   }
 
