@@ -64,12 +64,12 @@ std::vector<Token> Tokenize(std::string&& src)
     return srcpos < g_source.length();
   };
 
-  static auto next = [](size_t n = 1)
+  static auto next = [] (size_t n = 1)
   {
     srcpos += n;
   };
 
-  static auto match = [](std::string const& s)
+  static auto match = [] (std::string const& s)
   {
     return
       srcpos + s.length() <= g_source.length()
@@ -90,7 +90,7 @@ std::vector<Token> Tokenize(std::string&& src)
     }
   };
 
-  static auto isident = [](char c)
+  static auto isident = [] (char c)
   {
     return isalnum(c) || c == '_';
   };

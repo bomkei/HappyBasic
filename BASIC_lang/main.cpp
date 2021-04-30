@@ -6,7 +6,7 @@
 // ----------------------------------------------- //
 auto readfile(std::string const& path)
 {
-  static auto is_empty = [](std::string const& str)
+  static auto is_empty = [] (std::string const& str)
   {
     for( auto&& c : str )
       if( c > ' ' ) return false;

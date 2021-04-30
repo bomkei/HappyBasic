@@ -109,55 +109,55 @@ Node* Primary()
 
   switch( curtok().type )
   {
-    case Token::Number:
-    case Token::String:
-    case Token::Char:
+  case Token::Number:
+  case Token::String:
+  case Token::Char:
+  {
+    auto x = new Node;
+    x->tok = curtok();
+
+    next();
+    return x;
+  }
+
+  case Token::Ident:
+  {
+    auto x = new Node(Node::Variable);
+    x->tok = curtok();
+
+    next();
+
+    if( consume("(") )
     {
-      auto x = new Node;
-      x->tok = curtok();
+      x->type = Node::Callfunc;
 
-      next();
-      return x;
-    }
-
-    case Token::Ident:
-    {
-      auto x = new Node(Node::Variable);
-      x->tok = curtok();
-
-      next();
-
-      if( consume("(") )
+      if( !consume(")") )
       {
-        x->type = Node::Callfunc;
-
-        if( !consume(")") )
+        do
         {
-          do
-          {
-            x->list.emplace_back(Expr());
-          } while( consume(",") );
-          expect(")");
-        }
-
-        return x;
+          x->list.emplace_back(Expr());
+        } while( consume(",") );
+        expect(")");
       }
-
-      auto find = find_var(x->tok.str);
-
-      if( find == -1 )
-      {
-        find = g_variables.size();
-
-        Object obj;
-        obj.name = x->tok.str;
-        g_variables.emplace_back(obj);
-      }
-
-      x->varIndex = find;
 
       return x;
     }
+
+    auto find = find_var(x->tok.str);
+
+    if( find == -1 )
+    {
+      find = g_variables.size();
+
+      Object obj;
+      obj.name = x->tok.str;
+      g_variables.emplace_back(obj);
+    }
+
+    x->varIndex = find;
+
+    return x;
+  }
   }
 
   curtok().Error("syntax error");
@@ -201,7 +201,7 @@ Node* Unary()
   if( consume("-") )
     return new Node(Node::Sub, Node::FromInt(0), MemberAccess(), csmtok);
 
-  if (consume("ref"))
+  if( consume("ref") )
     return new Node(Node::Reference, MemberAccess(), nullptr, csmtok);
 
 
