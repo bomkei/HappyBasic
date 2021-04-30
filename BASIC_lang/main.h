@@ -322,3 +322,5 @@ Object Callfunc(Node* node);
 Object RunExpr(Node* node);
 Object RunStmt(Node* node);
 
+bool is_hex(std::string);
+
