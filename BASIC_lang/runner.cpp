@@ -11,22 +11,54 @@ Object Callfunc(Node *node)
   {
     ret.type = Object::Array;
 
-    if( args.size() != 1 )
-      node->tok.Error("illegal call function");
-
-    auto max = RunExpr(args[0]);
-
-    if( max.type != Object::Int )
-      node->tok.Error("parameter is must be a integer");
-
-    for( int i = 0; i < max.v_int; i++ )
+    switch( args.size() )
     {
-      Object x;
-      x.v_int = i;
-      ret.list.emplace_back(x);
-    }
+      case 1:
+      {
+        auto max = RunExpr(args[0]);
 
-    return ret;
+        if( max.type != Object::Int )
+          node->tok.Error("parameter is must be a integer");
+
+        for( int i = 0; i < max.v_int; i++ )
+        {
+          Object x;
+          x.v_int = i;
+          ret.list.emplace_back(x);
+        }
+
+        return ret;
+      }
+
+      case 2:
+      case 3:
+      {
+        auto begin = RunExpr(args[0]);
+        auto end = RunExpr(args[1]);
+
+        Object inc;
+        inc.v_int = 1;
+        if( args.size() == 3 ) inc = RunExpr(args[2]);
+
+        if( begin.type != Object::Int || end.type != Object::Int || inc.type != Object::Int )
+          node->tok.Error("parameter is must be a integer");
+
+        if( inc.v_int < 0 )
+          args[2]->tok.Error("cannot use negative number for inclement value");
+
+        for( int i = begin.v_int; i < end.v_int; i += inc.v_int )
+        {
+          Object x;
+          x.v_int = i;
+          ret.list.emplace_back(x);
+        }
+
+        return ret;
+      }
+
+    }
+    
+    node->tok.Error("illegal call function");
   }
 
   node->tok.Error("undefined function");
