@@ -251,7 +251,9 @@ Node* Instruction(bool expect_new_line = true)
     next();
 
     auto expr = Expr();
-    expect("\n");
+
+    if( expect_new_line )
+      expect("\n");
 
     return new Node(Node::Assign, var, expr);
   }
@@ -274,6 +276,8 @@ Node* Instruction(bool expect_new_line = true)
     if( expect_new_line )
       expect("\n");
   }
+  else if( !expect_new_line )
+    tkIndex--;
 
   return node;
 }
