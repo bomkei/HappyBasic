@@ -215,6 +215,7 @@ struct Token
   {
     Number,
     String,
+    Char,
     Ident,
     Operator
   };

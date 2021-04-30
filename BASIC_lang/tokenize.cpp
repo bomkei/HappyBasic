@@ -141,6 +141,22 @@ std::vector<Token> Tokenize(std::string&& src)
         tok.str += c, next();
     }
 
+    // •¶Žš
+    else if( c == '\'' )
+    {
+      next();
+      tok.type = Token::Char;
+
+      tok.obj.type = Object::Char;
+      tok.obj.v_char = peek();
+
+      next();
+      if( peek() != '\'' )
+        tok.Error("unclosed char literal");
+
+      next();
+    }
+
     // •¶Žš—ñ
     else if( c == '"' )
     {

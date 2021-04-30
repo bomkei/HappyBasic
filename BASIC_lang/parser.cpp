@@ -107,6 +107,7 @@ Node* Primary()
   {
     case Token::Number:
     case Token::String:
+    case Token::Char:
     {
       auto x = new Node;
       x->tok = curtok();
