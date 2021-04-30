@@ -27,10 +27,6 @@ auto readfile(std::string const& path)
   // 一行ずつ読み取っていく
   while( std::getline(ifs, line) )
   {
-    // 文字が無ければスキップ
-    //if( is_empty(line) )
-    //  continue;
-
     // 右端の空白以下の文字を削除
     while( line.length() && line[line.length() - 1] <= ' ' )
       line.pop_back();
@@ -56,14 +52,8 @@ auto readfile(std::string const& path)
 int main()
 {
   auto source = std::move(readfile("C:/users/mrzkr/desktop/test.txt"));
-  //std::cout << source << '\n';
-
+  
   auto tokens = std::move(Tokenize(std::move(source)));
-
-  //for( auto&& tok : tokens )
-  //{
-  //  std::cout << ":" << tok.str << '\n';
-  //}
 
   auto node = Parse(std::move(tokens));
 

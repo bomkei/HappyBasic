@@ -391,7 +391,7 @@ Node* Parse(std::vector<Token>&& tokens)
 {
   g_tokens = std::move(tokens);
 
-  for( int i = 0; i < g_tokens.size() - 1; )
+  for( size_t i = 0; i < g_tokens.size() - 1; )
   {
     if( g_tokens[i].str == "\n" && g_tokens[i + 1].str == "\n" )
     {
