@@ -74,7 +74,13 @@ Object Callfunc(Node *node)
 
     try
     {
-      ret.v_int = std::stoi(str);
+      // hex
+      if( str.length() >= 2 && str.substr(0, 2) == "0x" )
+        ret.v_int = std::stoi(str, nullptr, 16);
+      
+      // dec
+      else
+        ret.v_int = std::stoi(str);
     }
     catch( ... )
     {
