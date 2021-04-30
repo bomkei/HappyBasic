@@ -7,6 +7,8 @@ Object Callfunc(Node *node)
   
   Object ret;
 
+  //
+  // make array with range
   if( name == "range" )
   {
     ret.type = Object::Array;
@@ -57,9 +59,31 @@ Object Callfunc(Node *node)
       }
 
     }
-    
+
     node->tok.Error("illegal call function");
   }
+
+  //
+  // casting to integer
+  if( name == "int" )
+  {
+    if( args.size() != 1 )
+      node->tok.Error("illegal call function");
+
+    auto str = RunExpr(args[0]).to_string();
+
+    try
+    {
+      ret.v_int = std::stoi(str);
+    }
+    catch( ... )
+    {
+      args[0]->tok.Error("cannot cast to integer");
+    }
+
+    return ret;
+  }
+
 
   node->tok.Error("undefined function");
 }
