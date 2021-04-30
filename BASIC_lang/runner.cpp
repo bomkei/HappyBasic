@@ -45,8 +45,8 @@ Object Callfunc(Node *node)
         if( begin.type != Object::Int || end.type != Object::Int || inc.type != Object::Int )
           node->tok.Error("parameter is must be a integer");
 
-        if( inc.v_int < 0 )
-          args[2]->tok.Error("cannot use negative number for inclement value");
+        if( inc.v_int < 1 )
+          args[2]->tok.Error("cannot use negative number or zero for inclement value");
 
         for( int i = begin.v_int; i < end.v_int; i += inc.v_int )
         {
