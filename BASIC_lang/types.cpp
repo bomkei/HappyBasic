@@ -37,16 +37,6 @@ Object::Object(Object::Type type)
 
 }
 
-Object::Object(Object const& obj)
-{
-  *this = obj;
-}
-
-Object::Object(Object&& obj)
-{
-  *this = std::move(obj);
-}
-
 Object& Object::operator = (Object const& obj)
 {
   type = obj.type;
@@ -54,25 +44,9 @@ Object& Object::operator = (Object const& obj)
   v_float = obj.v_float;
   v_char = obj.v_char;
 
-  name = obj.name;
+//  name = obj.name;
   list = obj.list;
   var_ptr = obj.var_ptr;
-
-  return *this;
-}
-
-Object& Object::operator = (Object&& obj)
-{
-  type = obj.type;
-  v_int = obj.v_int;
-  v_float = obj.v_float;
-  v_char = obj.v_char;
-
-  name = std::move(obj.name);
-  list = std::move(obj.list);
-  var_ptr = obj.var_ptr;
-
-  Object::Clear(obj);
 
   return *this;
 }
@@ -112,7 +86,7 @@ std::string Object::to_string() const
     }
 
     case Pointer:
-      return "{" + var_ptr->to_string() + "}";
+      return "{" + var_ptr->name + "}";
   }
 
   return "";

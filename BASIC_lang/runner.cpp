@@ -238,8 +238,8 @@ Object RunExpr(Node* node)
 
     default:
     {
-      auto&& lhs = std::move(RunExpr(node->lhs));
-      auto&& rhs = std::move(RunExpr(node->rhs));
+      auto lhs = RunExpr(node->lhs);
+      auto rhs = RunExpr(node->rhs);
 
       if (lhs.type == Object::Pointer || rhs.type == Object::Pointer)
         node->tok.Error("cannot use pointer in expression");

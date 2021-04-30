@@ -90,11 +90,8 @@ struct Object
   Object* var_ptr;
 
   Object(Type type = Int);
-  Object(Object const& obj);
-  Object(Object&& obj);
 
   Object& operator = (Object const& obj);
-  Object& operator = (Object&& obj);
 
   std::string to_string() const;
 
