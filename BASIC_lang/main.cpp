@@ -42,13 +42,7 @@ auto readfile(std::string const& path)
     // 改行文字をつけて ret に追加する
     ret += line + '\n';
   }
-
-
-  // 行をつなげる記号
-  //  TODO: 行番号がずれる問題
-  //string_replace<std::string>(ret, "\\\n", "");
-
-
+  
   // ソースが空
   if( is_empty(ret) )
   {
