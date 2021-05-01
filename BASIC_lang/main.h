@@ -43,7 +43,7 @@ class ParserCore
   
   Token& get_tok() const;
 
-  bool check();
+  bool check() const;
   bool consume(std::string const&);
   void expect(std::string const);
   void next();
