@@ -18,8 +18,8 @@ class Tokenizer
   std::string source;
   size_t position;
 
-  char peek() const;
   bool check() const;
+  char peek() const;
   bool match(std::string const&) const;
   void next();
   void pass_space();
@@ -37,15 +37,31 @@ class ParserCore
   std::vector<Token> tokens;
   size_t index;
   
+  bool check();
+  bool consume(std::string const&);
+  void expect(std::string const);
+  void next();
+
 public:
 
   void Initialize(std::vector<Token>&&);
 
-
+  AST* Primary();
 };
 
 class ProgramContext
 {
+  std::vector<Object> variables;
+  std::string source;
+
+  Tokenizer tokenizer;
+  ParserCore parser;
+
+public:
+
+  void OpenFile(std::string const& path);
+
+  
 
 };
 
