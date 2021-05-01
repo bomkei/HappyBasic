@@ -39,9 +39,9 @@ class ParserCore
   std::vector<Token> tokens;
   size_t index;
   
-  Token& get_tok();
+  Token& get_tok() const;
 
-  bool check();
+  bool check() const;
   bool consume(std::string const&);
   void expect(std::string const&);
   void next();
@@ -86,4 +86,13 @@ public:
 
 };
 
+
+//
+// ソースコード
+//extern std::string g_source;
+
+//
+// 変数
+//struct Object;
+//extern std::vector<Object> g_variables;
 
