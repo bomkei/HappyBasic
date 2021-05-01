@@ -39,9 +39,9 @@ class ParserCore
   std::vector<Token> tokens;
   size_t index;
   
-  Token& get_tok() const;
+  Token& get_tok();
 
-  bool check() const;
+  bool check();
   bool consume(std::string const&);
   void expect(std::string const&);
   void next();
