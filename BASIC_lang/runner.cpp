@@ -176,6 +176,23 @@ void Instruction(Node* node)
     return;
   }
 
+  if( name == "color" )
+  {
+    if( args.size() != 1 )
+      node->tok.Error("invalid instruction");
+
+    auto c = RunExpr(args[0]);
+
+    if( c.type != Object::Int )
+      args[0]->tok.Error("color is must be a integer");
+
+    if( c.v_int < 0 || c.v_int > 15 )
+      args[0]->tok.Error("out of range");
+
+    SetConsoleColor(c.v_int);
+    return;
+  }
+
   node->tok.Error("undefined instruction");
 }
 
@@ -337,7 +354,7 @@ Object RunStmt(Node* node)
     auto var = RunExpr(node->lhs);
 
     if( var.var_ptr == nullptr )
-      node->tok.Error("cannot assignment to not a lvalue object");
+      node->tok.Error("cannot assignment to rvalue or reserved keywords");
 
     *var.var_ptr = RunExpr(node->rhs);
     break;

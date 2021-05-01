@@ -1,7 +1,40 @@
 #include "main.h"
 
-std::string g_source;
-size_t srcpos;
+struct ReservedToken
+{
+  std::string name;
+  int value;
+
+  ReservedToken(std::string const& name, int v = 0)
+    :name(name), value(v)
+  {
+  }
+
+  bool operator == (ReservedToken rs)
+  {
+    return name == rs.name;
+  }
+};
+
+static std::vector<ReservedToken> Reserved_Words =
+{
+  { "COL_BLACK",        0x0 },
+  { "COL_DARK_BLUE",    0x1 },
+  { "COL_DARK_GREEN",   0x2 },
+  { "COL_DARK_CYAN",    0x3 },
+  { "COL_DARK_RED",     0x4 },
+  { "COL_DARK_VIOLET",  0x5 },
+  { "COL_DARK_YELLOW",  0x6 },
+  { "COL_GRAY",         0x7 },
+  { "COL_LIGHT_GRAY",   0x8 },
+  { "COL_BLUE",         0x9 },
+  { "COL_GREEN",        0xA },
+  { "COL_CYAN",         0xB },
+  { "COL_RED",          0xC },
+  { "COL_VIOLET",       0xD },
+  { "COL_YELLOW",       0xE },
+  { "COL_WHITE",        0xF },
+};
 
 static auto op_tokens =
 {
@@ -46,6 +79,14 @@ static auto op_tokens =
   ":",
   "\n",
 };
+
+std::string g_source;
+size_t srcpos;
+
+bool operator == (ReservedToken L, ReservedToken R)
+{
+  return L.name == R.name;
+}
 
 std::vector<Token> Tokenize(std::string&& src)
 {
@@ -154,10 +195,23 @@ std::vector<Token> Tokenize(std::string&& src)
 
       while( check() && isident(c = peek()) )
       {
-        if( c >= 'A' && c <= 'Z' )
-          c += ('a' - 'A');
+        //if( c >= 'A' && c <= 'Z' )
+        //  c += ('a' - 'A');
 
         tok.str += c, next();
+      }
+
+      int find = find_vector<ReservedToken>(Reserved_Words, tok.str);
+
+      if( find != -1 )
+      {
+        tok.type = Token::Number;
+        tok.obj.v_int = Reserved_Words[find].value;
+      }
+      else
+      {
+        for( auto&& c : tok.str )
+          if( c >= 'A' && c <= 'Z' ) c += 0x20;
       }
     }
 

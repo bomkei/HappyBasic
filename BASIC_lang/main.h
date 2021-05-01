@@ -5,6 +5,11 @@
 #include <string>
 #include <vector>
 
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
+
 // ----------------------------------------------- //
 //  文字列置き換え
 // 
@@ -35,6 +40,20 @@ auto& string_replace(STR& str, STR find, STR replace)
   return str;
 }
 
+
+//
+// vector 検索
+template <class T, class... Args>
+i64 find_vector(std::vector<T> const& vec, Args ...args)
+{
+  for( i64 i = 0; i < vec.size(); i++ )
+    if( vec[i] == T(args...) )
+      return i;
+
+  return -1;
+}
+
+
 // ファイル名の部分のみ取得する
 inline auto GetFileName(const char* s)
 {
@@ -47,11 +66,6 @@ inline auto GetFileName(const char* s)
 }
 
 #define  alart fprintf(stderr,"\t%s:%d\n",GetFileName(__FILE__),__LINE__)
-
-typedef int8_t i8;
-typedef int16_t i16;
-typedef int32_t i32;
-typedef int64_t i64;
 
 
 //
@@ -192,3 +206,4 @@ Object RunStmt(Node* node);
 
 bool is_hex(std::string);
 
+void SetConsoleColor(int col);
