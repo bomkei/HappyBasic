@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Error.cpp" />
+    <ClCompile Include="Program.cpp" />
     <ClCompile Include="runner.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ParserCore.cpp" />

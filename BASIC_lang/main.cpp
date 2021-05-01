@@ -1,10 +1,6 @@
 #include "main.h"
 
-
-// ----------------------------------------------- //
-//  ファイルの中身をソースコードとして読み取る
-// ----------------------------------------------- //
-auto readfile(std::string const& path)
+void Program::OpenFile(std::string const& path)
 {
   static auto is_empty = [] (std::string const& str)
   {
@@ -15,7 +11,7 @@ auto readfile(std::string const& path)
   };
 
   std::ifstream ifs(path);
-  std::string ret, line;
+  std::string line;
 
   // ファイルを開けなかった
   if( ifs.fail() )
@@ -39,26 +35,29 @@ auto readfile(std::string const& path)
       continue;
 
     // 改行文字をつけて ret に追加する
-    ret += line + '\n';
+    source += line + '\n';
   }
 
   // ソースが空
-  if( is_empty(ret) )
+  if( is_empty(source) )
   {
     std::cout << "empty source file";
     exit(1);
   }
-
-  return ret;
 }
 
 int main()
 {
-  auto source = std::move(readfile("C:/users/mrzkr/desktop/test.txt"));
-
   try
   {
-    auto tokens = std::move(Tokenize(std::move(source)));
+    Program prg;
+
+    prg.OpenFile("C:/Users/mrzkr/Desktop/test.txt");
+    
+    prg.Tokenize();
+    prg.Parse();
+
+    auto res = prg.Run();
 
   }
   catch( ErrorInfo const& info )

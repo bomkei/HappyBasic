@@ -19,19 +19,19 @@ using ErrorInfo = std::pair<Token, std::string>;
 
 class Tokenizer
 {
-  std::string source;
+  std::string const& source;
   size_t position;
 
   bool check() const;
   char peek() const;
   bool match(std::string const&) const;
-  void next();
+  void next(int n = 1);
   void pass_space();
 
 public:
-  void Initialize(std::string&&);
+  Tokenizer(std::string const& src);
 
-  std::vector<Token> Tokenize() const;
+  std::vector<Token> Tokenize();
 
 
 };
@@ -67,10 +67,12 @@ class Program
   std::vector<Object> variables;
   std::string source;
 
-  Tokenizer tokenizer;
-  ParserCore parser;
+  Tokenizer *tokenizer;
+  ParserCore *parser;
 
 public:
+
+  Program();
 
   void OpenFile(std::string const& path);
 
@@ -96,5 +98,3 @@ public:
 //struct Object;
 //extern std::vector<Object> g_variables;
 
-
-std::vector<Token> Tokenize(std::string&& source);

@@ -80,61 +80,46 @@ static auto op_tokens =
   "\n",
 };
 
-std::string g_source;
-size_t srcpos;
-
 bool operator == (ReservedToken L, ReservedToken R)
 {
   return L.name == R.name;
 }
 
-std::vector<Token> Tokenize(std::string&& src)
+Tokenizer::Tokenizer(std::string const& src)
+  :source(src), position(0)
 {
-  g_source = std::move(src);
-  srcpos = 0;
 
+}
+
+bool Tokenizer::check() const
+{
+  return position < source.length();
+}
+
+char Tokenizer::peek() const
+{
+  return source[position];
+}
+
+bool Tokenizer::match(std::string const& str) const
+{
+  return position + str.length() <= source.length() && source.substr(position, str.length()) == str;
+}
+
+void Tokenizer::next(int n)
+{
+  position += n;
+}
+
+void Tokenizer::pass_space()
+{
+  while( check() && peek() <= ' ' )
+    next();
+}
+
+std::vector<Token> Tokenizer::Tokenize()
+{
   std::vector<Token> tokens;
-
-  static auto peek = []
-  {
-    return g_source[srcpos];
-  };
-
-  static auto check = []
-  {
-    return srcpos < g_source.length();
-  };
-
-  static auto next = [] (size_t n = 1)
-  {
-    srcpos += n;
-  };
-
-  static auto match = [] (std::string const& s)
-  {
-    return
-      srcpos + s.length() <= g_source.length()
-      &&
-      g_source.substr(srcpos, s.length()) == s;
-  };
-
-  static auto pass_space = []
-  {
-    while( check() )
-    {
-      if( match("\\\n") )
-        srcpos += 2;
-      else if( peek() <= ' ' && peek() != '\n' )
-        srcpos++;
-      else
-        break;
-    }
-  };
-
-  static auto isident = [] (char c)
-  {
-    return isalnum(c) || c == '_';
-  };
 
   pass_space();
 
@@ -143,7 +128,7 @@ std::vector<Token> Tokenize(std::string&& src)
     auto c = peek();
 
     Token tok;
-    tok.srcpos = srcpos;
+    tok.srcpos = position;
 
     // êîéö
     if( isdigit(c) )
@@ -151,7 +136,7 @@ std::vector<Token> Tokenize(std::string&& src)
       tok.type = Token::Number;
 
       // "0x" Ç™Ç†ÇÍÇŒ 16 êiêî
-      if( srcpos + 2 <= g_source.length() && g_source.substr(srcpos, 2) == "0x" )
+      if( match("0x") )
       {
         next(2);
 
@@ -189,11 +174,11 @@ std::vector<Token> Tokenize(std::string&& src)
     }
 
     // éØï éq
-    else if( isident(c) )
+    else if( isalnum(c) || c == '_' )
     {
       tok.type = Token::Ident;
 
-      while( check() && isident(c = peek()) )
+      while( check() && (isalnum(c = peek()) || c == '_') )
         tok.str += c, next();
 
       int find = find_vector<ReservedToken>(Reserved_Words, tok.str);
@@ -259,7 +244,7 @@ std::vector<Token> Tokenize(std::string&& src)
 
       for( std::string str : op_tokens )
       {
-        if( srcpos + str.length() <= g_source.length() && g_source.substr(srcpos, str.length()) == str )
+        if( match(str) )
         {
           next(str.length());
           hit = true;
