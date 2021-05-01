@@ -56,3 +56,8 @@ inline auto GetFileName(const char* s)
 }
 
 #define  alart fprintf(stderr,"\t%s:%d\n",GetFileName(__FILE__),__LINE__)
+
+
+bool is_hex(std::string);
+void SetConsoleColor(int col);
+

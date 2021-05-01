@@ -91,7 +91,3 @@ public:
 
 
 std::vector<Token> Tokenize(std::string&& source);
-
-bool is_hex(std::string);
-
-void SetConsoleColor(int col);
