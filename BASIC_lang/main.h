@@ -157,13 +157,23 @@ struct Node
     Add,
     Sub,
     Mul,
+    Mod,
     Div,
+
+    Shift,
+    Bigger,
+    Equal,
+    NotEqual,
+
     Assign,
 
     Block,
     If,
     For,
     While,
+
+    Break,
+    Continue,
 
     Array,
     IndexRef,

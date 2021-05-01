@@ -465,6 +465,53 @@ Node* Stmt()
     return node;
   }
 
+  //
+  // do - while
+  if( consume("do") )
+  {
+    auto tk = csmtok;
+
+    expect("\n");
+    std::vector<Node*> block;
+
+    Node* cond = nullptr;
+    auto closed = false;
+
+    while( check() )
+    {
+      if( consume("while") )
+      {
+        cond = Expr();
+        expect("\n");
+        closed = true;
+        break;
+      }
+
+      block.emplace_back(Stmt());
+    }
+
+    if( closed == false )
+      tk->Error("not closed");
+
+    auto block_main = new Node(Node::Block);
+    block_main->list = std::move(block);
+
+    auto if_n = new Node(Node::If);
+    if_n->lhs = new Node(Node::Equal, cond, Node::FromInt(0));
+    if_n->rhs = new Node(Node::Break);
+    if_n->list.emplace_back(nullptr);
+
+    auto check_n = new Node(Node::Block);
+    check_n->list.emplace_back(block_main);
+    check_n->list.emplace_back(if_n);
+    
+    auto node = new Node(Node::While);
+    node->lhs = Node::FromInt(1);
+    node->rhs = check_n;
+
+    return node;
+  }
+
 
   return Instruction();
 }

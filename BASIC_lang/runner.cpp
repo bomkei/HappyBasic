@@ -330,6 +330,42 @@ Object RunExpr(Node* node)
       lhs.v_float /= rhs.v_float;
       break;
 
+    case Node::Shift:
+      lhs.v_int <<= rhs.v_int;
+      lhs.v_char <<= rhs.v_char;
+      break;
+
+    case Node::Bigger:
+      switch( lhs.type )
+      {
+      case Object::Int: lhs.v_int = lhs.v_int > rhs.v_int; break;
+      case Object::Char: lhs.v_int = lhs.v_char > rhs.v_char; break;
+      case Object::Float: lhs.v_int = lhs.v_float > rhs.v_float; break;
+      }
+      lhs.type = Object::Int;
+      break;
+
+    case Node::Equal:
+      switch( lhs.type )
+      {
+      case Object::Int: lhs.v_int = lhs.v_int == rhs.v_int; break;
+      case Object::Char: lhs.v_int = lhs.v_char == rhs.v_char; break;
+      case Object::Float: lhs.v_int = lhs.v_float == rhs.v_float; break;
+      }
+      lhs.type = Object::Int;
+      break;
+
+    case Node::NotEqual:
+      switch( lhs.type )
+      {
+      case Object::Int: lhs.v_int = lhs.v_int != rhs.v_int; break;
+      case Object::Char: lhs.v_int = lhs.v_char != rhs.v_char; break;
+      case Object::Float: lhs.v_int = lhs.v_float != rhs.v_float; break;
+      }
+      lhs.type = Object::Int;
+      break;
+
+      
     }
 
     return lhs;
@@ -341,6 +377,9 @@ Object RunExpr(Node* node)
 
 Object RunStmt(Node* node)
 {
+  static bool LoopBreaked;
+  static bool LoopContinued;
+  
   if( node == nullptr )
     return { };
 
@@ -359,7 +398,12 @@ Object RunStmt(Node* node)
 
   case Node::Block:
     for( auto&& x : node->list )
+    {
+      if( LoopBreaked || LoopContinued )
+        break;
+
       RunStmt(x);
+    }
 
     break;
 
@@ -394,7 +438,7 @@ Object RunStmt(Node* node)
     while( true )
     {
       auto end = RunExpr(node->rhs);
-      
+
       if( end.type != Object::Int )
         node->tok.Error("range value is must be a integer");
 
@@ -410,13 +454,34 @@ Object RunStmt(Node* node)
 
   case Node::While:
   {
+    auto f1 = LoopBreaked;
+    auto f2 = LoopContinued;
+
+    LoopBreaked = false;
+    LoopContinued = false;
+
     while( RunExpr(node->lhs).eval() )
     {
+      LoopContinued = false;
       RunStmt(node->rhs);
+
+      if( LoopBreaked )
+        break;
     }
+
+    LoopBreaked = f1;
+    LoopContinued = f2;
 
     break;
   }
+
+  case Node::Break:
+    LoopBreaked = true;
+    break;
+
+  case Node::Continue:
+    LoopContinued = true;
+    break;
 
   default:
     return RunExpr(node);
