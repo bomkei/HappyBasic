@@ -149,9 +149,6 @@ void Instruction(Node* node)
     var.var_ptr->type = Object::Pointer;
     var.var_ptr->var_ptr = ptr.var_ptr;
 
-    /* std::cout << var.var_ptr->to_string() << '\n';
-     exit(123);*/
-
     return;
   }
 

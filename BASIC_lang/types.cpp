@@ -28,7 +28,6 @@ Object& Object::operator = (Object const& obj)
   v_float = obj.v_float;
   v_char = obj.v_char;
 
-  //  name = obj.name;
   list = obj.list;
   var_ptr = obj.var_ptr;
 
