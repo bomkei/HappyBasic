@@ -61,7 +61,12 @@ public:
 
   void OpenFile(std::string const& path);
 
-  
+  void Tokenize();
+  void Parse();
+
+  Object Run() const;
+
+
 
 };
 
