@@ -148,8 +148,13 @@
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AST.h" />
     <ClInclude Include="color.h" />
+    <ClInclude Include="common.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="object.h" />
+    <ClInclude Include="token.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

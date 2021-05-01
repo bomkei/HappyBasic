@@ -58,9 +58,8 @@ int main()
 
   auto tokens = std::move(Tokenize(std::move(source)));
 
-  auto node = Parse(std::move(tokens));
 
-  RunStmt(node);
+
 
 }
 

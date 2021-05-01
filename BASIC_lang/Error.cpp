@@ -1,6 +1,4 @@
-#include <Windows.h>
 #include "main.h"
-#include "color.h"
 
 // •¶šFw’è for Windows Console
 void SetConsoleColor(int col)
