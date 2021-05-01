@@ -35,6 +35,9 @@ auto readfile(std::string const& path)
     while( line.length() && line[0] <= ' ' )
       line.erase(line.begin());
 
+    if( line.empty() )
+      continue;
+
     // ‰üs•¶Žš‚ð‚Â‚¯‚Ä ret ‚É’Ç‰Á‚·‚é
     ret += line + '\n';
   }
