@@ -22,7 +22,7 @@ class msg(commands.Cog):
         await ctx.send("ENDED.")
     
     @commands.command(aliases=["runbasic"])
-    async def runbasic(self, ctx, *args)
+    async def runbasic(self, ctx, *args):
         msg = args[0]
         await ctx.send(msg)
     
