@@ -6,14 +6,7 @@ Token::Token(Token const& tok)
 }
 
 Token& Token::operator = (Token const& tok)
-{
-  type = tok.type;
-  str = tok.str;
-  obj = tok.obj;
-  srcpos = tok.srcpos;
-
-  return *this;
-}
+= default;
 
 Object::Object(Object::Type type)
   :type(type), v_int(0), v_float(0), v_char(0), var_ptr(nullptr)

@@ -16,7 +16,7 @@ bool ParserCore::consume(std::string const&)
 
 }
 
-void ParserCore::expect(std::string const)
+void ParserCore::expect(std::string const&)
 {
 
 }

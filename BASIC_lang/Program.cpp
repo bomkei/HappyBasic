@@ -21,6 +21,6 @@ Object Program::Run() const
 
 
 
-  return { };
+  return Object();
 }
 
