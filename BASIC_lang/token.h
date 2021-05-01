@@ -1,6 +1,5 @@
 #pragma once
 
-
 //
 // ƒg[ƒNƒ“
 struct Token
@@ -31,3 +30,4 @@ struct Token
   [[noreturn]]
   void Error(std::string const& msg);
 };
+
