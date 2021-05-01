@@ -128,7 +128,6 @@ struct Token
   Token(Token&& tok);
 
   Token& operator = (Token const& tok);
-  Token& operator = (Token&& tok);
 
   [[noreturn]]
   void Error(std::string const& msg);

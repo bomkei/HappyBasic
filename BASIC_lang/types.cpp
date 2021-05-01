@@ -20,17 +20,6 @@ Token& Token::operator = (Token const& tok)
   return *this;
 }
 
-Token& Token::operator = (Token&& tok)
-{
-  type = tok.type;
-  str = std::move(tok.str);
-  obj = std::move(tok.obj);
-  srcpos = tok.srcpos;
-
-  return *this;
-}
-
-
 Object::Object(Object::Type type)
   :type(type), v_int(0), v_float(0), v_char(0), var_ptr(nullptr)
 {
