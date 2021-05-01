@@ -1,9 +1,9 @@
 #pragma once
 
 //
-// ƒIƒuƒWƒFƒNƒg
-// ‘¦’l‚â•Ï”A•¶š—ñ‚È‚Ç‚Æ‚µ‚Äg—p‚·‚é
-// ‚³‚ç‚ÉA“®“I‚ÈŒ^•ÏX‚à‚±‚ê‚É‚æ‚èÀŒ»‚³‚ê‚Ä‚¢‚é
+// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+// å³å€¤ã‚„å¤‰æ•°ã€æ–‡å­—åˆ—ãªã©ã¨ã—ã¦ä½¿ç”¨ã™ã‚‹
+// ã•ã‚‰ã«ã€å‹•çš„ãªå‹å¤‰æ›´ã‚‚ã“ã‚Œã«ã‚ˆã‚Šå®Ÿç¾ã•ã‚Œã¦ã„ã‚‹
 struct Object
 {
   enum Type
@@ -25,7 +25,7 @@ struct Object
 
   Object* var_ptr;
 
-  Object(Type type = Int);
+  explicit Object(Type type = Int);
 
   Object& operator = (Object const& obj);
 

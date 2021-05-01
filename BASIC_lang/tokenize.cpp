@@ -1,41 +1,5 @@
 #include "main.h"
 
-struct ReservedToken
-{
-  std::string name;
-  int value;
-
-  ReservedToken(std::string const& name, int v = 0)
-    :name(name), value(v)
-  {
-  }
-
-  bool operator == (ReservedToken rs)
-  {
-    return name == rs.name;
-  }
-};
-
-static std::vector<ReservedToken> Reserved_Words =
-{
-  { "COL_BLACK",        0x0 },
-  { "COL_DARK_BLUE",    0x1 },
-  { "COL_DARK_GREEN",   0x2 },
-  { "COL_DARK_CYAN",    0x3 },
-  { "COL_DARK_RED",     0x4 },
-  { "COL_DARK_VIOLET",  0x5 },
-  { "COL_DARK_YELLOW",  0x6 },
-  { "COL_GRAY",         0x7 },
-  { "COL_LIGHT_GRAY",   0x8 },
-  { "COL_BLUE",         0x9 },
-  { "COL_GREEN",        0xA },
-  { "COL_CYAN",         0xB },
-  { "COL_RED",          0xC },
-  { "COL_VIOLET",       0xD },
-  { "COL_YELLOW",       0xE },
-  { "COL_WHITE",        0xF },
-};
-
 static auto op_tokens =
 {
   "...",
@@ -79,11 +43,6 @@ static auto op_tokens =
   ":",
   "\n",
 };
-
-bool operator == (ReservedToken L, ReservedToken R)
-{
-  return L.name == R.name;
-}
 
 Tokenizer::Tokenizer(std::string const& src)
   :source(src), position(0)
@@ -130,12 +89,12 @@ std::vector<Token> Tokenizer::Tokenize()
     Token tok;
     tok.srcpos = position;
 
-    // êîéö
+    // Êï∞Â≠ó
     if( isdigit(c) )
     {
       tok.type = Token::Number;
 
-      // "0x" Ç™Ç†ÇÍÇŒ 16 êiêî
+      // "0x" „Åå„ÅÇ„Çå„Å∞ 16 ÈÄ≤Êï∞
       if( match("0x") )
       {
         next(2);
@@ -146,13 +105,13 @@ std::vector<Token> Tokenizer::Tokenize()
         tok.obj.v_int = std::stoi(tok.str, nullptr, 16);
       }
 
-      // ñ≥Ç¢èÍçáÅA10 êiêî
+      // ÁÑ°„ÅÑÂ†¥Âêà„ÄÅ10 ÈÄ≤Êï∞
       else
       {
         while( check() && isdigit(c = peek()) )
           tok.str += c, next();
 
-        // ïÇìÆè¨êîì_êî
+        // ÊµÆÂãïÂ∞èÊï∞ÁÇπÊï∞
         if( peek() == '.' )
         {
           next();
@@ -165,7 +124,7 @@ std::vector<Token> Tokenizer::Tokenize()
           tok.obj.v_float = std::stof(tok.str);
         }
 
-        // êÆêî
+        // Êï¥Êï∞
         else
         {
           tok.obj.v_int = std::stoi(tok.str);
@@ -173,7 +132,7 @@ std::vector<Token> Tokenizer::Tokenize()
       }
     }
 
-    // éØï éq
+    // Ë≠òÂà•Â≠ê
     else if( isalnum(c) || c == '_' )
     {
       tok.type = Token::Ident;
@@ -181,21 +140,21 @@ std::vector<Token> Tokenizer::Tokenize()
       while( check() && (isalnum(c = peek()) || c == '_') )
         tok.str += c, next();
 
-      int find = find_vector<ReservedToken>(Reserved_Words, tok.str);
+//      int find = find_vector<ReservedToken>(Reserved_Words, tok.str);
 
-      if( find != -1 )
-      {
-        tok.type = Token::Number;
-        tok.obj.v_int = Reserved_Words[find].value;
-      }
-      else
-      {
-        for( auto&& c : tok.str )
-          if( c >= 'A' && c <= 'Z' ) c += 0x20;
-      }
+//      if( find != -1 )
+//      {
+//        tok.type = Token::Number;
+//        tok.obj.v_int = Reserved_Words[find].value;
+//      }
+//      else
+//      {
+//        for( auto&& c : tok.str )
+//          if( c >= 'A' && c <= 'Z' ) c += 0x20;
+//      }
     }
 
-    // ï∂éö
+    // ÊñáÂ≠ó
     else if( c == '\'' )
     {
       next();
@@ -211,7 +170,7 @@ std::vector<Token> Tokenizer::Tokenize()
       next();
     }
 
-    // ï∂éöóÒ
+    // ÊñáÂ≠óÂàó
     else if( c == '"' )
     {
       tok.type = Token::String;
@@ -236,7 +195,7 @@ std::vector<Token> Tokenizer::Tokenize()
       tok.str += '"';
     }
 
-    // ââéZéq
+    // ÊºîÁÆóÂ≠ê
     else
     {
       auto hit = false;
@@ -253,7 +212,7 @@ std::vector<Token> Tokenizer::Tokenize()
         }
       }
 
-      if( hit == false )
+      if(!hit)
       {
         Program::Error(tok, "unknown token");
       }
