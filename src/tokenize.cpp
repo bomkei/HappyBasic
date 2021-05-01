@@ -170,13 +170,13 @@ std::vector<Token> Tokenizer::Tokenize()
       
       if( find != -1 )
       {
-       tok.type = Token::Number;
-       tok.obj.v_int = std::get<1>(ReservedWords[find]);
+        tok.type = Token::Number;
+        tok.obj.v_int = std::get<1>(ReservedWords[find]);
       }
       else
       {
-       for( auto&& c : tok.str )
-         if( c >= 'A' && c <= 'Z' ) c += 0x20;
+        for( auto&& c : tok.str )
+          if( c >= 'A' && c <= 'Z' ) c += 0x20;
       }
     }
 
