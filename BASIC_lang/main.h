@@ -49,7 +49,7 @@ public:
   AST* Primary();
 };
 
-class ProgramContext
+class Program
 {
   std::vector<Object> variables;
   std::string source;
