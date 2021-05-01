@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "common.h"
+#include "utils.h"
 #include "color.h"
 #include "object.h"
 #include "token.h"
