@@ -6,9 +6,11 @@
 #include <vector>
 #include <tuple>
 #include <utility>
+#include <functional>
 
 #include "common.h"
-#include "color.h"
+#include "utils.h"
+//#include "color.h"
 #include "object.h"
 #include "token.h"
 #include "AST.h"
@@ -42,6 +44,7 @@ class ParserCore
   Token& get_tok();
 
   bool check();
+  bool match(std::string const&);
   bool consume(std::string const&);
   void expect(std::string const&);
   void next();
@@ -55,7 +58,10 @@ public:
   AST* Add();
   AST* Expr();
 
-  AST* Parse();
+  AST_If* Parse_if();
+
+
+  AST_Block* Parse();
 
 
 };

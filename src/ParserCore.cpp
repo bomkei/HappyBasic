@@ -11,9 +11,14 @@ bool ParserCore::check()
   return index < tokens.size();
 }
 
+bool ParserCore::match(std::string const& str)
+{
+  return get_tok().str == str;
+}
+
 bool ParserCore::consume(std::string const& str)
 {
-  if( get_tok().str == str )
+  if( match(str) )
   {
     next();
     return true;
@@ -60,7 +65,7 @@ AST* ParserCore::Expr()
   return nullptr;
 }
 
-AST* ParserCore::Parse()
+AST_Block* ParserCore::Parse()
 {
   return nullptr;
 }

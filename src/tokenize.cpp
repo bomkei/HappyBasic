@@ -44,6 +44,28 @@ static auto op_tokens =
   "\n",
 };
 
+static std::vector<std::pair<std::string, int>> ReservedWords =
+{
+  { "COL_WHITE", 0 },
+  { "COL_BLACK", 0x00 },
+  { "COL_DARK_BLUE", 0x01 },
+  { "COL_DARK_GREEN", 0x02 },
+  { "COL_DARK_CYAN", 0x03 },
+  { "COL_DARK_RED", 0x04 },
+  { "COL_DARK_VIOLET", 0x05 },
+  { "COL_DARK_YELLOW", 0x06 },
+  { "COL_GRAY", 0x07 },
+  { "COL_LIGHT_GRAY", 0x08 },
+  { "COL_BLUE", 0x09 },
+  { "COL_GREEN", 0x0a },
+  { "COL_CYAN", 0x0b },
+  { "COL_RED", 0x0c },
+  { "COL_VIOLET", 0x0d },
+  { "COL_YELLOW", 0x0e },
+  { "COL_WHITE", 0x0f },
+
+};
+
 Tokenizer::Tokenizer(std::string const& src)
   :source(src), position(0)
 {
@@ -139,19 +161,23 @@ std::vector<Token> Tokenizer::Tokenize()
 
       while( check() && (isalnum(c = peek()) || c == '_') )
         tok.str += c, next();
-
-//      int find = find_vector<ReservedToken>(Reserved_Words, tok.str);
-
-//      if( find != -1 )
-//      {
-//        tok.type = Token::Number;
-//        tok.obj.v_int = Reserved_Words[find].value;
-//      }
-//      else
-//      {
-//        for( auto&& c : tok.str )
-//          if( c >= 'A' && c <= 'Z' ) c += 0x20;
-//      }
+      
+      auto find = find_vector(ReservedWords, [](std::pair<std::string, int>& item, std::string s) {
+          return std::get<0>(item) == s;
+        },
+        tok.str
+      );
+      
+      if( find != -1 )
+      {
+       tok.type = Token::Number;
+       tok.obj.v_int = std::get<1>(ReservedWords[find]);
+      }
+      else
+      {
+       for( auto&& c : tok.str )
+         if( c >= 'A' && c <= 'Z' ) c += 0x20;
+      }
     }
 
     // 文字

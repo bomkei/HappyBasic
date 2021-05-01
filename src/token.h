@@ -18,14 +18,12 @@ struct Token
 
   Object obj;
   size_t srcpos = 0;
-
-  Token()
-  = default;
-
+  
+  Token() { }
   Token(Token const& tok);
-
+  
   Token& operator = (Token const& tok);
-
-
+  
+  
 };
 

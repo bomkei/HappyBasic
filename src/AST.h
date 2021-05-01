@@ -16,18 +16,26 @@ public:
   }
 };
 
-class AST_IF : public AST
+class AST_Block : public AST
+{
+public:
+  std::vector<AST_Block*> list;
+
+  Object Run();
+};
+
+class AST_If : public AST
 {
 public:
   AST* cond;
-  AST* if_true;
-  AST* if_false;
+  AST_Block* if_true;
+  AST_Block* if_false;
 };
 
-class AST_WHILE : public AST
+class AST_While : public AST
 {
 public:
   AST* condition;
-  AST* stmt;
+  AST_Block* stmt;
 };
 
