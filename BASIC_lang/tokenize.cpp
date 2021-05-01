@@ -221,7 +221,7 @@ std::vector<Token> Tokenize(std::string&& src)
 
       next();
       if( peek() != '\'' )
-        tok.Error("unclosed char literal");
+        Program::Error(tok, "unclosed char literal");
 
       next();
     }
@@ -270,7 +270,7 @@ std::vector<Token> Tokenize(std::string&& src)
 
       if( hit == false )
       {
-        tok.Error("unknown token");
+        Program::Error(tok, "unknown token");
       }
     }
 

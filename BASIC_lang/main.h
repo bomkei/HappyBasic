@@ -15,7 +15,7 @@
 #include "token.h"
 #include "AST.h"
 
-using ErrorInfo = std::pair<Token*, std::string>;
+using ErrorInfo = std::pair<Token, std::string>;
 
 class Tokenizer
 {
@@ -80,7 +80,7 @@ public:
   Object Run() const;
 
   [[noreturn]]
-  void Error(Token* tok, std::string const& msg);
+  static void Error(Token tok, std::string const& msg);
 
 
 

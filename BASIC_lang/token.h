@@ -27,7 +27,6 @@ struct Token
 
   Token& operator = (Token const& tok);
 
-  [[noreturn]]
-  void Error(std::string const& msg);
+
 };
 
