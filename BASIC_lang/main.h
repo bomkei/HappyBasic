@@ -163,6 +163,7 @@ struct Node
     Block,
     If,
     For,
+    While,
 
     Array,
     IndexRef,

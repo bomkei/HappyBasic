@@ -435,6 +435,37 @@ Node* Stmt()
     return node;
   }
 
+  //
+  // While
+  if( consume("while") )
+  {
+    auto cond = Expr();
+    expect("\n");
+
+    std::vector<Node*> block;
+    bool closed = false;
+
+    while( check() )
+    {
+      if( consume("wend") )
+      {
+        expect("\n");
+        closed = true;
+        break;
+      }
+
+      block.emplace_back(Stmt());
+    }
+
+    auto node = new Node(Node::While);
+    node->lhs = cond;
+    node->rhs = new Node(Node::Block);
+    node->rhs->list = std::move(block);
+
+    return node;
+  }
+
+
   return Instruction();
 }
 

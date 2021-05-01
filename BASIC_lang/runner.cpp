@@ -408,6 +408,16 @@ Object RunStmt(Node* node)
     break;
   }
 
+  case Node::While:
+  {
+    while( RunExpr(node->lhs).eval() )
+    {
+      RunStmt(node->rhs);
+    }
+
+    break;
+  }
+
   default:
     return RunExpr(node);
   }
