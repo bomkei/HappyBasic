@@ -20,7 +20,12 @@ class msg(commands.Cog):
                              stderr=subprocess.STDOUT)
         _ = await process_output(p, m, msg, ctx)
         await ctx.send("ENDED.")
-
+    
+    @commands.command(aliases=["runbasic"])
+    async def runbasic(self, ctx, *args)
+        msg = args[0]
+        await ctx.send(msg)
+    
     @commands.command(aliases=["db"])
     async def debugbasic(self, ctx):
         msg = "DEBUG FROM BASIC LANG IN C++\n"
