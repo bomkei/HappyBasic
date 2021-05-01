@@ -37,6 +37,8 @@ class ParserCore
   std::vector<Token> tokens;
   size_t index;
   
+  Token& get_tok() const;
+
   bool check();
   bool consume(std::string const&);
   void expect(std::string const);
@@ -47,6 +49,13 @@ public:
   void Initialize(std::vector<Token>&&);
 
   AST* Primary();
+  AST* Mul();
+  AST* Add();
+  AST* Expr();
+
+  AST* Parse();
+
+
 };
 
 class Program
