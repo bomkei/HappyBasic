@@ -89,12 +89,3 @@ public:
 };
 
 
-//
-// ソースコード
-//extern std::string g_source;
-
-//
-// 変数
-//struct Object;
-//extern std::vector<Object> g_variables;
-
