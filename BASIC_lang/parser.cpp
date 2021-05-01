@@ -435,23 +435,12 @@ Node* Stmt()
     return node;
   }
 
-
   return Instruction();
 }
 
 Node* Parse(std::vector<Token>&& tokens)
 {
   g_tokens = std::move(tokens);
-
-  //for( size_t i = 0; i < g_tokens.size() - 1; )
-  //{
-  //  if( g_tokens[i].str == "\n" && g_tokens[i + 1].str == "\n" )
-  //  {
-  //    g_tokens.erase(g_tokens.begin() + i);
-  //  }
-  //  else
-  //    i++;
-  //}
 
   auto node = new Node(Node::Block);
 
