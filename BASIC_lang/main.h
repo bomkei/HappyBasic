@@ -75,6 +75,9 @@ public:
 
   Object Run() const;
 
+  [[noreturn]]
+  void Error(Token* tok, std::string const& msg);
+
 
 
 };
