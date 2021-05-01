@@ -44,15 +44,20 @@ public:
 
 };
 
+class ProgramContext
+{
+
+};
+
 
 //
 // ソースコード
-extern std::string g_source;
+//extern std::string g_source;
 
 //
 // 変数
-struct Object;
-extern std::vector<Object> g_variables;
+//struct Object;
+//extern std::vector<Object> g_variables;
 
 
 std::vector<Token> Tokenize(std::string&& source);
