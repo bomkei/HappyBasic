@@ -26,9 +26,6 @@ void SetConsoleColor(int col)
 void Program::Error(Token* tok, std::string const& msg)
 {
 
-  std::cout << msg << '\n';
-  
-  throw 1;
-
+  throw std::make_pair(tok, msg);
 
 }

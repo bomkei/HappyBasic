@@ -5,6 +5,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <tuple>
+#include <utility>
 
 #include "common.h"
 #include "utils.h"
@@ -12,6 +14,8 @@
 #include "object.h"
 #include "token.h"
 #include "AST.h"
+
+using ErrorInfo = std::pair<Token*, std::string>;
 
 class Tokenizer
 {

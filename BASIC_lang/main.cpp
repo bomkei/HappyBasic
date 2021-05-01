@@ -56,10 +56,17 @@ int main()
 {
   auto source = std::move(readfile("C:/users/mrzkr/desktop/test.txt"));
 
-  auto tokens = std::move(Tokenize(std::move(source)));
+  try
+  {
+    auto tokens = std::move(Tokenize(std::move(source)));
+
+  }
+  catch( ErrorInfo const& info )
+  {
+    std::cout << std::get<1>(info) << '\n';
 
 
-
+  }
 
 }
 
