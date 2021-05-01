@@ -27,7 +27,7 @@ class Tokenizer
 public:
   void Initialize(std::string&&);
 
-  std::vector<Token> Tokenize();
+  std::vector<Token> Tokenize() const;
 
 
 };
