@@ -142,7 +142,7 @@
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="runner.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="parser.cpp" />
+    <ClCompile Include="ParserCore.cpp" />
     <ClCompile Include="tokenize.cpp" />
     <ClCompile Include="types.cpp" />
     <ClCompile Include="utils.cpp" />

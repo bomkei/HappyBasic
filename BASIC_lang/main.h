@@ -13,6 +13,37 @@
 #include "token.h"
 #include "AST.h"
 
+class Tokenizer
+{
+  std::string source;
+  size_t position;
+
+  char peek() const;
+  bool check() const;
+  bool match(std::string const&) const;
+  void next();
+  void pass_space();
+
+public:
+  void Initialize(std::string&&);
+
+  std::vector<Token> Tokenize();
+
+
+};
+
+class ParserCore
+{
+  std::vector<Token> tokens;
+  size_t index;
+  
+public:
+
+  void Initialize(std::vector<Token>&&);
+
+
+};
+
 
 //
 // ソースコード
