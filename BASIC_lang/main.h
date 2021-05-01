@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Windows.h>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -9,7 +8,6 @@
 #include <utility>
 
 #include "common.h"
-#include "utils.h"
 #include "color.h"
 #include "object.h"
 #include "token.h"
@@ -29,7 +27,7 @@ class Tokenizer
   void pass_space();
 
 public:
-  Tokenizer(std::string const& src);
+  explicit Tokenizer(std::string const& src);
 
   std::vector<Token> Tokenize();
 
@@ -45,7 +43,7 @@ class ParserCore
 
   bool check() const;
   bool consume(std::string const&);
-  void expect(std::string const);
+  void expect(std::string const&);
   void next();
 
 public:
@@ -82,7 +80,7 @@ public:
   Object Run() const;
 
   [[noreturn]]
-  static void Error(Token tok, std::string const& msg);
+  static void Error(const Token& tok, std::string const& msg);
 
 
 
@@ -90,11 +88,11 @@ public:
 
 
 //
-// É\Å[ÉXÉRÅ[Éh
+// „ÇΩ„Éº„Çπ„Ç≥„Éº„Éâ
 //extern std::string g_source;
 
 //
-// ïœêî
+// Â§âÊï∞
 //struct Object;
 //extern std::vector<Object> g_variables;
 

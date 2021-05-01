@@ -1,7 +1,7 @@
 #pragma once
 
 //
-// ÉgÅ[ÉNÉì
+// „Éà„Éº„ÇØ„É≥
 struct Token
 {
   enum Type
@@ -20,8 +20,7 @@ struct Token
   size_t srcpos = 0;
 
   Token()
-  {
-  }
+  = default;
 
   Token(Token const& tok);
 
