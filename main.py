@@ -21,7 +21,7 @@ class msg(commands.Cog):
         _ = await process_output(p, m, msg, ctx)
         await ctx.send("ENDED.")
     
-    @commands.command(aliases=["runbasic"])
+    @commands.command(aliases=["basic"])
     async def runbasic(self, ctx, *args):
         msg = args[0]
         await ctx.send(msg)
