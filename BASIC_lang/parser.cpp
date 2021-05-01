@@ -392,34 +392,45 @@ Node* Stmt()
   if( consume("for") )
   {
     auto tk = csmtok;
-    auto var = Expr();
+    
+    auto counter = Primary();
+    if( counter->type != Node::Variable )
+      tk->Error("expect counter variable after this token");
 
-    expect("in");
-    auto list = Expr();
+    expect("=");
+    auto begin = Expr();
+
+    expect("to");
+    auto end = Expr();
     expect("\n");
 
-    auto node = new Node(Node::For);
-    bool closed = false;
-
-    node->tok = *tk;
-    node->lhs = var;
-    node->rhs = list;
-    node->list.emplace_back(new Node(Node::Block));
+    auto closed = false;
+    std::vector<Node*> block;
 
     while( check() )
     {
       if( consume("next") )
       {
-        closed = true;
         expect("\n");
+        closed = true;
         break;
       }
 
-      node->list[0]->list.emplace_back(Stmt());
+      block.emplace_back(Stmt());
     }
 
     if( closed == false )
-      tk->Error("not closed");
+      tk->Error("not closed statement");
+
+    auto block_n = new Node(Node::Block);
+    block_n->list = std::move(block);
+
+    auto node = new Node(Node::For);
+    node->tok = *tk;
+    node->lhs = begin;
+    node->rhs = end;
+    node->list.emplace_back(counter);
+    node->list.emplace_back(block_n);
 
     return node;
   }

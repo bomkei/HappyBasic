@@ -369,19 +369,26 @@ Object RunStmt(Node* node)
 
   case Node::For:
   {
-    auto it = RunExpr(node->lhs);
-    auto arr = RunExpr(node->rhs);
+    auto counter = RunExpr(node->list[0]);
+    auto begin = RunExpr(node->lhs);
 
-    if( it.var_ptr == nullptr )
-      node->lhs->tok.Error("cannot use not a lvalue for iterator");
+    if( begin.type != Object::Int )
+      node->tok.Error("range value is must be a integer");
 
-    if( arr.type != Object::Array )
-      node->rhs->tok.Error("cannot iterate not array object");
+    counter.var_ptr->v_int = begin.v_int;
 
-    for( auto&& i : arr.list )
+    while( true )
     {
-      *it.var_ptr = i;
-      RunStmt(node->list[0]);
+      auto end = RunExpr(node->rhs);
+      
+      if( end.type != Object::Int )
+        node->tok.Error("range value is must be a integer");
+
+      if( counter.var_ptr->v_int > end.v_int )
+        break;
+
+      RunStmt(node->list[1]);
+      counter.var_ptr->v_int++;
     }
 
     break;
