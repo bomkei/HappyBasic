@@ -5,11 +5,6 @@ Token::Token(Token const& tok)
   *this = tok;
 }
 
-Token::Token(Token&& tok)
-{
-  *this = std::move(tok);
-}
-
 Token& Token::operator = (Token const& tok)
 {
   type = tok.type;

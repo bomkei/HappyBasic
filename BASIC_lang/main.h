@@ -125,7 +125,6 @@ struct Token
   }
 
   Token(Token const& tok);
-  Token(Token&& tok);
 
   Token& operator = (Token const& tok);
 
