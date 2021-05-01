@@ -10,7 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="70280ca5-3489-4658-a578-7f3f6f40859b" name="デフォルト変更リスト" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -94,7 +93,7 @@
       <updated>1619902029936</updated>
       <workItem from="1619902032125" duration="352000" />
       <workItem from="1619902398693" duration="137000" />
-      <workItem from="1619902550153" duration="944000" />
+      <workItem from="1619902550153" duration="1266000" />
     </task>
     <task id="LOCAL-00001" summary="cmake追加/ブランチ変更">
       <created>1619902205603</created>
@@ -110,7 +109,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619903249317</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="バグ修正&amp;returnコード表示">
+      <created>1619903642841</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1619903642841</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -144,6 +150,7 @@
     <option name="SHELVE_DETAILS_PREVIEW_SHOWN" value="true" />
     <MESSAGE value="cmake追加/ブランチ変更" />
     <MESSAGE value="botplugin化" />
-    <option name="LAST_COMMIT_MESSAGE" value="botplugin化" />
+    <MESSAGE value="バグ修正&amp;returnコード表示" />
+    <option name="LAST_COMMIT_MESSAGE" value="バグ修正&amp;returnコード表示" />
   </component>
 </project>

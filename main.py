@@ -36,14 +36,15 @@ class msg(commands.Cog):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
         _ = await process_output(p, m, msg, ctx)
-        await ctx.send("ENDED. CODE:"+str(p.returncode))
+        await ctx.send("ENDED.")
         msg = "RUN DEBUG\n"
         m: discord.Message = await ctx.send(msg)
         p = subprocess.Popen(["./plugin/BASIC_lang/basic"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
         _ = await process_output(p, m, msg, ctx)
-        await ctx.send("ENDED.")
+        _ = p.communicate()[0]
+        await ctx.send("ENDED. CODE:"+str(p.returncode))
 
 
 def setup(bot):
