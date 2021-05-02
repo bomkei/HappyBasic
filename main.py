@@ -22,8 +22,14 @@ class msg(commands.Cog):
         await ctx.send("ENDED.")
     
     @commands.command(aliases=["basic"])
-    async def runbasic(self, ctx, *args):
-        await ctx.send(ctx.message.content)
+    async def runbasic(self, ctx):
+        if not ctx.message.content.startswith(',basic\n```\n'):
+            return
+        
+        begin = 11
+        program = ctx.message.content[begin:len(ctx.message.content)-begin-3]
+        
+        await ctx.send(program)
     
     @commands.command(aliases=["db"])
     async def debugbasic(self, ctx):
