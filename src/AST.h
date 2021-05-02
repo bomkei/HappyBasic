@@ -20,6 +20,16 @@ namespace AST
     Expr*   left   = nullptr;
     Expr*   right  = nullptr;
     Token*  token  = nullptr;
+    
+    Expr(Type type = Immidiate)
+      :type(type)
+    {
+    }
+    
+    Expr(Type type, Expr* left, Expr* right, Token* tok)
+      :type(type), left(left), right(right), token(tok)
+    {
+    }
   };
   
   class Stmt

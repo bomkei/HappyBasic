@@ -13,7 +13,7 @@ int main()
     
     auto res = prg.Run();
     
-    
+    std::cout << res.to_string();
   }
   catch( ErrorInfo const& info )
   {

@@ -18,13 +18,12 @@ struct Token
 
   Object obj;
   size_t srcpos = 0;
-  
-  
 };
 
 
 [[noreturn]]
-void Error(Token tok, std::string const& msg)
+void Error(Token const& tok, std::string const& msg)
 {
   throw std::make_pair(tok, msg);
 }
+

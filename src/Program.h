@@ -8,7 +8,7 @@ class Program
   Tokenizer *tokenizer;
   ParserCore *parser;
   
-  AST::Stmt* prs_result;
+  AST::Expr* prs_result;
   
 public:
   
@@ -72,13 +72,13 @@ public:
   
   void Parse()
   {
-    prs_result = parser->Parse();
+    prs_result = parser->Mul();
   }
   
   Object Run()
   {
     
-    return AST_Runner::Run_Stmt(prs_result);
+    return AST_Runner::Run_Expr(prs_result);
   }
   
   

@@ -6,6 +6,8 @@ class ParserCore
   std::vector<Token> tokens;
   size_t index;
   
+  Token* csmtok;
+  
   Token& get_tok()
   {
     return tokens[index];
@@ -25,6 +27,7 @@ class ParserCore
   {
     if( match(str) )
     {
+      csmtok = &get_tok();
       next();
       return true;
     }
@@ -52,12 +55,41 @@ public:
 
   AST::Expr* Primary()
   {
-    return nullptr;
+    auto tok = &get_tok();
+    
+    switch( tok->type )
+    {
+      case Token::Number:
+      {
+        auto ast = new AST::Expr();
+        
+        ast->token = tok;
+        next();
+        
+        return ast;
+      }
+      
+      
+    }
+    
+    Error(*tok, "syntax error");
   }
 
   AST::Expr* Mul()
   {
-    return nullptr;
+    auto x = Primary();
+    
+    while( check() )
+    {
+      if( consume("*") )
+        x = new AST::Expr(AST::Expr::Mul, x, Primary(), csmtok);
+      else if( consume("/") )
+        x = new AST::Expr(AST::Expr::Div, x, Primary(), csmtok);
+      else
+        break;
+    }
+    
+    return x;
   }
 
   AST::Expr* Add()
@@ -83,7 +115,11 @@ public:
   
   AST::Stmt* Parse()
   {
-    return nullptr;
+    auto x = new AST::Stmt();
+    
+//    x->list.emplace_back();
+    
+    return x;
   }
   
   
