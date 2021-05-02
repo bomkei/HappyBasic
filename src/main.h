@@ -92,14 +92,25 @@ struct Token
 class AST
 {
 public:
+  enum Type
+  {
+    Add,
+    Sub,
+    Mul,
+    Div,
+    Immidiate
+  };
+  
   AST* lhs = nullptr;
   AST* rhs = nullptr;
   Token* tok = nullptr;
-
+  
   int varIndex = 0;
-
-  AST(AST* lhs, AST* rhs, Token* tok = nullptr)
-    :lhs(lhs), rhs(rhs), tok(tok)
+  
+  AST(Type type) :type(type) { }
+  
+  AST(Type type, AST* lhs, AST* rhs, Token* tok = nullptr)
+    :type(type), lhs(lhs), rhs(rhs), tok(tok)
   {
     
   }
