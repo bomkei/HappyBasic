@@ -8,14 +8,127 @@
 #include <utility>
 #include <functional>
 
-#include "common.h"
-#include "utils.h"
-//#include "color.h"
-#include "object.h"
-#include "token.h"
-#include "AST.h"
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
 
+
+struct Token;
 using ErrorInfo = std::pair<Token, std::string>;
+
+
+template <class T, class F, class... Args>
+int find_vector(std::vector<T>& vec, F compare, Args ...args)
+{
+  for( int i = 0; i < vec.size(); i++ )
+    if( compare(vec[i], args...) )
+      return i;
+
+  return -1;
+}
+
+
+struct Object
+{
+  enum Type
+  {
+    Int,
+    Float,
+    Char,
+    Array,
+    Pointer
+  };
+
+  Type type;
+  std::string name;
+
+  int v_int;
+  float v_float;
+  char v_char;
+  std::vector<Object> list;
+
+  Object* var_ptr;
+
+  Object(Type type = Int);
+
+  Object& operator = (Object const& obj);
+
+  std::string to_string() const;
+
+  static void Clear(Object& obj);
+
+  bool is_string() const;
+  bool eval() const;
+};
+
+//
+// トークン
+struct Token
+{
+  enum Type
+  {
+    Number,
+    String,
+    Char,
+    Ident,
+    Operator
+  };
+
+  Type type = Number;
+  std::string str;
+
+  Object obj;
+  size_t srcpos = 0;
+  
+  Token() { }
+  Token(Token const& tok);
+  
+  Token& operator = (Token const& tok);
+  
+  
+};
+
+class AST
+{
+public:
+  AST* lhs = nullptr;
+  AST* rhs = nullptr;
+  Token* tok = nullptr;
+
+  int varIndex = 0;
+
+  AST(AST* lhs, AST* rhs, Token* tok = nullptr)
+    :lhs(lhs), rhs(rhs), tok(tok)
+  {
+    
+  }
+};
+
+class AST_Block : public AST
+{
+public:
+  std::vector<AST_Block*> list;
+
+  Object Run();
+};
+
+class AST_If : public AST
+{
+public:
+  AST* cond;
+  AST_Block* if_true;
+  AST_Block* if_false;
+};
+
+class AST_While : public AST
+{
+public:
+  AST* condition;
+  AST_Block* stmt;
+};
+ 
+
 
 class Tokenizer
 {
@@ -92,13 +205,4 @@ public:
 
 };
 
-
-//
-// ソースコード
-//extern std::string g_source;
-
-//
-// 変数
-//struct Object;
-//extern std::vector<Object> g_variables;
 

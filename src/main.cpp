@@ -51,15 +51,14 @@ int main()
   try
   {
     Program prg;
-
-    //prg.OpenFile("C:/Users/mrzkr/Desktop/BASIC_lang/x64/Release/test.txt");
+    
     prg.OpenFile("test.txt");
     
     prg.Tokenize();
     prg.Parse();
-
+    
     auto res = prg.Run();
-
+    
   }
   catch( ErrorInfo const& info )
   {

@@ -1,18 +1,21 @@
-TARGET		= basic
+TARGET		= FlyBasic
+EXT       =
 
 SRCDIR		= src
 OBJDIR		= build
 
 CXXFILES	= $(wildcard $(SRCDIR)/*.cpp)
-CFILES		= $(wildcard $(SRCDIR)/*.c)
 
-OFILES		= \
-	$(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(CXXFILES))) \
-	$(patsubst %.c, $(OBJDIR)/%.o, $(notdir $(CFILES))) 
+OFILES		= $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(CXXFILES)))
 
-CFLAGS		= -O2
-CXXFLAGS	= $(CFLAGS) -std=gnu++17 -Wno-psabi
+CXXFLAGS	= -O2 -std=gnu++17 -Wno-psabi
 LDFLAGS		= -Wl,--gc-sections,-s
+
+ifeq ($(OS), Windows_NT)
+  EXT  = .exe
+else
+  EXT  = .out
+endif
 
 all: $(TARGET)
 
@@ -27,12 +30,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(wildcard $(SRCDIR)/*.h)
 	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
 	@g++ $(CXXFLAGS) -c $< -o $@
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(wildcard $(SRCDIR)/*.h)
-	@echo $(notdir $<)
-	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
-	@gcc $(CFLAGS) -c $< -o $@
-
 $(TARGET): $(OFILES)
 	@echo linking...
-	@g++ $(LDFLAGS) $^ -o $@
+	@g++ $(LDFLAGS) $^ -o $@$(EXT)
 
