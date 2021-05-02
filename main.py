@@ -23,11 +23,13 @@ class msg(commands.Cog):
     
     @commands.command(aliases=["basic"])
     async def runbasic(self, ctx):
-        if not ctx.message.content.startswith(',basic\n```\n'):
+        if ctx.message.content[:11] != ',basic\n```\n':
             return
         
-        begin = 11
-        program = ctx.message.content[begin:len(ctx.message.content)-3]
+        if ctx.message.content[-3:] != '```':
+            return
+        
+        program = ctx.message.content[11:-3]
         
         await ctx.send(program)
     
