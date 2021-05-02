@@ -27,7 +27,7 @@ class msg(commands.Cog):
             return
         
         begin = 11
-        program = ctx.message.content[begin:len(ctx.message.content)-begin-3]
+        program = ctx.message.content[begin:len(ctx.message.content)-3]
         
         await ctx.send(program)
     
