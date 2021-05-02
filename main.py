@@ -23,19 +23,7 @@ class msg(commands.Cog):
     
     @commands.command(aliases=["basic"])
     async def runbasic(self, ctx, *args):
-        msg = ''
-        program = ''
-        
-        if args[0] != '```':
-            await ctx.send('syntax error')
-        
-        for i in args[1:]:
-            if len(i) == 0 or i == '```':
-                break
-            
-            program += i + '\n'
-        
-        await ctx.send(str(program))
+        await ctx.send(ctx.content)
     
     @commands.command(aliases=["db"])
     async def debugbasic(self, ctx):
