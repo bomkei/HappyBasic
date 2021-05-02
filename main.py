@@ -28,7 +28,7 @@ class msg(commands.Cog):
         for i in args:
             msg += i + ', '
         
-        await msg
+        await ctx.send(msg)
     
     @commands.command(aliases=["db"])
     async def debugbasic(self, ctx):
