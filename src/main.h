@@ -199,7 +199,7 @@ public:
   Object Run() const;
 
   [[noreturn]]
-  static void Error(const Token& tok, std::string const& msg);
+  static void Error(Token const& tok, std::string const& msg);
 
 
 
