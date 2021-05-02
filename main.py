@@ -30,10 +30,10 @@ class msg(commands.Cog):
             await ctx.send('syntax error')
         
         for i in args[1:]:
-            if i == '```':
+            if len(i) == 0 or i == '```':
                 break
             
-            program += i
+            program += i + '\n'
         
         await ctx.send(str(program))
     
