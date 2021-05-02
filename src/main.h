@@ -89,56 +89,8 @@ struct Token
   
 };
 
-class AST
-{
-public:
-  enum Type
-  {
-    Add,
-    Sub,
-    Mul,
-    Div,
-    Immidiate
-  };
-  
-  AST* lhs = nullptr;
-  AST* rhs = nullptr;
-  Token* tok = nullptr;
-  
-  int varIndex = 0;
-  
-  AST(Type type) :type(type) { }
-  
-  AST(Type type, AST* lhs, AST* rhs, Token* tok = nullptr)
-    :type(type), lhs(lhs), rhs(rhs), tok(tok)
-  {
-    
-  }
-};
 
-class AST_Block : public AST
-{
-public:
-  std::vector<AST_Block*> list;
-
-  Object Run();
-};
-
-class AST_If : public AST
-{
-public:
-  AST* cond;
-  AST_Block* if_true;
-  AST_Block* if_false;
-};
-
-class AST_While : public AST
-{
-public:
-  AST* condition;
-  AST_Block* stmt;
-};
- 
+#include "AST.h"
 
 
 class Tokenizer
@@ -172,22 +124,22 @@ class ParserCore
   bool consume(std::string const&);
   void expect(std::string const&);
   void next();
-
+  
 public:
-
+  
   void Initialize(std::vector<Token>&&);
-
-  AST* Primary();
-  AST* Mul();
-  AST* Add();
-  AST* Expr();
-
-  AST_If* Parse_if();
-
-
-  AST_Block* Parse();
-
-
+  
+  AST::Expr* Primary();
+  AST::Expr* Mul();
+  AST::Expr* Add();
+  AST::Expr* Expr();
+  
+  AST::If* Parse_if();
+  AST::For* Parse_for();
+  
+  AST::Stmt* Parse();
+  
+  
 };
 
 class Program
@@ -199,21 +151,21 @@ class Program
   ParserCore *parser;
 
 public:
-
+  
   Program();
-
+  
   void OpenFile(std::string const& path);
-
+  
   void Tokenize();
   void Parse();
-
-  Object Run() const;
-
+  
+  Object Run_Expr(AST* ) const;
+  
   [[noreturn]]
   static void Error(Token const& tok, std::string const& msg);
-
-
-
+  
+  
+  
 };
 
 
