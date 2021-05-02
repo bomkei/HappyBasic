@@ -7,4 +7,5 @@
 *.exe
 *.out
 
-test.txt
+*.bat
+

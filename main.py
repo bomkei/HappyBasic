@@ -23,7 +23,7 @@ class msg(commands.Cog):
     
     @commands.command(aliases=["basic"])
     async def runbasic(self, ctx, *args):
-        await ctx.send(ctx.content)
+        await ctx.send(ctx.message.content)
     
     @commands.command(aliases=["db"])
     async def debugbasic(self, ctx):
