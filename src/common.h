@@ -7,4 +7,3 @@ typedef int64_t i64;
 
 struct Token;
 using ErrorInfo = std::pair<Token, std::string>;
-

@@ -1,7 +1,5 @@
 #pragma once
 
-//
-// ÉgÅ[ÉNÉì
 struct Token
 {
   enum Type
@@ -19,4 +17,3 @@ struct Token
   Object obj;
   size_t srcpos = 0;
 };
-

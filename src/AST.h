@@ -1,9 +1,7 @@
 #pragma once
 
-
 namespace AST
 {
-
   class Expr
   {
   public:
