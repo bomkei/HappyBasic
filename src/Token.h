@@ -20,9 +20,3 @@ struct Token
   size_t srcpos = 0;
 };
 
-[[noreturn]]
-void Error(size_t errpos, std::string const& msg)
-{
-  std::cout << errpos << ": " << msg;
-  exit(1);
-}

@@ -2,6 +2,8 @@
 
 class Program
 {
+  static Program* instance;
+
   std::vector<Object> variables;
   std::string source;
 
@@ -15,6 +17,8 @@ public:
   {
     tokenizer = new Tokenizer(source);
     parser = new ParserCore(variables);
+
+    instance = this;
   }
 
   void OpenFile(std::string const& path)
@@ -77,5 +81,11 @@ public:
   {
 
     return AST_Runner::Run_Stmt(prs_result);
+  }
+
+  [[noreturn]]
+  static void Error(Token const& tok, std::string const& msg)
+  {
+
   }
 };

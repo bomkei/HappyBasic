@@ -1,5 +1,7 @@
 #include "main.h"
 
+Program* Program::instance;
+
 int main()
 {
   Program prg;
