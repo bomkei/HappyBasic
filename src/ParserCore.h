@@ -234,11 +234,31 @@ public:
     // assign
     if( index + 1 < tokens.size() && tokens[index + 1].str == "=" )
     {
-      auto var = Primary();
-
-
+      auto ast = new AST::Assign;
+      
+      ast->var = Primary();
+      next();
+      
+      ast->value = Expr();
+      expect("\n");
+      
+      return ast;
     }
 
+    // instruction
+    auto ast = new AST::Instruction;
+    ast->name = tok.str;
+
+    if( !consume("\n") )
+    {
+      do
+      {
+        ast->args.emplace_back(Expr());
+      } while( consume(",") );
+      expect("\n");
+    }
+
+    return ast;
   }
 
   AST::Stmt* Parse()

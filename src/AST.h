@@ -102,7 +102,7 @@ namespace AST
   {
   public:
     Expr* var;
-    Expr* expr;
+    Expr* value;
   };
 
   class Instruction : public Stmt

@@ -189,6 +189,8 @@ public:
           for( auto&& c : tok.str )
             if( c >= 'A' && c <= 'Z' ) c += 0x20;
         }
+
+        tok.obj.name = tok.str;
       }
 
       // 文字
