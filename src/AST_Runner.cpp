@@ -9,14 +9,14 @@ Object AST_Runner::Run_Expr(AST::Expr* ast)
   {
   case AST::Expr::Immidiate:
     return ast->token->obj;
-  
+
   case AST::Expr::Variable:
   {
-    auto &var = Program::instance->variables[ast->varIndex];
+    auto& var = Program::instance->variables[ast->varIndex];
     var.var_ptr = &var;
     return var;
   }
-  
+
   default:
   {
     auto left = Run_Expr(ast->left);
@@ -62,7 +62,7 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
 
     alart;
 
-    for( auto&& i : ast->list )
+    for( auto&& i : ((AST::Block*)ast)->list )
       obj = Run_Stmt(i);
 
     return obj;
@@ -83,17 +83,18 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
 
   case AST::Stmt::If:
   {
-    alart;
-
-    if( Run_Expr(((AST::If*)ast)->cond).eval() )
+    for( auto&& pair : ((AST::If*)ast)->pairs )
     {
       alart;
-      return Run_Stmt(((AST::If*)ast)->if_true);
+      auto cond = Run_Expr(std::get<0>(pair));
+
+      if( cond.eval() )
+      {
+        return Run_Stmt(std::get<1>(pair));
+      }
     }
 
-    alart;
-
-    return Run_Stmt(((AST::If*)ast)->if_false);
+    break;
   }
 
   case AST::Stmt::For:

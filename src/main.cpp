@@ -12,7 +12,7 @@ int main()
 
   alart;
   prg.Tokenize();
-  
+
   alart;
   prg.Parse();
 

@@ -51,21 +51,32 @@ namespace AST
     };
 
     Type type;
-    Expr* expr = nullptr;
+    Expr* expr;
 
     Stmt(Type type = None)
-      :type(type)
+      :type(type), expr(nullptr)
     {
+    }
+  };
+
+  class Block : public Stmt
+  {
+  public:
+    std::vector<Stmt*> list;
+
+    Block()
+    {
+      type = Type::Block;
     }
   };
 
   class If : public Stmt
   {
   public:
-    Expr* cond;
-    Stmt* if_true;
-    Stmt* if_false;
-    
+    using Pair = std::pair<AST::Expr*, AST::Block*>;
+
+    std::vector<Pair> pairs;
+
     If()
     {
       type = Type::If;
@@ -78,7 +89,7 @@ namespace AST
     Expr* begin;
     Expr* end;
     Stmt* code;
-    
+
     For()
     {
       type = Type::For;
@@ -118,17 +129,6 @@ namespace AST
     Instruction()
     {
       type = Type::Instruction;
-    }
-  };
-
-  class Block : public Stmt
-  {
-  public:
-    std::vector<Stmt*> list;
-
-    Block()
-    {
-      type = Type::Block;
     }
   };
 

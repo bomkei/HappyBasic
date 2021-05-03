@@ -7,15 +7,15 @@
 #include <vector>
 #include <utility>
 
-#include "include/common.h"
-#include "include/utils.h"
+#include "common.h"
+#include "utils.h"
 
-#include "include/Object.h"
-#include "include/Token.h"
-#include "include/AST.h"
+#include "Object.h"
+#include "Token.h"
+#include "AST.h"
 
-#include "include/Tokenizer.h"
-#include "include/ParserCore.h"
-#include "include/AST_Runner.h"
-#include "include/Program.h"
+#include "Tokenizer.h"
+#include "ParserCore.h"
+#include "AST_Runner.h"
+#include "Program.h"
 

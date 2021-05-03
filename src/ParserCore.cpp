@@ -157,95 +157,38 @@ AST::Stmt* ParserCore::Stmt()
   // if
   if( consume("if") )
   {
-    auto tk = csmtok;
+    AST::If::Pair pair;
+    auto closed = false;
 
     auto ast = new AST::If;
-    ast->cond = Expr();
-    ast->if_true = new AST::Stmt;
-    ast->if_true->type = AST::Stmt::Block;
-    //ast->if_false = new AST::Stmt;
 
-    alart;
-    expect("then");
-    expect("\n");
-
-    alart;
-    auto closed = false;
+    std::get<0>(pair) = Expr();
+    std::get<1>(pair) = new AST::Block();
 
     while( check() )
     {
-      alart;
-
       if( consume("endif") )
       {
-        alart;
-
         expect("\n");
-        closed = true;
-        break;
-      }
-      else if( consume("else") )
-      {
-        alart;
-
-        if( ast->if_false == nullptr )
-        {
-          ast->if_false = new AST::Stmt;
-          ast->if_false->type = AST::Stmt::Block;
-        }
-
-        expect("\n");
-
-        while( check() )
-        {
-          alart;
-
-          if( consume("endif") )
-          {
-            alart;
-
-            expect("\n");
-            closed = true;
-            break;
-          }
-          else
-          {
-            alart;
-
-            ast->if_false->list.emplace_back(Stmt());
-          }
-        }
-
+        ast->pairs.emplace_back(pair);
         break;
       }
       else if( consume("elseif") )
       {
-        auto cond = Expr();
+        ast->pairs.emplace_back(pair);
+
+        std::get<0>(pair) = Expr();
+        std::get<1>(pair)->list.clear();
+
         expect("then");
         expect("\n");
-
-        auto new_a = new AST::If;
-        new_a->cond = cond;
-        new_a->if_true = new AST::Stmt;
-        new_a->if_true->type = AST::Stmt::Block;
-
-        ast->if_false = new_a;
-        ast = new_a;
       }
       else
       {
-        alart;
-
-        ast->if_true->list.emplace_back(Stmt());
+        std::get<1>(pair)->list.emplace_back(Stmt());
       }
     }
 
-    alart;
-
-    if( !closed )
-      Program::Error(*tk, "not closed");
-
-    alart;
 
     return ast;
   }
@@ -289,7 +232,7 @@ AST::Stmt* ParserCore::Stmt()
 
 AST::Stmt* ParserCore::Parse()
 {
-  auto ast = new AST::Stmt(AST::Stmt::Block);
+  auto ast = new AST::Block;
 
   while( check() )
   {

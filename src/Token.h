@@ -1,7 +1,7 @@
 #pragma once
 
 //
-// ãƒˆãƒ¼ã‚¯ãƒ³
+// ƒg[ƒNƒ“
 struct Token
 {
   enum Type
