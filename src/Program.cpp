@@ -72,6 +72,8 @@ Object Program::Run()
 
 void Program::Error(Token const& tok, std::string const& msg)
 {
+  alart;
+
   size_t
     line = 1,
     begin = 0,
@@ -94,6 +96,8 @@ void Program::Error(Token const& tok, std::string const& msg)
       break;
     }
   }
+
+  alart;
 
   std::cout
     << '\n'

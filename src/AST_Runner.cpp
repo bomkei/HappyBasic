@@ -60,6 +60,8 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
   {
     Object obj;
 
+    alart;
+
     for( auto&& i : ast->list )
       obj = Run_Stmt(i);
 
@@ -70,11 +72,30 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
   {
     auto var = Run_Expr(((AST::Assign*)ast)->var);
     auto value = Run_Expr(((AST::Assign*)ast)->value);
-    
-    *(var.var_ptr) = value;
-    
-    return value;
+
+    alart;
+    return *(var.var_ptr) = value;
   }
+
+  case AST::Stmt::Instruction:
+    alart;
+    return { };
+
+  case AST::Stmt::If:
+  {
+    alart;
+
+    if( Run_Expr(((AST::If*)ast)->cond).eval() )
+      return Run_Stmt(((AST::If*)ast)->if_true);
+
+    return Run_Stmt(((AST::If*)ast)->if_false);
+  }
+
+  case AST::Stmt::For:
+    break;
+
+  case AST::Stmt::While:
+    break;
 
   case AST::Stmt::Default:
     return Run_Expr(ast->expr);

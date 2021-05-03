@@ -164,55 +164,86 @@ AST::Stmt* ParserCore::Stmt()
     ast->if_true = new AST::Stmt;
     ast->if_false = new AST::Stmt;
 
+    alart;
     expect("then");
     expect("\n");
 
+    alart;
     auto closed = false;
 
     while( check() )
     {
+      alart;
+
       if( consume("endif") )
       {
+        alart;
+
         expect("\n");
         closed = true;
         break;
       }
       else if( consume("else") )
       {
+        alart;
+
         expect("\n");
 
         while( check() )
         {
+          alart;
+
           if( consume("endif") )
           {
+            alart;
+
             expect("\n");
             closed = true;
             break;
           }
           else
+          {
+            alart;
+
             ast->if_false->list.emplace_back(Stmt());
+          }
         }
 
         break;
       }
       else if( consume("elseif") )
       {
+        alart;
+
         auto old = ast;
         tk = csmtok;
 
+        alart;
+
         ast = new AST::If;
+        ast->if_true = new AST::Stmt;
         ast->if_false = old;
         ast->cond = Expr();
+
+        alart;
 
         expect("then");
         expect("\n");
       }
       else
+      {
+        alart;
+
         ast->if_true->list.emplace_back(Stmt());
+      }
     }
+
+    alart;
 
     if( !closed )
       Program::Error(*tk, "not closed");
+
+    alart;
 
     return ast;
   }
