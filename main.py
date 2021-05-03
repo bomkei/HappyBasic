@@ -31,6 +31,10 @@ class msg(commands.Cog):
         
         program = ctx.message.content[11:-3]
         
+        with open('script.txt', 'w') as f:
+            f.write(program)
+        
+        
         await ctx.send(program)
     
     @commands.command(aliases=["db"])

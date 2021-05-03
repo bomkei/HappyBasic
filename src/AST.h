@@ -39,11 +39,19 @@ namespace AST
     {
       If,
       For,
-      While
+      While,
+      Block,
+      Default
     };
     
     Type    type   = If;
+    Expr*   expr   = nullptr;
     std::vector<Stmt*> list;
+    
+    Stmt(Type type = Block)
+      :type(type)
+    {
+    }
   };
   
   class If : public Stmt

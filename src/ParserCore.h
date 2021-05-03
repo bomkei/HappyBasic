@@ -38,7 +38,7 @@ class ParserCore
   void expect(std::string const& str)
   {
     if( !consume(str) )
-      Error(get_tok(), "expect '" + str + "'");
+      Error(get_tok().srcpos, "expect '" + str + "'");
   }
 
   void next()
@@ -55,6 +55,9 @@ public:
 
   AST::Expr* Primary()
   {
+    if( !check() )
+      Error(tokens[index - 1].srcpos, "syntax error");
+    
     auto tok = &get_tok();
     
     switch( tok->type )
@@ -72,7 +75,7 @@ public:
       
     }
     
-    Error(*tok, "syntax error");
+    Error(tok->srcpos, "syntax error");
   }
 
   AST::Expr* Mul()
@@ -94,14 +97,25 @@ public:
 
   AST::Expr* Add()
   {
-    return nullptr;
+    auto x = Mul();
+    
+    while( check() )
+    {
+      if( consume("+") )
+        x = new AST::Expr(AST::Expr::Add, x, Mul(), csmtok);
+      else if( consume("-") )
+        x = new AST::Expr(AST::Expr::Sub, x, Mul(), csmtok);
+      else
+        break;
+    }
+    
+    return x;
   }
 
   AST::Expr* Expr()
   {
-    return nullptr;
+    return Add();
   }
-  
   
   AST::If* Parse_if()
   {
@@ -115,11 +129,18 @@ public:
   
   AST::Stmt* Parse()
   {
-    auto x = new AST::Stmt();
+    auto ast = new AST::Stmt(AST::Stmt::Block);
     
-//    x->list.emplace_back();
+    while( check() )
+    {
+      
+      
+      auto x = new AST::Stmt(AST::Stmt::Default);
+      x->expr = Expr();
+      ast->list.emplace_back(x);
+    }
     
-    return x;
+    return ast;
   }
   
   

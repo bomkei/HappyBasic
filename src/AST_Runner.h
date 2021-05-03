@@ -53,8 +53,20 @@ public:
     
     switch( ast->type )
     {
-      case AST::Stmt::If:
-        break;
+      case AST::Stmt::Block:
+      {
+        Object obj;
+        
+        for( auto&& i : ast->list )
+          obj = Run_Stmt(i);
+        
+        return obj;
+      }
+      
+      case AST::Stmt::Default:
+        return Run_Expr(ast->expr);
+      
+      
     }
     
     return { };

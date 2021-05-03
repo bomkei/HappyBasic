@@ -200,7 +200,7 @@ public:
 
         next();
         if( peek() != '\'' )
-          Error(tok, "unclosed char literal");
+          Error(tok.srcpos, "unclosed char literal");
 
         next();
       }
@@ -249,14 +249,14 @@ public:
 
         if(!hit)
         {
-          Error(tok, "unknown token");
+          Error(tok.srcpos, "unknown token");
         }
       }
 
       tokens.emplace_back(tok);
       pass_space();
     }
-
+    
     return tokens;
   }  
 };
