@@ -109,7 +109,7 @@ namespace AST
   {
   public:
     std::string name;
-    std::vector<AST::Stmt*> args;
+    std::vector<AST::Expr*> args;
   };
 
 

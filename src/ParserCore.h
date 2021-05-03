@@ -79,9 +79,6 @@ public:
 
   AST::Expr* Primary()
   {
-    if( !check() )
-      Error(tokens[index - 1].srcpos, "syntax error");
-
     auto tok = &get_tok();
 
     switch( tok->type )

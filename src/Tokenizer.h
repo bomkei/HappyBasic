@@ -95,7 +95,7 @@ class Tokenizer
 
   void pass_space()
   {
-    while( check() && peek() <= ' ' )
+    while( check() && peek() <= ' ' && peek() != '\n' )
       next();
   }
 
