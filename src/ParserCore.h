@@ -5,9 +5,9 @@ class ParserCore
 {
   std::vector<Token> tokens;
   size_t index;
-  
+
   Token* csmtok;
-  
+
   Token& get_tok()
   {
     return tokens[index];
@@ -47,7 +47,7 @@ class ParserCore
   }
 
 public:
-  
+
   void Initialize(std::vector<Token>&& tokens)
   {
     this->tokens = std::move(tokens);
@@ -57,31 +57,31 @@ public:
   {
     if( !check() )
       Error(tokens[index - 1].srcpos, "syntax error");
-    
+
     auto tok = &get_tok();
-    
+
     switch( tok->type )
     {
-      case Token::Number:
-      {
-        auto ast = new AST::Expr();
-        
-        ast->token = tok;
-        next();
-        
-        return ast;
-      }
-      
-      
+    case Token::Number:
+    {
+      auto ast = new AST::Expr();
+
+      ast->token = tok;
+      next();
+
+      return ast;
     }
-    
+
+
+    }
+
     Error(tok->srcpos, "syntax error");
   }
 
   AST::Expr* Mul()
   {
     auto x = Primary();
-    
+
     while( check() )
     {
       if( consume("*") )
@@ -91,14 +91,14 @@ public:
       else
         break;
     }
-    
+
     return x;
   }
 
   AST::Expr* Add()
   {
     auto x = Mul();
-    
+
     while( check() )
     {
       if( consume("+") )
@@ -108,7 +108,7 @@ public:
       else
         break;
     }
-    
+
     return x;
   }
 
@@ -116,35 +116,35 @@ public:
   {
     return Add();
   }
-  
+
   AST::If* Parse_if()
   {
-    
+
   }
-  
+
   AST::For* Parse_for()
   {
-    
+
   }
-  
+
   AST::Stmt* Parse()
   {
     auto ast = new AST::Stmt(AST::Stmt::Block);
-    
+
     while( check() )
     {
-      
-      
+
+
       auto x = new AST::Stmt(AST::Stmt::Default);
       x->expr = Expr();
       ast->list.emplace_back(x);
     }
-    
+
     return ast;
   }
-  
-  
-  
-  
-  
+
+
+
+
+
 };

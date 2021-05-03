@@ -5,26 +5,24 @@ class Program
   std::vector<Object> variables;
   std::string source;
 
-  Tokenizer *tokenizer;
-  ParserCore *parser;
-  
+  Tokenizer* tokenizer;
+  ParserCore* parser;
+
   AST::Stmt* prs_result;
-  
+
 public:
-  
   Program()
   {
     tokenizer = new Tokenizer(source);
     parser = new ParserCore();
-    
   }
-  
+
   void OpenFile(std::string const& path)
   {
-    static auto is_empty = [] (std::string const& str)
-    {
+    static auto is_empty = [] (std::string const& str) {
       for( auto&& c : str )
-        if( c > ' ' ) return false;
+        if( c > ' ' )
+          return false;
 
       return true;
     };
@@ -64,23 +62,20 @@ public:
       exit(1);
     }
   }
-  
+
   void Tokenize()
   {
     parser->Initialize(tokenizer->Tokenize());
   }
-  
+
   void Parse()
   {
     prs_result = parser->Parse();
   }
-  
+
   Object Run()
   {
-    
+
     return AST_Runner::Run_Stmt(prs_result);
   }
-  
-  
 };
-

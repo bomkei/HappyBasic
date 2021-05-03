@@ -72,7 +72,7 @@ class Tokenizer
 {
   std::string const& source;
   size_t position;
-  
+
   bool check() const
   {
     return position < source.length();
@@ -100,11 +100,11 @@ class Tokenizer
   }
 
 public:
-  
+
   Tokenizer(std::string const& src)
     :source(src), position(0)
   {
-    
+
   }
 
   std::vector<Token> Tokenize()
@@ -170,13 +170,13 @@ public:
 
         while( check() && (isalnum(c = peek()) || c == '_') )
           tok.str += c, next();
-        
-        auto find = find_vector(ReservedWords, [](std::pair<std::string, int>& item, std::string s) {
-            return std::get<0>(item) == s;
+
+        auto find = find_vector(ReservedWords, [] (std::pair<std::string, int>& item, std::string s) {
+          return std::get<0>(item) == s;
           },
           tok.str
-        );
-        
+            );
+
         if( find != -1 )
         {
           tok.type = Token::Number;
@@ -247,7 +247,7 @@ public:
           }
         }
 
-        if(!hit)
+        if( !hit )
         {
           Error(tok.srcpos, "unknown token");
         }
@@ -256,7 +256,7 @@ public:
       tokens.emplace_back(tok);
       pass_space();
     }
-    
+
     return tokens;
-  }  
+  }
 };

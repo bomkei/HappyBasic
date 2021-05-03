@@ -14,13 +14,13 @@ struct Object
   Type type = Int;
   std::string name;
 
-  int v_int      = 0;
-  float v_float  = 0;
-  char v_char    = 0;
+  int v_int = 0;
+  float v_float = 0;
+  char v_char = 0;
   std::vector<Object> list;
 
   Object* var_ptr = nullptr;
-  
+
   Object& operator = (Object const& obj)
   {
     type = obj.type;
@@ -33,7 +33,7 @@ struct Object
 
     return *this;
   }
-  
+
   std::string to_string() const
   {
     switch( type )
@@ -74,7 +74,7 @@ struct Object
 
     return "";
   }
-  
+
   bool is_string() const
   {
     if( type != Array )
@@ -86,24 +86,24 @@ struct Object
 
     return list.size() != 0;
   }
-  
+
   bool eval() const
   {
     switch( type )
     {
-      case Int:
-        return v_int != 0;
-      
-      case Float:
-        return v_float != 0;
-      
-      case Char:
-        return v_char != 0;
-      
-      case Array:
-        return list.size() != 0;
+    case Int:
+      return v_int != 0;
+
+    case Float:
+      return v_float != 0;
+
+    case Char:
+      return v_char != 0;
+
+    case Array:
+      return list.size() != 0;
     }
-    
+
     return false;
   }
 };
