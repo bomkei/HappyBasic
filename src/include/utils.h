@@ -10,3 +10,11 @@ int find_vector(std::vector<T>& vec, F compare, Args ...args)
   return -1;
 }
 
+template <class... Args>
+std::string format(std::string const& fmt, Args... args)
+{
+  char buf[1000];
+  sprintf(buf, fmt.c_str(), args...);
+  return buf;
+}
+

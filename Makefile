@@ -2,6 +2,7 @@ TARGET		= FlyBasic
 EXT       =
 
 SRCDIR		= src
+INCLUDE   = src/include
 OBJDIR		= build
 
 CXXFILES	= $(wildcard $(SRCDIR)/*.cpp)
@@ -25,7 +26,7 @@ clean:
 
 re: clean all
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(wildcard $(SRCDIR)/*.h)
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(wildcard $(SRCDIR)/*.h) $(wildcard $(INCLUDE)/*.h)
 	@echo $(notdir $<)
 	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
 	@g++ $(CXXFLAGS) -c $< -o $@
