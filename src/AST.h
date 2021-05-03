@@ -16,7 +16,7 @@ namespace AST
       Immidiate
     };
 
-    Type    type = Immidiate;
+    Type type = Immidiate;
     Expr* left = nullptr;
     Expr* right = nullptr;
     Token* token = nullptr;
@@ -44,7 +44,7 @@ namespace AST
       Default
     };
 
-    Type    type = If;
+    Type type = If;
     Expr* expr = nullptr;
     std::vector<Stmt*> list;
 
