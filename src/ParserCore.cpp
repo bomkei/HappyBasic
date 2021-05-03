@@ -80,6 +80,7 @@ AST::Expr* ParserCore::Primary()
   {
     auto ast = new AST::Expr();
 
+    ast->type = AST::Expr::Immidiate;
     ast->token = tok;
     next();
 
@@ -89,6 +90,7 @@ AST::Expr* ParserCore::Primary()
   case Token::Ident:
   {
     auto ast = new AST::Expr;
+    ast->type = AST::Expr::Variable;
     ast->token = tok;
     next();
 

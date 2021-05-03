@@ -103,6 +103,11 @@ namespace AST
   public:
     Expr* var;
     Expr* value;
+
+    Assign()
+    {
+      type = Type::Assign;
+    }
   };
 
   class Instruction : public Stmt
@@ -110,6 +115,11 @@ namespace AST
   public:
     std::string name;
     std::vector<AST::Expr*> args;
+
+    Instruction()
+    {
+      type = Type::Instruction;
+    }
   };
 
 
