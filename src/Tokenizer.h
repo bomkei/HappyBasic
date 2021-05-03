@@ -171,8 +171,10 @@ public:
         while( check() && (isalnum(c = peek()) || c == '_') )
           tok.str += c, next();
 
-        auto find = find_vector(ReservedWords, [] (std::pair<std::string, int>& item, std::string s) {
-          return std::get<0>(item) == s;
+        auto find = find_vector(
+          ReservedWords,
+          [] (std::pair<std::string, int>& item, std::string s) {
+            return std::get<0>(item) == s;
           },
           tok.str
             );

@@ -7,6 +7,8 @@
 #include <utility>
 
 #include "common.h"
+#include "utils.h"
+
 #include "Object.h"
 #include "Token.h"
 #include "AST.h"

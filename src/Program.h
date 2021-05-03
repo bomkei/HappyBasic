@@ -14,7 +14,7 @@ public:
   Program()
   {
     tokenizer = new Tokenizer(source);
-    parser = new ParserCore();
+    parser = new ParserCore(variables);
   }
 
   void OpenFile(std::string const& path)

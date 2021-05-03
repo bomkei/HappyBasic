@@ -13,13 +13,16 @@ namespace AST
       Sub,
       Mul,
       Div,
-      Immidiate
+      Immidiate,
+      Variable
     };
 
     Type type = Immidiate;
     Expr* left = nullptr;
     Expr* right = nullptr;
     Token* token = nullptr;
+
+    int varIndex = 0;
 
     Expr(Type type = Immidiate)
       :type(type)
@@ -40,6 +43,9 @@ namespace AST
       If,
       For,
       While,
+      Assign,
+      Instruction,
+
       Block,
       Default
     };
@@ -60,6 +66,11 @@ namespace AST
     Expr* cond;
     Stmt* if_true;
     Stmt* if_false;
+    
+    If()
+    {
+      type = Type::If;
+    }
   };
 
   class For : public Stmt
@@ -68,6 +79,11 @@ namespace AST
     Expr* begin;
     Expr* end;
     Stmt* code;
+    
+    For()
+    {
+      type = Type::For;
+    }
   };
 
   class While : public Stmt
@@ -75,8 +91,26 @@ namespace AST
   public:
     Expr* cond;
     Stmt* code;
+
+    While()
+    {
+      type = Type::While;
+    }
   };
 
+  class Assign : public Stmt
+  {
+  public:
+    Expr* var;
+    Expr* expr;
+  };
+
+  class Instruction : public Stmt
+  {
+  public:
+    std::string name;
+    std::vector<AST::Stmt*> args;
+  };
 
 
 }
