@@ -86,7 +86,12 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
     alart;
 
     if( Run_Expr(((AST::If*)ast)->cond).eval() )
+    {
+      alart;
       return Run_Stmt(((AST::If*)ast)->if_true);
+    }
+
+    alart;
 
     return Run_Stmt(((AST::If*)ast)->if_false);
   }
@@ -97,7 +102,7 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
   case AST::Stmt::While:
     break;
 
-  case AST::Stmt::Default:
+  default:
     return Run_Expr(ast->expr);
 
 

@@ -162,7 +162,8 @@ AST::Stmt* ParserCore::Stmt()
     auto ast = new AST::If;
     ast->cond = Expr();
     ast->if_true = new AST::Stmt;
-    ast->if_false = new AST::Stmt;
+    ast->if_true->type = AST::Stmt::Block;
+    //ast->if_false = new AST::Stmt;
 
     alart;
     expect("then");
@@ -186,6 +187,12 @@ AST::Stmt* ParserCore::Stmt()
       else if( consume("else") )
       {
         alart;
+
+        if( ast->if_false == nullptr )
+        {
+          ast->if_false = new AST::Stmt;
+          ast->if_false->type = AST::Stmt::Block;
+        }
 
         expect("\n");
 
@@ -213,22 +220,17 @@ AST::Stmt* ParserCore::Stmt()
       }
       else if( consume("elseif") )
       {
-        alart;
-
-        auto old = ast;
-        tk = csmtok;
-
-        alart;
-
-        ast = new AST::If;
-        ast->if_true = new AST::Stmt;
-        ast->if_false = old;
-        ast->cond = Expr();
-
-        alart;
-
+        auto cond = Expr();
         expect("then");
         expect("\n");
+
+        auto new_a = new AST::If;
+        new_a->cond = cond;
+        new_a->if_true = new AST::Stmt;
+        new_a->if_true->type = AST::Stmt::Block;
+
+        ast->if_false = new_a;
+        ast = new_a;
       }
       else
       {

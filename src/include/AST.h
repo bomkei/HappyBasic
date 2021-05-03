@@ -45,16 +45,15 @@ namespace AST
       While,
       Assign,
       Instruction,
-
       Block,
-      Default
+
+      None
     };
 
-    Type type = If;
+    Type type;
     Expr* expr = nullptr;
-    std::vector<Stmt*> list;
 
-    Stmt(Type type = Block)
+    Stmt(Type type = None)
       :type(type)
     {
     }
@@ -119,6 +118,17 @@ namespace AST
     Instruction()
     {
       type = Type::Instruction;
+    }
+  };
+
+  class Block : public Stmt
+  {
+  public:
+    std::vector<Stmt*> list;
+
+    Block()
+    {
+      type = Type::Block;
     }
   };
 
