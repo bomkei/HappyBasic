@@ -4,9 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <tuple>
 #include <utility>
-#include <functional>
 
 typedef int8_t i8;
 typedef int16_t i16;
