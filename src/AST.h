@@ -63,16 +63,13 @@ namespace AST
       Assign,
       Instruction,
       Block,
-
-      None
     };
 
     Type type;
-    Expr* expr;
     Token* token;
 
-    Stmt(Type type = None)
-      :type(type), expr(nullptr), token(nullptr)
+    Stmt(Type type = Block)
+      :type(type), token(nullptr)
     {
     }
   };

@@ -207,10 +207,6 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
   case AST::Stmt::While:
     break;
 
-  default:
-    return Expr(ast->expr);
-
-
   }
 
   return { };
