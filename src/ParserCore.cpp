@@ -201,8 +201,7 @@ AST::Stmt* ParserCore::Stmt()
       {
         ast->pairs.emplace_back(pair);
 
-        std::get<0>(pair) = Expr();
-        std::get<1>(pair) = new AST::Block;
+        pair = std::make_pair(Expr(), new AST::Block);
 
         expect("then");
         expect("\n");
