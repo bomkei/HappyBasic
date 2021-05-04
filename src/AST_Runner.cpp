@@ -107,9 +107,7 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
       auto cond = Run_Expr(std::get<0>(pair));
 
       if( cond.eval() )
-      {
         return Run_Stmt(std::get<1>(pair));
-      }
     }
 
     break;
