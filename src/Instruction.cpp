@@ -33,6 +33,20 @@ void AST_Runner::Instruction(AST::Instruction* ast)
     return;
   }
 
+  if( name == "pop" )
+  {
+    if( args.size() != 1 )
+      Program::Error(*ast->token, "invalid arguments");
+
+    if( !args[0].var_ptr || args[0].type != Object::Array )
+      Program::Error(*(ast->args[0]->token), "only can use lvalue array on first argument");
+
+    if( args[0].var_ptr->list.size() >= 1 )
+      args[0].var_ptr->list.pop_back();
+
+    return;
+  }
+
   Program::Error(*ast->token, "undefined instruction");
 }
 
