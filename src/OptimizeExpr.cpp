@@ -44,6 +44,15 @@ void AST::Expr::Optimize(){
     }
     terms.emplace_back(SignedExpr(SignedExpr::Positive,cur_left));
 
+    // remove immidiate! (to immidiatePart)
+    Expr immidiatePart{};
+    immidiatePart.token=new Token();
+    for( auto it = terms.begin(); it != terms.end(); ) {
+      if(it->expr->type==Immidiate){
+        immidiatePart.token->obj.v_int+=it->expr->token->obj.v_int*it->sign;
+        terms.erase(it);
+      }else it++;
+    }
     
   }else if(type==Mul or type==Div){
     // Term
