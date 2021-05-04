@@ -46,20 +46,20 @@ void AST::Expr::Optimize(){
     terms.emplace_back(SignedExpr(SignedExpr::Positive,cur_left));
 
     // remove immidiate! (to immidiatePart)
-    Expr immidiatePart{};
-    immidiatePart.token=new Token();
+    Expr *immidiatePart=new Expr();
+    immidiatePart->token=new Token();
     for( auto it = terms.begin(); it != terms.end(); ) {
       if(it->expr->type==Immidiate){
-        immidiatePart.token->obj.v_int+=it->expr->token->obj.v_int*it->sign;
+        immidiatePart->token->obj.v_int+=it->expr->token->obj.v_int*it->sign;
         terms.erase(it);
       }else it++;
     }
 
     // Constructing Expr(for return!)
     Expr ret;
-    ret.right=&immidiatePart;
-    ret.type = immidiatePart.token->obj.v_int > 0 ? Expr::Add : Expr::Sub;
-    immidiatePart.token->obj.v_int=std::abs(immidiatePart.token->obj.v_int); // immidiatePart = |immidiatePart|
+    ret.right=immidiatePart;
+    ret.type = immidiatePart->token->obj.v_int > 0 ? Expr::Add : Expr::Sub;
+    immidiatePart->token->obj.v_int=std::abs(immidiatePart->token->obj.v_int); // immidiatePart = |immidiatePart|
 
     Expr *cur=&ret;
     for (size_t i = 0; i < terms.size()-1; i++)
@@ -73,9 +73,9 @@ void AST::Expr::Optimize(){
     cur->left=terms[terms.size()-1].expr;
     
     // apply changes
-    this->right=cur->right;
-    this->left=cur->left;
-    this->type=cur->type;
+    this->right=ret.right;
+    this->left=ret.left;
+    this->type=ret.type;
   }else if(type==Mul or type==Div){
     // Term
   }else{
