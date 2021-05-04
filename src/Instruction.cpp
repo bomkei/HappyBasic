@@ -67,8 +67,13 @@ void AST_Runner::Instruction(AST::Instruction* ast)
 
   if( name == "clear" )
   {
-    for( auto&& var : Program::instance->variables )
-      var = Object();
+    //for( auto&& var : Program::instance->variables )
+    //  var = Object();
+    
+    auto size = Program::instance->variables.size();
+
+    Program::instance->variables.clear();
+    Program::instance->variables.resize(size);
 
     return;
   }
