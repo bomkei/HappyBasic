@@ -17,6 +17,10 @@ public:
   }
 
   static SignedExpr FromExprRight(AST::Expr* expr){
+    auto right=expr->right;
+    if(right->type == AST::Expr::Immidiate){
+      return SignedExpr(right->token->obj.v_int > 0 ? 1 : -1,expr->right);
+    }
     return SignedExpr(expr->right->type==AST::Expr::Add ? 1 : -1,expr->right);
   }
 };
