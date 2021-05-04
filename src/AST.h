@@ -41,6 +41,8 @@ namespace AST
     {
     }
 
+    void Optimize();
+    
     static Expr* FromInt(int v)
     {
       auto x = new Expr;
@@ -171,3 +173,4 @@ namespace AST
 
 }
 
+std::ostream& operator<<(std::ostream& ss, const AST::Expr &expr);

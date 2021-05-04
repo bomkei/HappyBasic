@@ -254,7 +254,9 @@ AST::Expr* ParserCore::Equal()
 
 AST::Expr* ParserCore::Expr()
 {
-  return Equal();
+  auto expr=Equal();
+  expr->Optimize();
+  return expr;
 }
 
 AST::Stmt* ParserCore::Stmt()
