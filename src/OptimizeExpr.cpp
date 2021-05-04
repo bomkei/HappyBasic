@@ -28,14 +28,12 @@ void AST::Expr::Optimize(){
     Expr *cur_left=this;
     while(cur_left->type == Add or cur_left->type==Sub)// loop while cur_left kind = Expr
     {
-      terms.emplace_back(
-        SignedExpr(
-          (cur_left->type==Add or cur_left->type==Sub) ? 1 : -1
-          ,cur_left->right
-        )  
-      );
+      assert(cur_left->type == Add or cur_left->type==Sub); // cur_left must be Add/Sub
+
+      terms.emplace_back(SignedExpr(cur_left->type==Add ? 1 : -1,cur_left));
       cur_left=cur_left->left;
     }
+    terms.emplace_back(SignedExpr(SignedExpr::Positive,cur_left));
 
     
   }else if(type==Mul or type==Div){
