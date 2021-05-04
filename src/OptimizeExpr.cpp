@@ -15,6 +15,10 @@ public:
     : sign((Sign)sign), expr(expr)
   {
   }
+
+  static SignedExpr FromExprRight(AST::Expr* expr){
+    return SignedExpr(expr->right->type==AST::Expr::Add ? 1 : -1,expr->right);
+  }
 };
 
 /* internal types - end */
