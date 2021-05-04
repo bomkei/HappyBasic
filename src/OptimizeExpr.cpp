@@ -71,6 +71,11 @@ void AST::Expr::Optimize(){
       cur->type=term.sign==1 ? Add : Sub;
     }
     cur->left=terms[terms.size()-1].expr;
+    
+    // apply changes
+    this->right=cur->right;
+    this->left=cur->left;
+    this->type=cur->type;
   }else if(type==Mul or type==Div){
     // Term
   }else{
