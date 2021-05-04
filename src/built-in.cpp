@@ -30,9 +30,32 @@ Object AST_Runner::Function(AST::Callfunc* ast)
 
       return ret;
 
+    case 2:
+      if( args[0].type != Object::Int )
+        Program::Error(*(ast->args[0]->token), "must be a integer");
+
+      if( args[1].type != Object::Int )
+        Program::Error(*(ast->args[1]->token), "must be a integer");
+
+      for( int i = args[0].v_int; i < args[1].v_int; i++ )
+      {
+        Object obj;
+        obj.v_int = i;
+        ret.list.emplace_back(obj);
+      }
+
+      return ret;
+
     default:
       Program::Error(*ast->token, "no matching args");
     }
+  }
+
+  //
+  // length
+  if( name == "length" )
+  {
+
   }
 
 
