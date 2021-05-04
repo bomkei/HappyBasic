@@ -62,12 +62,15 @@ void AST::Expr::Optimize(){
     immidiatePart.token->obj.v_int=std::abs(immidiatePart.token->obj.v_int); // immidiatePart = |immidiatePart|
 
     Expr *cur=&ret;
-    for(auto &&term:terms){
+    for (size_t i = 0; i < terms.size()-1; i++)
+    {
+      auto term=terms[i];
       cur->left=new Expr();
       cur=cur->left;
       cur->right=term.expr;
       cur->type=term.sign==1 ? Add : Sub;
     }
+    cur->left=terms[terms.size()-1].expr;
   }else if(type==Mul or type==Div){
     // Term
   }else{
