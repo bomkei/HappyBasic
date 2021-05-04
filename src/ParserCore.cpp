@@ -267,6 +267,29 @@ AST::Stmt* ParserCore::Stmt()
         expect("then");
         expect("\n");
       }
+      else if( consume("else") )
+      {
+        ast->pairs.emplace_back(pair);
+
+        pair = std::make_pair(AST::Expr::FromInt(1) , new AST::Block);
+        
+        expect("\n");
+
+        while( check() )
+        {
+          if( consume("endif") )
+          {
+            expect("\n");
+            closed = true;
+            break;
+          }
+          
+          std::get<1>(pair)->list.emplace_back(Stmt());
+        }
+
+        ast->pairs.emplace_back(pair);
+        break;
+      }
       else
       {
         std::get<1>(pair)->list.emplace_back(Stmt());

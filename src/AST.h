@@ -39,6 +39,14 @@ namespace AST
       :type(type), left(left), right(right), token(tok)
     {
     }
+
+    static Expr* FromInt(int v)
+    {
+      auto x = new Expr;
+      x->token = new Token;
+      x->token->obj.v_int = 1;
+      return x;
+    }
   };
 
   class Callfunc : public Expr
