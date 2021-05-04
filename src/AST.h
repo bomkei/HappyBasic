@@ -150,3 +150,4 @@ namespace AST
 
 }
 
+std::ostream& operator<<(std::ostream& ss, const AST::Expr &expr);
