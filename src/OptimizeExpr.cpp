@@ -11,7 +11,7 @@ public:
 
   template <typename T>
   SignedExpr(T sign,AST::Expr* expr)
-    : sign((T)sign), expr(expr)
+    : sign((Sign)sign), expr(expr)
   {
   }
 };
