@@ -47,6 +47,14 @@ void AST_Runner::Instruction(AST::Instruction* ast)
     return;
   }
 
+  if( name == "clear" )
+  {
+    for( auto&& var : Program::instance->variables
+      var = Object();
+
+    return;
+  }
+
   Program::Error(*ast->token, "undefined instruction");
 }
 
