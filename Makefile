@@ -1,4 +1,4 @@
-TARGET		= FlyBasic
+TARGET		= HappyBasic
 EXT       =
 
 SRCDIR		= src
