@@ -70,6 +70,13 @@ void ParserCore::Initialize(std::vector<Token>&& tokens)
 
 AST::Expr* ParserCore::Primary()
 {
+  if( consume("(") )
+  {
+    auto x = Expr();
+    expect(")");
+    return x;
+  }
+
   auto tok = &get_tok();
 
   switch( tok->type )
