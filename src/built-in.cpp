@@ -61,7 +61,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
     if( args[0].type != Object::Array )
       Program::Error(*(ast->args[0]->token), "this is not array");
 
-    ret.v_int = args[0].v_int;
+    ret.v_int = args[0].list.size();
     return ret;
   }
 
