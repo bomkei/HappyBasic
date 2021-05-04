@@ -49,7 +49,7 @@ void AST_Runner::Instruction(AST::Instruction* ast)
 
   if( name == "clear" )
   {
-    for( auto&& var : Program::instance->variables
+    for( auto&& var : Program::instance->variables )
       var = Object();
 
     return;
