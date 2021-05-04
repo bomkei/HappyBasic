@@ -77,6 +77,23 @@ AST::Expr* ParserCore::Primary()
     return x;
   }
 
+  if( consume("[") )
+  {
+    auto x = new AST::Array;
+
+    if( !consume("]") )
+    {
+      do
+      {
+        x->elems.emplace_back(Expr());
+      } while( consume(",") );
+      
+      expect("]");
+    }
+
+    return x;
+  }
+
   auto tok = &get_tok();
 
   switch( tok->type )
@@ -138,16 +155,24 @@ AST::Expr* ParserCore::Primary()
   Program::Error(*tok, "syntax error");
 }
 
+AST::Expr* ParserCore::Unary()
+{
+  if( consume("-") )
+    return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), Primary(), csmtok);
+
+  return Primary();
+}
+
 AST::Expr* ParserCore::Mul()
 {
-  auto x = Primary();
+  auto x = Unary();
 
   while( check() )
   {
     if( consume("*") )
-      x = new AST::Expr(AST::Expr::Mul, x, Primary(), csmtok);
+      x = new AST::Expr(AST::Expr::Mul, x, Unary(), csmtok);
     else if( consume("/") )
-      x = new AST::Expr(AST::Expr::Div, x, Primary(), csmtok);
+      x = new AST::Expr(AST::Expr::Div, x, Unary(), csmtok);
     else
       break;
   }
@@ -172,9 +197,64 @@ AST::Expr* ParserCore::Add()
   return x;
 }
 
+AST::Expr* ParserCore::Shift()
+{
+  auto x = Add();
+
+  while( check() )
+  {
+    if( consume("<<") )
+      x = new AST::Expr(AST::Expr::Shift, x, Add(), csmtok);
+    else if( consume(">>") )
+      x = new AST::Expr(AST::Expr::Shift, Add(), x, csmtok);
+    else
+      break;
+  }
+  
+  return x;
+}
+
+AST::Expr* ParserCore::Compare()
+{
+  auto x = Shift();
+
+  while( check() )
+  {
+    if( consume(">") )
+      x = new AST::Expr(AST::Expr::Bigger, x, Shift(), csmtok);
+    else if( consume("<") )
+      x = new AST::Expr(AST::Expr::Bigger, Shift(), x, csmtok);
+    else if( consume(">=") )
+      x = new AST::Expr(AST::Expr::BiggerOrEqual, x, Shift(), csmtok);
+    else if( consume("<=") )
+      x = new AST::Expr(AST::Expr::BiggerOrEqual, Shift(), x, csmtok);
+    else
+      break;
+  }
+
+  return x;
+}
+
+AST::Expr* ParserCore::Equal()
+{
+  auto x = Compare();
+
+  while( check() )
+  {
+    if( consume("==") )
+      x = new AST::Expr(AST::Expr::Equal, x, Compare(), csmtok);
+    else if( consume("!=") )
+      x = new AST::Expr(AST::Expr::NotEqual, x, Compare(), csmtok);
+    else
+      break;
+  }
+
+  return x;
+}
+
 AST::Expr* ParserCore::Expr()
 {
-  auto expr=Add();
+  auto expr=Equal();
   expr->Optimize();
   return expr;
 }
@@ -213,6 +293,28 @@ AST::Stmt* ParserCore::Stmt()
 
         expect("then");
         expect("\n");
+      }
+      else if( consume("else") )
+      {
+        ast->pairs.emplace_back(pair);
+        pair = std::make_pair(AST::Expr::FromInt(1) , new AST::Block);
+        
+        expect("\n");
+
+        while( check() )
+        {
+          if( consume("endif") )
+          {
+            expect("\n");
+            closed = true;
+            break;
+          }
+          
+          std::get<1>(pair)->list.emplace_back(Stmt());
+        }
+
+        ast->pairs.emplace_back(pair);
+        break;
       }
       else
       {
@@ -271,7 +373,6 @@ AST::Stmt* ParserCore::Stmt()
   }
 
 
-
   auto& tok = get_tok();
 
   if( tok.type != Token::Ident )
@@ -321,4 +422,3 @@ AST::Stmt* ParserCore::Parse()
 
   return ast;
 }
-

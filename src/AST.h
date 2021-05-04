@@ -11,10 +11,17 @@ namespace AST
       Sub,
       Mul,
       Div,
+      Shift,
+      Bigger,
+      BiggerOrEqual,
+      Equal,
+      NotEqual,
+
 
       Immidiate,
       Variable,
-      Callfunc
+      Callfunc,
+      Array
     };
 
     Type type = Immidiate;
@@ -35,6 +42,25 @@ namespace AST
     }
 
     void Optimize();
+    
+    static Expr* FromInt(int v)
+    {
+      auto x = new Expr;
+      x->token = new Token;
+      x->token->obj.v_int = 1;
+      return x;
+    }
+  };
+
+  class Array : public Expr
+  {
+  public:
+    std::vector<Expr*> elems;
+
+    Array()
+    {
+      type = Type::Array;
+    }
   };
 
   class Callfunc : public Expr
@@ -59,16 +85,13 @@ namespace AST
       Assign,
       Instruction,
       Block,
-
-      None
     };
 
     Type type;
-    Expr* expr;
     Token* token;
 
-    Stmt(Type type = None)
-      :type(type), expr(nullptr), token(nullptr)
+    Stmt(Type type = Block)
+      :type(type), token(nullptr)
     {
     }
   };

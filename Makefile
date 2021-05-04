@@ -1,4 +1,4 @@
-TARGET		= FlyBasic
+TARGET		= HappyBasic
 EXT       =
 
 SRCDIR		= src
@@ -9,7 +9,7 @@ CXXFILES	= $(wildcard $(SRCDIR)/*.cpp)
 
 OFILES		= $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(CXXFILES)))
 
-CXXFLAGS	= -O2 -std=gnu++17 -Wno-psabi
+CXXFLAGS	= -O1 -std=gnu++17 -Wno-psabi
 LDFLAGS		= -Wl,--gc-sections,-s
 
 ifeq ($(OS), Windows_NT)

@@ -26,8 +26,12 @@ public:
   void Initialize(std::vector<Token>&& tokens);
 
   AST::Expr* Primary();
+  AST::Expr* Unary();
   AST::Expr* Mul();
   AST::Expr* Add();
+  AST::Expr* Shift();
+  AST::Expr* Compare();
+  AST::Expr* Equal();
   AST::Expr* Expr();
 
   AST::Stmt* Stmt();
