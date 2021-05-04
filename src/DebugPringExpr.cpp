@@ -3,15 +3,14 @@
 
 std::ostream& operator<<(std::ostream& ss, const AST::Expr &expr){
   if (expr.type >= AST::Expr::Add && AST::Expr::Div >= expr.type){
-    ss<<expr.left;
+    ss<<*expr.left;
     ss<<(
-      expr.type == AST::Expr::Add ? "+"
-    : expr.type == AST::Expr::Sub ? "-"
-    : expr.type == AST::Expr::Mul ? "*"
-    : expr.type == AST::Expr::Div ? "/"
-    : "?"
-    );
-    ss<<expr.right;
+        expr.type == AST::Expr::Add ? "+"
+      : expr.type == AST::Expr::Sub ? "-"
+      : expr.type == AST::Expr::Mul ? "*"
+      : expr.type == AST::Expr::Div ? "/"
+      : "?");
+    ss<<*expr.right;
   }else if(expr.type==AST::Expr::Immidiate){
     auto token=expr.token;
     if(token->type)
