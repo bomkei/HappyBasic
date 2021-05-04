@@ -211,13 +211,15 @@ AST::Stmt* ParserCore::Stmt()
     ast->token = csmtok;
 
     ast->counter = Expr();
-    
+
     expect("=");
     ast->begin = Expr();
 
     expect("to");
     ast->end = Expr();
     
+    ast->code = new AST::Block;
+
     expect("\n");
 
     auto closed = false;

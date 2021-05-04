@@ -80,8 +80,6 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
   {
     Object obj;
 
-    alart;
-
     for( auto&& i : ((AST::Block*)ast)->list )
       obj = Run_Stmt(i);
 
@@ -93,7 +91,6 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
     auto var = Run_Expr(((AST::Assign*)ast)->var);
     auto value = Run_Expr(((AST::Assign*)ast)->value);
 
-    alart;
     return *(var.var_ptr) = value;
   }
 
@@ -107,7 +104,6 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
   {
     for( auto&& pair : ((AST::If*)ast)->pairs )
     {
-      alart;
       auto cond = Run_Expr(std::get<0>(pair));
 
       if( cond.eval() )
@@ -120,7 +116,36 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
   }
 
   case AST::Stmt::For:
-    break;
+  {
+    auto for_ast = reinterpret_cast<AST::For*>(ast);
+
+    auto counter = Run_Expr(for_ast->counter);
+    auto begin = Run_Expr(for_ast->begin);
+    
+    if( !counter.var_ptr )
+      Program::Error(*(for_ast->counter->token), "not a lvalue");
+
+    if( begin.type != Object::Int )
+      Program::Error(*(for_ast->begin->token), "must be a integer");
+
+    *(counter.var_ptr) = begin;
+
+    while( 1 )
+    {
+      auto end = Run_Expr(for_ast->end);
+
+      if( end.type != Object::Int )
+        Program::Error(*(for_ast->end->token), "must be a integer");
+
+      if( counter.var_ptr->v_int > end.v_int )
+        break;
+
+      Run_Stmt(for_ast->code);
+      counter.var_ptr->v_int++;
+    }
+
+    return counter;
+  }
 
   case AST::Stmt::While:
     break;
