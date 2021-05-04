@@ -55,7 +55,14 @@ Object AST_Runner::Function(AST::Callfunc* ast)
   // length
   if( name == "length" )
   {
+    if( args.size() != 1 )
+      Program::Error(*ast->token, "no matching args");
 
+    if( args[0].type != Object::Array )
+      Program::Error(*(ast->args[0]->token), "this is not array");
+
+    ret.v_int = args[0].v_int;
+    return ret;
   }
 
 
