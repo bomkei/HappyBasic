@@ -27,6 +27,21 @@ public:
   }
 };
 
+class InvertableExpr{
+public:
+  enum Type{
+    NotInverted=1,
+    Inverted=-1,
+  } type;
+  AST::Expr* expr;
+
+  template <typename T>
+  InvertableExpr(T type,AST::Expr* expr)
+    : type((Type)type), expr(expr)
+  {
+  }
+};
+
 /* internal types - end */
 
 void AST::Expr::Optimize(){
