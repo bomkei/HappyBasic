@@ -100,6 +100,18 @@ void AST::Expr::Optimize(){
     this->type=ret.type;
   }else if(type==Mul or type==Div){
     // Term
+    // get all factor
+    std::vector<InvertableExpr> terms;
+    
+    Expr *cur_left=this;
+    while(cur_left->type == Mul or cur_left->type==Div)// loop while cur_left kind = Expr
+    {
+      assert(cur_left->type == Mul or cur_left->type==Div); // cur_left must be Add/Sub
+
+      terms.emplace_back(InvertableExpr::FromExprRight(cur_left));
+      cur_left=cur_left->left;
+    }
+    terms.emplace_back(InvertableExpr(InvertableExpr::NotInverted,cur_left));
   }else{
     // Factor
   }
