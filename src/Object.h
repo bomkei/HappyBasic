@@ -43,10 +43,7 @@ struct Object
     case Char:
       return static_cast<T>(v_char);
       break;
-    case Array:
-      return static_cast<T>(list);
-      break;
-      
+
     default:
       return T();
     }
