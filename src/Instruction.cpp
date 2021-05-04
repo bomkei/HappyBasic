@@ -78,10 +78,13 @@ void AST_Runner::Instruction(AST::Instruction* ast)
     if( args.size() != 2 )
       Program::Error(*ast->token, "invalid arguments");
 
+    if( !args[0].var_ptr || !args[1].var_ptr )
+      Program::Error(*ast->token, "cannot use rvalue in move");
+
     if( args[1].type == Object::Array )
     {
       args[0].type = Object::Array;
-      args[0].list = std::move(args[1].list);
+      args[0].var_ptr->list = std::move(args[1].var_ptr->list);
     }
 
     return;

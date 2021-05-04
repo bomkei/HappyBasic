@@ -77,6 +77,23 @@ AST::Expr* ParserCore::Primary()
     return x;
   }
 
+  if( consume("[") )
+  {
+    auto x = new AST::Array;
+
+    if( !consume("]") )
+    {
+      do
+      {
+        x->elems.emplace_back(Expr());
+      } while( consume(",") );
+      
+      expect("]");
+    }
+
+    return x;
+  }
+
   auto tok = &get_tok();
 
   switch( tok->type )

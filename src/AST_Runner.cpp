@@ -49,6 +49,17 @@ Object AST_Runner::Expr(AST::Expr* ast)
   case AST::Expr::Callfunc:
     return Function(reinterpret_cast<AST::Callfunc*>(ast));
 
+  case AST::Expr::Array:
+  {
+    Object ret;
+    ret.type = Object::Array;
+
+    for( auto&& i : ((AST::Array*)ast)->elems )
+      ret.list.emplace_back(Expr(i));
+
+    return ret;
+  }
+
   default:
   {
     auto left = Expr(ast->left);

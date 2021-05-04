@@ -20,7 +20,8 @@ namespace AST
 
       Immidiate,
       Variable,
-      Callfunc
+      Callfunc,
+      Array
     };
 
     Type type = Immidiate;
@@ -46,6 +47,17 @@ namespace AST
       x->token = new Token;
       x->token->obj.v_int = 1;
       return x;
+    }
+  };
+
+  class Array : public Expr
+  {
+  public:
+    std::vector<Expr*> elems;
+
+    Array()
+    {
+      type = Type::Array;
     }
   };
 
