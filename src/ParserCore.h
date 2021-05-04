@@ -28,6 +28,9 @@ public:
   AST::Expr* Primary();
   AST::Expr* Mul();
   AST::Expr* Add();
+  AST::Expr* Shift();
+  AST::Expr* Compare();
+  AST::Expr* Equal();
   AST::Expr* Expr();
 
   AST::Stmt* Stmt();

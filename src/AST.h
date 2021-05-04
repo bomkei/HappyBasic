@@ -11,6 +11,12 @@ namespace AST
       Sub,
       Mul,
       Div,
+      Shift,
+      Bigger,
+      BiggerOrEqual,
+      Equal,
+      NotEqual,
+
 
       Immidiate,
       Variable,

@@ -1,5 +1,34 @@
 #include "main.h"
 
+void ObjectAdjuster(Object& L, Object& R)
+{
+  if( L.type == Object::Array || R.type == Object::Array )
+    return;
+
+  if( L.type == Object::Float || R.type == Object::Float )
+  {
+    for( auto&& obj : { &L, &R } )
+    {
+      if( obj->type == Object::Int )
+        obj->v_float = obj->v_int;
+      else if( obj->type == Object::Char )
+        obj->v_float = obj->v_char;
+
+      obj->type = Object::Char;
+    }
+  }
+  else if( L.type != R.type )
+  {
+    for( auto&& obj : { &L, &R } )
+    {
+      if( obj->type == Object::Char )
+        obj->v_int = obj->v_char;
+
+      obj->type = Object::Int;
+    }
+  }
+}
+
 Object AST_Runner::Expr(AST::Expr* ast)
 {
   if( !ast )
@@ -25,23 +54,70 @@ Object AST_Runner::Expr(AST::Expr* ast)
     auto left = Expr(ast->left);
     auto right = Expr(ast->right);
 
+    ObjectAdjuster(left, right);
+
+    if( left.type == Object::Array || right.type == Object::Array )
+      Program::Error(*ast->token, "type mismatch");
+
     switch( ast->type )
     {
     case AST::Expr::Add:
       left.v_int += right.v_int;
+      left.v_float += right.v_float;
       break;
 
     case AST::Expr::Sub:
       left.v_int -= right.v_int;
+      left.v_float -= right.v_float;
       break;
 
     case AST::Expr::Mul:
       left.v_int *= right.v_int;
+      left.v_float *= right.v_float;
       break;
 
     case AST::Expr::Div:
       left.v_int /= right.v_int;
+      left.v_float /= right.v_float;
       break;
+
+    case AST::Expr::Shift:
+      left.v_int <<= right.v_int;
+      break;
+
+    case AST::Expr::Bigger:
+      switch( left.type ) {
+      case Object::Int: left.v_int = left.v_int > right.v_int;
+      case Object::Char: left.v_int = left.v_char > right.v_char;
+      }
+      left.type = Object::Int;
+      break;
+      
+    case AST::Expr::BiggerOrEqual:
+      switch( left.type ) {
+      case Object::Int: left.v_int = left.v_int >= right.v_int;
+      case Object::Char: left.v_int = left.v_char >= right.v_char;
+      }
+      left.type = Object::Int;
+      break;
+      
+    case AST::Expr::Equal:
+      switch( left.type ) {
+      case Object::Int: left.v_int = left.v_int == right.v_int;
+      case Object::Char: left.v_int = left.v_char == right.v_char;
+      }
+      left.type = Object::Int;
+      break;
+      
+    case AST::Expr::NotEqual:
+      switch( left.type ) {
+      case Object::Int: left.v_int = left.v_int != right.v_int;
+      case Object::Char: left.v_int = left.v_char != right.v_char;
+      }
+      left.type = Object::Int;
+      break;
+
+
 
     }
 

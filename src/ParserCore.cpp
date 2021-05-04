@@ -172,9 +172,64 @@ AST::Expr* ParserCore::Add()
   return x;
 }
 
+AST::Expr* ParserCore::Shift()
+{
+  auto x = Add();
+
+  while( check() )
+  {
+    if( consume("<<") )
+      x = new AST::Expr(AST::Expr::Shift, x, Add(), csmtok);
+    else if( consume(">>") )
+      x = new AST::Expr(AST::Expr::Shift, Add(), x, csmtok);
+    else
+      break;
+  }
+  
+  return x;
+}
+
+AST::Expr* ParserCore::Compare()
+{
+  auto x = Shift();
+
+  while( check() )
+  {
+    if( consume(">") )
+      x = new AST::Expr(AST::Expr::Bigger, x, Shift(), csmtok);
+    else if( consume("<") )
+      x = new AST::Expr(AST::Expr::Bigger, Shift(), x, csmtok);
+    else if( consume(">=") )
+      x = new AST::Expr(AST::Expr::BiggerOrEqual, x, Shift(), csmtok);
+    else if( consume("<=") )
+      x = new AST::Expr(AST::Expr::BiggerOrEqual, Shift(), x, csmtok);
+    else
+      break;
+  }
+
+  return x;
+}
+
+AST::Expr* ParserCore::Equal()
+{
+  auto x = Compare();
+
+  while( check() )
+  {
+    if( consume("==") )
+      x = new AST::Expr(AST::Expr::Equal, x, Compare(), csmtok);
+    else if( consume("!=") )
+      x = new AST::Expr(AST::Expr::NotEqual, x, Compare(), csmtok);
+    else
+      break;
+  }
+
+  return x;
+}
+
 AST::Expr* ParserCore::Expr()
 {
-  return Add();
+  return Equal();
 }
 
 AST::Stmt* ParserCore::Stmt()
