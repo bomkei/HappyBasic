@@ -174,7 +174,9 @@ AST::Expr* ParserCore::Add()
 
 AST::Expr* ParserCore::Expr()
 {
-  return Add();
+  auto expr=Add();
+  expr->Optimize();
+  return expr;
 }
 
 AST::Stmt* ParserCore::Stmt()
