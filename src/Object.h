@@ -46,7 +46,8 @@ struct Object
     case Array:
       return static_cast<T>(list);
       break;
-      default:
+      
+    default:
       return T();
     }
   }
