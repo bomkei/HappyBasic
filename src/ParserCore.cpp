@@ -161,9 +161,13 @@ AST::Stmt* ParserCore::Stmt()
     auto closed = false;
 
     auto ast = new AST::If;
+    ast->token = csmtok;
 
     std::get<0>(pair) = Expr();
-    std::get<1>(pair) = new AST::Block();
+    std::get<1>(pair) = new AST::Block;
+
+    expect("then");
+    expect("\n");
 
     while( check() )
     {
@@ -171,6 +175,7 @@ AST::Stmt* ParserCore::Stmt()
       {
         expect("\n");
         ast->pairs.emplace_back(pair);
+        closed = true;
         break;
       }
       else if( consume("elseif") )
@@ -178,7 +183,7 @@ AST::Stmt* ParserCore::Stmt()
         ast->pairs.emplace_back(pair);
 
         std::get<0>(pair) = Expr();
-        std::get<1>(pair)->list.clear();
+        std::get<1>(pair) = new AST::Block;
 
         expect("then");
         expect("\n");
@@ -188,10 +193,55 @@ AST::Stmt* ParserCore::Stmt()
         std::get<1>(pair)->list.emplace_back(Stmt());
       }
     }
-
+    
+    if( !closed )
+    {
+      Program::Error(*ast->token, "not closed");
+    }
 
     return ast;
   }
+
+
+  //
+  // for
+  if( consume("for") )
+  {
+    auto ast = new AST::For;
+    ast->token = csmtok;
+
+    ast->counter = Expr();
+    
+    expect("=");
+    ast->begin = Expr();
+
+    expect("to");
+    ast->end = Expr();
+    
+    expect("\n");
+
+    auto closed = false;
+
+    while( check() )
+    {
+      if( consume("next") )
+      {
+        expect("\n");
+        closed = true;
+        break;
+      }
+
+      ast->code->list.emplace_back(Stmt());
+    }
+
+    if( !closed )
+    {
+      Program::Error(*ast->token, "not closed");
+    }
+
+    return ast;
+  }
+
 
 
   auto& tok = get_tok();
@@ -203,6 +253,7 @@ AST::Stmt* ParserCore::Stmt()
   if( index + 1 < tokens.size() && tokens[index + 1].str == "=" )
   {
     auto ast = new AST::Assign;
+    ast->token = &tok;
 
     ast->var = Primary();
     next();
@@ -216,6 +267,7 @@ AST::Stmt* ParserCore::Stmt()
   // instruction
   auto ast = new AST::Instruction;
   ast->name = tok.str;
+  ast->token = &tok;
   next();
 
   if( !consume("\n") )

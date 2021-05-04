@@ -49,6 +49,26 @@ Object AST_Runner::Run_Expr(AST::Expr* ast)
   return { };
 }
 
+void Instruction(AST::Instruction* ast)
+{
+  auto const& name = ast->name;
+  std::vector<Object> args;
+
+  for( auto&& i : ast->args )
+    args.emplace_back(AST_Runner::Run_Expr(i));
+
+  if( name == "print" )
+  {
+    for( auto&& i : args )
+      std::cout << i.to_string();
+
+    std::cout << '\n';
+    return;
+  }
+
+  Program::Error(*ast->token, "undefined instruction");
+}
+
 Object AST_Runner::Run_Stmt(AST::Stmt* ast)
 {
   if( !ast )
@@ -78,8 +98,10 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
   }
 
   case AST::Stmt::Instruction:
-    alart;
-    return { };
+  {
+    Instruction(reinterpret_cast<AST::Instruction*>(ast));
+    break;
+  }
 
   case AST::Stmt::If:
   {

@@ -20,7 +20,7 @@ int main()
   auto res = prg.Run();
 
   alart;
-  std::cout << res.to_string();
+  //std::cout << res.to_string();
 
 
 

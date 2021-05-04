@@ -50,9 +50,10 @@ namespace AST
 
     Type type;
     Expr* expr;
+    Token* token;
 
     Stmt(Type type = None)
-      :type(type), expr(nullptr)
+      :type(type), expr(nullptr), token(nullptr)
     {
     }
   };
@@ -84,9 +85,10 @@ namespace AST
   class For : public Stmt
   {
   public:
+    Expr* counter;
     Expr* begin;
     Expr* end;
-    Stmt* code;
+    AST::Block* code;
 
     For()
     {

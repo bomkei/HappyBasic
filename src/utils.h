@@ -25,5 +25,10 @@ std::string format(std::string const& fmt, Args... args)
   return buf;
 }
 
-#define  alart  fprintf(stderr,"\t%s:%d\n",get_file_name(__FILE__),__LINE__)
+#if _DEBUG_BUILD_
+  #define  alart  fprintf(stderr,"\t%s:%d\n",get_file_name(__FILE__),__LINE__)
+#else
+  #define alart
+#endif
+
 
