@@ -2,6 +2,7 @@
 
 /* internal types */
 class SignedExpr{
+public:
   enum Sign{
     Positive=1,
     Negative=-1,
