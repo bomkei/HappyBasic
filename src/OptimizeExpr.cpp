@@ -42,6 +42,11 @@ public:
     : type((Type)type), expr(expr)
   {
   }
+
+  static InvertableExpr FromExprRight(AST::Expr* expr){
+    auto type=(expr->type==AST::Expr::Mul ? NotInverted : Inverted); // default sign (expr->type)
+    return InvertableExpr(type,expr->right);
+  }
 };
 
 /* internal types - end */
