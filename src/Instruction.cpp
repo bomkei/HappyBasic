@@ -47,6 +47,24 @@ void AST_Runner::Instruction(AST::Instruction* ast)
     return;
   }
 
+  if( name == "insert" )
+  {
+    if( args.size() != 3 )
+      Program::Error(*ast->token, "invalid arguments");
+
+    if( !args[0].var_ptr || args[0].type != Object::Array )
+      Program::Error(*(ast->args[0]->token), "only can use lvalue array on first argument");
+
+    if( args[1].type != Object::Int )
+      Program::Error(*(ast->args[1]->token), "index is must be a int");
+
+    if( args[1].v_int < 0 || args[1].v_int >= args[0].var_ptr->list.size() )
+      Program::Error(*(ast->args[1]->token), "out of range");
+
+    args[0].var_ptr->list.insert(args[0].var_ptr->list.begin() + args[1].v_int, args[2]);
+    return;
+  }
+
   if( name == "clear" )
   {
     for( auto&& var : Program::instance->variables )
