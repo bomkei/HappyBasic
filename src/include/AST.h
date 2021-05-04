@@ -30,7 +30,7 @@ namespace AST
     Token* token = nullptr;
 
     int varIndex = 0;
-    
+
     Expr(Type type = Immidiate)
       :type(type)
     {
@@ -42,7 +42,7 @@ namespace AST
     }
 
     void Optimize();
-    
+
     static Expr* FromInt(int v)
     {
       auto x = new Expr;
@@ -173,4 +173,5 @@ namespace AST
 
 }
 
-std::ostream& operator<<(std::ostream& ss, const AST::Expr &expr);
+std::ostream& operator << (std::ostream& ss, const AST::Expr& expr);
+
