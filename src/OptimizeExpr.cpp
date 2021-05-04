@@ -1,4 +1,5 @@
 #include "main.h"
+#include <cassert>
 
 /* internal types */
 class SignedExpr{
