@@ -1,5 +1,22 @@
 #include "main.h"
 
+/* internal types */
+class SignedExpr{
+  enum Sign{
+    Positive=1,
+    Negative=-1,
+  } sign;
+  AST::Expr* expr;
+
+  template <typename T>
+  SignedExpr(T sign,AST::Expr* expr)
+    : sign((T)sign), expr(expr)
+  {
+  }
+};
+
+/* internal types - end */
+
 void AST::Expr::Optimize(){
   if(type==Add or type==Sub){
     // Expr
