@@ -53,7 +53,12 @@ void AST::Expr::Optimize(){
         terms.erase(it);
       }else it++;
     }
-    
+
+    // Constructing Expr(for return!)
+    Expr ret;
+    ret.right=&immidiatePart;
+    ret.type = immidiatePart.token->obj.v_int > 0 ? Expr::Add : Expr::Sub;
+    immidiatePart.token->obj.v_int=std::abs(immidiatePart.token->obj.v_int); // immidiatePart = |immidiatePart|
   }else if(type==Mul or type==Div){
     // Term
   }else{
