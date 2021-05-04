@@ -1,6 +1,6 @@
 #include "main.h"
 
-Object AST_Runner::Run_Expr(AST::Expr* ast)
+Object AST_Runner::Expr(AST::Expr* ast)
 {
   if( !ast )
     return { };
@@ -19,8 +19,8 @@ Object AST_Runner::Run_Expr(AST::Expr* ast)
 
   default:
   {
-    auto left = Run_Expr(ast->left);
-    auto right = Run_Expr(ast->right);
+    auto left = Expr(ast->left);
+    auto right = Expr(ast->right);
 
     switch( ast->type )
     {
@@ -49,27 +49,7 @@ Object AST_Runner::Run_Expr(AST::Expr* ast)
   return { };
 }
 
-void Instruction(AST::Instruction* ast)
-{
-  auto const& name = ast->name;
-  std::vector<Object> args;
-
-  for( auto&& i : ast->args )
-    args.emplace_back(AST_Runner::Run_Expr(i));
-
-  if( name == "print" )
-  {
-    for( auto&& i : args )
-      std::cout << i.to_string();
-
-    std::cout << '\n';
-    return;
-  }
-
-  Program::Error(*ast->token, "undefined instruction");
-}
-
-Object AST_Runner::Run_Stmt(AST::Stmt* ast)
+Object AST_Runner::Stmt(AST::Stmt* ast)
 {
   if( !ast )
     return { };
@@ -81,15 +61,15 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
     Object obj;
 
     for( auto&& i : ((AST::Block*)ast)->list )
-      obj = Run_Stmt(i);
+      obj = Stmt(i);
 
     return obj;
   }
 
   case AST::Stmt::Assign:
   {
-    auto var = Run_Expr(((AST::Assign*)ast)->var);
-    auto value = Run_Expr(((AST::Assign*)ast)->value);
+    auto var = Expr(((AST::Assign*)ast)->var);
+    auto value = Expr(((AST::Assign*)ast)->value);
 
     return *(var.var_ptr) = value;
   }
@@ -104,10 +84,10 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
   {
     for( auto&& pair : ((AST::If*)ast)->pairs )
     {
-      auto cond = Run_Expr(std::get<0>(pair));
+      auto cond = Expr(std::get<0>(pair));
 
       if( cond.eval() )
-        return Run_Stmt(std::get<1>(pair));
+        return Stmt(std::get<1>(pair));
     }
 
     break;
@@ -117,8 +97,8 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
   {
     auto for_ast = reinterpret_cast<AST::For*>(ast);
 
-    auto counter = Run_Expr(for_ast->counter);
-    auto begin = Run_Expr(for_ast->begin);
+    auto counter = Expr(for_ast->counter);
+    auto begin = Expr(for_ast->begin);
     
     if( !counter.var_ptr )
       Program::Error(*(for_ast->counter->token), "not a lvalue");
@@ -130,7 +110,7 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
 
     while( 1 )
     {
-      auto end = Run_Expr(for_ast->end);
+      auto end = Expr(for_ast->end);
 
       if( end.type != Object::Int )
         Program::Error(*(for_ast->end->token), "must be a integer");
@@ -138,7 +118,7 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
       if( counter.var_ptr->v_int > end.v_int )
         break;
 
-      Run_Stmt(for_ast->code);
+      Stmt(for_ast->code);
       counter.var_ptr->v_int++;
     }
 
@@ -149,7 +129,7 @@ Object AST_Runner::Run_Stmt(AST::Stmt* ast)
     break;
 
   default:
-    return Run_Expr(ast->expr);
+    return Expr(ast->expr);
 
 
   }

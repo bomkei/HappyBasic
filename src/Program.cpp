@@ -67,7 +67,7 @@ void Program::Parse()
 Object Program::Run()
 {
 
-  return AST_Runner::Run_Stmt(prs_result);
+  return AST_Runner::Stmt(prs_result);
 }
 
 void Program::Error(Token const& tok, std::string const& msg)
