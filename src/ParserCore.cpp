@@ -270,7 +270,6 @@ AST::Stmt* ParserCore::Stmt()
       else if( consume("else") )
       {
         ast->pairs.emplace_back(pair);
-
         pair = std::make_pair(AST::Expr::FromInt(1) , new AST::Block);
         
         expect("\n");
@@ -347,7 +346,6 @@ AST::Stmt* ParserCore::Stmt()
   }
 
 
-
   auto& tok = get_tok();
 
   if( tok.type != Token::Ident )
@@ -397,4 +395,3 @@ AST::Stmt* ParserCore::Parse()
 
   return ast;
 }
-
