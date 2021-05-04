@@ -17,6 +17,9 @@ Object AST_Runner::Expr(AST::Expr* ast)
     return var;
   }
 
+  case AST::Expr::Callfunc:
+    return Function(reinterpret_cast<AST::Callfunc*>(ast));
+
   default:
   {
     auto left = Expr(ast->left);

@@ -1,8 +1,40 @@
 #include "main.h"
 
-Object AST_Runner::Function(AST::Expr* ast)
+Object AST_Runner::Function(AST::Callfunc* ast)
 {
+  auto& name = ast->token->str;
+  std::vector<Object> args;
+  Object ret;
+
+  for( auto&& i : ast->args )
+    args.emplace_back(Expr(i));
+
+  //
+  // range
+  if( name == "range" )
+  {
+    ret.type = Object::Array;
+
+    switch( args.size() )
+    {
+    case 1:
+      if( args[0].type != Object::Int )
+        Program::Error(*(ast->args[0]->token), "must be a integer");
+
+      for( int i = 0; i < args[0].v_int; i++ )
+      {
+        Object obj;
+        obj.v_int = i;
+        ret.list.emplace_back(obj);
+      }
+
+      return ret;
+
+    default:
+      Program::Error(*ast->token, "no matching args");
+    }
+  }
 
 
-  return { };
+  Program::Error(*ast->token, "undefined function");
 }

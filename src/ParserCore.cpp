@@ -89,6 +89,25 @@ AST::Expr* ParserCore::Primary()
 
   case Token::Ident:
   {
+    // callfunc
+    if( index + 1 < tokens.size() && tokens[index + 1].str == "(" )
+    {
+      auto ast = new AST::Callfunc;
+      ast->token = tok;
+      index += 2;
+
+      if( !consume(")") )
+      {
+        do
+        {
+          ast->args.emplace_back(Expr());
+        } while( consume(",") );
+        expect(")");
+      }
+
+      return ast;
+    }
+
     auto ast = new AST::Expr;
     ast->type = AST::Expr::Variable;
     ast->token = tok;

@@ -11,8 +11,10 @@ namespace AST
       Sub,
       Mul,
       Div,
+
       Immidiate,
-      Variable
+      Variable,
+      Callfunc
     };
 
     Type type = Immidiate;
@@ -21,7 +23,7 @@ namespace AST
     Token* token = nullptr;
 
     int varIndex = 0;
-
+    
     Expr(Type type = Immidiate)
       :type(type)
     {
@@ -30,6 +32,17 @@ namespace AST
     Expr(Type type, Expr* left, Expr* right, Token* tok)
       :type(type), left(left), right(right), token(tok)
     {
+    }
+  };
+
+  class Callfunc : public Expr
+  {
+  public:
+    std::vector<Expr*> args;
+
+    Callfunc()
+    {
+      type = Type::Callfunc;
     }
   };
 
