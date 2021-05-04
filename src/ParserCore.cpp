@@ -138,16 +138,24 @@ AST::Expr* ParserCore::Primary()
   Program::Error(*tok, "syntax error");
 }
 
+AST::Expr* ParserCore::Unary()
+{
+  if( consume("-") )
+    return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), Primary(), csmtok);
+
+  return Primary();
+}
+
 AST::Expr* ParserCore::Mul()
 {
-  auto x = Primary();
+  auto x = Unary();
 
   while( check() )
   {
     if( consume("*") )
-      x = new AST::Expr(AST::Expr::Mul, x, Primary(), csmtok);
+      x = new AST::Expr(AST::Expr::Mul, x, Unary(), csmtok);
     else if( consume("/") )
-      x = new AST::Expr(AST::Expr::Div, x, Primary(), csmtok);
+      x = new AST::Expr(AST::Expr::Div, x, Unary(), csmtok);
     else
       break;
   }
