@@ -182,8 +182,7 @@ AST::Stmt* ParserCore::Stmt()
     auto ast = new AST::If;
     ast->token = csmtok;
 
-    std::get<0>(pair) = Expr();
-    std::get<1>(pair) = new AST::Block;
+    pair = std::make_pair(Expr(), new AST::Block);
 
     expect("then");
     expect("\n");
