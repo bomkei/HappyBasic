@@ -33,6 +33,8 @@ namespace AST
       :type(type), left(left), right(right), token(tok)
     {
     }
+
+    void Optimize();
   };
 
   class Callfunc : public Expr
