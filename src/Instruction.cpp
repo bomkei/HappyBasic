@@ -78,8 +78,8 @@ void AST_Runner::Instruction(AST::Instruction* ast)
     if( args.size() != 2 )
       Program::Error(*ast->token, "invalid arguments");
 
-    if( !args[0].var_ptr || !args[1].var_ptr )
-      Program::Error(*ast->token, "cannot use rvalue in move");
+    if( !args[0].var_ptr )
+      Program::Error(*ast->token, "cannot use rvalue at target");
 
     if( args[1].type == Object::Array )
     {
