@@ -73,6 +73,20 @@ void AST_Runner::Instruction(AST::Instruction* ast)
     return;
   }
 
+  if( name == "move" )
+  {
+    if( args.size() != 2 )
+      Program::Error(*ast->token, "invalid arguments");
+
+    if( args[1].type == Object::Array )
+    {
+      args[0].type = Object::Array;
+      args[0].list = std::move(args[1].list);
+    }
+
+    return;
+  }
+
   Program::Error(*ast->token, "undefined instruction");
 }
 
