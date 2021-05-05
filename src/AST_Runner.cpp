@@ -248,7 +248,12 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
         if( counter.var_ptr->v_int > end.v_int )
           break;
 
+        LoopBreaked = LoopContinued = false;
         Stmt(for_ast->code);
+
+        if( LoopBreaked )
+          break;
+
         counter.var_ptr->v_int++;
       }
 
