@@ -34,7 +34,7 @@ class msg(commands.Cog):
         with open('./plugin/BASIC_lang/test.txt', 'w') as f:
             f.write(program)
 
-        msg = "DEBUG FROM BASIC LANG IN C++\n------------- LOG ---------------"
+        msg = "DEBUG FROM BASIC LANG IN C++\n------------- LOG ---------------\n"
         m: discord.Message = await ctx.send(msg)
         p = subprocess.Popen(["make","-C","./plugin/BASIC_lang/"],
                              stdout=subprocess.PIPE,
