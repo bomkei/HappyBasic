@@ -442,7 +442,7 @@ AST::Stmt* ParserCore::Stmt()
     expect("\n");
   }
 
-  std::cout << (*ast->args[0] == *ast->args[1]) << '\n';
+  std::cout << ast->args[0]->equal(*ast->args[1]) << '\n';
   
   return ast;
 }

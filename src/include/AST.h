@@ -46,8 +46,7 @@ namespace AST
     std::string ToString() const;
     bool IsConstexpr() const;
 
-    bool operator == (Expr const&) const;
-    bool operator != (Expr const&) const;
+    bool equal(AST::Expr const&) const;
 
     static Expr* FromInt(int v)
     {

@@ -89,41 +89,31 @@ bool AST::Expr::IsConstexpr() const
   return false;
 }
 
-bool AST::Expr::operator != (AST::Expr const& ast)const
+bool AST::Expr::equal(AST::Expr const& ast) const
 {
-  return (*this == ast) == false;
-}
-
-bool AST::Expr::operator == (AST::Expr const& _ast) const
-{
-  auto ast = (Expr*)&_ast;
-
-  if( !ast )
+  if( ast.type != type )
     return false;
-
-  if( ast->type != type )
-    return false;
-
-  std::cout << ToString() << ", " << ast->ToString() << '\n';
 
   switch( type )
   {
   case Immidiate:
-    return token->obj.equal(ast->token->obj);
+    return token->obj.equal(ast.token->obj);
 
   case Variable:
-    return varIndex == ast->varIndex;
+    return varIndex == ast.varIndex;
 
   case Callfunc:
   {
-    if( token->str != ast->token->str )
+    auto&& args = ((AST::Callfunc*)this)->args;
+
+    if( token->str != ast.token->str )
       return false;
 
-    if( ((AST::Callfunc*)this)->args.size() != ((AST::Callfunc*)ast)->args.size() )
+    if( args.size() != ((AST::Callfunc*)&ast)->args.size() )
       return false;
 
-    for( size_t i = 0; i < ((AST::Callfunc*)this)->args.size(); i++ )
-      if( *((AST::Callfunc*)this)->args[i] != *((AST::Callfunc*)ast)->args[i] )
+    for( size_t i = 0; i < args.size(); i++ )
+      if( !args[i]->equal(*((AST::Callfunc*)&ast)->args[i]) )
         return false;
 
     return true;
@@ -131,18 +121,20 @@ bool AST::Expr::operator == (AST::Expr const& _ast) const
 
   case Array:
   {
-    if( ((AST::Array*)this)->elems.size() != ((AST::Array*)ast)->elems.size() )
+    auto& elems = ((AST::Array*)this)->elems;
+
+    if( elems.size() != ((AST::Array*)&ast)->elems.size() )
       return false;
 
-    for( size_t i = 0; i < ((AST::Array*)this)->elems.size(); i++ )
-      if( *((AST::Array*)this)->elems[i] != *((AST::Array*)ast)->elems[i] )
+    for( size_t i = 0; i < elems.size(); i++ )
+      if( !elems[i]->equal(*((AST::Array*)&ast)->elems[i]) )
         return false;
 
     return true;
   }
 
   default:
-    return *left == *ast->left && *right == *ast->right;
+    return left->equal(*ast.left) && right->equal(*ast.right);
   }
 
   return false;
