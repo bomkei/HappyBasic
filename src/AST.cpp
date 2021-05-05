@@ -79,9 +79,13 @@ bool AST::Expr::IsConstexpr() const
 
   default:
     if( !left )
-      return right ? right->IsConstexpr() : false;
+    {
+      if( right ) return right->IsConstexpr();
+    }
     else if( !right )
-      return left ? left->IsConstexpr() : false;
+    {
+      if( left ) return left->IsConstexpr();
+    }
 
     return left->IsConstexpr() && right->IsConstexpr();
   }
