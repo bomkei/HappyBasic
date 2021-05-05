@@ -22,7 +22,8 @@ namespace AST
       Variable,
       Callfunc,
       Array,
-      IndexRef
+      IndexRef,
+      Param
     };
 
     Type type;
