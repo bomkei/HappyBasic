@@ -474,6 +474,26 @@ AST::Stmt* ParserCore::Stmt()
     return ast;
   }
 
+  //
+  // break
+  if( consume("break") )
+  {
+    auto ast = new AST::Stmt;
+    ast->type = AST::Stmt::Break;
+    expect("\n");
+    break;
+  }
+  
+  //
+  // continue
+  if( consume("continue") )
+  {
+    auto ast = new AST::Stmt;
+    ast->type = AST::Stmt::Continue;
+    expect("\n");
+    break;
+  }
+
 
   auto& tok = get_tok();
 
