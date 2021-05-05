@@ -456,6 +456,24 @@ AST::Stmt* ParserCore::Stmt()
     return ast;
   }
 
+  //
+  // return
+  if( consume("return") )
+  {
+    auto ast = new AST::Return;
+    ast->token = csmtok;
+
+    if( !consume("\n") )
+    {
+      ast->expr = Expr();
+      expect("\n");
+    }
+    else
+      ast->expr = nullptr;
+
+    return ast;
+  }
+
 
   auto& tok = get_tok();
 

@@ -112,7 +112,7 @@ namespace AST
   class Return : public Stmt
   {
   public:
-    AST::Expr* value;
+    AST::Expr* expr;
 
     Return()
     {
