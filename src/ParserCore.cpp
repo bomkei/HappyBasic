@@ -399,6 +399,9 @@ AST::Stmt* ParserCore::Stmt()
   // def
   if( consume("def") )
   {
+    if( get_tok().type != Token::Ident )
+      Program::Error(get_tok(), "expect identifier after 'def' keyword");
+
 
   }
 
