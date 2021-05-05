@@ -10,9 +10,19 @@ void Optimizer::CalcConstexpr(AST::Expr* expr)
 {
   switch( expr->type )
   {
-  case AST::Expr::Immidiate:
-  case AST::Expr::Variable:
-    case AST::Expr::
+    case AST::Expr::Immidiate:
+    case AST::Expr::Variable:
+      break;
+
+    case AST::Expr::Array:
+      for( auto&& i : ((AST::Array*)expr)->elems )
+        CalcConstexpr(i);
+      break;
+
+    default:
+    {
+
+    }
   }
 }
 
