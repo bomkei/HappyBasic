@@ -162,6 +162,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 {
   static bool LoopBreaked = false;
   static bool LoopContinued = false;
+  static bool FuncReturned = false;
 
   if( !ast )
     return { };
@@ -199,6 +200,9 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       Instruction((AST::Instruction*)(ast));
       break;
     }
+    
+    case AST::Stmt::Break:
+      
 
     case AST::Stmt::If:
     {
