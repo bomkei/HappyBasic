@@ -92,6 +92,7 @@ namespace AST
       Assign,
       Instruction,
       Block,
+      Function,
     };
 
     Type type;
