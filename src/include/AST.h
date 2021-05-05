@@ -25,15 +25,15 @@ namespace AST
       IndexRef
     };
 
-    Type type = Immidiate;
-    Expr* left = nullptr;
-    Expr* right = nullptr;
-    Token* token = nullptr;
+    Type type;
+    Expr* left;
+    Expr* right;
+    Token* token;
 
     int varIndex = 0;
 
     Expr(Type type = Immidiate)
-      :type(type)
+      :type(type), left(nullptr), right(nullptr), token(nullptr)
     {
     }
 
