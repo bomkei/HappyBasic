@@ -34,7 +34,7 @@ bool AST::Expr::operator == (AST::Expr const& _ast) const
       return false;
 
     for( size_t i = 0; i < ((AST::Callfunc*)this)->args.size(); i++ )
-      if( ((AST::Callfunc*)this)->args[i] != ((AST::Callfunc*)ast)->args[i] )
+      if( *((AST::Callfunc*)this)->args[i] != *((AST::Callfunc*)ast)->args[i] )
         return false;
 
     return true;
@@ -46,14 +46,14 @@ bool AST::Expr::operator == (AST::Expr const& _ast) const
       return false;
 
     for( size_t i = 0; i < ((AST::Array*)this)->elems.size(); i++ )
-      if( ((AST::Array*)this)->elems[i] != ((AST::Array*)ast)->elems[i] )
+      if( *((AST::Array*)this)->elems[i] != *((AST::Array*)ast)->elems[i] )
         return false;
 
     return true;
   }
 
   default:
-    return left == ast->left && right == ast->right;
+    return *left == *ast->left && *right == *ast->right;
   }
 
   return false;
