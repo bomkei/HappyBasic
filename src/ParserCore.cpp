@@ -142,7 +142,7 @@ AST::Expr* ParserCore::Primary()
 
         int find = -1;
 
-        for(int i=0;i< )
+        for(int i=0;i< 
       }
 
       auto ast = new AST::Expr;
@@ -460,6 +460,8 @@ AST::Stmt* ParserCore::Stmt()
 
     std::vector<AST::Expr*> args;
     std::vector<AST::Stmt*> block;
+
+    func_args = &args;
 
     expect("(");
 
