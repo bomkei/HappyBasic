@@ -109,6 +109,17 @@ namespace AST
     }
   };
 
+  class Return : public Stmt
+  {
+  public:
+    AST::Expr* value;
+
+    Return()
+    {
+      type = Type::Return;
+    }
+  };
+
   class Block : public Stmt
   {
   public:
