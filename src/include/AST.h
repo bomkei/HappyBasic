@@ -93,6 +93,9 @@ namespace AST
       Instruction,
       Block,
       Function,
+      Break,
+      Continue,
+      Return
     };
 
     Type type;
