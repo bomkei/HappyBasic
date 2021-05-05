@@ -402,6 +402,9 @@ AST::Stmt* ParserCore::Stmt()
   {
     auto tk = csmtok;
 
+    if( in_function )
+      Program::Error(*tk, "nested def");
+
     if( get_tok().type != Token::Ident )
       Program::Error(get_tok(), "expect identifier after 'def' keyword");
 
