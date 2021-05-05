@@ -60,6 +60,23 @@ Object AST_Runner::Expr(AST::Expr* ast)
     return ret;
   }
 
+  case AST::Expr::IndexRef:
+  {
+    auto obj = Expr(ast->left);
+    auto sub = Expr(ast->right);
+
+    if( obj.type != Object::Array )
+      Program::Error(*ast->left->token, "this is not array");
+
+    if( sub.type != Object::Int )
+      Program::Error(*ast->right->token, "subscript type mismatch");
+
+    if( sub.v_int < 0 || sub.v_int >= obj.list.size() )
+      Program::Error(*ast->right->token, "subscript out of range");
+
+    return obj.list[sub.v_int];
+  }
+
   default:
   {
     auto left = Expr(ast->left);
