@@ -412,7 +412,10 @@ AST::Stmt* ParserCore::Stmt()
     {
       do
       {
-        args.emplace_back(Expr());
+        if( get_tok().type != Token::Ident )
+          Program::Error(get_tok(), "syntax error");
+        
+        args.emplace_back(Primary());
       } while( consume(",") );
 
       expect(")");
@@ -430,6 +433,8 @@ AST::Stmt* ParserCore::Stmt()
 
       block.emplace_back(Stmt());
     }
+
+    
   }
 
 
