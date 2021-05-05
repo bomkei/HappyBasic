@@ -36,7 +36,7 @@ bool AST::Expr::operator == (AST::Expr* ast) const
     if( ((AST::Array*)this)->elems.size() != ((AST::Array*)ast)->elems.size() )
       return false;
 
-    for( size_t i = 0; i < ((AST::Array*)this)->args.size(); i++ )
+    for( size_t i = 0; i < ((AST::Array*)this)->elems.size(); i++ )
       if( ((AST::Array*)this)->elems[i] != ((AST::Array*)ast)->elems[i] )
         return false;
 

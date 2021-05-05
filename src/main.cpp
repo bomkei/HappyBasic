@@ -1,80 +1,18 @@
 #include "main.h"
 
-/// Programの継承。ファイルを開く
-//void Program::OpenFile(std::string const& path)
-//{
-//  static auto is_empty = [] (std::string const& str)
-//  {
-//    for( auto&& c : str )
-//      if( c > ' ' ) return false;
-//
-//    return true;
-//  };
-//
-//  std::ifstream ifs(path);
-//  std::string line;
-//
-//  // ファイルを開けなかった
-//  if( ifs.fail() )
-//  {
-//    std::cout << "cannot open file";
-//    exit(1);
-//  }
-//
-//  // 一行ずつ読み取っていく
-//  while( std::getline(ifs, line) )
-//  {
-//    // 右端の空白以下の文字を削除
-//    while( line.length() && line[line.length() - 1] <= ' ' )
-//      line.pop_back();
-//
-//    // 左端の空白以下の文字を削除
-//    while( line.length() && line[0] <= ' ' )
-//      line.erase(line.begin());
-//
-//    if( line.empty() )
-//      continue;
-//
-//    // 改行文字をつけて ret に追加する
-//    source += line + '\n';
-//  }
-//
-//  // ソースが空
-//  if( is_empty(source) )
-//  {
-//    std::cout << "empty source file";
-//    exit(1);
-//  }
-//}
 Program* Program::instance;
 
-
 /// mainコード
-int main()
+int main(int argc, char** argv)
 {
-  try
-  {
-    Program prg;
+  Program prg;
 
-    //prg.OpenFile("C:/Users/mrzkr/Desktop/BASIC_lang/x64/Release/test.txt");
-    prg.OpenFile("./plugin/BASIC_lang/test.txt");
-    
-    prg.Tokenize();
-    prg.Parse();
-//  prg.OpenFile(argv[1]);
-//
-//  prg.Tokenize();
-//
-//  prg.Parse();
+  prg.OpenFile(argc == 1 ? "./plugin/BASIC_lang/test.txt" : argv[1]);
 
-    auto res = prg.Run();
+  prg.Tokenize();
 
-  }
-  catch( ErrorInfo const& info )
-  {
-    std::cerr << std::get<1>(info) << '\n';
-  }
+  prg.Parse();
 
+  auto res = prg.Run();
 }
-
 
