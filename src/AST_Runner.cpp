@@ -160,8 +160,12 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
 Object AST_Runner::Stmt(AST::Stmt* ast)
 {
+  alart;
+
   if( !ast )
     return { };
+
+  alart;
 
   std::cout << ast->ToString() << '\n';
 

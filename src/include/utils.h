@@ -27,8 +27,10 @@ std::string format(std::string const& fmt, Args... args)
 
 #if _DEBUG_BUILD_
   #define  alart  fprintf(stderr,"\t%s:%d\n",get_file_name(__FILE__),__LINE__)
+  #define  view_pointer(p)  fprintf(stderr,"\t" ## p ## " = %p\n", p)
 #else
   #define alart
+  #define view_pointer(p) p
 #endif
 
 

@@ -63,6 +63,8 @@ void Program::Parse()
 {
   prs_result = parser->Parse();
 
+  printf("prs_result = %p\n");
+
   std::cout
     << "---------------------------------------------\n"
     << prs_result->ToString() << '\n'

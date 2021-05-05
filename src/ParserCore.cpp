@@ -431,7 +431,10 @@ AST::Stmt* ParserCore::Stmt()
     expect("\n");
   }
 
-  //Debug(ast->args[0]);
+  alart;
+  Debug(ast->args[0]);
+
+  alart;
 
   //std::cout << ast->args[0]->equal(*ast->args[1]) << '\n';
   
@@ -447,5 +450,6 @@ AST::Stmt* ParserCore::Parse()
     ast->list.emplace_back(Stmt());
   }
 
+  alart;
   return ast;
 }
