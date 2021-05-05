@@ -133,16 +133,14 @@ AST::Expr* ParserCore::Primary()
         return ast;
       }
 
-      // parameter
+      // find parameter
       if( in_function )
       {
-        auto prm = new AST::Expr;
-        prm->token = tok;
-        prm->type = AST::Expr::Param;
-
-        int find = -1;
-
-        for(int i=0;i< 
+        for( auto&& i : *func_args )
+        {
+          if( i->token->str == tok->str )
+            return i;
+        }
       }
 
       auto ast = new AST::Expr;
@@ -472,7 +470,9 @@ AST::Stmt* ParserCore::Stmt()
         if( get_tok().type != Token::Ident )
           Program::Error(get_tok(), "syntax error");
         
-        args.emplace_back(Primary());
+        auto prm = Primary();
+        prm->type = AST::Expr::Param;
+        args.emplace_back(prm);
       } while( consume(",") );
 
       expect(")");
