@@ -21,32 +21,32 @@ void Program::OpenFile(std::string const& path)
   std::ifstream ifs(path);
   std::string line;
 
-  // ƒtƒ@ƒCƒ‹‚ğŠJ‚¯‚È‚©‚Á‚½
+  // ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ãªã‹ã£ãŸ
   if( ifs.fail() )
   {
     std::cout << "cannot open file";
     exit(1);
   }
 
-  // ˆês‚¸‚Â“Ç‚İæ‚Á‚Ä‚¢‚­
+  // ä¸€è¡Œãšã¤èª­ã¿å–ã£ã¦ã„ã
   while( std::getline(ifs, line) )
   {
-    // ‰E’[‚Ì‹ó”’ˆÈ‰º‚Ì•¶š‚ğíœ
+    // å³ç«¯ã®ç©ºç™½ä»¥ä¸‹ã®æ–‡å­—ã‚’å‰Šé™¤
     while( line.length() && line[line.length() - 1] <= ' ' )
       line.pop_back();
 
-    // ¶’[‚Ì‹ó”’ˆÈ‰º‚Ì•¶š‚ğíœ
+    // å·¦ç«¯ã®ç©ºç™½ä»¥ä¸‹ã®æ–‡å­—ã‚’å‰Šé™¤
     while( line.length() && line[0] <= ' ' )
       line.erase(line.begin());
 
     if( line.empty() )
       continue;
 
-    // ‰üs•¶š‚ğ‚Â‚¯‚Ä ret ‚É’Ç‰Á‚·‚é
+    // æ”¹è¡Œæ–‡å­—ã‚’ã¤ã‘ã¦ ret ã«è¿½åŠ ã™ã‚‹
     source += line + '\n';
   }
 
-  // ƒ\[ƒX‚ª‹ó
+  // ã‚½ãƒ¼ã‚¹ãŒç©º
   if( is_empty(source) )
   {
     std::cout << "empty source file";
