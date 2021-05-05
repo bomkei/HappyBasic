@@ -87,6 +87,8 @@ void Program::Error(Token const& tok, std::string const& msg)
 
   for( size_t i = 0; i < tok.srcpos; i++ )
   {
+    alart;
+
     if( instance->source[i] == '\n' )
     {
       line++;

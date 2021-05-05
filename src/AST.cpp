@@ -53,6 +53,12 @@ std::string AST::Expr::ToString() const
 
     default:
     {
+      if( !left || !right )
+      {
+        alart;
+        Program::Error(*token, "ERROR");
+      }
+
       auto left = this->left->ToString();
       auto right = this->right->ToString();
 

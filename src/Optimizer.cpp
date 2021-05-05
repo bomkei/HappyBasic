@@ -111,9 +111,9 @@ void Debug(AST::Expr* expr)
       ast->left->token->obj = AST_Runner::Expr(ast);
       ast->left->type = AST::Expr::Immidiate;
 
+      terms[i].term = ast->left;
       delete ast->right;
 
-      terms[i].term = ast->left;
       terms.erase(terms.begin() + i + 1);
     }
     else if( !terms[i].term->IsConstexpr() )
@@ -152,4 +152,5 @@ void Debug(AST::Expr* expr)
   std::cout << expr->ToString() << '\n';
 
   alart;
+  exit(100);
 }
