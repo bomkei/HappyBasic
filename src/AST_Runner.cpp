@@ -160,10 +160,10 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
 Object AST_Runner::Stmt(AST::Stmt* ast)
 {
-  static bool LoopBreaked = false;
-  static bool LoopContinued = false;
-  static bool FuncReturned = false;
-  static Object ReturnValue;
+  static bool *LoopBreaked = false;
+  static bool *LoopContinued = false;
+  static bool *FuncReturned = false;
+  static Object *ReturnValue;
 
   if( !ast )
     return { };
@@ -233,6 +233,8 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       auto counter = Expr(for_ast->counter);
       auto begin = Expr(for_ast->begin);
 
+      auto old = 
+
       if( !counter.var_ptr )
         Program::Error(*(for_ast->counter->token), "not a lvalue");
 
@@ -265,7 +267,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
     case AST::Stmt::While:
     {
-      break;
+      
     }
 
   }
