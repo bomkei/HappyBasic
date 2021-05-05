@@ -1,29 +1,50 @@
 #include "main.h"
 
-bool operator == (AST::Expr* left, AST::Expr* right)
+bool AST::Expr::operator == (AST::Expr* ast) const
 {
-  if( !left || !right )
+  if( !ast )
     return false;
 
-  if( left->type != right->type )
+  if( ast->type != type )
     return false;
 
-  switch( left->type )
+  switch( type )
   {
-  case AST::Expr::Immidiate:
-    return left->token->obj.equal(right->token->obj);
+  case Immidiate:
+    return token->obj.equal(ast->token->obj);
 
-  case AST::Expr::Variable:
-    return left->varIndex == right->varIndex;
+  case Variable:
+    return varIndex == ast->varIndex;
 
-  case AST::Expr::Callfunc:
-    if( left->token->str != right->token->str )
+  case Callfunc:
+  {
+    if( token->str != ast->token->str )
       return false;
 
-    for( auto&& arg : ((AST::Callfunc*)this)->args )
-    {
+    if( ((AST::Callfunc*)this)->args.size() != ((AST::Callfunc*)ast)->args.size() )
+      return false;
 
-    }
+    for( size_t i = 0; i < ((AST::Callfunc*)this)->args.size(); i++ )
+      if( ((AST::Callfunc*)this)->args[i] != ((AST::Callfunc*)ast)->args[i] )
+        return false;
+
+    return true;
+  }
+
+  case Array:
+  {
+    if( ((AST::Array*)this)->elems.size() != ((AST::Array*)ast)->elems.size() )
+      return false;
+
+    for( size_t i = 0; i < ((AST::Array*)this)->args.size(); i++ )
+      if( ((AST::Array*)this)->elems[i] != ((AST::Array*)ast)->elems[i] )
+        return false;
+
+    return true;
+  }
+
+  default:
+    return left == ast->left && right == ast->right;
   }
 
   return false;

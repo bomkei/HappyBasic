@@ -46,6 +46,9 @@ namespace AST
     std::string ToString() const;
     bool IsConstexpr() const;
 
+    bool operator == (Expr*) const;
+    bool operator != (Expr*) const;
+
     static Expr* FromInt(int v)
     {
       auto x = new Expr;
@@ -175,7 +178,4 @@ namespace AST
 
 
 }
-
-bool operator == (AST::Expr* left, AST::Expr* right);
-
 
