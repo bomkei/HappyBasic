@@ -63,7 +63,10 @@ void Program::Parse()
 {
   prs_result = parser->Parse();
 
-  std::cout << prs_result->ToString() << '\n';
+  std::cout
+    << "---------------------------------------------\n"
+    << prs_result->ToString() << '\n'
+    << "---------------------------------------------\n";
 }
 
 Object Program::Run()
