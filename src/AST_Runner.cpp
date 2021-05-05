@@ -202,7 +202,13 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
     }
     
     case AST::Stmt::Break:
-      
+      LoopBreaked = true;
+      break;
+
+    case AST::Stmt::Continue:
+      LoopBreaked = true;
+      LoopContinued = true;
+      break;
 
     case AST::Stmt::If:
     {
