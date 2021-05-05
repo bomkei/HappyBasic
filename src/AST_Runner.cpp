@@ -174,7 +174,6 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
       for( auto&& i : ((AST::Block*)ast)->list )
       {
-        alart;
         obj = Stmt(i);
       }
 
@@ -191,7 +190,6 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
     case AST::Stmt::Instruction:
     {
-      alart;
       Instruction((AST::Instruction*)(ast));
       break;
     }
