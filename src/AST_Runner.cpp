@@ -163,6 +163,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
   static bool LoopBreaked = false;
   static bool LoopContinued = false;
   static bool FuncReturned = false;
+  static Object ReturnValue;
 
   if( !ast )
     return { };
@@ -174,17 +175,15 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
     case AST::Stmt::Block:
     {
-      Object obj;
-
       for( auto&& i : ((AST::Block*)ast)->list )
       {
-        obj = Stmt(i);
+        Stmt(i);
 
         if( LoopBreaked )
           break;
       }
 
-      return obj;
+      break;
     }
 
     case AST::Stmt::Assign:
@@ -208,6 +207,10 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
     case AST::Stmt::Continue:
       LoopBreaked = true;
       LoopContinued = true;
+      break;
+
+    case AST::Stmt::Return:
+      ReturnValue = Expr(((AST::Return*)ast)->expr);
       break;
 
     case AST::Stmt::If:
@@ -257,7 +260,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
         counter.var_ptr->v_int++;
       }
 
-      return counter;
+      break;
     }
 
     case AST::Stmt::While:
@@ -267,7 +270,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
   }
 
-  return { };
+  return ReturnValue;
 }
 
 
