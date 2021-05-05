@@ -17,8 +17,7 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
     old_args.emplace_back(AST_Runner::Expr(ast->args[i]));
   }
 
-
-
+  Program::instance->cur_func = ast;
   AST_Runner::Stmt(ast->code);
 
   for( size_t i = 0; i < old_args.size(); i++ )
