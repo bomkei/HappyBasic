@@ -160,10 +160,10 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
 Object AST_Runner::Stmt(AST::Stmt* ast)
 {
-  static bool *LoopBreaked = false;
-  static bool *LoopContinued = false;
-  static bool *FuncReturned = false;
-  static Object *ReturnValue;
+  static bool *LoopBreaked = nullptr;
+  static bool *LoopContinued = nullptr;
+  static bool *FuncReturned = nullptr;
+  static Object* ReturnValue = nullptr;
 
   if( !ast )
     return { };
@@ -299,7 +299,10 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
   }
 
-  return ReturnValue;
+  if( ReturnValue )
+    return *ReturnValue;
+
+  return { };
 }
 
 
