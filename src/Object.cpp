@@ -85,3 +85,26 @@ bool Object::eval() const
 
   return false;
 }
+
+bool Object::equal(Object const& obj) const
+{
+  if( obj.type != type )
+    return false;
+
+  if( obj.name != name )
+    return false;
+
+  switch( type )
+  {
+  case Int: return obj.v_int == v_int;
+  case Float: return obj.v_float == v_float;
+  case Char: return obj.v_char == v_char;
+  case Array:
+    if( obj.list.size() != list.size() ) return false;
+    for( int i = 0; i < obj.list.size(); i++ )
+      if( !obj.list[i].equal(list[i]) ) return false;
+    return true;
+  }
+
+  return false;
+}

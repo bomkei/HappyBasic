@@ -2,6 +2,7 @@
 
 namespace AST
 {
+
   class Expr
   {
   public:
@@ -174,5 +175,7 @@ namespace AST
 
 
 }
+
+bool operator == (AST::Expr* left, AST::Expr* right);
 
 

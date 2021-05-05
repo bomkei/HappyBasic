@@ -22,4 +22,3 @@
 #include "include/Program.h"
 
 #include "include/Optimizer.h"
-
