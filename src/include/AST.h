@@ -106,6 +106,19 @@ namespace AST
     }
   };
 
+  class Function : public Stmt
+  {
+  public:
+    std::string name;
+    std::vector<Expr*> args;
+    AST::Block* code;
+
+    Function()
+    {
+      type = Type::Function;
+    }
+  };
+
   class Block : public Stmt
   {
   public:
