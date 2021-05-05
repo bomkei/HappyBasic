@@ -9,6 +9,14 @@ Program::Program()
   prs_result = nullptr;
 }
 
+i64 Program::find_func(std::string const& name) const
+{
+  for( i64 i = 0; i < functions.size(); i++ )
+    if( functions[i]->name == name ) return i;
+
+  return -1;
+}
+
 void Program::OpenFile(std::string const& path)
 {
   static auto is_empty = [] (std::string const& str) {

@@ -14,6 +14,8 @@ class Program
 
   AST::Stmt* prs_result;
 
+  i64 find_func(std::string const&) const;
+
   friend class AST_Runner;
 
 public:
