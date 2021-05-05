@@ -18,7 +18,7 @@ public:
     Term(AST::Expr*);
   };
 
-  static void EvalConstexpr(AST::Expr* expr);
+  static void CalcConstexpr(AST::Expr* expr);
   static std::vector<Term> GetTermsFromExpr(AST::Expr* expr);
 
 

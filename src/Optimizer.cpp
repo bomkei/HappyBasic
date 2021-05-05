@@ -6,7 +6,7 @@ Optimizer::Term::Term(AST::Expr* term)
 
 }
 
-void Optimizer::EvalConstexpr(AST::Expr* expr)
+void Optimizer::CalcConstexpr(AST::Expr* expr)
 {
 
 }
