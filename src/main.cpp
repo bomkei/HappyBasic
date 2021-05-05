@@ -57,7 +57,7 @@ int main()
     Program prg;
 
     //prg.OpenFile("C:/Users/mrzkr/Desktop/BASIC_lang/x64/Release/test.txt");
-    prg.OpenFile("test.txt");
+    prg.OpenFile("./plugin/BASIC_lang/test.txt");
     
     prg.Tokenize();
     prg.Parse();

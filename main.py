@@ -31,14 +31,9 @@ class msg(commands.Cog):
         
         program = ctx.message.content[11:-3]
         
-        with open('script.txt', 'w') as f:
+        with open('test.txt', 'w') as f:
             f.write(program)
-        
-        
-        await ctx.send(program)
-    
-    @commands.command(aliases=["db"])
-    async def debugbasic(self, ctx):
+
         msg = "DEBUG FROM BASIC LANG IN C++\n"
         m: discord.Message = await ctx.send(msg)
         p = subprocess.Popen(["make","-C","./plugin/BASIC_lang/"],
@@ -48,19 +43,45 @@ class msg(commands.Cog):
         await ctx.send("ENDED.")
         msg = "chmod a+x ./basic\n"
         m: discord.Message = await ctx.send(msg)
-        p = subprocess.Popen(["chmod","a+x","./plugin/BASIC_lang/basic"],
+        p = subprocess.Popen(["chmod","a+x","./plugin/BASIC_lang/HappyBasic"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
         _ = await process_output(p, m, msg, ctx)
         await ctx.send("ENDED.")
         msg = "RUN DEBUG\n"
         m: discord.Message = await ctx.send(msg)
-        p = subprocess.Popen(["./plugin/BASIC_lang/basic"],
+        p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
         _ = await process_output(p, m, msg, ctx)
         _ = p.communicate()[0]
         await ctx.send("ENDED. CODE:"+str(p.returncode))
+
+
+    # @commands.command(aliases=["db"])
+    # async def debugbasic(self, ctx):
+    #     msg = "DEBUG FROM BASIC LANG IN C++\n"
+    #     m: discord.Message = await ctx.send(msg)
+    #     p = subprocess.Popen(["make","-C","./plugin/BASIC_lang/"],
+    #                          stdout=subprocess.PIPE,
+    #                          stderr=subprocess.STDOUT)
+    #     _ = await process_output(p, m, msg, ctx)
+    #     await ctx.send("ENDED.")
+    #     msg = "chmod a+x ./basic\n"
+    #     m: discord.Message = await ctx.send(msg)
+    #     p = subprocess.Popen(["chmod","a+x","./plugin/BASIC_lang/HappyBasic"],
+    #                          stdout=subprocess.PIPE,
+    #                          stderr=subprocess.STDOUT)
+    #     _ = await process_output(p, m, msg, ctx)
+    #     await ctx.send("ENDED.")
+    #     msg = "RUN DEBUG\n"
+    #     m: discord.Message = await ctx.send(msg)
+    #     p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic"],
+    #                          stdout=subprocess.PIPE,
+    #                          stderr=subprocess.STDOUT)
+    #     _ = await process_output(p, m, msg, ctx)
+    #     _ = p.communicate()[0]
+    #     await ctx.send("ENDED. CODE:"+str(p.returncode))
 
 
 def setup(bot):
