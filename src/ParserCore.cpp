@@ -411,9 +411,13 @@ AST::Stmt* ParserCore::Stmt()
     {
       do
       {
-
+        args.emplace_back(Expr());
       } while( consume(",") );
+
+      expect(")");
     }
+
+
   }
 
 
