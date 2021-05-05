@@ -283,6 +283,11 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
         counter.var_ptr->v_int++;
       }
+      
+      // restore pointers
+      LoopBreaked = oldptr1;
+      LoopContinued = oldptr2;
+      ReturnValue = oldptr3;
 
       break;
     }
