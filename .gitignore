@@ -10,3 +10,6 @@
 
 *.bat
 *.txt
+
+/BASIC_DEBUG
+

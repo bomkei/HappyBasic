@@ -21,7 +21,15 @@ template <class... Args>
 std::string format(std::string const& fmt, Args... args)
 {
   char buf[1000];
-  sprintf(buf, fmt.c_str(), args...);
+  
+#ifdef _MSC_VER
+  sprintf_s
+#else
+  sprintf
+#endif
+
+  (buf, fmt.c_str(), args...);
+  
   return buf;
 }
 
