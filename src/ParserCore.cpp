@@ -392,6 +392,7 @@ AST::Stmt* ParserCore::Stmt()
       Program::Error(*ast->token, "not closed");
     }
 
+    functions.emplace_back(ast);
     return ast;
   }
 
