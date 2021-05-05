@@ -17,7 +17,6 @@ namespace AST
       Equal,
       NotEqual,
 
-
       Immidiate,
       Variable,
       Callfunc,
@@ -43,6 +42,8 @@ namespace AST
     }
 
     void Optimize();
+    std::string ToString() const;
+    bool IsConstexpr() const;
 
     static Expr* FromInt(int v)
     {

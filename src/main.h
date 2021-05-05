@@ -21,3 +21,5 @@
 #include "include/AST_Runner.h"
 #include "include/Program.h"
 
+#include "include/Optimizer.h"
+

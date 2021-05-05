@@ -80,6 +80,7 @@ AST::Expr* ParserCore::Primary()
   if( consume("[") )
   {
     auto x = new AST::Array;
+    x->token = csmtok;
 
     if( !consume("]") )
     {
@@ -272,8 +273,23 @@ AST::Expr* ParserCore::Equal()
 
 AST::Expr* ParserCore::Expr()
 {
-  auto expr=Equal();
-  expr->Optimize();
+  auto expr = Equal();
+
+  //auto terms = Optimizer::GetTermsFromExpr(expr);
+
+  //for( auto&& t : terms )
+  //{
+  //  std::cout
+  //    << "Sign='" << (t.sign == Optimizer::Term::Sign::Plus ? "+" : "-") << "'"
+  //    << " "
+  //    << "IsConstexpr() =" << (t.term->IsConstexpr() ? "true " : "false")
+  //    << ": "
+  //    << t.term->ToString()
+  //    << '\n';
+  //}
+
+  //exit(1);
+  
   return expr;
 }
 

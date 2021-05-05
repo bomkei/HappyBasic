@@ -61,6 +61,11 @@ int main()
     
     prg.Tokenize();
     prg.Parse();
+//  prg.OpenFile(argv[1]);
+//
+//  prg.Tokenize();
+//
+//  prg.Parse();
 
     auto res = prg.Run();
 
