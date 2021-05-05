@@ -242,7 +242,11 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       auto counter = Expr(for_ast->counter);
       auto begin = Expr(for_ast->begin);
 
-      auto old = 
+      // save pointers
+      auto oldptr1 = LoopBreaked;
+      auto oldptr2 = LoopContinued;
+      auto oldptr3 = ReturnValue;
+
 
       if( !counter.var_ptr )
         Program::Error(*(for_ast->counter->token), "not a lvalue");
