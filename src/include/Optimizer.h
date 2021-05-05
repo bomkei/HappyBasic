@@ -3,7 +3,7 @@
 class Optimizer
 {
 public:
-  
+
   struct Term
   {
     enum Sign
@@ -18,9 +18,8 @@ public:
     Term(AST::Expr*);
   };
 
-  static void CalcConstexpr(AST::Expr* expr);
+  static bool ReduceFactors(AST::Expr* expr);
   static std::vector<Term> GetTermsFromExpr(AST::Expr* expr);
-
 
 
 };

@@ -6,39 +6,52 @@ Optimizer::Term::Term(AST::Expr* term)
 
 }
 
-void Optimizer::CalcConstexpr(AST::Expr* expr)
+// return: whether of reduced
+bool Optimizer::ReduceFactors(AST::Expr* expr)
 {
+  // loop is continue if true !!
+
   switch( expr->type )
   {
     case AST::Expr::Immidiate:
     case AST::Expr::Variable:
-      break;
+      return false;
+
+    case AST::Expr::Callfunc:
+    {
+      auto ret = false;
+
+      for( auto&& arg : ((AST::Callfunc*)expr)->args )
+      {
+        if( ReduceFactors(arg) )
+          ret = true;
+      }
+
+      return ret;
+    }
 
     case AST::Expr::Array:
-      for( auto&& i : ((AST::Array*)expr)->elems )
-        CalcConstexpr(i);
       break;
 
     default:
     {
-      if( !expr->left->IsConstexpr() )
+      auto L = ReduceFactors(expr->left);
+      auto R = ReduceFactors(expr->right);
+
+      if( expr->left->IsConstexpr() && expr->right->IsConstexpr() )
       {
-        CalcConstexpr(expr->left);
-        break;
+        expr->token->obj = AST_Runner::Expr(expr);
+        expr->type = AST::Expr::Immidiate;
+
+        delete expr->left;
+        delete expr->right;
       }
 
-      if( !expr->right->IsConstexpr() )
-      {
-        CalcConstexpr(expr->right);
-        break;
-      }
-
-      expr->token->obj = AST_Runner::Expr(expr);
-      expr->type = AST::Expr::Immidiate;
-
-      break;
+      return L || R;
     }
   }
+
+  return false;
 }
 
 std::vector<Optimizer::Term> Optimizer::GetTermsFromExpr(AST::Expr* expr)
