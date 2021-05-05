@@ -134,7 +134,8 @@ void AST::Expr::Optimize(){
       }else it++;
     }
     int gcd=std::gcd(imm_denom_int, imm_numer_int);
-    std::cout<<imm_numer*(double)imm_numer_int/gcd<<"/"<<imm_denom*(double)imm_denom_int/gcd<<std::endl;
+    double imm_numer=(double)imm_numer_int/gcd;
+    double imm_denom=(double)imm_denom_int/gcd;
   }else{
     // Factor
   }
