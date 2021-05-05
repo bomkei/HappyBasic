@@ -106,21 +106,6 @@ namespace AST
     }
   };
 
-  class Block;
-  class Function : public Stmt
-  {
-  public:
-    std::string name;
-    std::vector<Expr*> args;
-    std::vector<Object> args_obj;
-    AST::Block* code;
-
-    Function()
-    {
-      type = Type::Function;
-    }
-  };
-
   class Block : public Stmt
   {
   public:
@@ -192,6 +177,20 @@ namespace AST
     Instruction()
     {
       type = Type::Instruction;
+    }
+  };
+
+  class Function : public Stmt
+  {
+  public:
+    std::string name;
+    std::vector<Expr*> args;
+    std::vector<Object> args_obj;
+    AST::Block* code;
+
+    Function()
+    {
+      type = Type::Function;
     }
   };
 
