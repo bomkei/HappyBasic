@@ -254,7 +254,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
         LoopBreaked = LoopContinued = false;
         Stmt(for_ast->code);
 
-        if( LoopBreaked )
+        if( LoopBreaked || FuncReturned )
           break;
 
         counter.var_ptr->v_int++;
