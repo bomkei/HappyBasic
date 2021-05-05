@@ -30,8 +30,14 @@ bool Optimizer::ReduceFactors(AST::Expr* expr)
       return ret;
     }
 
-    case AST::Expr::Array:
+    case AST::Expr::Array:  // ???
+    {
+      for( auto&& i : ((AST::Array*)expr)->elems )
+      {
+        while( ReduceFactors(i) );
+      }
       break;
+    }
 
     default:
     {
@@ -76,4 +82,69 @@ std::vector<Optimizer::Term> Optimizer::GetTermsFromExpr(AST::Expr* expr)
     terms.emplace_back(t);
 
   return terms;
+}
+
+void Debug(AST::Expr* expr)
+{
+
+  // before
+  std::cout << expr->ToString() << '\n';
+  std::cout << "start optimize\n\n";
+
+  //Optimizer::ReduceConstexpr(expr);
+
+  auto terms = Optimizer::GetTermsFromExpr(expr);
+
+
+  for( size_t i = 0; i < terms.size() - 1; )
+  {
+    if( terms[i].term->IsConstexpr() && terms[i + 1].term->IsConstexpr() )
+    {
+      auto ast = new AST::Expr;
+
+      ast->type =
+        (terms[i + 1].sign == Optimizer::Term::Sign::Minus) ? AST::Expr::Sub : AST::Expr::Add;
+
+      ast->left = terms[i].term;
+      ast->right = terms[i + 1].term;
+
+      ast->left->token->obj = AST_Runner::Expr(ast);
+      ast->left->type = AST::Expr::Immidiate;
+
+      delete ast->right;
+
+      terms[i].term = ast->left;
+      terms.erase(terms.begin() + i + 1);
+    }
+    else if( !terms[i].term->IsConstexpr() )
+    {
+      while( Optimizer::ReduceFactors(terms[i].term) )
+      {
+        alart;
+      }
+      i++;
+    }
+    else
+      i++;
+  }
+
+  for( size_t i = 0; i < terms.size(); i++ )
+  {
+    if( terms[i].term->IsConstexpr() )
+    {
+      auto copy = terms[i];
+      terms.erase(terms.begin() + i);
+      terms.insert(terms.begin(), copy);
+    }
+  }
+
+
+  for( auto&& i : terms )
+  {
+    std::cout << i.term->ToString() << '\n';
+  }
+
+
+  std::cout << "";
+  exit(1);
 }
