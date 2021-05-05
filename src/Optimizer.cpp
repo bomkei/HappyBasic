@@ -128,6 +128,8 @@ void Debug(AST::Expr* expr)
       i++;
   }
 
+  alart;
+
   for( size_t i = 0; i < terms.size(); i++ )
   {
     if( terms[i].term->IsConstexpr() )
@@ -138,13 +140,14 @@ void Debug(AST::Expr* expr)
     }
   }
 
+  alart;
+
 
   for( auto&& i : terms )
   {
-    std::cout << i.term->ToString() << '\n';
+  //  std::cout << i.term->ToString() << '\n';
   }
 
 
-  std::cout << "";
-  exit(1);
+  alart;
 }

@@ -79,6 +79,8 @@ namespace AST
     }
   };
 
+  //
+  // Statement
   class Stmt
   {
   public:
@@ -94,6 +96,8 @@ namespace AST
 
     Type type;
     Token* token;
+
+    std::string ToString(int tab = 0) const;
 
     Stmt(Type type = Block)
       :type(type), token(nullptr)

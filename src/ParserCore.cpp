@@ -280,6 +280,8 @@ AST::Expr* ParserCore::Expr()
   return expr;
 }
 
+void Debug(AST::Expr*);
+
 AST::Stmt* ParserCore::Stmt()
 {
   //
@@ -429,7 +431,7 @@ AST::Stmt* ParserCore::Stmt()
     expect("\n");
   }
 
-  Debug(ast->args[0]);
+  //Debug(ast->args[0]);
 
   //std::cout << ast->args[0]->equal(*ast->args[1]) << '\n';
   

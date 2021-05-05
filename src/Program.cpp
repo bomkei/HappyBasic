@@ -62,6 +62,8 @@ void Program::Tokenize()
 void Program::Parse()
 {
   prs_result = parser->Parse();
+
+  std::cout << prs_result->ToString() << '\n';
 }
 
 Object Program::Run()
@@ -78,6 +80,8 @@ void Program::Error(Token const& tok, std::string const& msg)
     line = 1,
     begin = 0,
     end = instance->source.length();
+  
+  alart;
 
   for( size_t i = 0; i < tok.srcpos; i++ )
   {
@@ -87,6 +91,8 @@ void Program::Error(Token const& tok, std::string const& msg)
       begin = i + 1;
     }
   }
+
+  alart;
 
   for( auto i = begin; i < end; i++ )
   {

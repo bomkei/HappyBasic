@@ -33,6 +33,8 @@ Object AST_Runner::Expr(AST::Expr* ast)
 {
   if( !ast )
     return { };
+  
+  std::cout << ast->ToString() << '\n';
 
   switch( ast->type )
   {
@@ -160,6 +162,8 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 {
   if( !ast )
     return { };
+
+  std::cout << ast->ToString() << '\n';
 
   switch( ast->type )
   {

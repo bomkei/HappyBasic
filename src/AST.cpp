@@ -151,3 +151,64 @@ bool AST::Expr::equal(AST::Expr const& ast) const
 
   return false;
 }
+
+std::string AST::Stmt::ToString(int tab) const
+{
+  switch( type )
+  {
+    case Type::If:
+    {
+      std::string s = "if pairs:\n";
+
+      for( auto&& p : ((AST::If*)this)->pairs )
+      {
+        s +=
+          " " + std::get<0>(p)->ToString() + ":\n" +
+          " " + std::get<1>(p)->ToString(tab + 1);
+      }
+
+      return s + "\n";
+    }
+
+    case Type::For:
+      return
+        "for " + ((AST::For*)this)->counter->ToString() + " = " + ((AST::For*)this)->begin->ToString() +
+        " to " + ((AST::For*)this)->end->ToString() + "\n" +
+        ((AST::For*)this)->code->ToString(tab + 1) + "next\n";
+
+    case Type::While:
+      return
+        "while " + ((AST::While*)this)->cond->ToString() + "\n"
+        + ((AST::While*)this)->code->ToString(tab + 1) + "wend\n";
+
+    case Type::Assign:
+      return std::string(tab, ' ') + ((AST::Assign*)this)->var->ToString() + " = " + ((AST::Assign*)this)->value->ToString() + "\n";
+
+    case Type::Instruction:
+    {
+      std::string s = std::string(tab, ' ') + ((AST::Instruction*)this)->name + " ";
+
+      for( size_t i = 0; i < ((AST::Instruction*)this)->args.size(); i++ )
+      {
+        s += ((AST::Instruction*)this)->args[i]->ToString();
+        if( i < ((AST::Instruction*)this)->args.size() - 1 ) s += ", ";
+      }
+
+      return s + "\n";
+    }
+
+    case Type::Block:
+    {
+      std::string str;
+
+      for( auto&& s : ((AST::Block*)this)->list )
+      {
+        str += s->ToString(tab + 1);
+      }
+
+      return str + "\n";
+    }
+  }
+
+  return "";
+}
