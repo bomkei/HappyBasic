@@ -399,6 +399,8 @@ AST::Stmt* ParserCore::Stmt()
   // def
   if( consume("def") )
   {
+    auto tk = csmtok;
+
     if( get_tok().type != Token::Ident )
       Program::Error(get_tok(), "expect identifier after 'def' keyword");
 
@@ -434,7 +436,12 @@ AST::Stmt* ParserCore::Stmt()
       block.emplace_back(Stmt());
     }
 
+    auto ast = new AST::Function;
+    ast->token = tk;
+    ast->name = name;
+    ast->args = std::move(args);
     
+    return ast;
   }
 
 
