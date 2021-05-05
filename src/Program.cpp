@@ -56,7 +56,7 @@ void Program::OpenFile(std::string const& path)
 
 void Program::Tokenize()
 {
-  parser->Initialize(tokenizer->Tokenize());
+  parser->Initialize(std::move(tokenizer->Tokenize()));
 }
 
 void Program::Parse()
