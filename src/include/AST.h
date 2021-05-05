@@ -111,6 +111,7 @@ namespace AST
   public:
     std::string name;
     std::vector<Expr*> args;
+    std::vector<Object> args_obj;
     AST::Block* code;
 
     Function()
