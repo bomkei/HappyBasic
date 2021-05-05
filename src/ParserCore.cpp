@@ -279,10 +279,11 @@ AST::Expr* ParserCore::Expr()
   for( auto&& t : terms )
   {
     std::cout
-      << (t.sign == Optimizer::Term::Sign::Plus ? "+" : "-")
-      << "( "
-      << t.term->to_string()
-      << " )"
+      << "Sign='" << (t.sign == Optimizer::Term::Sign::Plus ? "+" : "-") << "'"
+      << " "
+      << "IsConstexpr() =" << (t.term->IsConstexpr() ? "true " : "false")
+      << ": "
+      << t.term->ToString()
       << '\n';
   }
 

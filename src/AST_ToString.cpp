@@ -1,6 +1,6 @@
 #include "main.h"
 
-std::string AST::Expr::to_string() const
+std::string AST::Expr::ToString() const
 {
   switch( type )
   {
@@ -17,7 +17,7 @@ std::string AST::Expr::to_string() const
     auto&& elems = ((AST::Array*)this)->elems;
     for( int i = 0; i < elems.size(); i++ )
     {
-      s += elems[i]->to_string();
+      s += elems[i]->ToString();
       if( i < elems.size() - 1 ) s += ", ";
     }
 
@@ -31,7 +31,7 @@ std::string AST::Expr::to_string() const
 
     for( int i = 0; i < args.size(); i++ )
     {
-      s += args[i]->to_string();
+      s += args[i]->ToString();
       if( i < args.size() - 1 ) s += ", ";
     }
 
@@ -40,13 +40,13 @@ std::string AST::Expr::to_string() const
 
   case IndexRef:
   {
-    return left->to_string() + "[" + right->to_string() + "]";
+    return left->ToString() + "[" + right->ToString() + "]";
   }
 
   default:
   {
-    auto left = this->left->to_string();
-    auto right = this->right->to_string();
+    auto left = this->left->ToString();
+    auto right = this->right->ToString();
 
     return left+
       [] (Type t) {

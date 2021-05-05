@@ -6,6 +6,11 @@ Optimizer::Term::Term(AST::Expr* term)
 
 }
 
+void Optimizer::EvalConstexpr(AST::Expr* expr)
+{
+
+}
+
 std::vector<Optimizer::Term> Optimizer::GetTermsFromExpr(AST::Expr* expr)
 {
   std::vector<Term> terms;
