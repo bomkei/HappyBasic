@@ -31,7 +31,7 @@ class msg(commands.Cog):
         
         program = ctx.message.content[11:-3]
         
-        with open('test.txt', 'w') as f:
+        with open('./plugin/BASIC_lang/test.txt', 'w') as f:
             f.write(program)
 
         msg = "DEBUG FROM BASIC LANG IN C++\n"
