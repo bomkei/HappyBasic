@@ -517,7 +517,7 @@ AST::Stmt* ParserCore::Stmt()
     auto ast = new AST::Stmt;
     ast->type = AST::Stmt::Break;
     expect("\n");
-    break;
+    return ast;
   }
   
   //
@@ -527,7 +527,7 @@ AST::Stmt* ParserCore::Stmt()
     auto ast = new AST::Stmt;
     ast->type = AST::Stmt::Continue;
     expect("\n");
-    break;
+    return ast;
   }
 
 
