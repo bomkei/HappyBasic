@@ -21,7 +21,24 @@ void Optimizer::CalcConstexpr(AST::Expr* expr)
 
     default:
     {
+      if( !expr->left->IsConstexpr() )
+      {
+        CalcConstexpr(expr->left);
+        break;
+      }
 
+      if( !expr->right->IsConstexpr() )
+      {
+        CalcConstexpr(expr->right);
+        break;
+      }
+
+      switch( expr->type )
+      {
+
+      }
+
+      break;
     }
   }
 }
