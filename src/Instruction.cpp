@@ -5,8 +5,15 @@ void AST_Runner::Instruction(AST::Instruction* ast)
   auto const& name = ast->name;
   std::vector<Object> args;
 
+  alart;
+
   for( auto&& i : ast->args )
+  {
+    alart;
     args.emplace_back(AST_Runner::Expr(i));
+  }
+
+  alart;
 
   if( name == "input" )
   {

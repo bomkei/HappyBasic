@@ -148,6 +148,8 @@ void Debug(AST::Expr* expr)
   //  std::cout << i.term->ToString() << '\n';
   }
 
+  alart;
+  std::cout << expr->ToString() << '\n';
 
   alart;
 }

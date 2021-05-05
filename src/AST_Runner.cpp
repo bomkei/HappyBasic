@@ -31,11 +31,15 @@ void ObjectAdjuster(Object& L, Object& R)
 
 Object AST_Runner::Expr(AST::Expr* ast)
 {
+  alart;
+
   if( !ast )
     return { };
   
-  std::cout << ast->ToString() << '\n';
+  alart;
+  //std::cout << ast->ToString() << '\n';
 
+  alart;
   switch( ast->type )
   {
     case AST::Expr::Immidiate:
@@ -49,6 +53,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
     }
 
     case AST::Expr::Callfunc:
+      alart;
       return Function(reinterpret_cast<AST::Callfunc*>(ast));
 
     case AST::Expr::Array:
@@ -57,7 +62,10 @@ Object AST_Runner::Expr(AST::Expr* ast)
       ret.type = Object::Array;
 
       for( auto&& i : ((AST::Array*)ast)->elems )
+      {
+        alart;
         ret.list.emplace_back(Expr(i));
+      }
 
       return ret;
     }
@@ -86,6 +94,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
       ObjectAdjuster(left, right);
 
+      alart;
       if( left.type == Object::Array || right.type == Object::Array )
         Program::Error(*ast->token, "type mismatch");
 
