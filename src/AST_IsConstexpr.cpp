@@ -7,13 +7,6 @@ bool AST::Expr::IsConstexpr() const
   case Immidiate:
     return true;
 
-  case Array:
-  {
-    for( auto&& i : ((AST::Array*)this)->elems )
-      if( !i->IsConstexpr() ) return false;
-    return true;
-  }
-
   default:
     if( !left )
       return right ? right->IsConstexpr() : false;

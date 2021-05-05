@@ -274,21 +274,22 @@ AST::Expr* ParserCore::Expr()
 {
   auto expr = Equal();
 
-  auto terms = Optimizer::GetTermsFromExpr(expr);
+  //auto terms = Optimizer::GetTermsFromExpr(expr);
 
-  for( auto&& t : terms )
-  {
-    std::cout
-      << "Sign='" << (t.sign == Optimizer::Term::Sign::Plus ? "+" : "-") << "'"
-      << " "
-      << "IsConstexpr() =" << (t.term->IsConstexpr() ? "true " : "false")
-      << ": "
-      << t.term->ToString()
-      << '\n';
-  }
+  //for( auto&& t : terms )
+  //{
+  //  std::cout
+  //    << "Sign='" << (t.sign == Optimizer::Term::Sign::Plus ? "+" : "-") << "'"
+  //    << " "
+  //    << "IsConstexpr() =" << (t.term->IsConstexpr() ? "true " : "false")
+  //    << ": "
+  //    << t.term->ToString()
+  //    << '\n';
+  //}
 
-  exit(1);
-  //return expr;
+  //exit(1);
+  
+  return expr;
 }
 
 AST::Stmt* ParserCore::Stmt()
