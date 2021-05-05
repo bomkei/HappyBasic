@@ -1,5 +1,10 @@
 #include "main.h"
 
+bool* AST_Runner::LoopBreaked = nullptr;
+bool* AST_Runner::LoopContinued = nullptr;
+bool* AST_Runner::FuncReturned = nullptr;
+Object* AST_Runner::ReturnValue = nullptr;
+
 void ObjectAdjuster(Object& L, Object& R)
 {
   if( L.type == Object::Array || R.type == Object::Array )
@@ -160,11 +165,6 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
 Object AST_Runner::Stmt(AST::Stmt* ast)
 {
-  static bool *LoopBreaked = nullptr;
-  static bool *LoopContinued = nullptr;
-  static bool *FuncReturned = nullptr;
-  static Object* ReturnValue = nullptr;
-
   if( !ast )
     return { };
 

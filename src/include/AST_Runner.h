@@ -3,6 +3,11 @@
 class AST_Runner
 {
 public:
+  static bool* LoopBreaked;
+  static bool* LoopContinued;
+  static bool* FuncReturned;
+  static Object* ReturnValue;
+
   static Object Expr(AST::Expr* ast);
   static Object Stmt(AST::Stmt* ast);
 
