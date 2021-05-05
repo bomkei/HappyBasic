@@ -403,7 +403,8 @@ AST::Stmt* ParserCore::Stmt()
       Program::Error(get_tok(), "expect identifier after 'def' keyword");
 
     auto& name = get_tok().str;
-    std::vector<Expr*> args;
+    std::vector<AST::Expr*> args;
+    std::vector<AST::Block*> block;
 
     expect("(");
 
@@ -417,7 +418,18 @@ AST::Stmt* ParserCore::Stmt()
       expect(")");
     }
 
+    auto closed = false;
 
+    while( check() )
+    {
+      if( consume("enddef") )
+      {
+        closed = true;
+        break;
+      }
+
+      block.emplace_back(Stmt());
+    }
   }
 
 
