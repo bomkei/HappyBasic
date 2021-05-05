@@ -15,7 +15,7 @@ LDFLAGS		= -Wl,--gc-sections,-s
 ifeq ($(OS), Windows_NT)
   EXT  = .exe
 else
-  EXT  = .out
+  EXT  =
 endif
 
 all: $(TARGET)

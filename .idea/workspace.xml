@@ -10,8 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="70280ca5-3489-4658-a578-7f3f6f40859b" name="デフォルト変更リスト" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +30,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="kumitatepazuru-develop" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -50,6 +49,16 @@
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RunManager" selected="Makefile.all">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="all (1)" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
       <makefile filename="$PROJECT_DIR$/Makefile" target="all" workingDirectory="" arguments="">
         <envs />
@@ -68,10 +77,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Makefile.all" />
         <item itemvalue="Makefile.all (1)" />
         <item itemvalue="Makefile.all" />
         <item itemvalue="Makefile.all" />
+        <item itemvalue="Makefile.all" />
+        <item itemvalue="Makefile.all (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -88,6 +98,7 @@
       <workItem from="1619902550153" duration="1266000" />
       <workItem from="1620023748160" duration="1608000" />
       <workItem from="1620203094596" duration="405000" />
+      <workItem from="1620203531172" duration="3126000" />
     </task>
     <task id="LOCAL-00001" summary="cmake追加/ブランチ変更">
       <created>1619902205603</created>
@@ -110,7 +121,56 @@
       <option name="project" value="LOCAL" />
       <updated>1619903642841</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="動くようにはなったけど...">
+      <created>1620203626034</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1620203626034</updated>
+    </task>
+    <task id="LOCAL-00005" summary="バグ修正">
+      <created>1620209584927</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1620209584927</updated>
+    </task>
+    <task id="LOCAL-00006" summary="表示情報を抑制">
+      <created>1620209863220</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1620209863220</updated>
+    </task>
+    <task id="LOCAL-00007" summary="表示情報をもっと抑制">
+      <created>1620210049568</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1620210049568</updated>
+    </task>
+    <task id="LOCAL-00008" summary="バグ修正">
+      <created>1620210138422</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1620210138422</updated>
+    </task>
+    <task id="LOCAL-00009" summary="バグ修正&amp;コードブロック化">
+      <created>1620210420255</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1620210420255</updated>
+    </task>
+    <task id="LOCAL-00010" summary="バグ修正">
+      <created>1620210548549</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1620210548549</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -145,6 +205,11 @@
     <MESSAGE value="cmake追加/ブランチ変更" />
     <MESSAGE value="botplugin化" />
     <MESSAGE value="バグ修正&amp;returnコード表示" />
-    <option name="LAST_COMMIT_MESSAGE" value="バグ修正&amp;returnコード表示" />
+    <MESSAGE value="動くようにはなったけど..." />
+    <MESSAGE value="表示情報を抑制" />
+    <MESSAGE value="表示情報をもっと抑制" />
+    <MESSAGE value="バグ修正&amp;コードブロック化" />
+    <MESSAGE value="バグ修正" />
+    <option name="LAST_COMMIT_MESSAGE" value="バグ修正" />
   </component>
 </project>
