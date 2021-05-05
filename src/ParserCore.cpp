@@ -402,7 +402,7 @@ AST::Stmt* ParserCore::Stmt()
     if( get_tok().type != Token::Ident )
       Program::Error(get_tok(), "expect identifier after 'def' keyword");
 
-
+    auto& name = get_tok().str;
   }
 
 
