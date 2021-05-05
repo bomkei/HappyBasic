@@ -160,6 +160,9 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
 Object AST_Runner::Stmt(AST::Stmt* ast)
 {
+  static bool LoopBreaked = false;
+  static bool LoopContinued = false;
+
   if( !ast )
     return { };
 
@@ -175,6 +178,9 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       for( auto&& i : ((AST::Block*)ast)->list )
       {
         obj = Stmt(i);
+
+        if( LoopBreaked )
+          break;
       }
 
       return obj;
@@ -240,7 +246,9 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
     }
 
     case AST::Stmt::While:
-      break;
+    {
+
+    }
 
   }
 
