@@ -1,12 +1,21 @@
 #include "main.h"
 
-bool AST::Expr::operator == (AST::Expr* ast) const
+bool AST::Expr::operator != (AST::Expr const& ast)const
 {
+  return (*this == ast) == false;
+}
+
+bool AST::Expr::operator == (AST::Expr const& _ast) const
+{
+  auto ast = (Expr*)&_ast;
+
   if( !ast )
     return false;
 
   if( ast->type != type )
     return false;
+
+  std::cout << ToString() << ", " << ast->ToString() << '\n';
 
   switch( type )
   {

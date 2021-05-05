@@ -331,8 +331,8 @@ AST::Stmt* ParserCore::Stmt()
       else if( consume("else") )
       {
         ast->pairs.emplace_back(pair);
-        pair = std::make_pair(AST::Expr::FromInt(1) , new AST::Block);
-        
+        pair = std::make_pair(AST::Expr::FromInt(1), new AST::Block);
+
         expect("\n");
 
         while( check() )
@@ -343,7 +343,7 @@ AST::Stmt* ParserCore::Stmt()
             closed = true;
             break;
           }
-          
+
           std::get<1>(pair)->list.emplace_back(Stmt());
         }
 
@@ -355,7 +355,7 @@ AST::Stmt* ParserCore::Stmt()
         std::get<1>(pair)->list.emplace_back(Stmt());
       }
     }
-    
+
     if( !closed )
     {
       Program::Error(*ast->token, "not closed");
@@ -379,7 +379,7 @@ AST::Stmt* ParserCore::Stmt()
 
     expect("to");
     ast->end = Expr();
-    
+
     ast->code = new AST::Block;
 
     expect("\n");
@@ -442,6 +442,8 @@ AST::Stmt* ParserCore::Stmt()
     expect("\n");
   }
 
+  std::cout << (*ast->args[0] == *ast->args[1]) << '\n';
+  
   return ast;
 }
 
