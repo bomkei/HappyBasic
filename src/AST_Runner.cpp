@@ -247,6 +247,15 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       auto oldptr2 = LoopContinued;
       auto oldptr3 = ReturnValue;
 
+      // make new flags
+      bool flag1 = false, flag2 = false;
+      Object retval;
+
+      // set new pointer
+      LoopBreaked = &flag1;
+      LoopContinued = &flag2;
+      ReturnValue = &retval;
+
 
       if( !counter.var_ptr )
         Program::Error(*(for_ast->counter->token), "not a lvalue");
