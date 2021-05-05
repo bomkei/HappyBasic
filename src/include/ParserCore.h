@@ -9,6 +9,7 @@ class ParserCore
   size_t index;
 
   Token* csmtok;
+  bool in_function;
 
   Token& get_tok();
 
