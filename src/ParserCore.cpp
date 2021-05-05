@@ -405,6 +405,8 @@ AST::Stmt* ParserCore::Stmt()
       Program::Error(get_tok(), "expect identifier after 'def' keyword");
 
     auto& name = get_tok().str;
+    next();
+
     std::vector<AST::Expr*> args;
     std::vector<AST::Stmt*> block;
 
