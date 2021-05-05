@@ -88,7 +88,7 @@ AST::Expr* ParserCore::Primary()
       {
         x->elems.emplace_back(Expr());
       } while( consume(",") );
-      
+
       expect("]");
     }
 
@@ -99,57 +99,57 @@ AST::Expr* ParserCore::Primary()
 
   switch( tok->type )
   {
-  case Token::Char:
-  case Token::String:
-  case Token::Number:
-  {
-    auto ast = new AST::Expr();
-
-    ast->type = AST::Expr::Immidiate;
-    ast->token = tok;
-    next();
-
-    return ast;
-  }
-
-  case Token::Ident:
-  {
-    // callfunc
-    if( index + 1 < tokens.size() && tokens[index + 1].str == "(" )
+    case Token::Char:
+    case Token::String:
+    case Token::Number:
     {
-      auto ast = new AST::Callfunc;
-      ast->token = tok;
-      index += 2;
+      auto ast = new AST::Expr();
 
-      if( !consume(")") )
-      {
-        do
-        {
-          ast->args.emplace_back(Expr());
-        } while( consume(",") );
-        expect(")");
-      }
+      ast->type = AST::Expr::Immidiate;
+      ast->token = tok;
+      next();
 
       return ast;
     }
 
-    auto ast = new AST::Expr;
-    ast->type = AST::Expr::Variable;
-    ast->token = tok;
-    next();
-
-    auto find = find_var(tok->str);
-
-    if( find == -1 )
+    case Token::Ident:
     {
-      find = variables.size();
-      variables.emplace_back(tok->obj);
+      // callfunc
+      if( index + 1 < tokens.size() && tokens[index + 1].str == "(" )
+      {
+        auto ast = new AST::Callfunc;
+        ast->token = tok;
+        index += 2;
+
+        if( !consume(")") )
+        {
+          do
+          {
+            ast->args.emplace_back(Expr());
+          } while( consume(",") );
+          expect(")");
+        }
+
+        return ast;
+      }
+
+      auto ast = new AST::Expr;
+      ast->type = AST::Expr::Variable;
+      ast->token = tok;
+      next();
+
+      auto find = find_var(tok->str);
+
+      if( find == -1 )
+      {
+        find = variables.size();
+        variables.emplace_back(tok->obj);
+      }
+
+      ast->varIndex = find;
+
+      return ast;
     }
-
-    ast->varIndex = find;
-
-    return ast;
-  }
 
   }
 
