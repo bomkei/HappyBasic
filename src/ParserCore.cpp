@@ -395,6 +395,13 @@ AST::Stmt* ParserCore::Stmt()
     return ast;
   }
 
+  //
+  // def
+  if( consume("def") )
+  {
+
+  }
+
 
   auto& tok = get_tok();
 
