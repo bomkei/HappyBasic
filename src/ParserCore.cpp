@@ -406,7 +406,7 @@ AST::Stmt* ParserCore::Stmt()
 
     auto& name = get_tok().str;
     std::vector<AST::Expr*> args;
-    std::vector<AST::Block*> block;
+    std::vector<AST::Stmt*> block;
 
     expect("(");
 

@@ -178,6 +178,9 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
   switch( ast->type )
   {
+    case AST::Stmt::Function:
+      break;
+
     case AST::Stmt::Block:
     {
       Object obj;
