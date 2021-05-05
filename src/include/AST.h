@@ -179,13 +179,13 @@ namespace AST
       type = Type::Instruction;
     }
   };
-
+  
   class Function : public Stmt
   {
   public:
     std::string name;
     std::vector<Expr*> args;
-    std::vector<Object> args_obj;
+    //std::vector<Object> args_obj;
     AST::Block* code;
 
     Function()
