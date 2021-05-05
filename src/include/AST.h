@@ -43,6 +43,7 @@ namespace AST
     }
 
     void Optimize();
+    std::string to_string() const;
 
     static Expr* FromInt(int v)
     {

@@ -272,9 +272,22 @@ AST::Expr* ParserCore::Equal()
 
 AST::Expr* ParserCore::Expr()
 {
-  auto expr=Equal();
-  expr->Optimize();
-  return expr;
+  auto expr = Equal();
+
+  auto terms = Optimizer::GetTermsFromExpr(expr);
+
+  for( auto&& t : terms )
+  {
+    std::cout
+      << (t.sign == Optimizer::Term::Sign::Plus ? "+" : "-")
+      << "( "
+      << t.term->to_string()
+      << " )"
+      << '\n';
+  }
+
+  exit(1);
+  //return expr;
 }
 
 AST::Stmt* ParserCore::Stmt()
