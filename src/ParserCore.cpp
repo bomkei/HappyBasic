@@ -1,7 +1,7 @@
 #include "main.h"
 
 ParserCore::ParserCore(std::vector<Object>& variables, std::vector<AST::Function*>& functions)
-  :variables(variables), functions(functions), in_function(false) { }
+  :variables(variables), functions(functions), in_function(false), func_args(nullptr) { }
 
 Token& ParserCore::get_tok()
 {
@@ -131,6 +131,17 @@ AST::Expr* ParserCore::Primary()
         }
 
         return ast;
+      }
+
+      if( in_function )
+      {
+        auto prm = new AST::Expr;
+        prm->token = tok;
+        prm->type = AST::Expr::Param;
+
+        int find = -1;
+
+        for(int i=0;i< )
       }
 
       auto ast = new AST::Expr;

@@ -10,6 +10,7 @@ class ParserCore
 
   Token* csmtok;
   bool in_function;
+  std::vector<AST::Expr*>* func_args;
 
   Token& get_tok();
 
