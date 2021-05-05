@@ -12,7 +12,7 @@ public:
       Minus
     };
 
-    Sign sign = Plus;
+    Sign sign;
     AST::Expr* term;
 
     Term(AST::Expr*);

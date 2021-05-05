@@ -8,6 +8,11 @@ void AST_Runner::Instruction(AST::Instruction* ast)
   for( auto&& i : ast->args )
     args.emplace_back(AST_Runner::Expr(i));
 
+  if( name == "input" )
+  {
+    for(  )
+  }
+
   if( name == "print" )
   {
     for( auto&& i : args )

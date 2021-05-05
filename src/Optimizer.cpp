@@ -1,14 +1,19 @@
 #include "main.h"
 
 Optimizer::Term::Term(AST::Expr* term)
-  :term(term)
+  :term(term), sign(Sign::Plus)
 {
 
 }
 
 void Optimizer::CalcConstexpr(AST::Expr* expr)
 {
-
+  switch( expr->type )
+  {
+  case AST::Expr::Immidiate:
+  case AST::Expr::Variable:
+    case AST::Expr::
+  }
 }
 
 std::vector<Optimizer::Term> Optimizer::GetTermsFromExpr(AST::Expr* expr)
