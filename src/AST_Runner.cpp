@@ -181,6 +181,9 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
         if( LoopBreaked && *LoopBreaked )
           break;
+
+        if( FuncReturned && *FuncReturned )
+          break;
       }
 
       break;
@@ -216,7 +219,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       break;
 
     case AST::Stmt::Return:
-      if( !FuncReturned )
+      if( !ReturnValue )
         Program::Error(*ast->token, "cannot use 'return' here");
 
       *ReturnValue = Expr(((AST::Return*)ast)->expr);
@@ -254,8 +257,6 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       // set new pointer
       LoopBreaked = &flag1;
       LoopContinued = &flag2;
-      ReturnValue = &retval;
-
 
       if( !counter.var_ptr )
         Program::Error(*(for_ast->counter->token), "not a lvalue");
@@ -278,7 +279,10 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
         *LoopBreaked = *LoopContinued = false;
         Stmt(for_ast->code);
 
-        if( *LoopBreaked || *FuncReturned )
+        if( *LoopBreaked )
+          break;
+
+        if( FuncReturned && *FuncReturned )
           break;
 
         counter.var_ptr->v_int++;
@@ -287,7 +291,6 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       // restore pointers
       LoopBreaked = oldptr1;
       LoopContinued = oldptr2;
-      ReturnValue = oldptr3;
 
       break;
     }

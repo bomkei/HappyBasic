@@ -18,12 +18,24 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
   }
 
   Program::instance->cur_func = ast;
-  auto ret = AST_Runner::Stmt(ast->code);
+  
+  Object ret;
+  auto retp = AST_Runner::ReturnValue;
+
+  AST_Runner::ReturnValue = &ret;
+  
+  //
+  // Run
+  AST_Runner::Stmt(ast->code);
 
   for( size_t i = 0; i < old_args.size(); i++ )
   {
     ast->args[i]->token->obj = old_args[i];
   }
 
+  alart;
+  std::cout << ret.to_string() << '\n';
+
+  AST_Runner::ReturnValue = retp;
   return ret;
 }
