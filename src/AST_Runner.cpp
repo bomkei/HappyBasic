@@ -209,7 +209,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
     case AST::Stmt::For:
     {
-      auto for_ast = reinterpret_cast<AST::For*>(ast);
+      auto for_ast = (AST::For*)(ast);
 
       auto counter = Expr(for_ast->counter);
       auto begin = Expr(for_ast->begin);
