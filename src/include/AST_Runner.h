@@ -9,6 +9,6 @@ public:
   static Object Function(AST::Callfunc* ast);
   static void Instruction(AST::Instruction* inst);
 
-  static Object UserFunc(AST::Function* fun);
+  static Object UserFunc(AST::Callfunc* fun);
 
 };

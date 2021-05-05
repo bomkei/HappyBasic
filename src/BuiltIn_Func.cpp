@@ -65,6 +65,6 @@ Object AST_Runner::Function(AST::Callfunc* ast)
     return ret;
   }
 
-
-  Program::Error(*ast->token, "undefined function");
+  return AST_Runner::UserFunc(ast);
+  //Program::Error(*ast->token, "undefined function");
 }
