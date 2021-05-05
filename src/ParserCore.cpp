@@ -440,6 +440,9 @@ AST::Stmt* ParserCore::Stmt()
     ast->token = tk;
     ast->name = name;
     ast->args = std::move(args);
+
+    ast->code = new AST::Block;
+    ast->code->list = std::move(block);
     
     return ast;
   }

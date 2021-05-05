@@ -106,6 +106,7 @@ namespace AST
     }
   };
 
+  class Block;
   class Function : public Stmt
   {
   public:
