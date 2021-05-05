@@ -115,27 +115,27 @@ void AST::Expr::Optimize(){
     terms.emplace_back(InvertableExpr(InvertableExpr::NotInverted,cur_left));
 
     // remove immidiate! (to immidiatePart)
-    double imm_denom=1;int imm_denom_int=1;
-    double imm_numer=1;int imm_numer_int=1;
+    double imm_denom_dbl=1;int imm_denom_int=1;
+    double imm_numer_dbl=1;int imm_numer_int=1;
     for( auto it = terms.begin(); it != terms.end(); ) {
       if(it->expr->type==Immidiate){
         if(it->type==InvertableExpr::NotInverted){
           if(it->expr->token->obj.type==Object::Int)
             imm_numer_int*=it->expr->token->obj.v_int;
           else
-            imm_numer*=it->expr->token->obj.as<double>();
+            imm_numer_dbl*=it->expr->token->obj.as<double>();
         }else{
           if(it->expr->token->obj.type==Object::Int)
             imm_denom_int*=it->expr->token->obj.v_int;
           else
-            imm_denom*=it->expr->token->obj.as<double>();
+            imm_denom_dbl*=it->expr->token->obj.as<double>();
         }
         terms.erase(it);
       }else it++;
     }
     int gcd=std::gcd(imm_denom_int, imm_numer_int);
-    double imm_numer=(double)imm_numer_int/gcd;
-    double imm_denom=(double)imm_denom_int/gcd;
+    double imm_numer=imm_numer_dbl*(double)imm_numer_int/gcd;
+    double imm_denom=imm_denom_dbl*(double)imm_denom_int/gcd;
   }else{
     // Factor
   }
