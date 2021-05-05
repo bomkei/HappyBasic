@@ -425,6 +425,8 @@ AST::Stmt* ParserCore::Stmt()
       expect(")");
     }
 
+    expect("\n");
+
     auto closed = false;
 
     while( check() )
@@ -432,6 +434,7 @@ AST::Stmt* ParserCore::Stmt()
       if( consume("enddef") )
       {
         closed = true;
+        expect("\n");
         break;
       }
 
