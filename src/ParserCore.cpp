@@ -80,6 +80,7 @@ AST::Expr* ParserCore::Primary()
   if( consume("[") )
   {
     auto x = new AST::Array;
+    x->token = csmtok;
 
     if( !consume("]") )
     {
