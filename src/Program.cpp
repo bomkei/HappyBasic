@@ -6,6 +6,7 @@ Program::Program()
   parser = new ParserCore(variables);
 
   instance = this;
+  prs_result = nullptr;
 }
 
 void Program::OpenFile(std::string const& path)
@@ -21,32 +22,26 @@ void Program::OpenFile(std::string const& path)
   std::ifstream ifs(path);
   std::string line;
 
-  // ファイルを開けなかった
   if( ifs.fail() )
   {
-    std::cout << "cannot open file";
+    std::cout << "cannot open file: " << path << '\n';
     exit(1);
   }
 
-  // 一行ずつ読み取っていく
   while( std::getline(ifs, line) )
   {
-    // 右端の空白以下の文字を削除
     while( line.length() && line[line.length() - 1] <= ' ' )
       line.pop_back();
 
-    // 左端の空白以下の文字を削除
     while( line.length() && line[0] <= ' ' )
       line.erase(line.begin());
 
     if( line.empty() )
       continue;
 
-    // 改行文字をつけて ret に追加する
     source += line + '\n';
   }
 
-  // ソースが空
   if( is_empty(source) )
   {
     std::cout << "empty source file";

@@ -2,7 +2,6 @@
 
 Program* Program::instance;
 
-/// mainコード
 int main(int argc, char** argv)
 {
   Program prg;
