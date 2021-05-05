@@ -34,28 +34,19 @@ class msg(commands.Cog):
         with open('./plugin/BASIC_lang/test.txt', 'w') as f:
             f.write(program)
 
-        msg = "DEBUG FROM BASIC LANG IN C++\n------------- LOG ---------------\n"
-        m: discord.Message = await ctx.send(msg)
         p = subprocess.Popen(["make","-C","./plugin/BASIC_lang/"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
-        # _ = await process_output(p, m, msg, ctx)
-        # await ctx.send("ENDED.")
-        # msg = "chmod a+x ./basic\n"
-        # m: discord.Message = await ctx.send(msg)
         p = subprocess.Popen(["chmod","a+x","./plugin/BASIC_lang/HappyBasic"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
-        # _ = await process_output(p, m, msg, ctx)
-        # await ctx.send("ENDED.")
-        # msg = "RUN DEBUG\n"
-        # m: discord.Message = await ctx.send(msg)
         p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
-        _ = await process_output(p, m, msg, ctx)
+        msg,m = await process_output(p, await ctx.send("RUN DEBUG"), "```basic\n", ctx)
+        m.edit(msg+"\n```")
         _ = p.communicate()[0]
-        await ctx.send("------------ ENDED --------------\nCODE:"+str(p.returncode))
+        await ctx.send("exit :"+str(p.returncode))
 
 
     # @commands.command(aliases=["db"])
