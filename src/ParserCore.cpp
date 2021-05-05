@@ -176,9 +176,9 @@ AST::Expr* ParserCore::IndexRef()
 AST::Expr* ParserCore::Unary()
 {
   if( consume("-") )
-    return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), Primary(), csmtok);
+    return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), IndexRef(), csmtok);
 
-  return Primary();
+  return IndexRef();
 }
 
 AST::Expr* ParserCore::Mul()
