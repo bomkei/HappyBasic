@@ -5,6 +5,8 @@ class Program
   static Program* instance;
 
   std::vector<Object> variables;
+  std::vector<AST::Function*> functions;
+
   std::string source;
 
   Tokenizer* tokenizer;
