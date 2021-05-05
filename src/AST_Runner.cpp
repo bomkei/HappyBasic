@@ -167,8 +167,6 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
   alart;
 
-  std::cout << ast->ToString() << '\n';
-
   switch( ast->type )
   {
     case AST::Stmt::Block:
@@ -176,7 +174,10 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       Object obj;
 
       for( auto&& i : ((AST::Block*)ast)->list )
+      {
+        alart;
         obj = Stmt(i);
+      }
 
       return obj;
     }
@@ -191,7 +192,8 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
     case AST::Stmt::Instruction:
     {
-      Instruction(reinterpret_cast<AST::Instruction*>(ast));
+      alart;
+      Instruction((AST::Instruction*)(ast));
       break;
     }
 

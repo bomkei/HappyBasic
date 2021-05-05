@@ -100,6 +100,8 @@ void AST_Runner::Instruction(AST::Instruction* ast)
     return;
   }
 
+  alart;
+
   Program::Error(*ast->token, "undefined instruction");
 }
 
