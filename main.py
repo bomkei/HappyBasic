@@ -44,7 +44,7 @@ class msg(commands.Cog):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         msg,m = await process_output(p, await ctx.send("RUN DEBUG"), "```basic\n", ctx)
-        m.edit(msg+"\n```")
+        await m.edit(msg+"\n```")
         _ = p.communicate()[0]
         await ctx.send("exit :"+str(p.returncode))
 
