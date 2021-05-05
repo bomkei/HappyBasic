@@ -107,6 +107,7 @@ void Debug(AST::Expr* expr)
 
       ast->left = terms[i].term;
       ast->right = terms[i + 1].term;
+      ast->token = ast->left->token;
 
       ast->left->token->obj = AST_Runner::Expr(ast);
       ast->left->type = AST::Expr::Immidiate;
