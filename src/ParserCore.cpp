@@ -133,6 +133,7 @@ AST::Expr* ParserCore::Primary()
         return ast;
       }
 
+      // parameter
       if( in_function )
       {
         auto prm = new AST::Expr;
