@@ -62,8 +62,8 @@ void Program::Tokenize()
 void Program::Parse()
 {
   prs_result = parser->Parse();
-
-  printf("prs_result = %p\n");
+  
+  view_pointer(prs_result);
 
   std::cout
     << "---------------------------------------------\n"
