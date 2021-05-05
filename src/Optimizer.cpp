@@ -33,10 +33,8 @@ void Optimizer::CalcConstexpr(AST::Expr* expr)
         break;
       }
 
-      switch( expr->type )
-      {
-
-      }
+      expr->token->obj = AST_Runner::Expr(expr);
+      expr->type = AST::Expr::Immidiate;
 
       break;
     }
