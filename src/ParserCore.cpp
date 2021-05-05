@@ -155,6 +155,24 @@ AST::Expr* ParserCore::Primary()
   Program::Error(*tok, "syntax error");
 }
 
+AST::Expr* ParserCore::IndexRef()
+{
+  auto x = Primary();
+
+  while( check() )
+  {
+    if( consume("[") )
+    {
+      x = new AST::Expr(AST::Expr::IndexRef, x, Expr(), csmtok);
+      expect("]");
+    }
+    else
+      break;
+  }
+
+  return x;
+}
+
 AST::Expr* ParserCore::Unary()
 {
   if( consume("-") )
