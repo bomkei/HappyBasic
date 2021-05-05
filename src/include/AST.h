@@ -162,7 +162,7 @@ namespace AST
   {
   public:
     Expr* cond;
-    Stmt* code;
+    AST::Block* code;
 
     While()
     {
