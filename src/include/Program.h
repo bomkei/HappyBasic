@@ -13,6 +13,7 @@ class Program
   ParserCore* parser;
 
   AST::Stmt* prs_result;
+  AST::Function* cur_func;
 
   i64 find_func(std::string const&) const;
 

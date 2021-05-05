@@ -7,6 +7,7 @@ Program::Program()
 
   instance = this;
   prs_result = nullptr;
+  cur_func = nullptr;
 }
 
 i64 Program::find_func(std::string const& name) const
