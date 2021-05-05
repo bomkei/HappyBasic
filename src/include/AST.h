@@ -21,7 +21,8 @@ namespace AST
       Immidiate,
       Variable,
       Callfunc,
-      Array
+      Array,
+      IndexRef
     };
 
     Type type = Immidiate;
