@@ -3,7 +3,7 @@
 Program::Program()
 {
   tokenizer = new Tokenizer(source);
-  parser = new ParserCore(variables);
+  parser = new ParserCore(variables, functions);
 
   instance = this;
   prs_result = nullptr;
