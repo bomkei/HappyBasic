@@ -82,6 +82,9 @@ bool AST::Expr::IsConstexpr() const
         if( !i->IsConstexpr() ) return false;
       return true;
 
+    case Variable:
+      return false;
+
     default:
       if( !left )
       {

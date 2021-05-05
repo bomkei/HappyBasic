@@ -10,7 +10,7 @@ void AST_Runner::Instruction(AST::Instruction* ast)
 
   if( name == "input" )
   {
-    for(  )
+    
   }
 
   if( name == "print" )
