@@ -62,6 +62,9 @@ public:
 /* internal types - end */
 
 void AST::Expr::Optimize(){
+  Expr ret;
+
+  // get expr type
   ExprType exprtype;
   if(type==Add or type==Sub)
     exprtype.type=ExprType::Expr;
