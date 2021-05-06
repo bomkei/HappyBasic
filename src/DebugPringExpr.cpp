@@ -2,6 +2,10 @@
 #include <ostream>
 
 std::ostream& operator<<(std::ostream& ss, const AST::Expr &expr){
+  if(&expr==nullptr){
+    ss<<"null";
+    return ss;
+  }
   if (expr.type >= AST::Expr::Add && AST::Expr::Div >= expr.type){
     ss<<*expr.left;
     ss<<(
@@ -13,6 +17,10 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr &expr){
     ss<<*expr.right;
   }else if(expr.type==AST::Expr::Immidiate){
     auto token=expr.token;
+    if(token==nullptr){
+      ss<<"null";
+      return ss;
+    }
     switch(token->type){
       case Token::Operator:
         ss<<"{"<<token->str<<"}";
