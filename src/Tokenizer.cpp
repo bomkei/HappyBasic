@@ -112,12 +112,10 @@ std::vector<Token> Tokenizer::Tokenize()
     Token tok;
     tok.srcpos = position;
 
-    // 数字
     if( isdigit(c) )
     {
       tok.type = Token::Number;
 
-      // "0x" があれば 16 進数
       if( match("0x") )
       {
         next(2);
@@ -128,13 +126,11 @@ std::vector<Token> Tokenizer::Tokenize()
         tok.obj.v_int = std::stoi(tok.str, nullptr, 16);
       }
 
-      // 無い場合、10 進数
       else
       {
         while( check() && isdigit(c = peek()) )
           tok.str += c, next();
 
-        // 浮動小数点数
         if( peek() == '.' )
         {
           next();
@@ -147,7 +143,6 @@ std::vector<Token> Tokenizer::Tokenize()
           tok.obj.v_float = std::stof(tok.str);
         }
 
-        // 整数
         else
         {
           tok.obj.v_int = std::stoi(tok.str);
@@ -155,7 +150,6 @@ std::vector<Token> Tokenizer::Tokenize()
       }
     }
 
-    // 識別子
     else if( isalnum(c) || c == '_' )
     {
       tok.type = Token::Ident;
@@ -185,7 +179,6 @@ std::vector<Token> Tokenizer::Tokenize()
       tok.obj.name = tok.str;
     }
 
-    // 文字
     else if( c == '\'' )
     {
       next();
@@ -201,7 +194,6 @@ std::vector<Token> Tokenizer::Tokenize()
       next();
     }
 
-    // 文字列
     else if( c == '"' )
     {
       tok.type = Token::String;
@@ -226,7 +218,6 @@ std::vector<Token> Tokenizer::Tokenize()
       tok.str += '"';
     }
 
-    // 演算子
     else
     {
       auto hit = false;
