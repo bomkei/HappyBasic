@@ -485,6 +485,7 @@ AST::Stmt* ParserCore::Stmt()
     expect("\n");
 
     auto closed = false;
+    in_function = true;
 
     while( check() )
     {
@@ -497,6 +498,8 @@ AST::Stmt* ParserCore::Stmt()
 
       block.emplace_back(Stmt());
     }
+
+    in_function = false;
 
     auto ast = new AST::Function;
     ast->token = tk;
