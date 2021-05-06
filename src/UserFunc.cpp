@@ -14,7 +14,12 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
 
   for( size_t i = 0; i < old_args.size(); i++ )
   {
-    old_args.emplace_back(AST_Runner::Expr(ast->args[i]));
+    old_args.emplace_back(ast->args[i]->token->obj);
+  }
+
+  for( size_t i = 0; i < fun->args.size(); i++ )
+  {
+    ast->args[i]->token->obj = AST_Runner::Expr(fun->args[i]);
   }
 
   Program::instance->cur_func = ast;

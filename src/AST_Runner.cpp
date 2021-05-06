@@ -84,6 +84,15 @@ Object AST_Runner::Expr(AST::Expr* ast)
       return obj.list[sub.v_int];
     }
 
+    case AST::Expr::Param:
+    {
+      alart;
+
+      auto& p = ast->token->obj;
+      p.var_ptr = &p;
+      return p;
+    }
+
     default:
     {
       auto left = Expr(ast->left);

@@ -470,8 +470,12 @@ AST::Stmt* ParserCore::Stmt()
         if( get_tok().type != Token::Ident )
           Program::Error(get_tok(), "syntax error");
         
-        auto prm = Primary();
+        auto prm = new AST::Expr;
         prm->type = AST::Expr::Param;
+        prm->token = new Token;
+        prm->token->str = get_tok().str;
+        next();
+
         args.emplace_back(prm);
       } while( consume(",") );
 
