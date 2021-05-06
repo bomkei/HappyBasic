@@ -57,6 +57,9 @@ public:
     
     return TypedExpr(type,expr->right);
   }
+  int getSign(){
+    return type==Normal?1:-1;
+  }
 };
 
 /* internal types - end */
