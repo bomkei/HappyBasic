@@ -61,6 +61,14 @@ public:
 /* internal types - end */
 
 void AST::Expr::Optimize(){
+  ExprType exprtype;
+  if(type==Add or type==Sub)
+    exprtype=ExprType::Expr;
+  else if(type==Mul or type==Div)
+    exprtype=ExprType::Expr;
+  else
+    exprtype=ExprType::Factor;
+    
   if(type==Add or type==Sub){
     // Expr
     // get all term
