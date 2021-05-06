@@ -66,7 +66,8 @@ public:
 
 void AST::Expr::Optimize(){
   Expr ret;
-
+  Expr *cur;
+  
   // get expr type
   ExprType exprtype;
   if(type==Add or type==Sub)
