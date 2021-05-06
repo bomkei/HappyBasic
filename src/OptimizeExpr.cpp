@@ -85,4 +85,14 @@ void AST::Expr::Optimize(){
     cur_left=cur_left->left;
   }
   parts.emplace_back(TypedExpr(TypedExpr::Normal,cur_left));
+  
+  if(exprtype.type==ExprType::Expr){
+    double immidiate=0;
+    for( auto it = parts.begin(); it != parts.end(); ) {
+      if(it->expr->type==Immidiate){
+        immidiate+=it->expr->token->obj.v_int*it->getSign();
+        parts.erase(it);
+      }else it++;
+    }
+  }
 }
