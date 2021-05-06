@@ -87,6 +87,7 @@ void AST::Expr::Optimize(){
   parts.emplace_back(TypedExpr(TypedExpr::Normal,cur_left));
   
   if(exprtype.type==ExprType::Expr){
+    // calculate immidiate
     double immidiate=0;
     for( auto it = parts.begin(); it != parts.end(); ) {
       if(it->expr->type==Immidiate){
