@@ -4,29 +4,31 @@
 #include <numeric>
 
 /* internal types */
-class SignedExpr{
+
+class TypedExpr{
 public:
-  enum Sign{
-    Positive=1,
-    Negative=-1,
-  } sign;
+  enum Type{
+    Normal=1,
+    Innormal=-1,
+  } type;
   AST::Expr* expr;
 
   template <typename T>
-  SignedExpr(T sign,AST::Expr* expr)
-    : sign((Sign)sign), expr(expr)
+  TypedExpr(T type,AST::Expr* expr)
+    : type((Type)type), expr(expr)
   {
   }
 
-  static SignedExpr FromExprRight(AST::Expr* expr){
-    auto right=expr->right;
-    int sign=(expr->type==AST::Expr::Add ? 1 : -1); // default sign (expr->type)
-    if(right->type == AST::Expr::Immidiate) // right == immidiate
-    {
-      sign*=right->token->obj.v_int > 0 ? 1 : -1; // if right is negative, invert sign
-      right->token->obj.v_int=std::abs(right->token->obj.v_int); // right = |right|
+  static TypedExpr FromExprRight(AST::Expr* expr){
+    Type type;
+    AST::Expr::Type srctype=expr->type;
+    if(srctype == AST::Expr::Mul or srctype == AST::Expr::Add){
+      type=Normal;
+    }else if(srctype == AST::Expr::Div or srctype == AST::Expr::Sub){
+      type=Innormal;
     }
-    return SignedExpr(sign,expr->right);
+    
+    return TypedExpr(type,expr->right);
   }
 };
 
