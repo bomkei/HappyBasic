@@ -21,6 +21,15 @@ public:
 
     return false;
   }
+
+  static bool isMatchedType(Type type,AST::Expr &src){
+    if(
+      type==Expr and (src.type==AST::Expr::Add or src.type==AST::Expr::Sub) or
+      type==Term and (src.type==AST::Expr::Mul or src.type==AST::Expr::Div)
+    )return true;
+
+    return false;
+  }
 };
 
 class TypedExpr{
@@ -60,4 +69,8 @@ void AST::Expr::Optimize(){
     exprtype.type=ExprType::Expr;
   else
     exprtype.type=ExprType::Factor;
+  
+  if(exprtype.isMatchedType(*this)){
+
+  }
 }
