@@ -5,6 +5,12 @@
 
 /* internal types */
 
+enum ExprType{
+  Expr,
+  Term,
+  Factor
+};
+
 class TypedExpr{
 public:
   enum Type{
