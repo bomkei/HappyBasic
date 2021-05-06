@@ -5,10 +5,13 @@
 
 /* internal types */
 
-enum ExprType{
-  Expr,
-  Term,
-  Factor
+class ExprType{
+public:
+  enum Type{
+    Expr,
+    Term,
+    Factor
+  }type;
 };
 
 class TypedExpr{
@@ -35,26 +38,6 @@ public:
     }
     
     return TypedExpr(type,expr->right);
-  }
-};
-
-class InvertableExpr{
-public:
-  enum Type{
-    NotInverted=1,
-    Inverted=-1,
-  } type;
-  AST::Expr* expr;
-
-  template <typename T>
-  InvertableExpr(T type,AST::Expr* expr)
-    : type((Type)type), expr(expr)
-  {
-  }
-
-  static InvertableExpr FromExprRight(AST::Expr* expr){
-    auto type=(expr->type==AST::Expr::Mul ? NotInverted : Inverted); // default sign (expr->type)
-    return InvertableExpr(type,expr->right);
   }
 };
 
