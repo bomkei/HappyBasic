@@ -70,7 +70,13 @@ void AST::Expr::Optimize(){
   else
     exprtype.type=ExprType::Factor;
   
-  if(exprtype.isMatchedType(*this)){
-
+  // get all parts
+  std::vector<TypedExpr> parts;
+  Expr *cur_left=this;
+  while(exprtype.isMatchedType(*cur_left))// loop while cur_left kind = Expr
+  {
+    parts.emplace_back(TypedExpr::FromExprRight(cur_left));
+    cur_left=cur_left->left;
   }
+  parts.emplace_back(TypedExpr(TypedExpr::Normal,cur_left));
 }
