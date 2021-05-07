@@ -6,7 +6,11 @@ int main(int argc, char** argv)
 {
   srand((int)time(nullptr));
 
-  for( auto&& arg : Utils::ToVector<std::string>(argc, argv) )
+  auto&& args = Utils::ToVector<std::string>(argc, argv);
+
+  args.erase(args.begin());
+
+  for( auto&& arg : args )
   {
     if( arg == "-safety" && !Options::IsSafety )
     {
@@ -15,6 +19,7 @@ int main(int argc, char** argv)
     else if( Options::FileName.empty() )
     {
       Options::FileName = arg;
+      alart;
     }
     else
     {

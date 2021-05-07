@@ -164,7 +164,6 @@ Object AST_Runner::Function(AST::Callfunc* ast)
     }
   }
 
-
   else
   {
     return AST_Runner::UserFunc(ast);
