@@ -129,32 +129,32 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
         case AST::Expr::Bigger:
           switch( left.type ) {
-            case Object::Int: left.v_int = left.v_int > right.v_int;
-            case Object::Char: left.v_int = left.v_char > right.v_char;
+            case Object::Int: left.v_int = left.v_int > right.v_int; break;
+            case Object::Char: left.v_int = left.v_char > right.v_char; break;
           }
           left.type = Object::Int;
           break;
 
         case AST::Expr::BiggerOrEqual:
           switch( left.type ) {
-            case Object::Int: left.v_int = left.v_int >= right.v_int;
-            case Object::Char: left.v_int = left.v_char >= right.v_char;
+            case Object::Int: left.v_int = left.v_int >= right.v_int; break;
+            case Object::Char: left.v_int = left.v_char >= right.v_char; break;
           }
           left.type = Object::Int;
           break;
 
         case AST::Expr::Equal:
           switch( left.type ) {
-            case Object::Int: left.v_int = left.v_int == right.v_int;
-            case Object::Char: left.v_int = left.v_char == right.v_char;
+            case Object::Int: left.v_int = left.v_int == right.v_int; break;
+            case Object::Char: left.v_int = left.v_char == right.v_char; break;
           }
           left.type = Object::Int;
           break;
 
         case AST::Expr::NotEqual:
           switch( left.type ) {
-            case Object::Int: left.v_int = left.v_int != right.v_int;
-            case Object::Char: left.v_int = left.v_char != right.v_char;
+            case Object::Int: left.v_int = left.v_int != right.v_int; break;
+            case Object::Char: left.v_int = left.v_char != right.v_char; break;
           }
           left.type = Object::Int;
           break;
