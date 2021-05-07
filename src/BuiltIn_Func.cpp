@@ -65,6 +65,27 @@ Object AST_Runner::Function(AST::Callfunc* ast)
     return ret;
   }
 
+  // random
+  if( name == "random" )
+  {
+    for( auto&& i : args )
+      if( i.type != Object::Int )
+        Program::Error(*ast->token, "only use integer in args of random()");
+
+    auto begin = args.size() > 1 ? args[0].v_int : 0;
+    auto end = args[args.size() > 1].v_int;
+
+    if( begin > end )
+      Program::Error(*ast->token, "begin > end");
+
+    if( begin == end )
+      ret.v_int = begin;
+    else
+      ret.v_int = Utils::Random(begin, end);
+
+    return ret;
+  }
+
+
   return AST_Runner::UserFunc(ast);
-  //Program::Error(*ast->token, "undefined function");
 }

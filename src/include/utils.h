@@ -36,19 +36,19 @@ std::string format(std::string const& fmt, Args... args)
 namespace Utils
 {
   template <class T>
-  auto Random(T max)
+  T Random(T max)
   {
     return rand() % max;
   }
 
   template <class T>
-  auto Random(T begin, T end)
+  T Random(T begin, T end)
   {
     return rand() % (end - begin);
   }
 
   template <class T>
-  auto GetRandomStr(auto len = 20)
+  T GetRandomStr(int len = 20)
   {
     T str;
 
