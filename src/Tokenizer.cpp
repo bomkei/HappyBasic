@@ -240,7 +240,7 @@ std::vector<Token> Tokenizer::Tokenize()
 
   for( auto&& tk : tokens )
   {
-    if( tk.str == "happybasic" )
+    if( tk.str == "__happybasic__" )
     {
       tk.type = Token::String;
       tk.obj.type = Object::Array;
