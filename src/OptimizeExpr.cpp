@@ -152,7 +152,8 @@ void AST::Expr::Optimize(){
     for (auto &&part : parts)
     {
       if(parts.size()==++i){
-        // set to left
+        cur->left=part.expr;
+        cur->type=part.getType();
       }else{
         // cur->left=new Expr();
         // cur=cur->left;
