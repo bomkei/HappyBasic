@@ -238,5 +238,22 @@ std::vector<Token> Tokenizer::Tokenize()
     else it++;
   }
 
+  for( auto&& tk : tokens )
+  {
+    if( tk.str == "happybasic" )
+    {
+      tk.type = Token::String;
+      tk.obj.type = Object::Array;
+
+      for( auto&& c : "HappyBasic" )
+      {
+        Object ch;
+        ch.type = Object::Char;
+        ch.v_char = c;
+        tk.obj.list.emplace_back(ch);
+      }
+    }
+  }
+
   return tokens;
 }
