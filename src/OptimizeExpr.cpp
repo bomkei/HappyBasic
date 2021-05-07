@@ -153,8 +153,10 @@ void AST::Expr::Optimize(){
     for (auto &&part : parts)
     {
       if(parts.size()==++i){
-        cur->left=part.expr;
-        cur->type=part.getType();
+        cur->left=part.expr->left;
+        cur->type=part.expr->type;
+        cur->right=part.expr->right;
+        cur->token=part.expr->token;
       }else{
         cur->right=part.expr;
         cur->type=part.getType();
