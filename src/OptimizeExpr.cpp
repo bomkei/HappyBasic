@@ -102,7 +102,7 @@ void AST::Expr::Optimize(){
     parts.emplace_back(TypedExpr::FromExprRight(cur_left));
     cur_left=cur_left->left;
   }
-  parts.emplace_back(TypedExpr(TypedExpr::Normal,cur_left));
+  parts.emplace_back(TypedExpr(TypedExpr::Normal,TypedExpr::getKindFromExprType(exprtype),cur_left));
   
   if(exprtype.type==ExprType::Expr){
     // calculate immidiate
