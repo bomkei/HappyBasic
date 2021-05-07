@@ -53,11 +53,18 @@ public:
 
   static TypedExpr FromExprRight(AST::Expr* expr){
     Type type;
+    Kind kind;
     AST::Expr::Type srctype=expr->type;
     if(srctype == AST::Expr::Mul or srctype == AST::Expr::Add){
       type=Normal;
     }else if(srctype == AST::Expr::Div or srctype == AST::Expr::Sub){
       type=Innormal;
+    }
+    
+    if(srctype == AST::Expr::Mul or srctype == AST::Expr::Div){
+      kind=Term;
+    }else if(srctype == AST::Expr::Add or srctype == AST::Expr::Sub){
+      kind=Expr;
     }
     
     return TypedExpr(type,expr->right);
