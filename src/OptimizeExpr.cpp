@@ -34,6 +34,11 @@ public:
 
 class TypedExpr{
 public:
+  enum Kind{
+    Expr,
+    Term
+  } kind;
+  
   enum Type{
     Normal=1,
     Innormal=-1,
