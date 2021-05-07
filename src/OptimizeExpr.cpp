@@ -148,6 +148,7 @@ void AST::Expr::Optimize(){
     ret.type=part.expr->type;
     ret.right=part.expr->right;
     ret.token=part.expr->token;
+    ret.varIndex=part.expr->varIndex;
   }else{
     int i=0;
     for (auto &&part : parts)
@@ -157,6 +158,7 @@ void AST::Expr::Optimize(){
         cur->type=part.expr->type;
         cur->right=part.expr->right;
         cur->token=part.expr->token;
+        cur->varIndex=part.expr->varIndex;
       }else{
         cur->right=part.expr;
         cur->type=part.getType();
