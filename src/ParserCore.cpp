@@ -482,6 +482,7 @@ AST::Stmt* ParserCore::Stmt()
       expect(")");
     }
 
+    alart;
     expect("\n");
 
     auto closed = false;
@@ -522,6 +523,7 @@ AST::Stmt* ParserCore::Stmt()
 
     if( !consume("\n") )
     {
+      alart;
       ast->expr = Expr();
       expect("\n");
     }
