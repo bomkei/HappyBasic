@@ -26,8 +26,11 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
   
   Object ret;
   auto retp = AST_Runner::ReturnValue;
+  auto flag = AST_Runner::FuncReturned;
+  auto returnedFlag = false;
 
   AST_Runner::ReturnValue = &ret;
+  AST_Runner::FuncReturned = &returnedFlag;
   
   //
   // Run
@@ -39,5 +42,7 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
   }
 
   AST_Runner::ReturnValue = retp;
+  AST_Runner::FuncReturned = flag;
+
   return ret;
 }

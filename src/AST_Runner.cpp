@@ -188,6 +188,9 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
         if( LoopBreaked && *LoopBreaked )
           break;
+        
+        if( LoopContinued && *LoopContinued )
+          break;
 
         if( FuncReturned && *FuncReturned )
           break;
@@ -218,7 +221,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       break;
 
     case AST::Stmt::Continue:
-      if( !LoopBreaked )
+      if( !LoopContinued )
         Program::Error(*ast->token, "cannot use 'continue' here");
 
       *LoopBreaked = true;
@@ -230,6 +233,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
         Program::Error(*ast->token, "cannot use 'return' here");
 
       *ReturnValue = Expr(((AST::Return*)ast)->expr);
+      *FuncReturned = true;
       break;
 
     case AST::Stmt::If:
