@@ -101,6 +101,7 @@ void Program::Error(Token const& tok, std::string const& msg)
 
   std::cout
     << '\n'
+    << "Error:"
     << format("%6zd|", line) + instance->source.substr(begin, end - begin) << '\n'
     << "      |" << std::string(tok.srcpos - begin, ' ')
     << "^" << std::string(tok.str.length() > 1 ? tok.str.length() - 1 : 0, '~')
