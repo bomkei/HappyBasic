@@ -24,7 +24,29 @@ struct Object
 
   std::string to_string() const;
   bool is_string() const;
-  bool eval() const;
+  bool eval() const'
   bool equal(Object const&) const;
+
+  template<typename T>
+  T as(){
+    T ret;
+    switch( type )
+    {
+    case Int:
+      return static_cast<T>(v_int);
+      break;
+
+    case Float:
+      return static_cast<T>(v_float);
+      break;
+
+    case Char:
+      return static_cast<T>(v_char);
+      break;
+
+    default:
+      return T();
+    }
+  }
 };
 
