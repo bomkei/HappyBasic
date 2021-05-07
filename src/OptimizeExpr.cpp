@@ -80,6 +80,21 @@ public:
   int getSign(){
     return type==Normal?1:-1;
   }
+  AST::Expr::Type getType(){
+    if(kind == Expr){
+      if(type==Normal){
+        return AST::Expr::Add;
+      }else{ // type == Innormal
+        return AST::Expr::Sub;
+      }
+    }else{ // kind == Term
+      if(type==Normal){
+        return AST::Expr::Mul;
+      }else{ // type == Innormal
+        return AST::Expr::Div;
+      }
+    }
+  }
 };
 
 /* internal types - end */
