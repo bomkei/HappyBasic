@@ -40,7 +40,7 @@ class msg(commands.Cog):
         p = subprocess.Popen(["chmod","a+x","./plugin/BASIC_lang/HappyBasic"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
-        p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic"],
+        p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic -safety ./plugin/BASIC_lang/HappyBasic/script.txt"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         msg,m = await process_output(p, await ctx.send("RUN DEBUG"), "```basic\n", ctx)
