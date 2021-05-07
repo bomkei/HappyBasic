@@ -1,6 +1,6 @@
 #pragma once
 
-static constexpr auto FUNC_CALL_DEPTH_MAX = 50;
+static constexpr auto FUNC_CALL_DEPTH_MAX = 100;
 
 class Options
 {

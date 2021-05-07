@@ -8,9 +8,21 @@ int main(int argc, char** argv)
 
   for( auto&& arg : Utils::ToVector<std::string>(argc, argv) )
   {
-    if( arg == "-safety" )
+    if( arg == "-safety" && !Options::IsSafety )
     {
+      Options::IsSafety = true;
+    }
+    else if( Options::FileName.empty() )
+    {
+      Options::FileName = arg;
+    }
+    else
+    {
+      std::cout
+        << "fatal: this argument is specified or unknown.\n"
+        << "  " << arg << '\n';
 
+      exit(2);
     }
   }
 
