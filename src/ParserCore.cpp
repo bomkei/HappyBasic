@@ -501,6 +501,9 @@ AST::Stmt* ParserCore::Stmt()
       block.emplace_back(Stmt());
     }
 
+    if( !closed )
+      Program::Error(*tk, "not closed");
+
     in_function = false;
 
     auto ast = new AST::Function;
