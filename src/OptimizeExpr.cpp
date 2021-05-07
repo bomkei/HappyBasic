@@ -105,6 +105,20 @@ void AST::Expr::Optimize(){
     }
   }
 
+  // reconstructing Expr (to ret)
+  int i=0;
+  for (auto &&part : parts)
+  {
+    if(parts.size()==++i){
+      // set to left
+    }else{
+      // cur->left=new Expr();
+      // cur=cur->left;
+      // cur->right=term.expr;
+      // cur->type=term.type==1 ? Add : Sub;
+    }
+  }
+  
   std::cout<<"check: "<<*this<<" | "<<ret<<std::endl;
   this->left=ret.left;
   this->type=ret.type;
