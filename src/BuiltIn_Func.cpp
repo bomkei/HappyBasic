@@ -138,10 +138,10 @@ Object AST_Runner::Function(AST::Callfunc* ast)
           Program::Error(*ast->args[0]->token, "cannot cast to integer");
         }
       }
-
-      args[0].type = Object::Int;
-      ret = args[0];
     }
+
+    args[0].type = Object::Int;
+    ret = args[0];
   }
 
   else
