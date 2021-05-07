@@ -144,21 +144,13 @@ void AST::Expr::Optimize(){
   if(parts.size()==1){
     auto part=parts[0];
     // copy part.expr => ret
-    ret.left=part.expr->left;
-    ret.type=part.expr->type;
-    ret.right=part.expr->right;
-    ret.token=part.expr->token;
-    ret.varIndex=part.expr->varIndex;
+    ret=*part.expr;
   }else{
     int i=0;
     for (auto &&part : parts)
     {
       if(parts.size()==++i){
-        cur->left=part.expr->left;
-        cur->type=part.expr->type;
-        cur->right=part.expr->right;
-        cur->token=part.expr->token;
-        cur->varIndex=part.expr->varIndex;
+        *cur=*part.expr;
       }else{
         cur->right=part.expr;
         cur->type=part.getType();
