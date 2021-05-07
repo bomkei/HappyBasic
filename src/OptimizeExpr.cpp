@@ -141,16 +141,20 @@ void AST::Expr::Optimize(){
   }
 
   // reconstructing Expr (to ret)
-  int i=0;
-  for (auto &&part : parts)
-  {
-    if(parts.size()==++i){
-      // set to left
-    }else{
-      // cur->left=new Expr();
-      // cur=cur->left;
-      // cur->right=term.expr;
-      // cur->type=term.type==1 ? Add : Sub;
+  if(parts.size()==1){
+    // copy parts[0] to ret
+  }else{
+    int i=0;
+    for (auto &&part : parts)
+    {
+      if(parts.size()==++i){
+        // set to left
+      }else{
+        // cur->left=new Expr();
+        // cur=cur->left;
+        // cur->right=term.expr;
+        // cur->type=term.type==1 ? Add : Sub;
+      }
     }
   }
   
