@@ -53,7 +53,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
 
   //
   // length
-  if( name == "length" )
+  else if( name == "length" )
   {
     if( args.size() != 1 )
       Program::Error(*ast->token, "no matching args");
@@ -66,7 +66,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
 
   //
   // random
-  if( name == "random" )
+  else if( name == "random" )
   {
     for( auto&& i : args )
       if( i.type != Object::Int )
@@ -86,7 +86,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
 
   //
   // randomstr
-  if( name == "randomstr" )
+  else if( name == "randomstr" )
   {
     if( args.size() > 1 )
       Program::Error(*ast->token, "no matching args");
@@ -105,6 +105,45 @@ Object AST_Runner::Function(AST::Callfunc* ast)
       ret.list.emplace_back(ch);
     }
   }
+
+  //
+  // int
+  else if( name == "int" )
+  {
+    if( args.size() != 1 )
+      Program::Error(*ast->token, "no matching args");
+    
+    switch( args[0].type )
+    {
+      case Object::Int:
+        break;
+
+      case Object::Float:
+        args[0].v_int = args[0].v_float;
+        break;
+
+      case Object::Char:
+        args[0].v_int = args[0].v_char;
+        break;
+
+      case Object::Array:
+      {
+        try
+        {
+          auto str = args[0].to_string();
+          args[0].v_int = std::stoi(str, nullptr, str.find("0x") == std::string::npos ? 10 : 16);
+        }
+        catch( ... )
+        {
+          Program::Error(*ast->args[0]->token, "cannot cast to integer");
+        }
+      }
+
+      args[0].type = Object::Int;
+      ret = args[0];
+    }
+  }
+
   else
     return AST_Runner::UserFunc(ast);
   
