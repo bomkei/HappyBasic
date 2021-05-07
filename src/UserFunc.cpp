@@ -12,10 +12,13 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
   auto ast = Program::instance->functions[find];
   std::vector<Object> old_args;
 
-  for( size_t i = 0; i < old_args.size(); i++ )
+  if( ast->args.size() != fun->args.size() )
   {
-    old_args.emplace_back(ast->args[i]->token->obj);
+    Program::Error(*fun->token, "no mathing arguments");
   }
+
+  for( auto&& i : ast->args )
+    old_args.emplace_back(i->token->obj);
 
   for( size_t i = 0; i < fun->args.size(); i++ )
   {
