@@ -45,9 +45,6 @@ void Program::OpenFile(std::string const& path)
     while( line.length() && line[0] <= ' ' )
       line.erase(line.begin());
 
-    if( line.empty() )
-      continue;
-
     source += line + '\n';
   }
 
