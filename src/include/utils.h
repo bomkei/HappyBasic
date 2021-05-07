@@ -35,6 +35,19 @@ std::string format(std::string const& fmt, Args... args)
 
 namespace Utils
 {
+  template <class T, class U, class Count>
+  auto ToVector(Count count, U** items)
+  {
+    std::vector<T> ret;
+
+    for( size_t i = 0; i < count; i++ )
+    {
+      ret.emplace_back(T(items[i]));
+    }
+
+    return ret;
+  }
+
   template <class T>
   T Random(T max)
   {

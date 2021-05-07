@@ -6,7 +6,13 @@ int main(int argc, char** argv)
 {
   srand((int)time(nullptr));
 
+  for( auto&& arg : Utils::ToVector<std::string>(argc, argv) )
+  {
+    if( arg == "-safety" )
+    {
 
+    }
+  }
 
   Program prg;
 
