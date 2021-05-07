@@ -6,6 +6,7 @@ int main(int argc, char** argv)
 {
   srand((int)time(nullptr));
 
+#ifndef _MSC_VER // debug
   auto&& args = Utils::ToVector<std::string>(argc, argv);
 
   args.erase(args.begin());
@@ -30,6 +31,12 @@ int main(int argc, char** argv)
       exit(2);
     }
   }
+#else
+
+  Options::FileName = "C:/Users/mrzkr/Desktop/Sources/C++/HappyBasic/script.txt";
+  Options::IsSafety = true;
+
+#endif
 
   Program prg;
 

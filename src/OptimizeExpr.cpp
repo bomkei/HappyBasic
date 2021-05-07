@@ -79,6 +79,7 @@ public:
     : type((Type)type), kind(kind), expr(expr)
   {
   }
+
   static Kind getKindFromExprType(ExprType srctype) {
     if( srctype.type == ExprType::Expr ) {
       return Kind::Expr;
@@ -90,29 +91,37 @@ public:
       return Kind::Expr; // it's default
     }
   }
+
   static TypedExpr FromExprRight(AST::Expr* expr) {
     Type type;
     Kind kind;
     AST::Expr::Type srctype = expr->type;
+
+    // mul / add
     if( srctype == AST::Expr::Mul || srctype == AST::Expr::Add ) {
       type = Normal;
     }
+    // div / sub
     else if( srctype == AST::Expr::Div || srctype == AST::Expr::Sub ) {
       type = Innormal;
     }
 
+    // mul / div
     if( srctype == AST::Expr::Mul || srctype == AST::Expr::Div ) {
       kind = Term;
     }
+    // add / sub
     else if( srctype == AST::Expr::Add || srctype == AST::Expr::Sub ) {
       kind = Expr;
     }
 
     return TypedExpr(type, kind, expr->right);
   }
+
   int getSign() {
     return type == Normal ? 1 : -1;
   }
+
   AST::Expr::Type getType() {
     if( kind == Expr ) {
       if( type == Normal ) {
