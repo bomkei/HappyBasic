@@ -142,7 +142,11 @@ void AST::Expr::Optimize(){
 
   // reconstructing Expr (to ret)
   if(parts.size()==1){
-    // copy parts[0] to ret
+    auto part=parts[0];
+    ret.left=part.expr->left;
+    ret.type=part.expr->type;
+    ret.right=part.expr->right;
+    ret.token=part.expr->token;
   }else{
     int i=0;
     for (auto &&part : parts)
