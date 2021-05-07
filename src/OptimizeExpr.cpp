@@ -95,5 +95,12 @@ void AST::Expr::Optimize(){
         parts.erase(it);
       }else it++;
     }
-  }
+    
+    if(immidiate != 0){
+      cur->right=new Expr();
+      cur->right->token=new Token();
+      cur->right->token->obj.v_int=std::abs(immidiate);
+      cur->type=immidiate>0?Expr::Add:Expr::Sub;
+      cur=cur->left;
+    }
 }
