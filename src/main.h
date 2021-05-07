@@ -23,3 +23,5 @@
 #include "include/Program.h"
 
 #include "include/Optimizer.h"
+#include "include/Options.h"
+

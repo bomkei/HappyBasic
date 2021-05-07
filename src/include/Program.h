@@ -22,7 +22,7 @@ class Program
 public:
   Program();
 
-  void OpenFile(std::string const& path);
+  void OpenFile();
 
   void Tokenize();
   void Parse();

@@ -1,5 +1,16 @@
 #include "main.h"
 
+AST::Expr::Expr(Type type)
+  :type(type), left(nullptr), right(nullptr), token(nullptr)
+{
+}
+
+AST::Expr::Expr(Type type, Expr* left, Expr* right, Token* tok)
+  : type(type), left(left), right(right), token(tok)
+{
+}
+
+
 std::string AST::Expr::ToString() const
 {
   switch( type )

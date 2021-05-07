@@ -148,13 +148,16 @@ Object AST_Runner::Function(AST::Callfunc* ast)
   // to_string
   else if( name == "to_string" )
   {
-  
+    ret.type = Object::Array;
+
+    
   }
 
 
   else
+  {
     return AST_Runner::UserFunc(ast);
-
+  }
 
   return ret;
 }

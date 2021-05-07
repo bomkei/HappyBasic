@@ -18,7 +18,7 @@ i64 Program::find_func(std::string const& name) const
   return -1;
 }
 
-void Program::OpenFile(std::string const& path)
+void Program::OpenFile()
 {
   static auto is_empty = [] (std::string const& str) {
     for( auto&& c : str )
@@ -28,12 +28,12 @@ void Program::OpenFile(std::string const& path)
     return true;
   };
 
-  std::ifstream ifs(path);
+  std::ifstream ifs(Options::FileName);
   std::string line;
 
   if( ifs.fail() )
   {
-    std::cout << "cannot open file: " << path << '\n';
+    std::cout << "cannot open file: " << Options::FileName << '\n';
     exit(1);
   }
 

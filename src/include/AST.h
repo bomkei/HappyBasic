@@ -33,15 +33,8 @@ namespace AST
 
     int varIndex = 0;
 
-    Expr(Type type = Immidiate)
-      :type(type), left(nullptr), right(nullptr), token(nullptr)
-    {
-    }
-
-    Expr(Type type, Expr* left, Expr* right, Token* tok)
-      :type(type), left(left), right(right), token(tok)
-    {
-    }
+    Expr(Type type = Immidiate);
+    Expr(Type type, Expr* left, Expr* right, Token* tok);
 
     void Optimize();
     std::string ToString() const;
