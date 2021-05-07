@@ -38,7 +38,7 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
 
   if( CallCount >= FUNC_CALL_DEPTH_MAX )
   {
-    Program::Error(*ast->token, "prevented crash of stack overflow. but you can suppression with option.");
+    Program::Error(*fun->token, "prevented crash of stack overflow. but you can suppression with option.");
   }
 
   //
