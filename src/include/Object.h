@@ -8,7 +8,6 @@ struct Object
     Float,
     Char,
     Array,
-    Pointer
   };
 
   Type type = Int;
