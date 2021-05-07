@@ -155,10 +155,9 @@ void AST::Expr::Optimize(){
         cur->left=part.expr;
         cur->type=part.getType();
       }else{
-        // cur->left=new Expr();
-        // cur=cur->left;
-        // cur->right=term.expr;
-        // cur->type=term.type==1 ? Add : Sub;
+        cur->right=part.expr;
+        cur->type=part.getType();
+        cur=cur->left=new Expr();
       }
     }
   }
