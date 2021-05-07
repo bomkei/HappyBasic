@@ -138,6 +138,26 @@ void AST::Expr::Optimize(){
       cur->type=immidiate>0?Expr::Add:Expr::Sub;
       cur=cur->left=new Expr();
     }
+  }else if(exprtype.type==ExprType::Term){
+    // remove immidiate!
+    double imm_denom_dbl=1;int imm_denom_int=1;
+    double imm_numer_dbl=1;int imm_numer_int=1;
+    for( auto it = parts.begin(); it != parts.end(); ) {
+      if(it->expr->type!=Immidiate){ // skip not immidiate
+        it++;
+        continue;
+      }
+      parts.erase(it);
+
+      auto obj=it->expr->token->obj;
+      if(it->type==TypedExpr::Innormal){
+        if(obj.type==Object::Int)imm_numer_int*=obj.v_int;
+        else imm_numer_dbl*=obj.as<double>();
+      }else{
+        if(obj.type==Object::Int)imm_denom_int*=obj.v_int;
+        else imm_denom_dbl*=obj.as<double>();
+      }
+    }
   }
 
   // reconstructing Expr (to ret)
