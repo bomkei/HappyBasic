@@ -5,15 +5,10 @@ void AST_Runner::Instruction(AST::Instruction* ast)
   auto const& name = ast->name;
   std::vector<Object> args;
 
-  alart;
-
   for( auto&& i : ast->args )
   {
-    alart;
     args.emplace_back(AST_Runner::Expr(i));
   }
-
-  alart;
 
   if( name == "input" )
   {
@@ -79,9 +74,6 @@ void AST_Runner::Instruction(AST::Instruction* ast)
 
   if( name == "clear" )
   {
-    //for( auto&& var : Program::instance->variables )
-    //  var = Object();
-    
     auto size = Program::instance->variables.size();
 
     Program::instance->variables.clear();
@@ -106,8 +98,6 @@ void AST_Runner::Instruction(AST::Instruction* ast)
 
     return;
   }
-
-  alart;
 
   Program::Error(*ast->token, "undefined instruction");
 }

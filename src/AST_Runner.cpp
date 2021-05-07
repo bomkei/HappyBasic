@@ -86,8 +86,6 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
     case AST::Expr::Param:
     {
-      alart;
-
       auto& p = ast->token->obj;
       p.var_ptr = &p;
       return p;

@@ -139,7 +139,10 @@ AST::Expr* ParserCore::Primary()
         for( auto&& i : *func_args )
         {
           if( i->token->str == tok->str )
+          {
+            next();
             return i;
+          }
         }
       }
 
@@ -472,8 +475,7 @@ AST::Stmt* ParserCore::Stmt()
         
         auto prm = new AST::Expr;
         prm->type = AST::Expr::Param;
-        prm->token = new Token;
-        prm->token->str = get_tok().str;
+        prm->token = &get_tok();
         next();
 
         args.emplace_back(prm);
