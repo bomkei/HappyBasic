@@ -103,4 +103,10 @@ void AST::Expr::Optimize(){
       cur->type=immidiate>0?Expr::Add:Expr::Sub;
       cur=cur->left;
     }
+  }
+
+  std::cout<<"check: "<<*this<<" | "<<ret<<std::endl;
+  this->left=ret.left;
+  this->type=ret.type;
+  this->right=ret.right;
 }
