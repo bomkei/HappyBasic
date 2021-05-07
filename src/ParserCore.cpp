@@ -288,8 +288,8 @@ AST::Expr* ParserCore::Expr()
 {
   auto expr = Equal();
 
-  //Debug(expr);
-
+  expr->Optimize();
+  
   return expr;
 }
 
