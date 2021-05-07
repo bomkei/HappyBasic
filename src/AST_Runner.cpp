@@ -224,7 +224,6 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       if( !LoopContinued )
         Program::Error(*ast->token, "cannot use 'continue' here");
 
-      *LoopBreaked = true;
       *LoopContinued = true;
       break;
 
@@ -306,7 +305,11 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
     case AST::Stmt::While:
     {
+      auto while_ast = (AST::While*)ast;
+
       
+
+      break;
     }
 
   }
