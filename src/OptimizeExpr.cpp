@@ -55,6 +55,8 @@ public:
       return Kind::Expr;
     }else if (srctype.type == ExprType::Term){
       return Kind::Term;
+    }else{
+      return Kind::Expr; // it's default
     }
   }
   static TypedExpr FromExprRight(AST::Expr* expr){
