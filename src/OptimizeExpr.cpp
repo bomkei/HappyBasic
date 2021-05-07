@@ -67,7 +67,7 @@ public:
       kind=Expr;
     }
     
-    return TypedExpr(type,expr->right);
+    return TypedExpr(type,kind,expr->right);
   }
   int getSign(){
     return type==Normal?1:-1;
