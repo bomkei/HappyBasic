@@ -50,7 +50,13 @@ public:
     : type((Type)type), kind(kind), expr(expr)
   {
   }
-
+  static Kind getKindFromExprType(ExprType srctype){
+    if (srctype.type == ExprType::Expr){
+      return Kind::Expr;
+    }else if (srctype.type == ExprType::Term){
+      return Kind::Term;
+    }
+  }
   static TypedExpr FromExprRight(AST::Expr* expr){
     Type type;
     Kind kind;
