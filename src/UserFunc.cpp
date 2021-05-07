@@ -38,8 +38,6 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
     ast->args[i]->token->obj = old_args[i];
   }
 
-  std::cout << ret.to_string() << '\n';
-
   AST_Runner::ReturnValue = retp;
   return ret;
 }
