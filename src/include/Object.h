@@ -24,7 +24,7 @@ struct Object
 
   std::string to_string() const;
   bool is_string() const;
-  bool eval() const'
+  bool eval() const;
   bool equal(Object const&) const;
 
   template<typename T>
