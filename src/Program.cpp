@@ -42,8 +42,8 @@ void Program::OpenFile(std::string const& path)
     while( line.length() && line[line.length() - 1] <= ' ' )
       line.pop_back();
 
-    //while( line.length() && line[0] <= ' ' )
-    //  line.erase(line.begin());
+    while( line.length() && line[0] <= ' ' )
+      line.erase(line.begin());
 
     if( line.empty() )
       continue;
