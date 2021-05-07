@@ -2,11 +2,6 @@
 
 std::string AST::Expr::ToString() const
 {
-  alart;
-  fprintf(stderr,"this->token->str = %s\n", token->str.c_str());
-  
-  alart;
-
   switch( type )
   {
     case Immidiate:
@@ -38,7 +33,6 @@ std::string AST::Expr::ToString() const
 
       for( int i = 0; i < args.size(); i++ )
       {
-        alart;
         s += args[i]->ToString();
         if( i < args.size() - 1 ) s += ", ";
       }
@@ -55,7 +49,6 @@ std::string AST::Expr::ToString() const
     {
       if( !left || !right )
       {
-        alart;
         Program::Error(*token, "ERROR");
       }
 
