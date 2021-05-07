@@ -15,9 +15,11 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
   if( ast->args.size() != fun->args.size() )
     Program::Error(*fun->token, "no mathing arguments");
 
+  // save args before run
   for( auto&& i : ast->args )
     old_args.emplace_back(i->token->obj);
 
+  // set args
   for( size_t i = 0; i < fun->args.size(); i++ )
     ast->args[i]->token->obj = AST_Runner::Expr(fun->args[i]);
 
