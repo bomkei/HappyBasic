@@ -307,7 +307,33 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
     {
       auto while_ast = (AST::While*)ast;
 
-      
+      // save pointers
+      auto oldptr1 = LoopBreaked;
+      auto oldptr2 = LoopContinued;
+
+      // make new flags
+      bool flag1 = false, flag2 = false;
+
+      // set new pointer
+      LoopBreaked = &flag1;
+      LoopContinued = &flag2;
+
+      while( Expr(while_ast->cond).eval() )
+      {
+        *LoopBreaked = *LoopContinued = false;
+        Stmt(while_ast->code);
+
+        if( *LoopBreaked )
+          break;
+
+        if( FuncReturned && *FuncReturned )
+          break;
+
+      }
+
+      // restore pointers
+      LoopBreaked = oldptr1;
+      LoopContinued = oldptr2;
 
       break;
     }
