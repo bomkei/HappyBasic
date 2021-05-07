@@ -98,9 +98,6 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
       ObjectAdjuster(left, right);
 
-      if( left.type == Object::Array || right.type == Object::Array )
-        Program::Error(*ast->token, "type mismatch");
-
       switch( ast->type )
       {
         case AST::Expr::Add:
@@ -116,6 +113,25 @@ Object AST_Runner::Expr(AST::Expr* ast)
           break;
 
         case AST::Expr::Mul:
+          if( (left.type == Object::Array) != (right.type == Object::Array) )
+          {
+            if( left.type != Object::Array )
+              std::swap(left, right);
+
+            if( right.type != Object::Int )
+              Program::Error(*ast->token, "type mismatch");
+            
+            auto list = left.list;
+
+            for( int i = 1; i < right.v_int; i++ )
+            {
+              for( auto&& obj : list )
+                left.list.emplace_back(obj);
+            }
+
+            break;
+          }
+
           left.v_int *= right.v_int;
           left.v_char *= right.v_char;
           left.v_float *= right.v_float;

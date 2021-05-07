@@ -96,6 +96,7 @@ void AST_Runner::Instruction(AST::Instruction* ast)
       args[0].var_ptr->list = std::move(args[1].var_ptr->list);
     }
 
+    // dont anythings if object is not an array
     return;
   }
 
