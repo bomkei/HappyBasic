@@ -46,8 +46,8 @@ public:
   AST::Expr* expr;
 
   template <typename T>
-  TypedExpr(T type,AST::Expr* expr)
-    : type((Type)type), expr(expr)
+  TypedExpr(T type,Kind kind,AST::Expr* expr)
+    : type((Type)type), kind(kind), expr(expr)
   {
   }
 
