@@ -3,6 +3,8 @@
 class AST_Runner
 {
 public:
+  static size_t CallCount;
+
   static bool* LoopBreaked;
   static bool* LoopContinued;
   static bool* FuncReturned;

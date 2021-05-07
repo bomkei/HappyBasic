@@ -1,5 +1,6 @@
 #include "main.h"
 
+size_t AST_Runner::CallCount = false;
 bool* AST_Runner::LoopBreaked = nullptr;
 bool* AST_Runner::LoopContinued = nullptr;
 bool* AST_Runner::FuncReturned = nullptr;

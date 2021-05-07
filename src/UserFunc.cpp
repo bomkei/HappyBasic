@@ -4,6 +4,7 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
 {
   auto find = Program::instance->find_func(fun->token->str);
 
+  // not found
   if( find == -1 )
   {
     Program::Error(*fun->token, "undefined function");
@@ -33,6 +34,13 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
   AST_Runner::ReturnValue = &ret;
   AST_Runner::FuncReturned = &returnedFlag;
   
+  CallCount++;
+
+  if( CallCount >= FUNC_CALL_DEPTH_MAX )
+  {
+    Program::Error(*ast->token, "prevented crash of stack overflow. but you can suppression with option.");
+  }
+
   //
   // Run
   AST_Runner::Stmt(ast->code);
@@ -42,6 +50,8 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
 
   AST_Runner::ReturnValue = retp;
   AST_Runner::FuncReturned = flag;
+
+  CallCount--;
 
   return ret;
 }
