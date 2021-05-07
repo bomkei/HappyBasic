@@ -31,6 +31,12 @@ void Program::OpenFile()
   std::ifstream ifs(Options::FileName);
   std::string line;
 
+  if( Options::FileName.empty() )
+  {
+    std::cout << "fatal: no input file\n";
+    exit(1);
+  }
+
   if( ifs.fail() )
   {
     std::cout << "cannot open file: " << Options::FileName << '\n';

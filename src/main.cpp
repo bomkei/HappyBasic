@@ -6,6 +6,8 @@ int main(int argc, char** argv)
 {
   srand((int)time(nullptr));
 
+
+
   Program prg;
 
   prg.OpenFile();
