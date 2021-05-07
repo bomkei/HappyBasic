@@ -110,7 +110,7 @@ public:
     {
       type = Normal;
     }
-    else if (srctype == AST::Expr::Div or srctype == AST::Expr::Sub)
+    else
     {
       type = Innormal;
     }
