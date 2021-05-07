@@ -42,18 +42,20 @@ public:
 
   bool isMatchedType(AST::Expr& src) {
     if(
-      type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or
-      type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div)
-      )return true;
+      type == Expr || (src.type == AST::Expr::Add || src.type == AST::Expr::Sub) ||
+      type == Term || (src.type == AST::Expr::Mul || src.type == AST::Expr::Div)
+      )
+      return true;
 
     return false;
   }
 
   static bool isMatchedType(Type type, AST::Expr& src) {
     if(
-      type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or
-      type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div)
-      )return true;
+      type == Expr || (src.type == AST::Expr::Add || src.type == AST::Expr::Sub) ||
+      type == Term || (src.type == AST::Expr::Mul || src.type == AST::Expr::Div)
+      )
+      return true;
 
     return false;
   }
@@ -92,17 +94,17 @@ public:
     Type type;
     Kind kind;
     AST::Expr::Type srctype = expr->type;
-    if( srctype == AST::Expr::Mul or srctype == AST::Expr::Add ) {
+    if( srctype == AST::Expr::Mul || srctype == AST::Expr::Add ) {
       type = Normal;
     }
-    else if( srctype == AST::Expr::Div or srctype == AST::Expr::Sub ) {
+    else if( srctype == AST::Expr::Div || srctype == AST::Expr::Sub ) {
       type = Innormal;
     }
 
-    if( srctype == AST::Expr::Mul or srctype == AST::Expr::Div ) {
+    if( srctype == AST::Expr::Mul || srctype == AST::Expr::Div ) {
       kind = Term;
     }
-    else if( srctype == AST::Expr::Add or srctype == AST::Expr::Sub ) {
+    else if( srctype == AST::Expr::Add || srctype == AST::Expr::Sub ) {
       kind = Expr;
     }
 
@@ -138,9 +140,9 @@ void AST::Expr::Optimize() {
   Expr* cur = &ret;
   // get expr type
   ExprType exprtype;
-  if( type == Add or type == Sub )
+  if( type == Add || type == Sub )
     exprtype.type = ExprType::Expr;
-  else if( type == Mul or type == Div )
+  else if( type == Mul || type == Div )
     exprtype.type = ExprType::Term;
   else
     exprtype.type = ExprType::Factor;
