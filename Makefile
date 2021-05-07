@@ -10,7 +10,7 @@ CXXFILES	= $(wildcard $(SRCDIR)/*.cpp)
 OFILES		= $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(CXXFILES)))
 
 CXXFLAGS	= -O1 -std=gnu++17 -Wno-psabi
-LDFLAGS		= -Wl,--gc-sections,-s
+LDFLAGS		= -Wl,--gc-sections
 
 ifeq ($(OS), Windows_NT)
   EXT  = .exe
