@@ -148,9 +148,20 @@ Object AST_Runner::Function(AST::Callfunc* ast)
   // to_string
   else if( name == "to_string" )
   {
+    if( args.size() != 1 )
+      Program::Error(*ast->token, "no matching args");
+
+    auto str = args[0].to_string();
+
     ret.type = Object::Array;
 
-    
+    for( auto&& c : str )
+    {
+      Object ch;
+      ch.type = Object::Char;
+      ch.v_char = c;
+      ret.list.emplace_back(ch);
+    }
   }
 
 
