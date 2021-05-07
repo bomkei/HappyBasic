@@ -18,7 +18,6 @@ std::string AST::Expr::ToString() const
       
       for( int i = 0; i < elems.size(); i++ )
       {
-        alart;
         s += elems[i]->ToString();
         if( i < elems.size() - 1 ) s += ", ";
       }
