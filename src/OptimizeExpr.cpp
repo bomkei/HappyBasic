@@ -158,6 +158,11 @@ void AST::Expr::Optimize(){
         else imm_denom_dbl*=obj.as<double>();
       }
     }
+
+    // imm
+    int gcd=std::gcd(imm_denom_int, imm_numer_int);
+    double imm_numer=imm_numer_dbl*(double)imm_numer_int/gcd;
+    double imm_denom=imm_denom_dbl*(double)imm_denom_int/gcd;
   }
 
   // reconstructing Expr (to ret)
