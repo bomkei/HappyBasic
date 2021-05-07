@@ -105,32 +105,38 @@ Object AST_Runner::Expr(AST::Expr* ast)
       {
         case AST::Expr::Add:
           left.v_int += right.v_int;
+          left.v_char += right.v_char;
           left.v_float += right.v_float;
           break;
 
         case AST::Expr::Sub:
           left.v_int -= right.v_int;
+          left.v_char -= right.v_char;
           left.v_float -= right.v_float;
           break;
 
         case AST::Expr::Mul:
           left.v_int *= right.v_int;
+          left.v_char *= right.v_char;
           left.v_float *= right.v_float;
           break;
 
         case AST::Expr::Div:
           left.v_int /= right.v_int;
+          left.v_char /= right.v_char;
           left.v_float /= right.v_float;
           break;
 
         case AST::Expr::Shift:
           left.v_int <<= right.v_int;
+          left.v_char <<= right.v_char;
           break;
 
         case AST::Expr::Bigger:
           switch( left.type ) {
             case Object::Int: left.v_int = left.v_int > right.v_int; break;
             case Object::Char: left.v_int = left.v_char > right.v_char; break;
+            case Object::Float: left.v_int = left.v_float > right.v_float; break;
           }
           left.type = Object::Int;
           break;
@@ -139,6 +145,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
           switch( left.type ) {
             case Object::Int: left.v_int = left.v_int >= right.v_int; break;
             case Object::Char: left.v_int = left.v_char >= right.v_char; break;
+            case Object::Float: left.v_int = left.v_float >= right.v_float; break;
           }
           left.type = Object::Int;
           break;
@@ -147,6 +154,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
           switch( left.type ) {
             case Object::Int: left.v_int = left.v_int == right.v_int; break;
             case Object::Char: left.v_int = left.v_char == right.v_char; break;
+            case Object::Float: left.v_int = left.v_float == right.v_float; break;
           }
           left.type = Object::Int;
           break;
@@ -155,6 +163,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
           switch( left.type ) {
             case Object::Int: left.v_int = left.v_int != right.v_int; break;
             case Object::Char: left.v_int = left.v_char != right.v_char; break;
+            case Object::Float: left.v_int = left.v_float != right.v_float; break;
           }
           left.type = Object::Int;
           break;
