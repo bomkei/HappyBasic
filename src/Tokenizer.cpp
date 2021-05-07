@@ -155,25 +155,10 @@ std::vector<Token> Tokenizer::Tokenize()
       tok.type = Token::Ident;
 
       while( check() && (isalnum(c = peek()) || c == '_') )
+      {
+        if( c >= 'A' && c <= 'Z' ) c += 0x20;
+
         tok.str += c, next();
-
-      auto find = find_vector(
-        ReservedWords,
-        [] (std::pair<std::string, int>& item, std::string s) {
-          return std::get<0>(item) == s;
-        },
-        tok.str
-          );
-
-      if( find != -1 )
-      {
-        tok.type = Token::Number;
-        tok.obj.v_int = std::get<1>(ReservedWords[find]);
-      }
-      else
-      {
-        for( auto&& c : tok.str )
-          if( c >= 'A' && c <= 'Z' ) c += 0x20;
       }
 
       tok.obj.name = tok.str;
