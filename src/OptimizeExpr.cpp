@@ -107,7 +107,7 @@ void AST::Expr::Optimize(){
   if(type==Add or type==Sub)
     exprtype.type=ExprType::Expr;
   else if(type==Mul or type==Div)
-    exprtype.type=ExprType::Expr;
+    exprtype.type=ExprType::Term;
   else
     exprtype.type=ExprType::Factor;
   
