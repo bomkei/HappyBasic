@@ -13,17 +13,13 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
   std::vector<Object> old_args;
 
   if( ast->args.size() != fun->args.size() )
-  {
     Program::Error(*fun->token, "no mathing arguments");
-  }
 
   for( auto&& i : ast->args )
     old_args.emplace_back(i->token->obj);
 
   for( size_t i = 0; i < fun->args.size(); i++ )
-  {
     ast->args[i]->token->obj = AST_Runner::Expr(fun->args[i]);
-  }
 
   Program::instance->cur_func = ast;
   
@@ -40,9 +36,7 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
   AST_Runner::Stmt(ast->code);
 
   for( size_t i = 0; i < old_args.size(); i++ )
-  {
     ast->args[i]->token->obj = old_args[i];
-  }
 
   AST_Runner::ReturnValue = retp;
   AST_Runner::FuncReturned = flag;
