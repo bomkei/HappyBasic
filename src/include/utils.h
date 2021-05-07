@@ -44,7 +44,7 @@ namespace Utils
   template <class T>
   T Random(T begin, T end)
   {
-    return rand() % (end - begin);
+    return begin + rand() % (end - begin);
   }
 
   template <class T>
@@ -75,5 +75,7 @@ namespace Utils
           break;
       }
     }
+
+    return str;
   }
 };

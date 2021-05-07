@@ -28,7 +28,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
         ret.list.emplace_back(obj);
       }
 
-      return ret;
+      break;
 
     case 2:
       if( args[0].type != Object::Int )
@@ -43,8 +43,8 @@ Object AST_Runner::Function(AST::Callfunc* ast)
         obj.v_int = i;
         ret.list.emplace_back(obj);
       }
-
-      return ret;
+      
+      break;
 
     default:
       Program::Error(*ast->token, "no matching args");
@@ -62,9 +62,9 @@ Object AST_Runner::Function(AST::Callfunc* ast)
       Program::Error(*(ast->args[0]->token), "this is not array");
 
     ret.v_int = args[0].list.size();
-    return ret;
   }
 
+  //
   // random
   if( name == "random" )
   {
@@ -82,10 +82,32 @@ Object AST_Runner::Function(AST::Callfunc* ast)
       ret.v_int = begin;
     else
       ret.v_int = Utils::Random(begin, end);
-
-    return ret;
   }
 
+  //
+  // randomstr
+  if( name == "randomstr" )
+  {
+    if( args.size() > 1 )
+      Program::Error(*ast->token, "no matching args");
 
-  return AST_Runner::UserFunc(ast);
+    auto len = args.size() ? args[0].v_int : 30;
+
+    auto str = Utils::GetRandomStr<std::string>(len);
+
+    ret.type = Object::Array;
+
+    for( auto&& c : str )
+    {
+      Object ch;
+      ch.type = Object::Char;
+      ch.v_char = c;
+      ret.list.emplace_back(ch);
+    }
+  }
+  else
+    return AST_Runner::UserFunc(ast);
+  
+
+  return ret;
 }
