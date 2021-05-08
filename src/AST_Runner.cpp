@@ -20,7 +20,7 @@ void ObjectAdjuster(Object& L, Object& R)
       else if( obj->type == Object::Char )
         obj->v_float = obj->v_char;
 
-      obj->type = Object::Char;
+      obj->type = Object::Float;
     }
   }
   else if( L.type != R.type )
@@ -132,6 +132,12 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
             break;
           }
+          
+          if( !left.eval() || !right.eval() )
+          {
+            left.v_int = 0;
+            break;
+          }
 
           left.v_int *= right.v_int;
           left.v_char *= right.v_char;
@@ -139,6 +145,16 @@ Object AST_Runner::Expr(AST::Expr* ast)
           break;
 
         case AST::Expr::Div:
+          std::cout << left.to_string() << '\n';
+          std::cout << right.to_string() << '\n';
+          
+          if( !right.eval() )
+          {
+            Program::Error(*ast->token, "cant division with zero");
+          }
+          else if( !left.eval() )
+            break;
+
           left.v_int /= right.v_int;
           left.v_char /= right.v_char;
           left.v_float /= right.v_float;
