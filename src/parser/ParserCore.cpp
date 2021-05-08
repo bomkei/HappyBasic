@@ -1,7 +1,18 @@
 #include "../main.h"
 
-ParserCore::ParserCore(std::vector<Object>& variables, std::vector<AST::Function*>& functions)
-  :variables(variables), functions(functions), in_function(false), func_args(nullptr) { }
+ParserCore::ParserCore(
+  std::vector<Object>& variables,
+  std::vector<AST::Function*>& functions,
+  std::vector<AST::Class*>& classes
+)
+  :variables(variables),
+  functions(functions),
+  classes(classes),
+  in_function(false),
+  func_args(nullptr)
+{
+
+}
 
 Token& ParserCore::get_tok()
 {
