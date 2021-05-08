@@ -1,4 +1,4 @@
-#include "main.h"
+#include "../main.h"
 
 ParserCore::ParserCore(std::vector<Object>& variables, std::vector<AST::Function*>& functions)
   :variables(variables), functions(functions), in_function(false), func_args(nullptr) { }
