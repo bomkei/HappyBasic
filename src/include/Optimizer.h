@@ -1,9 +1,7 @@
 #pragma once
 
-class Optimizer
+namespace Optimizer
 {
-public:
-
   struct Term
   {
     enum Sign
@@ -15,11 +13,18 @@ public:
     Sign sign;
     AST::Expr* term;
 
-    Term(AST::Expr*);
+    Term(AST::Expr* t)
+      :sign(Sign::Plus), term(t)
+    {
+      
+    }
   };
 
-  static bool ReduceFactors(AST::Expr* expr);
-  static std::vector<Term> GetTermsFromExpr(AST::Expr* expr);
+
+  std::vector<Term> GetTerms(AST::Expr* expr);
+
+  std::vector<std::string> GetAlphabets(AST::Expr*);
 
 
-};
+
+}
