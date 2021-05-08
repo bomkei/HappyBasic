@@ -221,7 +221,6 @@ void AST::Expr::Optimize()
         it++;
         continue;
       }
-      parts.erase(it);
 
       auto obj = it->expr->token->obj;
       if( it->type == TypedExpr::Innormal )
@@ -238,6 +237,7 @@ void AST::Expr::Optimize()
         else
           imm_denom_dbl *= obj.as<double>();
       }
+      parts.erase(it);
     }
 
     // imm
