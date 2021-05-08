@@ -38,9 +38,17 @@ public:
   AST::Expr* Equal();
   AST::Expr* Expr();
 
-  AST::Stmt* Stmt();
+  AST::Stmt* If();
+  AST::Stmt* For();
+  AST::Stmt* While();
+  AST::Stmt* DoWhile();
+  AST::Stmt* Define();
+  AST::Stmt* Class();
+  AST::Stmt* Statements();
 
-  AST::Stmt* Parse();
+  //AST::Stmt* Stmt();
+
+  //AST::Stmt* Parse();
 
 
 };

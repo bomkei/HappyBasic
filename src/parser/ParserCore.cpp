@@ -295,7 +295,7 @@ AST::Expr* ParserCore::Expr()
 
 void Debug(AST::Expr*);
 
-AST::Stmt* ParserCore::Stmt()
+AST::Stmt* ParserCore::If()
 {
   //
   // if
@@ -366,7 +366,11 @@ AST::Stmt* ParserCore::Stmt()
     return ast;
   }
 
+  return nullptr;
+}
 
+AST::Stmt* ParserCore::For()
+{
   //
   // for
   if( consume("for") )
@@ -408,6 +412,11 @@ AST::Stmt* ParserCore::Stmt()
     return ast;
   }
 
+  return nullptr;
+}
+
+AST::Stmt* ParserCore::While()
+{
   //
   // while
   if( consume("while") )
@@ -434,7 +443,7 @@ AST::Stmt* ParserCore::Stmt()
 
     if( !closed )
       Program::Error(*tk, "not closed");
-    
+
     auto ast = new AST::While;
     ast->token = tk;
     ast->cond = cond;
@@ -444,6 +453,16 @@ AST::Stmt* ParserCore::Stmt()
     return ast;
   }
 
+  return nullptr;
+}
+
+AST::Stmt* ParserCore::DoWhile()
+{
+  // todo
+}
+
+AST::Stmt* ParserCore::Define()
+{
   //
   // def
   if( consume("def") )
@@ -472,7 +491,7 @@ AST::Stmt* ParserCore::Stmt()
       {
         if( get_tok().type != Token::Ident )
           Program::Error(get_tok(), "syntax error");
-        
+
         auto prm = new AST::Expr;
         prm->type = AST::Expr::Param;
         prm->token = &get_tok();
@@ -518,6 +537,17 @@ AST::Stmt* ParserCore::Stmt()
     return ast;
   }
 
+  return nullptr;
+}
+
+AST::Stmt* ParserCore::Class()
+{
+
+}
+
+
+AST::Stmt* ParserCore::Statements()
+{
   //
   // return
   if( consume("return") )
@@ -591,26 +621,7 @@ AST::Stmt* ParserCore::Stmt()
     } while( consume(",") );
     expect("\n");
   }
-
-  //alart;
-  //Debug(ast->args[0]);
-
-  //alart;
-
-  //std::cout << ast->args[0]->equal(*ast->args[1]) << '\n';
   
   return ast;
 }
 
-AST::Stmt* ParserCore::Parse()
-{
-  auto ast = new AST::Block;
-
-  while( check() )
-  {
-    ast->list.emplace_back(Stmt());
-  }
-
-  //alart;
-  return ast;
-}
