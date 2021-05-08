@@ -308,9 +308,14 @@ AST::Expr* ParserCore::Equal()
 
 void Debug(AST::Expr*);
 
+AST::Expr* ParserCore::Assign()
+{
+
+}
+
 AST::Expr* ParserCore::Expr()
 {
-  auto expr = Equal();
+  auto expr = Assign();
 
   //Debug(expr);
   //exit(10);
