@@ -42,7 +42,7 @@ namespace Optimizer
   void RemoveAlphabet(AST::Expr* expr, std::string const& name);
 
   std::vector<Term> GetTerms(AST::Expr* expr);
-  std::vector<std::string> GetAlphabets(AST::Expr*);
+  std::vector<Alphabet> GetAlphabets(AST::Expr*);
 
 
 

@@ -61,24 +61,39 @@ namespace Optimizer
     return terms;
   }
 
-  std::vector<std::string> GetAlphabets(AST::Expr* expr)
+  std::vector<Alphabet> GetAlphabets(AST::Expr* expr)
   {
-    std::vector<std::string> ret;
+    std::vector<Alphabet> ret;
 
     if( !expr )
       return ret;
 
-    if( expr->type == AST::Expr::Variable )
+    if( expr->right->type == AST::Expr::Variable )
     {
-      ret.emplace_back(expr->token->str);
+      Alphabet a;
+      
+      if( expr->type == AST::Expr::Mul )
+        a.type = Alphabet::Type::Mul;
+      else
+        a.type = Alphabet::Type::Div;
+
+      a.name = expr->right->token->str;
+      ret.emplace_back(a);
+    }
+    else if( expr->type == AST::Expr::Variable )
+    {
+      ret.push_back(expr->token->str);
       return ret;
     }
 
     auto left = GetAlphabets(expr->left);
     auto right = GetAlphabets(expr->right);
 
-    for( auto&& i : left ) ret.emplace_back(i);
-    for( auto&& i : right ) ret.emplace_back(i);
+    for( auto&& t : left )
+      ret.emplace_back(t);
+
+    for( auto&& t : right )
+      ret.emplace_back(t);
 
     return ret;
   }
