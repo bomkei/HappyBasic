@@ -23,7 +23,8 @@ namespace AST
       Callfunc,
       Array,
       IndexRef,
-      Param
+      Param,
+      New
     };
 
     Type type;
