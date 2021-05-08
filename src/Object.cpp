@@ -13,7 +13,7 @@ Object& Object::operator = (Object const& obj)
   return *this;
 }
 
-std::string Object::to_string() const
+std::string Object::ToString() const
 {
   switch( type )
   {
@@ -30,7 +30,7 @@ std::string Object::to_string() const
     {
       std::string s = "";
 
-      if( is_string() )
+      if( IsString() )
       {
         for( auto&& c : list )
           s += c.v_char;
@@ -40,7 +40,7 @@ std::string Object::to_string() const
 
       for( int i = 0; i < list.size(); i++ )
       {
-        s += list[i].to_string();
+        s += list[i].ToString();
         if( i < list.size() - 1 ) s += ", ";
       }
 
@@ -51,7 +51,7 @@ std::string Object::to_string() const
   return "";
 }
 
-bool Object::is_string() const
+bool Object::IsString() const
 {
   if( type != Array )
     return false;
@@ -63,7 +63,7 @@ bool Object::is_string() const
   return list.size() != 0;
 }
 
-bool Object::eval() const
+bool Object::Eval() const
 {
   switch( type )
   {
@@ -83,7 +83,7 @@ bool Object::eval() const
   return false;
 }
 
-bool Object::equal(Object const& obj) const
+bool Object::Equal(Object const& obj) const
 {
   if( obj.type != type )
     return false;
@@ -96,10 +96,14 @@ bool Object::equal(Object const& obj) const
     case Int: return obj.v_int == v_int;
     case Float: return obj.v_float == v_float;
     case Char: return obj.v_char == v_char;
+
     case Array:
-      if( obj.list.size() != list.size() ) return false;
+      if( obj.list.size() != list.size() )
+        return false;
+      
       for( int i = 0; i < obj.list.size(); i++ )
-        if( !obj.list[i].equal(list[i]) ) return false;
+        if( !obj.list[i].Equal(list[i]) ) return false;
+      
       return true;
   }
 

@@ -53,7 +53,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
     }
 
     case AST::Expr::Callfunc:
-      return Function(reinterpret_cast<AST::Callfunc*>(ast));
+      return Function((AST::Callfunc*)ast);
 
     case AST::Expr::Array:
     {
@@ -90,6 +90,19 @@ Object AST_Runner::Expr(AST::Expr* ast)
       auto& p = ast->token->obj;
       p.var_ptr = &p;
       return p;
+    }
+
+    case AST::Expr::Assign:
+    {
+      auto dest = Expr(ast->left);
+      auto src = Expr(ast->right);
+
+      if( !dest.var_ptr )
+        Program::Error(*ast->token, "cannot assign to rvalue");
+
+      *dest.var_ptr = src;
+
+      return src;
     }
 
     default:
@@ -133,7 +146,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
             break;
           }
           
-          if( !left.eval() || !right.eval() )
+          if( !left.Eval() || !right.Eval() )
           {
             left.v_int = 0;
             break;
@@ -145,11 +158,11 @@ Object AST_Runner::Expr(AST::Expr* ast)
           break;
 
         case AST::Expr::Div:
-          if( !right.eval() )
+          if( !right.Eval() )
           {
             Program::Error(*ast->token, "cant division with zero");
           }
-          else if( !left.eval() )
+          else if( !left.Eval() )
             break;
 
           left.v_int /= right.v_int;
@@ -238,20 +251,6 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       break;
     }
 
-    case AST::Stmt::Assign:
-    {
-      auto var = Expr(((AST::Assign*)ast)->var);
-      auto value = Expr(((AST::Assign*)ast)->value);
-
-      return *(var.var_ptr) = value;
-    }
-
-    case AST::Stmt::Instruction:
-    {
-      Instruction((AST::Instruction*)(ast));
-      break;
-    }
-    
     case AST::Stmt::Break:
       if( !LoopBreaked )
         Program::Error(*ast->token, "cannot use 'break' here");
@@ -270,7 +269,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       if( !ReturnValue )
         Program::Error(*ast->token, "cannot use 'return' here");
 
-      *ReturnValue = Expr(((AST::Return*)ast)->expr);
+      *ReturnValue = Expr(ast->expr);
       *FuncReturned = true;
       break;
 
@@ -280,7 +279,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       {
         auto cond = Expr(std::get<0>(pair));
 
-        if( cond.eval() )
+        if( cond.Eval() )
           return Stmt(std::get<1>(pair));
       }
 
@@ -357,7 +356,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       LoopBreaked = &flag1;
       LoopContinued = &flag2;
 
-      while( Expr(while_ast->cond).eval() )
+      while( Expr(while_ast->cond).Eval() )
       {
         *LoopBreaked = *LoopContinued = false;
         Stmt(while_ast->code);
@@ -367,7 +366,6 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
         if( FuncReturned && *FuncReturned )
           break;
-
       }
 
       // restore pointers
@@ -377,6 +375,8 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       break;
     }
 
+    default:
+      return Expr(ast->expr);
   }
 
   if( ReturnValue )
@@ -384,6 +384,3 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
   return { };
 }
-
-
-

@@ -40,6 +40,7 @@ public:
   AST::Expr* Shift();
   AST::Expr* Compare();
   AST::Expr* Equal();
+  AST::Expr* Assign();
   AST::Expr* Expr();
 
   AST::If* If();

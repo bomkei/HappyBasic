@@ -18,6 +18,8 @@ namespace AST
       Equal,
       NotEqual,
 
+      Assign,
+
       Immidiate,
       Variable,
       Callfunc,
@@ -84,36 +86,20 @@ namespace AST
       If,
       For,
       While,
-      Assign,
-      Instruction,
       Block,
       Function,
       Break,
       Continue,
       Return,
-      Class
+      Class,
+      Default
     };
 
-    Type type;
-    Token* token;
+    Type type = Default;
+    Token* token = nullptr;
+    Expr* expr = nullptr;
 
     std::string ToString(int tab = 0) const;
-
-    Stmt(Type type = Block)
-      :type(type), token(nullptr)
-    {
-    }
-  };
-
-  class Return : public Stmt
-  {
-  public:
-    AST::Expr* expr;
-
-    Return()
-    {
-      type = Type::Return;
-    }
   };
 
   class Block : public Stmt
@@ -166,30 +152,6 @@ namespace AST
     }
   };
 
-  class Assign : public Stmt
-  {
-  public:
-    Expr* var;
-    Expr* value;
-
-    Assign()
-    {
-      type = Type::Assign;
-    }
-  };
-
-  class Instruction : public Stmt
-  {
-  public:
-    std::string name;
-    std::vector<AST::Expr*> args;
-
-    Instruction()
-    {
-      type = Type::Instruction;
-    }
-  };
-  
   class Function : public Stmt
   {
   public:
@@ -207,8 +169,7 @@ namespace AST
   {
   public:
     std::string name;
-    std::vector<AST::Expr*> variables;
-    std::vector<AST::Function*> functions;
+    std::vector<Stmt*> member_list;
 
     Class()
     {
@@ -219,4 +180,5 @@ namespace AST
 
 }
 
-std::ostream& operator<<(std::ostream& ss, const AST::Expr &expr);
+std::ostream& operator << (std::ostream& ss, const AST::Expr& expr);
+
