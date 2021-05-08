@@ -178,4 +178,5 @@ namespace AST
 
 }
 
-std::ostream& operator<<(std::ostream& ss, const AST::Expr &expr);
+std::ostream& operator << (std::ostream& ss, const AST::Expr& expr);
+
