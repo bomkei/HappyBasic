@@ -189,6 +189,7 @@ void AST::Expr::Optimize()
     double immidiate = 0;
     for( auto it = parts.begin(); it != parts.end(); )
     {
+      it->expr->Optimize();
       if( it->expr->type == Immidiate )
       {
         immidiate += it->expr->token->obj.v_int * it->getSign();
