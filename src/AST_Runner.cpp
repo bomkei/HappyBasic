@@ -94,8 +94,6 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
     case AST::Expr::Assign:
     {
-      alart;
-
       auto dest = Expr(ast->left);
       auto src = Expr(ast->right);
 

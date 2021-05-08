@@ -10,8 +10,18 @@ Object AST_Runner::Function(AST::Callfunc* ast)
     args.emplace_back(Expr(i));
 
   //
+  // print
+  if( name == "print" )
+  {
+    for( auto&& i : args )
+      std::cout << i.ToString();
+
+    std::cout << '\n';
+  }
+
+  //
   // range
-  if( name == "range" )
+  else if( name == "range" )
   {
     ret.type = Object::Array;
 
