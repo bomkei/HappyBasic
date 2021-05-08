@@ -40,11 +40,13 @@ namespace Optimizer
     bool operator == (Alphabet const&);
   };
 
-  bool IsHaveAlphabet(AST::Expr* expr, std::string const& name);
-  void RemoveAlphabet(AST::Expr* expr, std::string const& name);
+  bool IsHaveAlphabet(AST::Expr*, Alphabet const&);
+  void RemoveAlphabet(AST::Expr*, std::string const&);
 
   std::vector<Term> GetTerms(AST::Expr* expr);
   std::vector<Alphabet> GetAlphabets(AST::Expr*);
+
+  AST::Expr* ConstructAST_FromTerms(std::vector<Term> const&);
 
 }
 
