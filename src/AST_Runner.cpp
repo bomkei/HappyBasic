@@ -53,7 +53,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
     }
 
     case AST::Expr::Callfunc:
-      return Function(reinterpret_cast<AST::Callfunc*>(ast));
+      return Function((AST::Callfunc*)ast);
 
     case AST::Expr::Array:
     {
