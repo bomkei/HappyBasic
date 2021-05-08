@@ -19,6 +19,10 @@ class msg(commands.Cog):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
         _ = await process_output(p, m, msg, ctx)
+        p = subprocess.Popen(["chmod","a+x","./plugin/BASIC_lang/HappyBasic"],
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        _ = p.communicate()[0]
         await ctx.send("ENDED.")
     
     @commands.command(aliases=["basic"])
@@ -33,14 +37,8 @@ class msg(commands.Cog):
         
         with open('./plugin/BASIC_lang/test.txt', 'w') as f:
             f.write(program)
-
-        p = subprocess.Popen(["make","-C","./plugin/BASIC_lang/"],
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-        p = subprocess.Popen(["chmod","a+x","./plugin/BASIC_lang/HappyBasic"],
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-        p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic"],
+        
+        p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic","./plugin/BASIC_lang/test.txt"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         msg,m = await process_output(p, await ctx.send("RUN DEBUG"), "```basic\n", ctx)
