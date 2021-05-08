@@ -14,12 +14,15 @@ AST::Stmt* ParserCore::Statements()
   if( match("do") )
     return DoWhile();
 
+  alart;
   if( match("def") )
     return Define();
 
+  alart;
   if( match("class") )
     return Class();
 
+  alart;
 
   //
   // return
@@ -28,16 +31,28 @@ AST::Stmt* ParserCore::Statements()
     auto ast = new AST::Return;
     ast->token = csmtok;
 
+    alart;
+
     if( !consume("\n") )
     {
+      alart;
       ast->expr = Expr();
+
+      alart;
       expect("\n");
     }
     else
-      ast->expr = nullptr;
+    {
 
+      alart;
+      ast->expr = nullptr;
+    }
+
+    alart;
     return ast;
   }
+
+  alart;
 
   //
   // break
@@ -49,6 +64,9 @@ AST::Stmt* ParserCore::Statements()
     return ast;
   }
 
+
+  alart;
+
   //
   // continue
   if( consume("continue") )
@@ -59,6 +77,7 @@ AST::Stmt* ParserCore::Statements()
     return ast;
   }
 
+  alart;
 
   auto& tok = get_tok();
 
@@ -77,14 +96,19 @@ AST::Stmt* ParserCore::Statements()
     ast->value = Expr();
     expect("\n");
 
+    alart;
     return ast;
   }
+
+  alart;
 
   // instruction
   auto ast = new AST::Instruction;
   ast->name = tok.str;
   ast->token = &tok;
   next();
+
+  alart;
 
   if( !consume("\n") )
   {
@@ -95,6 +119,7 @@ AST::Stmt* ParserCore::Statements()
     expect("\n");
   }
 
+  alart;
   return ast;
 }
 

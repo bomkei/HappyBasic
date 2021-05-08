@@ -67,7 +67,9 @@ AST::Function* ParserCore::Define()
     auto ast = new AST::Function;
     ast->token = tk;
     ast->name = name;
-    ast->args = std::move(args);
+
+    if( args.size() )
+      ast->args = args;
 
     ast->code = new AST::Block;
     ast->code->list = std::move(block);
@@ -75,6 +77,8 @@ AST::Function* ParserCore::Define()
     functions.emplace_back(ast);
     return ast;
   }
+
+  alart;
 
   return nullptr;
 }

@@ -40,12 +40,16 @@ int main(int argc, char** argv)
 
   Program prg;
 
+  alart;
   prg.OpenFile();
 
+  alart;
   prg.Tokenize();
   
+  alart;
   prg.Parse();
 
+  alart;
   auto res = prg.Run();
 
 
