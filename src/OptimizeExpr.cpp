@@ -244,8 +244,7 @@ void AST::Expr::Optimize()
     int gcd = std::gcd(imm_denom_int, imm_numer_int);
     double imm_numer = imm_numer_dbl * (double)imm_numer_int / gcd;
     double imm_denom = imm_denom_dbl * (double)imm_denom_int / gcd;
-
-    if( imm_numer != 1 )
+    if( imm_numer != 1.0 )
     {
       cur->right = new Expr();
       cur->right->token = new Token();
@@ -254,7 +253,7 @@ void AST::Expr::Optimize()
       cur->type = Expr::Mul;
       cur = cur->left = new Expr();
     }
-    if( imm_denom != 1 )
+    if( imm_denom != 1.0 )
     {
       cur->right = new Expr();
       cur->right->token = new Token();
