@@ -27,7 +27,7 @@ public:
 
   ParserCore(
     std::vector<Object>& variables,
-    std::vector<AST::Function*>& functions
+    std::vector<AST::Function*>& functions,
     std::vector<AST::Class*>& classes
   );
 
