@@ -310,7 +310,14 @@ void Debug(AST::Expr*);
 
 AST::Expr* ParserCore::Assign()
 {
+  auto x = Equal();
 
+  if( consume("=") )
+  {
+    x = new AST::Expr(AST::Expr::Assign, x, Assign(), csmtok);
+  }
+
+  return x;
 }
 
 AST::Expr* ParserCore::Expr()
