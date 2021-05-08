@@ -145,9 +145,6 @@ Object AST_Runner::Expr(AST::Expr* ast)
           break;
 
         case AST::Expr::Div:
-          std::cout << left.to_string() << '\n';
-          std::cout << right.to_string() << '\n';
-          
           if( !right.eval() )
           {
             Program::Error(*ast->token, "cant division with zero");
