@@ -251,20 +251,6 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       break;
     }
 
-    //case AST::Stmt::Assign:
-    //{
-    //  auto var = Expr(((AST::Assign*)ast)->var);
-    //  auto value = Expr(((AST::Assign*)ast)->value);
-
-    //  return *(var.var_ptr) = value;
-    //}
-
-    //case AST::Stmt::Instruction:
-    //{
-    //  Instruction((AST::Instruction*)(ast));
-    //  break;
-    //}
-
     case AST::Stmt::Break:
       if( !LoopBreaked )
         Program::Error(*ast->token, "cannot use 'break' here");
@@ -380,7 +366,6 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
         if( FuncReturned && *FuncReturned )
           break;
-
       }
 
       // restore pointers
@@ -399,6 +384,3 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
   return { };
 }
-
-
-
