@@ -29,7 +29,6 @@ struct Object
 
   template<typename T>
   T as(){
-    T ret;
     switch( type )
     {
     case Int:
