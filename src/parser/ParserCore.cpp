@@ -314,7 +314,8 @@ AST::Expr* ParserCore::Assign()
 
   if( consume("=") )
   {
-    x = new AST::Expr(AST::Expr::Assign, x, Assign(), csmtok);
+    auto tk = csmtok;
+    x = new AST::Expr(AST::Expr::Assign, x, Assign(), tk);
   }
 
   return x;
