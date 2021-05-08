@@ -27,10 +27,10 @@ class msg(commands.Cog):
     
     @commands.command(aliases=["basic"])
     async def runbasic(self, ctx):
-        if ctx.message.content[:11] != ',basic\n```\n':
+        if ctx.message.content.splitlines()[1] != '```':
             return
         
-        if ctx.message.content[-3:] != '```':
+        if ctx.message.content.splitlines()[-1] != '```':
             return
         
         program = ctx.message.content[11:-3]
@@ -38,7 +38,12 @@ class msg(commands.Cog):
         with open('./plugin/BASIC_lang/test.txt', 'w') as f:
             f.write(program)
         
-        p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic","./plugin/BASIC_lang/test.txt"],
+        if ctx.message.content.splitlines()[0].split(" ")[-1] == "safety":
+            p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic","-safety","./plugin/BASIC_lang/test.txt"],
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        else:
+            p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic","./plugin/BASIC_lang/test.txt"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         msg,m = await process_output(p, await ctx.send("RUN DEBUG"), "```basic\n", ctx)
