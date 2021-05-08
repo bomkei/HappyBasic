@@ -130,7 +130,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
       {
         try
         {
-          auto str = args[0].to_string();
+          auto str = args[0].ToString();
           args[0].v_int = std::stoi(str, nullptr, str.find("0x") == std::string::npos ? 10 : 16);
         }
         catch( ... )
@@ -151,7 +151,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
     if( args.size() != 1 )
       Program::Error(*ast->token, "no matching args");
 
-    auto str = args[0].to_string();
+    auto str = args[0].ToString();
 
     ret.type = Object::Array;
 

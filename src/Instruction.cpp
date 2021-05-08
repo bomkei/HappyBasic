@@ -18,7 +18,7 @@ void AST_Runner::Instruction(AST::Instruction* ast)
   if( name == "print" )
   {
     for( auto&& i : args )
-      std::cout << i.to_string();
+      std::cout << i.ToString();
 
     std::cout << '\n';
     return;

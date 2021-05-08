@@ -133,7 +133,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
             break;
           }
           
-          if( !left.eval() || !right.eval() )
+          if( !left.Eval() || !right.Eval() )
           {
             left.v_int = 0;
             break;
@@ -145,11 +145,11 @@ Object AST_Runner::Expr(AST::Expr* ast)
           break;
 
         case AST::Expr::Div:
-          if( !right.eval() )
+          if( !right.Eval() )
           {
             Program::Error(*ast->token, "cant division with zero");
           }
-          else if( !left.eval() )
+          else if( !left.Eval() )
             break;
 
           left.v_int /= right.v_int;
@@ -280,7 +280,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       {
         auto cond = Expr(std::get<0>(pair));
 
-        if( cond.eval() )
+        if( cond.Eval() )
           return Stmt(std::get<1>(pair));
       }
 
@@ -357,7 +357,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       LoopBreaked = &flag1;
       LoopContinued = &flag2;
 
-      while( Expr(while_ast->cond).eval() )
+      while( Expr(while_ast->cond).Eval() )
       {
         *LoopBreaked = *LoopContinued = false;
         Stmt(while_ast->code);

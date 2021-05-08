@@ -16,7 +16,7 @@ std::string AST::Expr::ToString() const
   switch( type )
   {
     case Immidiate:
-      return token->obj.to_string();
+      return token->obj.ToString();
 
     case Variable:
       return token->str;
@@ -126,7 +126,7 @@ bool AST::Expr::equal(AST::Expr const& ast) const
   switch( type )
   {
     case Immidiate:
-      return token->obj.equal(ast.token->obj);
+      return token->obj.Equal(ast.token->obj);
 
     case Variable:
       return varIndex == ast.varIndex;

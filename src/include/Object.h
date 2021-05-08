@@ -22,10 +22,10 @@ struct Object
 
   Object& operator = (Object const& obj);
 
-  std::string to_string() const;
-  bool is_string() const;
-  bool eval() const;
-  bool equal(Object const&) const;
+  std::string ToString() const;
+  bool IsString() const;
+  bool Eval() const;
+  bool Equal(Object const&) const;
 
   template<typename T>
   T as(){
