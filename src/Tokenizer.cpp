@@ -254,7 +254,5 @@ std::vector<Token> Tokenizer::Tokenize()
     }
   }
 
-  alart;
-
   return tokens;
 }

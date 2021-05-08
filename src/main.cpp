@@ -20,7 +20,6 @@ int main(int argc, char** argv)
     else if( Options::FileName.empty() )
     {
       Options::FileName = arg;
-      alart;
     }
     else
     {
@@ -40,16 +39,12 @@ int main(int argc, char** argv)
 
   Program prg;
 
-  alart;
   prg.OpenFile();
 
-  alart;
   prg.Tokenize();
-  
-  alart;
+ 
   prg.Parse();
 
-  alart;
   auto res = prg.Run();
 
 

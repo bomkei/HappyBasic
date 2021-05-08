@@ -319,13 +319,10 @@ AST::Block* ParserCore::Parse()
 {
   auto ast = new AST::Block;
 
-  alart;
   while( check() )
   {
-    alart;
     ast->list.emplace_back(Statements());
   }
 
-  alart;
   return ast;
 }
