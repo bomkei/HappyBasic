@@ -24,7 +24,8 @@ AST::Stmt* ParserCore::Statements()
   // return
   if( consume("return") )
   {
-    auto ast = new AST::Return;
+    auto ast = new AST::Stmt;
+    ast->type = AST::Stmt::Return;
     ast->token = csmtok;
 
     if( !consume("\n") )
@@ -46,6 +47,7 @@ AST::Stmt* ParserCore::Statements()
   {
     auto ast = new AST::Stmt;
     ast->type = AST::Stmt::Break;
+    ast->token = csmtok;
     expect("\n");
     return ast;
   }
@@ -56,11 +58,14 @@ AST::Stmt* ParserCore::Statements()
   {
     auto ast = new AST::Stmt;
     ast->type = AST::Stmt::Continue;
+    ast->token = csmtok;
     expect("\n");
     return ast;
   }
 
 
-  return Expr();
+  auto st = new AST::Stmt;
+  st->expr = Expr();
+  return st;
 }
 
