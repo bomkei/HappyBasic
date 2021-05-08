@@ -2,6 +2,41 @@
 
 namespace Optimizer
 {
+  bool IsHaveAlphabet(AST::Expr* expr, std::string const& name)
+  {
+    if( !expr )
+      return false;
+
+    if( expr->type == AST::Expr::Variable )
+      if( expr->token->str == name )
+        return true;
+
+    return IsHaveAlphabet(expr->left, name) || IsHaveAlphabet(expr->right, name);
+  }
+
+  void RemoveAlphabet(AST::Expr* expr, std::string const& name)
+  {
+    if( !expr )
+      return;
+    
+    if( expr->left && expr->right )
+    {
+      if( expr->left->token->str == name )
+      {
+        *expr = *expr->right;
+        //return;
+      }
+      else if( expr->right->token->str == name )
+      {
+        *expr = *expr->left;
+        //return;
+      }
+    }
+
+    RemoveAlphabet(expr->left, name);
+    RemoveAlphabet(expr->right, name);
+  }
+
   std::vector<Term> GetTerms(AST::Expr* expr)
   {
     std::vector<Term> terms;
@@ -66,8 +101,10 @@ void Debug(AST::Expr* expr)
   std::cout << "\nalphabets:\n";
   for( auto&& te : terms )
   {
+    // get alphabets
     auto alpha = Optimizer::GetAlphabets(te.term);
 
+    // add to Alphabets if not exist
     for( auto&& n : alpha )
     {
       if( std::count(Alphabets.begin(), Alphabets.end(), n) == 0 )
@@ -79,6 +116,34 @@ void Debug(AST::Expr* expr)
   {
     std::cout << name << '\n';
   }
+
+  std::cout << "\nreduce alphabets\n";
+
+  for( auto&& name : Alphabets )
+  {
+    //std::vector<AST::Expr*> n_terms;
+
+    for( auto&& term : terms )
+    {
+      if( Optimizer::IsHaveAlphabet(term.term, name) )
+      {
+        //n_terms.emplace_back(term);
+
+        Optimizer::RemoveAlphabet(term.term, name);
+      }
+    }
+
+    
+
+    break;
+  }
+
+  std::cout << "\nterms(after):\n";
+  for( auto&& te : terms )
+  {
+    std::cout << (te.sign == Optimizer::Term::Sign::Plus ? "+" : "-") << " " << te.term->ToString() << '\n';
+  }
+
 
 
   exit(10);

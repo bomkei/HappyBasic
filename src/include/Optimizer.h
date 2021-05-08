@@ -20,9 +20,28 @@ namespace Optimizer
     }
   };
 
+  struct Alphabet
+  {
+    enum Type
+    {
+      Mul,
+      Div
+    };
+
+    Type type;
+    std::string name;
+
+    Alphabet(std::string const& name)
+      :type(Type::Mul), name(name)
+    {
+
+    }
+  };
+
+  bool IsHaveAlphabet(AST::Expr* expr, std::string const& name);
+  void RemoveAlphabet(AST::Expr* expr, std::string const& name);
 
   std::vector<Term> GetTerms(AST::Expr* expr);
-
   std::vector<std::string> GetAlphabets(AST::Expr*);
 
 
