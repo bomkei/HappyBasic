@@ -60,41 +60,7 @@ AST::Stmt* ParserCore::Statements()
     return ast;
   }
 
-  auto& tok = get_tok();
 
-  if( tok.type != Token::Ident )
-    Program::Error(tok, "expect instruction name or variable here");
-
-  // assign
-  if( index + 1 < tokens.size() && tokens[index + 1].str == "=" )
-  {
-    auto ast = new AST::Assign;
-    ast->token = &tok;
-
-    ast->var = Primary();
-    next();
-
-    ast->value = Expr();
-    expect("\n");
-
-    return ast;
-  }
-
-  // instruction
-  auto ast = new AST::Instruction;
-  ast->name = tok.str;
-  ast->token = &tok;
-  next();
-
-  if( !consume("\n") )
-  {
-    do
-    {
-      ast->args.emplace_back(Expr());
-    } while( consume(",") );
-    expect("\n");
-  }
-
-  return ast;
+  return Expr();
 }
 

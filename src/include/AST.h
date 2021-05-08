@@ -84,8 +84,6 @@ namespace AST
       If,
       For,
       While,
-      Assign,
-      Instruction,
       Block,
       Function,
       Break,
@@ -166,30 +164,6 @@ namespace AST
     }
   };
 
-  class Assign : public Stmt
-  {
-  public:
-    Expr* var;
-    Expr* value;
-
-    Assign()
-    {
-      type = Type::Assign;
-    }
-  };
-
-  class Instruction : public Stmt
-  {
-  public:
-    std::string name;
-    std::vector<AST::Expr*> args;
-
-    Instruction()
-    {
-      type = Type::Instruction;
-    }
-  };
-  
   class Function : public Stmt
   {
   public:
