@@ -6,6 +6,7 @@ class Program
 
   std::vector<Object> variables;
   std::vector<AST::Function*> functions;
+  std::vector<AST::Class*> classes;
 
   std::string source;
 
