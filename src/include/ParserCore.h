@@ -4,6 +4,7 @@ class ParserCore
 {
   std::vector<Object>& variables;
   std::vector<AST::Function*>& functions;
+  std::vector<AST::Class*> classes;
 
   std::vector<Token> tokens;
   size_t index;
@@ -24,7 +25,11 @@ class ParserCore
 
 public:
 
-  ParserCore(std::vector<Object>& variables, std::vector<AST::Function*>& functions);
+  ParserCore(
+    std::vector<Object>& variables,
+    std::vector<AST::Function*>& functions
+    std::vector<AST::Class*>& classes
+  );
 
   void Initialize(std::vector<Token>&& tokens);
 

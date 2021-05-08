@@ -1,10 +1,10 @@
 #pragma once
 
-class ParserWrap
+class ParserWrap : public ParserCore
 {
-  ParserCore* core;
-
 public:
+  ParserWrap(std::vector<Object>& variables, std::vector<AST::Function*>& functions);
+
 
 
 };

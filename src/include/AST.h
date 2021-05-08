@@ -191,13 +191,28 @@ namespace AST
   class Function : public Stmt
   {
   public:
-    std::string name;
+    std::string& name;
     std::vector<Expr*> args;
     AST::Block* code;
 
     Function()
+      :name(token->str)
     {
       type = Type::Function;
+    }
+  };
+
+  class Class : public Stmt
+  {
+  public:
+    std::string& name;
+    std::vector<AST::Expr*> variables;
+    std::vector<AST::Function*> functions;
+
+    Class()
+      :name(token->str)
+    {
+
     }
   };
 
