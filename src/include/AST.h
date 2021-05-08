@@ -207,8 +207,7 @@ namespace AST
   {
   public:
     std::string name;
-    std::vector<AST::Expr*> variables;
-    std::vector<AST::Function*> functions;
+    std::vector<Stmt*> member_list;
 
     Class()
     {

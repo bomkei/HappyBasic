@@ -8,6 +8,7 @@ struct Object
     Float,
     Char,
     Array,
+    ClassObj
   };
 
   Type type = Int;
