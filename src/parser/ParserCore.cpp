@@ -304,3 +304,14 @@ AST::Expr* ParserCore::Expr()
   return expr;
 }
 
+AST::Block* ParserCore::Parse()
+{
+  auto ast = new AST::Block;
+
+  while( check() )
+  {
+    ast->list.emplace_back(Statements());
+  }
+
+  return ast;
+}

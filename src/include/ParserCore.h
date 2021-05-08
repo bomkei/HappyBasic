@@ -48,8 +48,9 @@ public:
   AST::Stmt* DoWhile();
   AST::Stmt* Define();
   AST::Stmt* Class();
-  AST::Stmt* Statements();
 
+  AST::Stmt* Statements();
+  AST::Block* Parse();
 
   //AST::Stmt* Stmt();
 

@@ -19,7 +19,6 @@
 
 #include "include/Tokenizer.h"
 #include "include/ParserCore.h"
-#include "include/ParserWrap.h"
 #include "include/AST_Runner.h"
 #include "include/Program.h"
 

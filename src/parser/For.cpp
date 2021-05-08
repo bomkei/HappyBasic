@@ -32,7 +32,7 @@ AST::Stmt* ParserCore::For()
         break;
       }
 
-      ast->code->list.emplace_back(Stmt());
+      ast->code->list.emplace_back(Statements());
     }
 
     if( !closed )

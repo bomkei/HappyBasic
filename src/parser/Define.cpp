@@ -56,7 +56,7 @@ AST::Stmt* ParserCore::Define()
         break;
       }
 
-      block.emplace_back(Stmt());
+      block.emplace_back(Statements());
     }
 
     if( !closed )

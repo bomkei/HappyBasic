@@ -51,7 +51,7 @@ AST::Stmt* ParserCore::If()
             break;
           }
 
-          std::get<1>(pair)->list.emplace_back(Stmt());
+          std::get<1>(pair)->list.emplace_back(Statements());
         }
 
         ast->pairs.emplace_back(pair);
@@ -59,7 +59,7 @@ AST::Stmt* ParserCore::If()
       }
       else
       {
-        std::get<1>(pair)->list.emplace_back(Stmt());
+        std::get<1>(pair)->list.emplace_back(Statements());
       }
     }
 
