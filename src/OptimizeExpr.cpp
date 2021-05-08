@@ -16,8 +16,7 @@ class SignedExpr
 
   template <typename T>
   SignedExpr(T sign, AST::Expr* expr)
-      : sign((Sign)sign)
-      , expr(expr)
+    : sign((Sign)sign), expr(expr)
   {
   }
 
@@ -27,9 +26,11 @@ class SignedExpr
     auto sign = (expr->type == AST::Expr::Add ? 1 : -1); // default sign (expr->type)
 
     if( right->type == AST::Expr::Immidiate )
-    {
-      sign *= right->token->obj.v_int > 0 ? 1 : -1; // if immidiate is negative, invert sign
-    }
+
+      if( right->type == AST::Expr::Immidiate )
+      {
+        sign *= right->token->obj.v_int > 0 ? 1 : -1; // if immidiate is negative, invert sign
+      }
 
     return SignedExpr(sign, expr->right);
   }
@@ -48,7 +49,8 @@ class ExprType
   bool isMatchedType(AST::Expr& src)
   {
     if(
-        type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div) )
+      type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or
+      type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div) )
       return true;
 
     return false;
@@ -57,7 +59,8 @@ class ExprType
   static bool isMatchedType(Type type, AST::Expr& src)
   {
     if(
-        type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div) )
+      type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or
+      type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div) )
       return true;
 
     return false;
@@ -82,9 +85,7 @@ class TypedExpr
 
   template <typename T>
   TypedExpr(T type, Kind kind, AST::Expr* expr)
-      : type((Type)type)
-      , kind(kind)
-      , expr(expr)
+    : type((Type)type), kind(kind), expr(expr)
   {
   }
   static Kind getKindFromExprType(ExprType srctype)
@@ -139,8 +140,7 @@ class TypedExpr
       {
         return AST::Expr::Add;
       }
-      else
-      { // type == Innormal
+      else { // type == Innormal
         return AST::Expr::Sub;
       }
     }

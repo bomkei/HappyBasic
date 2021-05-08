@@ -229,13 +229,12 @@ std::vector<Token> Tokenizer::Tokenize()
     pass_space();
   }
 
-  for( auto it = tokens.begin(); it != tokens.end() - 1; )
+  for( size_t i = 0; i < tokens.size() - 1;)
   {
-    if( it[0].str == "\n" && it[1].str == "\n" )
-    {
-      tokens.erase(it);
-    }
-    else it++;
+    if( tokens[i].str == "\n" && tokens[i + 1].str == "\n" )
+      tokens.erase(tokens.begin() + i);
+    else
+      i++;
   }
 
   for( auto&& tk : tokens )

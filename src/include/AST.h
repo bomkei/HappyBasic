@@ -23,7 +23,8 @@ namespace AST
       Callfunc,
       Array,
       IndexRef,
-      Param
+      Param,
+      New
     };
 
     Type type;
@@ -89,7 +90,8 @@ namespace AST
       Function,
       Break,
       Continue,
-      Return
+      Return,
+      Class
     };
 
     Type type;
@@ -198,6 +200,19 @@ namespace AST
     Function()
     {
       type = Type::Function;
+    }
+  };
+
+  class Class : public Stmt
+  {
+  public:
+    std::string name;
+    std::vector<AST::Expr*> variables;
+    std::vector<AST::Function*> functions;
+
+    Class()
+    {
+      type = Type::Class;
     }
   };
 
