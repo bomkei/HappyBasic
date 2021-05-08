@@ -5,7 +5,9 @@ SRCDIR		= src
 INCLUDE   = src/include
 OBJDIR		= build
 
-CXXFILES	= $(wildcard $(SRCDIR)/*.cpp)
+CXXFILES	= \
+  $(wildcard $(SRCDIR)/*.cpp) \
+  $(wildcard $(SRCDIR)/parser/*.cpp)
 
 OFILES		= $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(CXXFILES)))
 
@@ -27,6 +29,11 @@ clean:
 re: clean all
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(wildcard $(SRCDIR)/*.h) $(wildcard $(INCLUDE)/*.h)
+	@echo $(notdir $<)
+	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
+	@g++ $(CXXFLAGS) -c $< -o $@
+  
+$(OBJDIR)/%.o: $(SRCDIR)/parser/%.cpp $(wildcard $(SRCDIR)/*.h) $(wildcard $(INCLUDE)/*.h)
 	@echo $(notdir $<)
 	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
 	@g++ $(CXXFLAGS) -c $< -o $@
