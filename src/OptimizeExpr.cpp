@@ -125,6 +125,9 @@ class TypedExpr
       }
     }
   }
+  bool operator==(TypedExpr& target){
+    return expr->equal(*target.expr) and kind==target.kind and type==target.type;
+  }
 };
 
 /* internal types - end */
@@ -248,6 +251,15 @@ void AST::Expr::Optimize()
         denoms.emplace_back(factor);
       }
     }
+    // reduct step2: remove duplicate(s)
+    for( auto it = numers.begin(); it != numers.end(); )
+    {
+      auto numer=*it;
+      if(Utils::VectorHasItem(denoms,numer)){
+
+      }
+    }
+    
   }
 
   // reconstructing Expr (to ret)
