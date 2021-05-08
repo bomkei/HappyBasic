@@ -234,8 +234,20 @@ void AST::Expr::Optimize()
     }
 
     // reduction!!!
-    std::vector<TypedExpr> numers; // type == innormal
-    std::vector<TypedExpr> denoms; // type == normal
+    // ruduct step1: split to denom and numer
+    std::vector<TypedExpr> numers; // type == normal
+    std::vector<TypedExpr> denoms; // type == innormal
+    for( auto&& factor : parts )
+    {
+      if( factor.type == TypedExpr::Normal )
+      {
+        numers.emplace_back(factor);
+      }
+      else
+      {
+        denoms.emplace_back(factor);
+      }
+    }
   }
 
   // reconstructing Expr (to ret)
