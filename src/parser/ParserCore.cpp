@@ -306,12 +306,15 @@ AST::Expr* ParserCore::Equal()
   return x;
 }
 
+void Debug(AST::Expr*);
+
 AST::Expr* ParserCore::Expr()
 {
   auto expr = Equal();
 
-  //expr->Optimize();
-  
+  Debug(expr);
+  exit(10);
+
   return expr;
 }
 

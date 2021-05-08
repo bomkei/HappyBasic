@@ -1,157 +1,253 @@
 #include "main.h"
+//
+//bool operator == (Optimizer::Alphabet const& a, Optimizer::Alphabet const& b)
+//{
+//  return a.name == b.name;
+//}
 
-Optimizer::Term::Term(AST::Expr* term)
-  :term(term), sign(Sign::Plus)
+namespace Optimizer
 {
-
-}
-
-// return: whether of reduced
-bool Optimizer::ReduceFactors(AST::Expr* expr)
-{
-  // loop is continue if true !!
-
-  switch( expr->type )
+  bool Alphabet::operator == (Alphabet const& a)
   {
-    case AST::Expr::Immidiate:
-    case AST::Expr::Variable:
-      return false;
-
-    case AST::Expr::Callfunc:
-    {
-      auto ret = false;
-
-      for( auto&& arg : ((AST::Callfunc*)expr)->args )
-      {
-        if( ReduceFactors(arg) )
-          ret = true;
-      }
-
-      return ret;
-    }
-
-    case AST::Expr::Array:  // ???
-    {
-      for( auto&& i : ((AST::Array*)expr)->elems )
-      {
-        while( ReduceFactors(i) );
-      }
-      break;
-    }
-
-    default:
-    {
-      auto L = ReduceFactors(expr->left);
-      auto R = ReduceFactors(expr->right);
-
-      if( expr->left->IsConstexpr() && expr->right->IsConstexpr() )
-      {
-        expr->token->obj = AST_Runner::Expr(expr);
-        expr->type = AST::Expr::Immidiate;
-
-        delete expr->left;
-        delete expr->right;
-      }
-
-      return L || R;
-    }
+    return type == a.type && name == a.name;
   }
 
-  return false;
-}
 
-std::vector<Optimizer::Term> Optimizer::GetTermsFromExpr(AST::Expr* expr)
-{
-  std::vector<Term> terms;
-
-  if( expr->type != AST::Expr::Add && expr->type != AST::Expr::Sub )
+  bool IsHaveAlphabet(AST::Expr* expr, Alphabet const& alpha)
   {
-    terms.push_back(expr);
+    auto dont_r = false;
+    auto res_r = false;
+
+    if( !expr )
+      return false;
+
+    alart;
+    std::cout << expr->token->str << '\n';
+
+    //if( expr->type == AST::Expr::Variable )
+    //  if( expr->token->str == alpha.name )
+    //    return true;
+
+    //return IsHaveAlphabet(expr->left, alpha) || IsHaveAlphabet(expr->right, alpha);
+
+    if( expr->type == AST::Expr::Variable )
+    {
+      return expr->token->str == alpha.name;
+    }
+    else if( expr->right && expr->right->type == AST::Expr::Variable )
+    {
+      auto check = false;
+
+      if( expr->type == AST::Expr::Mul )
+      {
+        if( alpha.type == Alphabet::Type::Mul )
+          check = true;
+      }
+      else if( expr->type == AST::Expr::Div && alpha.type == Alphabet::Type::Div )
+        check = true;
+
+      if( check )
+      {
+        res_r = expr->right->token->str == alpha.name;
+      }
+    }
+
+    auto left = IsHaveAlphabet(expr->left, alpha);
+
+    if( !dont_r )
+      left = left && IsHaveAlphabet(expr->right, alpha);
+
+    return left;
+  }
+
+  void RemoveAlphabet(AST::Expr* expr, std::string const& name)
+  {
+    if( !expr )
+      return;
+    
+    if( expr->left && expr->right )
+    {
+      if( expr->left->token->str == name )
+      {
+        *expr = *expr->right;
+        //return;
+      }
+      else if( expr->right->token->str == name )
+      {
+        *expr = *expr->left;
+        //return;
+      }
+    }
+
+    RemoveAlphabet(expr->left, name);
+    RemoveAlphabet(expr->right, name);
+  }
+
+  std::vector<Term> GetTerms(AST::Expr* expr)
+  {
+    std::vector<Term> terms;
+
+    if( expr->type != AST::Expr::Add && expr->type != AST::Expr::Sub )
+    {
+      terms.push_back(expr);
+      return terms;
+    }
+
+    auto left = GetTerms(expr->left);
+    auto right = GetTerms(expr->right);
+
+    right[0].sign = expr->type == AST::Expr::Add ? Term::Sign::Plus : Term::Sign::Minus;
+
+    for( auto&& t : left )
+      terms.emplace_back(t);
+
+    for( auto&& t : right )
+      terms.emplace_back(t);
+
     return terms;
   }
 
-  auto left = GetTermsFromExpr(expr->left);
-  auto right = GetTermsFromExpr(expr->right);
+  std::vector<Alphabet> GetAlphabets(AST::Expr* expr)
+  {
+    std::vector<Alphabet> ret;
+    auto dont_r = false;
 
-  right[0].sign = expr->type == AST::Expr::Add ? Term::Sign::Plus : Term::Sign::Minus;
+    if( !expr )
+      return ret;
+    
+    if( expr->type == AST::Expr::Variable )
+    {
+      ret.push_back(expr->token->str);
+      return ret;
+    }
+    else if( expr->right && expr->right->type == AST::Expr::Variable )
+    {
+      Alphabet a;
+      
+      if( expr->type == AST::Expr::Mul )
+        a.type = Alphabet::Type::Mul;
+      else
+        a.type = Alphabet::Type::Div;
 
-  for( auto&& t : left )
-    terms.emplace_back(t);
+      a.name = expr->right->token->str;
+      ret.emplace_back(a);
 
-  for( auto&& t : right )
-    terms.emplace_back(t);
+      dont_r = true;
+    }
 
-  return terms;
+    auto left = GetAlphabets(expr->left);
+    
+    for( auto&& t : left )
+      ret.emplace_back(t);
+
+    if( !dont_r )
+    {
+      for( auto&& t : GetAlphabets(expr->right) )
+        ret.emplace_back(t);
+    }
+
+    return ret;
+  }
+
+  AST::Expr* ConstructAST_FromTerms(std::vector<Term> const& terms)
+  {
+    if( terms.empty() )
+      return nullptr;
+
+    auto ast = terms[0].term;
+
+    for( size_t i = 1; i < terms.size(); i++ )
+    {
+      auto tk = new Token;
+      tk->type = Token::Operator;
+      tk->str = terms[i].sign == Term::Sign::Plus ? "+" : "-";
+
+      ast =
+        new AST::Expr(
+          terms[i].sign == Term::Sign::Plus ? AST::Expr::Add : AST::Expr::Sub,
+          ast, terms[i].term, tk
+        );
+    }
+
+    return ast;
+  }
 }
+
 
 void Debug(AST::Expr* expr)
 {
+  std::vector<Optimizer::Alphabet> Alphabets; // of terms
 
-  // before
-  std::cout << expr->ToString() << '\n';
-  std::cout << "start optimize\n\n";
+  auto terms = Optimizer::GetTerms(expr);
+  
 
-  //Optimizer::ReduceConstexpr(expr);
-
-  auto terms = Optimizer::GetTermsFromExpr(expr);
-
-
-  for( size_t i = 0; i < terms.size() - 1; )
+  std::cout << "\nterms(before):\n";
+  for( auto&& te : terms )
   {
-    if( terms[i].term->IsConstexpr() && terms[i + 1].term->IsConstexpr() )
+    std::cout << (te.sign == Optimizer::Term::Sign::Plus ? "+" : "-") << " " << te.term->ToString() << '\n';
+  }
+
+  std::cout << "\nalphabets:\n";
+  for( auto&& te : terms )
+  {
+    // get alphabets
+    auto alphas = Optimizer::GetAlphabets(te.term);
+
+    // add to Alphabets if not exist
+    for( auto&& n : alphas )
     {
-      auto ast = new AST::Expr;
-
-      ast->type =
-        (terms[i + 1].sign == Optimizer::Term::Sign::Minus) ? AST::Expr::Sub : AST::Expr::Add;
-
-      ast->left = terms[i].term;
-      ast->right = terms[i + 1].term;
-      ast->token = ast->left->token;
-
-      ast->left->token->obj = AST_Runner::Expr(ast);
-      ast->left->type = AST::Expr::Immidiate;
-
-      terms[i].term = ast->left;
-      delete ast->right;
-
-      terms.erase(terms.begin() + i + 1);
+      if( std::count(Alphabets.begin(), Alphabets.end(), n) == 0 )
+        Alphabets.emplace_back(n);
     }
-    else if( !terms[i].term->IsConstexpr() )
+  }
+
+  for( auto&& a : Alphabets )
+  {
+    std::cout << (a.type == Optimizer::Alphabet::Type::Mul ? "*" : "/") << " " << a.name << '\n';
+  }
+
+  std::cout << "\nreduce alphabets!\n";
+
+  for( auto&& alpha : Alphabets )
+  {
+    std::vector<Optimizer::Term> alphaTerms;
+
+    // search alpha in all terms
+    for( auto it = terms.begin(); it < terms.end();)
     {
-      while( Optimizer::ReduceFactors(terms[i].term) )
+      // if have
+      if( Optimizer::IsHaveAlphabet(it->term, alpha) )
       {
         alart;
+
+        // remove
+        Optimizer::RemoveAlphabet(it->term, alpha.name);
+
+        alphaTerms.emplace_back(*it);
+        terms.erase(it);
       }
-      i++;
+      else
+        it++;
     }
-    else
-      i++;
-  }
 
-  alart;
+    auto ast = Optimizer::ConstructAST_FromTerms(alphaTerms);
 
-  for( size_t i = 0; i < terms.size(); i++ )
-  {
-    if( terms[i].term->IsConstexpr() )
+    if( ast != nullptr )
     {
-      auto copy = terms[i];
-      terms.erase(terms.begin() + i);
-      terms.insert(terms.begin(), copy);
+      //std::cout << "\nconstructed:\n";
+      //std::cout << ast->ToString() << '\n';
     }
+
+    break;
   }
 
-  alart;
-
-
-  for( auto&& i : terms )
+  std::cout << "\nterms(after):\n";
+  for( auto&& te : terms )
   {
-  //  std::cout << i.term->ToString() << '\n';
+    std::cout << (te.sign == Optimizer::Term::Sign::Plus ? "+" : "-") << " " << te.term->ToString() << '\n';
   }
 
-  alart;
-  std::cout << expr->ToString() << '\n';
 
-  alart;
-  exit(100);
+
+  exit(10);
 }
