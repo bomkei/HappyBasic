@@ -232,6 +232,10 @@ void AST::Expr::Optimize()
       cur->type = Expr::Div;
       cur = cur->left = new Expr();
     }
+
+    // reduction!!!
+    std::vector<TypedExpr> numers; // type == innormal
+    std::vector<TypedExpr> denoms; // type == normal
   }
 
   // reconstructing Expr (to ret)
