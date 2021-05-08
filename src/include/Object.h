@@ -28,25 +28,24 @@ struct Object
   bool Equal(Object const&) const;
 
   template<typename T>
-  T as(){
-    T ret;
+  T as()
+  {
     switch( type )
     {
-    case Int:
-      return static_cast<T>(v_int);
-      break;
+      case Int:
+        return static_cast<T>(v_int);
 
-    case Float:
-      return static_cast<T>(v_float);
-      break;
+      case Float:
+        return static_cast<T>(v_float);
 
-    case Char:
-      return static_cast<T>(v_char);
-      break;
+      case Char:
+        return static_cast<T>(v_char);
 
-    default:
-      return T();
+      default:
+        break;
     }
+    
+    return T();
   }
 };
 
