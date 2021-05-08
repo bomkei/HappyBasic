@@ -312,8 +312,8 @@ AST::Expr* ParserCore::Expr()
 {
   auto expr = Equal();
 
-  Debug(expr);
-  exit(10);
+  //Debug(expr);
+  //exit(10);
 
   return expr;
 }
