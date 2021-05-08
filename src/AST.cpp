@@ -198,21 +198,21 @@ std::string AST::Stmt::ToString(int tab) const
         "while " + ((AST::While*)this)->cond->ToString() + "\n"
         + ((AST::While*)this)->code->ToString(tab + 1) + "wend\n";
 
-    case Type::Assign:
-      return std::string(tab, ' ') + ((AST::Assign*)this)->var->ToString() + " = " + ((AST::Assign*)this)->value->ToString() + "\n";
+    //case Type::Assign:
+    //  return std::string(tab, ' ') + ((AST::Assign*)this)->var->ToString() + " = " + ((AST::Assign*)this)->value->ToString() + "\n";
 
-    case Type::Instruction:
-    {
-      std::string s = std::string(tab, ' ') + ((AST::Instruction*)this)->name + " ";
+    //case Type::Instruction:
+    //{
+    //  std::string s = std::string(tab, ' ') + ((AST::Instruction*)this)->name + " ";
 
-      for( size_t i = 0; i < ((AST::Instruction*)this)->args.size(); i++ )
-      {
-        s += ((AST::Instruction*)this)->args[i]->ToString();
-        if( i < ((AST::Instruction*)this)->args.size() - 1 ) s += ", ";
-      }
+    //  for( size_t i = 0; i < ((AST::Instruction*)this)->args.size(); i++ )
+    //  {
+    //    s += ((AST::Instruction*)this)->args[i]->ToString();
+    //    if( i < ((AST::Instruction*)this)->args.size() - 1 ) s += ", ";
+    //  }
 
-      return s + "\n";
-    }
+    //  return s + "\n";
+    //}
 
     case Type::Block:
     {
