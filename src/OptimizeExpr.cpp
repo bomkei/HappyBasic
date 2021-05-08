@@ -234,7 +234,7 @@ void AST::Expr::Optimize()
     }
 
     // reduction!!!
-    // ruduct step1: split to denom and numer
+    // reduct step1: split to denom and numer
     std::vector<TypedExpr> numers; // type == normal
     std::vector<TypedExpr> denoms; // type == innormal
     for( auto&& factor : parts )
