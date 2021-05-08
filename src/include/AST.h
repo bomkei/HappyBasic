@@ -89,7 +89,8 @@ namespace AST
       Function,
       Break,
       Continue,
-      Return
+      Return,
+      Class
     };
 
     Type type;
@@ -212,7 +213,7 @@ namespace AST
     Class()
       :name(token->str)
     {
-
+      type = Type::Class;
     }
   };
 
