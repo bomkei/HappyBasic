@@ -310,7 +310,7 @@ AST::Expr* ParserCore::Expr()
 {
   auto expr = Equal();
 
-  //expr->Optimize();
+  expr->Optimize();
   
   return expr;
 }
