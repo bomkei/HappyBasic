@@ -94,6 +94,8 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
     case AST::Expr::Assign:
     {
+      alart;
+
       auto dest = Expr(ast->left);
       auto src = Expr(ast->right);
 
@@ -390,6 +392,8 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       break;
     }
 
+    default:
+      return Expr(ast->expr);
   }
 
   if( ReturnValue )
