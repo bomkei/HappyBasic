@@ -1,6 +1,6 @@
 #include "../main.h"
 
-AST::Stmt* ParserCore::If()
+AST::If* ParserCore::If()
 {
   //
   // if

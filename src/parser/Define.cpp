@@ -1,6 +1,6 @@
 #include "../main.h"
 
-AST::Stmt* ParserCore::Define()
+AST::Function* ParserCore::Define()
 {
   //
   // def
@@ -49,7 +49,7 @@ AST::Stmt* ParserCore::Define()
 
     while( check() )
     {
-      if( consume("enddef") )
+      if( consume("end") )
       {
         closed = true;
         expect("\n");

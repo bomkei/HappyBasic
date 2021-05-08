@@ -1,6 +1,6 @@
 #include "../main.h"
 
-AST::Stmt* ParserCore::For()
+AST::For* ParserCore::For()
 {
   //
   // for

@@ -1,7 +1,10 @@
 #include "../main.h"
 
-AST::Stmt* ParserCore::Class()
+AST::Class *ParserCore::Class()
 {
+  // todo
 
+
+  return nullptr;
 }
 

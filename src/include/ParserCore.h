@@ -42,12 +42,12 @@ public:
   AST::Expr* Equal();
   AST::Expr* Expr();
 
-  AST::Stmt* If();
-  AST::Stmt* For();
-  AST::Stmt* While();
-  AST::Stmt* DoWhile();
-  AST::Stmt* Define();
-  AST::Stmt* Class();
+  AST::If* If();
+  AST::For* For();
+  AST::While* While();
+  AST::While* DoWhile();
+  AST::Function* Define();
+  AST::Class* Class();
 
   AST::Stmt* Statements();
   AST::Block* Parse();

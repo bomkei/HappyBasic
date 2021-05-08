@@ -1,6 +1,8 @@
 #include "../main.h"
 
-AST::Stmt* ParserCore::DoWhile()
+AST::While* ParserCore::DoWhile()
 {
   // todo
+
+  return nullptr;
 }

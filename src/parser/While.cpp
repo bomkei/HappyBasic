@@ -1,6 +1,6 @@
 #include "../main.h"
 
-AST::Stmt* ParserCore::While()
+AST::While* ParserCore::While()
 {
   //
   // while
