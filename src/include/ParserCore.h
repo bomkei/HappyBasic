@@ -2,6 +2,7 @@
 
 class ParserCore
 {
+public:
   std::vector<Object>& variables;
   std::vector<AST::Function*>& functions;
   std::vector<AST::Class*> classes;
@@ -22,8 +23,6 @@ class ParserCore
   void expect(std::string const& str);
   void next();
   int find_var(std::string const& name);
-
-public:
 
   ParserCore(
     std::vector<Object>& variables,

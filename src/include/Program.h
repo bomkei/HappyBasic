@@ -11,7 +11,7 @@ class Program
   std::string source;
 
   Tokenizer* tokenizer;
-  ParserCore* parser;
+  ParserWrap* parser;
 
   AST::Stmt* prs_result;
   AST::Function* cur_func;
