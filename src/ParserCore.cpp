@@ -1,7 +1,12 @@
 #include "main.h"
 
 ParserCore::ParserCore(std::vector<Object>& variables, std::vector<AST::Function*>& functions)
-  :variables(variables), functions(functions), in_function(false), func_args(nullptr) { }
+    : variables(variables)
+    , functions(functions)
+    , in_function(false)
+    , func_args(nullptr)
+{
+}
 
 Token& ParserCore::get_tok()
 {
@@ -163,7 +168,6 @@ AST::Expr* ParserCore::Primary()
 
       return ast;
     }
-
   }
 
   Program::Error(*tok, "syntax error");
@@ -242,7 +246,7 @@ AST::Expr* ParserCore::Shift()
     else
       break;
   }
-  
+
   return x;
 }
 
@@ -289,6 +293,7 @@ AST::Expr* ParserCore::Expr()
   auto expr = Equal();
 
   //Debug(expr);
+  expr->Optimize();
 
   return expr;
 }
@@ -366,7 +371,6 @@ AST::Stmt* ParserCore::Stmt()
     return ast;
   }
 
-
   //
   // for
   if( consume("for") )
@@ -434,7 +438,7 @@ AST::Stmt* ParserCore::Stmt()
 
     if( !closed )
       Program::Error(*tk, "not closed");
-    
+
     auto ast = new AST::While;
     ast->token = tk;
     ast->cond = cond;
@@ -472,7 +476,7 @@ AST::Stmt* ParserCore::Stmt()
       {
         if( get_tok().type != Token::Ident )
           Program::Error(get_tok(), "syntax error");
-        
+
         auto prm = new AST::Expr;
         prm->type = AST::Expr::Param;
         prm->token = &get_tok();
@@ -545,7 +549,7 @@ AST::Stmt* ParserCore::Stmt()
     expect("\n");
     return ast;
   }
-  
+
   //
   // continue
   if( consume("continue") )
@@ -555,7 +559,6 @@ AST::Stmt* ParserCore::Stmt()
     expect("\n");
     return ast;
   }
-
 
   auto& tok = get_tok();
 
@@ -598,7 +601,7 @@ AST::Stmt* ParserCore::Stmt()
   //alart;
 
   //std::cout << ast->args[0]->equal(*ast->args[1]) << '\n';
-  
+
   return ast;
 }
 
