@@ -76,7 +76,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
     auto end = args[args.size() > 1].v_int;
 
     if( begin > end )
-      Program::Error(*ast->token, "begin > end");
+      Program::Error(*ast->args[0]->token, "begin > end");
 
     if( begin == end )
       ret.v_int = begin;
