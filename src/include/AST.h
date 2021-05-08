@@ -18,6 +18,8 @@ namespace AST
       Equal,
       NotEqual,
 
+      Assign,
+
       Immidiate,
       Variable,
       Callfunc,

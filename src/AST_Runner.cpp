@@ -92,6 +92,19 @@ Object AST_Runner::Expr(AST::Expr* ast)
       return p;
     }
 
+    case AST::Expr::Assign:
+    {
+      auto dest = Expr(ast->left);
+      auto src = Expr(ast->right);
+
+      if( !dest.var_ptr )
+        Program::Error(*ast->token, "cannot assign to rvalue");
+
+      *dest.var_ptr = src;
+
+      return src;
+    }
+
     default:
     {
       auto left = Expr(ast->left);
