@@ -282,7 +282,6 @@ void AST::Expr::Optimize()
     }
   }
 
-  std::cout << "check: " << *this << " | " << ret << std::endl;
   this->left = ret.left;
   this->type = ret.type;
   this->right = ret.right;
