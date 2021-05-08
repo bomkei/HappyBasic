@@ -265,27 +265,19 @@ void AST::Expr::Optimize()
   }
 
   // reconstructing Expr (to ret)
-  if( parts.size() == 1 )
+
+  int i = 0;
+  for( auto&& part : parts )
   {
-    auto part = parts[0];
-    // copy part.expr => ret
-    ret = *part.expr;
-  }
-  else
-  {
-    int i = 0;
-    for( auto&& part : parts )
+    if( parts.size() == ++i )
     {
-      if( parts.size() == ++i )
-      {
-        *cur = *part.expr;
-      }
-      else
-      {
-        cur->right = part.expr;
-        cur->type = part.getType();
-        cur = cur->left = new Expr();
-      }
+      *cur = *part.expr;
+    }
+    else
+    {
+      cur->right = part.expr;
+      cur->type = part.getType();
+      cur = cur->left = new Expr();
     }
   }
 
