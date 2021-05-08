@@ -31,11 +31,13 @@ namespace Optimizer
     Type type;
     std::string name;
 
-    Alphabet(std::string const& name)
+    Alphabet(std::string const& name = "")
       :type(Type::Mul), name(name)
     {
 
     }
+
+    bool operator == (Alphabet const&);
   };
 
   bool IsHaveAlphabet(AST::Expr* expr, std::string const& name);
@@ -44,6 +46,7 @@ namespace Optimizer
   std::vector<Term> GetTerms(AST::Expr* expr);
   std::vector<Alphabet> GetAlphabets(AST::Expr*);
 
-
-
 }
+
+//bool operator == (Optimizer::Alphabet, Optimizer::Alphabet);
+

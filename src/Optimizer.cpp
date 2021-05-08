@@ -1,7 +1,18 @@
 #include "main.h"
+//
+//bool operator == (Optimizer::Alphabet const& a, Optimizer::Alphabet const& b)
+//{
+//  return a.name == b.name;
+//}
 
 namespace Optimizer
 {
+  bool Alphabet::operator == (Alphabet const& a)
+  {
+    return type == a.type && name == a.name;
+  }
+
+
   bool IsHaveAlphabet(AST::Expr* expr, std::string const& name)
   {
     if( !expr )
@@ -64,11 +75,17 @@ namespace Optimizer
   std::vector<Alphabet> GetAlphabets(AST::Expr* expr)
   {
     std::vector<Alphabet> ret;
+    auto dont_r = false;
 
     if( !expr )
       return ret;
-
-    if( expr->right->type == AST::Expr::Variable )
+    
+    if( expr->type == AST::Expr::Variable )
+    {
+      ret.push_back(expr->token->str);
+      return ret;
+    }
+    else if( expr->right && expr->right->type == AST::Expr::Variable )
     {
       Alphabet a;
       
@@ -79,21 +96,20 @@ namespace Optimizer
 
       a.name = expr->right->token->str;
       ret.emplace_back(a);
-    }
-    else if( expr->type == AST::Expr::Variable )
-    {
-      ret.push_back(expr->token->str);
-      return ret;
+
+      dont_r = true;
     }
 
     auto left = GetAlphabets(expr->left);
-    auto right = GetAlphabets(expr->right);
-
+    
     for( auto&& t : left )
       ret.emplace_back(t);
 
-    for( auto&& t : right )
-      ret.emplace_back(t);
+    if( !dont_r )
+    {
+      for( auto&& t : GetAlphabets(expr->right) )
+        ret.emplace_back(t);
+    }
 
     return ret;
   }
@@ -102,7 +118,7 @@ namespace Optimizer
 
 void Debug(AST::Expr* expr)
 {
-  std::vector<std::string> Alphabets; // of terms
+  std::vector<Optimizer::Alphabet> Alphabets; // of terms
 
   auto terms = Optimizer::GetTerms(expr);
   
@@ -117,34 +133,34 @@ void Debug(AST::Expr* expr)
   for( auto&& te : terms )
   {
     // get alphabets
-    auto alpha = Optimizer::GetAlphabets(te.term);
+    auto alphas = Optimizer::GetAlphabets(te.term);
 
     // add to Alphabets if not exist
-    for( auto&& n : alpha )
+    for( auto&& n : alphas )
     {
       if( std::count(Alphabets.begin(), Alphabets.end(), n) == 0 )
         Alphabets.emplace_back(n);
     }
   }
 
-  for( auto&& name : Alphabets )
+  for( auto&& a : Alphabets )
   {
-    std::cout << name << '\n';
+    std::cout << (a.type == Optimizer::Alphabet::Type::Mul ? "*" : "/") << " " << a.name << '\n';
   }
 
   std::cout << "\nreduce alphabets\n";
 
-  for( auto&& name : Alphabets )
+  for( auto&& alpha : Alphabets )
   {
     //std::vector<AST::Expr*> n_terms;
 
     for( auto&& term : terms )
     {
-      if( Optimizer::IsHaveAlphabet(term.term, name) )
+      if( Optimizer::IsHaveAlphabet(term.term, alpha.name) )
       {
         //n_terms.emplace_back(term);
 
-        Optimizer::RemoveAlphabet(term.term, name);
+        Optimizer::RemoveAlphabet(term.term, alpha.name);
       }
     }
 
