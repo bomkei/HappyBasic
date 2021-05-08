@@ -2,8 +2,10 @@
 
 class ParserCore
 {
+public:
   std::vector<Object>& variables;
   std::vector<AST::Function*>& functions;
+  std::vector<AST::Class*> classes;
 
   std::vector<Token> tokens;
   size_t index;
@@ -22,9 +24,11 @@ class ParserCore
   void next();
   int find_var(std::string const& name);
 
-public:
-
-  ParserCore(std::vector<Object>& variables, std::vector<AST::Function*>& functions);
+  ParserCore(
+    std::vector<Object>& variables,
+    std::vector<AST::Function*>& functions,
+    std::vector<AST::Class*>& classes
+  );
 
   void Initialize(std::vector<Token>&& tokens);
 
@@ -38,9 +42,19 @@ public:
   AST::Expr* Equal();
   AST::Expr* Expr();
 
-  AST::Stmt* Stmt();
+  AST::If* If();
+  AST::For* For();
+  AST::While* While();
+  AST::While* DoWhile();
+  AST::Function* Define();
+  AST::Class* Class();
 
-  AST::Stmt* Parse();
+  AST::Stmt* Statements();
+  AST::Block* Parse();
+
+  //AST::Stmt* Stmt();
+
+  //AST::Stmt* Parse();
 
 
 };
