@@ -89,29 +89,15 @@ namespace AST
       Break,
       Continue,
       Return,
-      Class
+      Class,
+      Default
     };
 
-    Type type;
-    Token* token;
+    Type type = Default;
+    Token* token = nullptr;
+    Expr* expr = nullptr;
 
     std::string ToString(int tab = 0) const;
-
-    Stmt(Type type = Block)
-      :type(type), token(nullptr)
-    {
-    }
-  };
-
-  class Return : public Stmt
-  {
-  public:
-    AST::Expr* expr;
-
-    Return()
-    {
-      type = Type::Return;
-    }
   };
 
   class Block : public Stmt
