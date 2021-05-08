@@ -283,7 +283,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       if( !ReturnValue )
         Program::Error(*ast->token, "cannot use 'return' here");
 
-      *ReturnValue = Expr(((AST::Return*)ast)->expr);
+      *ReturnValue = Expr(ast->expr);
       *FuncReturned = true;
       break;
 
