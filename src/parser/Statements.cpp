@@ -65,7 +65,10 @@ AST::Stmt* ParserCore::Statements()
 
 
   auto st = new AST::Stmt;
+
   st->expr = Expr();
+  expect("\n");
+
   return st;
 }
 
