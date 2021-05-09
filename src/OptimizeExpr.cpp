@@ -256,7 +256,8 @@ void AST::Expr::Optimize()
     {
       auto numer=*it;
       if(Utils::VectorHasItem(denoms,numer)){
-
+          denoms.erase(denoms.begin()+Utils::VectorFindItem(denoms,numer));
+          numers.erase(it);
       }
     }
     
