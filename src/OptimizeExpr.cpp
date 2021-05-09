@@ -4,41 +4,9 @@
 #include <numeric>
 
 /* internal types */
-class SignedExpr
-{
-public:
-  enum Sign
-  {
-    Positive = 1,
-    Negative = -1,
-  } sign;
-  AST::Expr* expr;
-
-  template <typename T>
-  SignedExpr(T sign, AST::Expr* expr)
-    : sign((Sign)sign), expr(expr)
-  {
-  }
-
-  static SignedExpr FromExprRight(AST::Expr* expr)
-  {
-    auto right = expr->right;
-    auto sign = (expr->type == AST::Expr::Add ? 1 : -1); // default sign (expr->type)
-
-    if( right->type == AST::Expr::Immidiate )
-
-      if( right->type == AST::Expr::Immidiate )
-      {
-        sign *= right->token->obj.v_int > 0 ? 1 : -1; // if immidiate is negative, invert sign
-      }
-
-    return SignedExpr(sign, expr->right);
-  }
-};
-
 class ExprType
 {
-public:
+  public:
   enum Type
   {
     Expr,
@@ -49,8 +17,7 @@ public:
   bool isMatchedType(AST::Expr& src)
   {
     if(
-      type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or
-      type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div) )
+        type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div) )
       return true;
 
     return false;
@@ -59,8 +26,7 @@ public:
   static bool isMatchedType(Type type, AST::Expr& src)
   {
     if(
-      type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or
-      type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div) )
+        type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div) )
       return true;
 
     return false;
@@ -69,7 +35,7 @@ public:
 
 class TypedExpr
 {
-public:
+  public:
   enum Kind
   {
     Expr,
@@ -85,7 +51,9 @@ public:
 
   template <typename T>
   TypedExpr(T type, Kind kind, AST::Expr* expr)
-    : type((Type)type), kind(kind), expr(expr)
+      : type((Type)type)
+      , kind(kind)
+      , expr(expr)
   {
   }
   static Kind getKindFromExprType(ExprType srctype)
@@ -140,7 +108,8 @@ public:
       {
         return AST::Expr::Add;
       }
-      else { // type == Innormal
+      else
+      { // type == Innormal
         return AST::Expr::Sub;
       }
     }
@@ -155,6 +124,10 @@ public:
         return AST::Expr::Div;
       }
     }
+  }
+  bool operator==(TypedExpr& target)
+  {
+    return this->expr->equal(*target.expr) and kind == target.kind;
   }
 };
 
@@ -187,8 +160,9 @@ void AST::Expr::Optimize()
   {
     // calculate immidiate
     double immidiate = 0;
-    for( auto it = parts.begin(); it != parts.end();)
+    for( auto it = parts.begin(); it != parts.end(); )
     {
+      it->expr->Optimize();
       if( it->expr->type == Immidiate )
       {
         immidiate += it->expr->token->obj.v_int * it->getSign();
@@ -214,14 +188,13 @@ void AST::Expr::Optimize()
     int imm_denom_int = 1;
     double imm_numer_dbl = 1;
     int imm_numer_int = 1;
-    for( auto it = parts.begin(); it != parts.end();)
+    for( auto it = parts.begin(); it != parts.end(); )
     {
       if( it->expr->type != Immidiate )
       { // skip not immidiate
         it++;
         continue;
       }
-      parts.erase(it);
 
       auto obj = it->expr->token->obj;
       if( it->type == TypedExpr::Innormal )
@@ -238,14 +211,14 @@ void AST::Expr::Optimize()
         else
           imm_denom_dbl *= obj.as<double>();
       }
+      parts.erase(it);
     }
 
     // imm
     int gcd = std::gcd(imm_denom_int, imm_numer_int);
     double imm_numer = imm_numer_dbl * (double)imm_numer_int / gcd;
     double imm_denom = imm_denom_dbl * (double)imm_denom_int / gcd;
-
-    if( imm_numer != 1 )
+    if( imm_numer != 1.0 )
     {
       cur->right = new Expr();
       cur->right->token = new Token();
@@ -254,7 +227,7 @@ void AST::Expr::Optimize()
       cur->type = Expr::Mul;
       cur = cur->left = new Expr();
     }
-    if( imm_denom != 1 )
+    if( imm_denom != 1.0 )
     {
       cur->right = new Expr();
       cur->right->token = new Token();
@@ -263,34 +236,59 @@ void AST::Expr::Optimize()
       cur->type = Expr::Div;
       cur = cur->left = new Expr();
     }
-  }
 
-  // reconstructing Expr (to ret)
-  if( parts.size() == 1 )
-  {
-    auto part = parts[0];
-    // copy part.expr => ret
-    ret = *part.expr;
-  }
-  else
-  {
-    int i = 0;
-    for( auto&& part : parts )
+    // reduction!!!
+    // reduct step1: split to denom and numer
+    std::vector<TypedExpr> numers; // type == normal
+    std::vector<TypedExpr> denoms; // type == innormal
+    for( auto&& factor : parts )
     {
-      if( parts.size() == ++i )
+      if( factor.type == TypedExpr::Normal )
       {
-        *cur = *part.expr;
+        numers.emplace_back(factor);
       }
       else
       {
-        cur->right = part.expr;
-        cur->type = part.getType();
-        cur = cur->left = new Expr();
+        denoms.emplace_back(factor);
       }
+    }
+    // reduct step2: remove duplicate(s)
+    for( auto it = numers.begin(); it != numers.end(); )
+    {
+      auto numer = *it;
+      if( Utils::VectorHasItem(denoms, numer) )
+      {
+        denoms.erase(denoms.begin() + Utils::VectorFindItem(denoms, numer));
+        numers.erase(it);
+      }
+      else
+        it++;
+    }
+    // reduct step3: reconstructing parts
+    parts.clear();
+    for( auto&& numer : numers )
+      parts.emplace_back(numer);
+    for( auto&& denom : denoms )
+      parts.emplace_back(denom);
+  }
+
+  // reconstructing Expr (to ret)
+
+  int i = 0;
+  for( auto&& part : parts )
+  {
+    if( parts.size() == ++i )
+    {
+      *cur = *part.expr;
+    }
+    else
+    {
+      cur->right = part.expr;
+      cur->type = part.getType();
+      cur = cur->left = new Expr();
     }
   }
 
-  std::cout << "check: " << *this << " | " << ret << std::endl;
   this->left = ret.left;
   this->type = ret.type;
   this->right = ret.right;
