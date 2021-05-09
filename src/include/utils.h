@@ -100,9 +100,9 @@ namespace Utils
   }
   template<typename T>
   int  VectorFindItem(std::vector<T> vec, T val){
-    return ::find_vector(vec,[val](T v){return val==v;},val);
+    return ::find_vector(vec,[](T v,T t){return v==t;},val);
   }
-  
+
   template<typename T>
   bool VectorHasItem(std::vector<T> vec, T val){
     for (auto &&elem : vec) 
