@@ -183,6 +183,7 @@ void AST::Expr::Optimize()
       cur->type = immidiate > 0 ? Expr::Add : Expr::Sub;
       cur = cur->left = new Expr();
     }
+    Expr_Summarize(parts);
   }
   else if( exprtype.type == ExprType::Term )
   {
