@@ -154,6 +154,12 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
   for( auto&& expr : parts )
   {
     std::cout << *expr.expr << std::endl;
+    for (auto &&variable : getVariables(*expr.expr))
+    {
+      std::cout<<variable<<" ";
+    }
+    std::cout<<std::endl;
+    
   }
 }
 /* internal functions - end */
