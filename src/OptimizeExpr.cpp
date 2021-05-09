@@ -134,7 +134,7 @@ class TypedExpr
 
 /* internal types - end */
 
-void getFactors(AST::Expr& expr, std::vector<AST::Expr>& dest)
+void getNumreFactors(AST::Expr& expr, std::vector<AST::Expr>& dest)
 {
   if( expr.type != AST::Expr::Mul )
   {
@@ -143,9 +143,9 @@ void getFactors(AST::Expr& expr, std::vector<AST::Expr>& dest)
   else
   {
     if( expr.left )
-      getFactors(*expr.left, dest);
+      getNumreFactors(*expr.left, dest);
     if( expr.right )
-      getFactors(*expr.right, dest);
+      getNumreFactors(*expr.right, dest);
   }
 }
 
@@ -181,7 +181,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
   {
     std::cout << *part.expr << "|";
     std::vector<AST::Expr> factors;
-    getFactors(*part.expr, factors);
+    getNumreFactors(*part.expr, factors);
     for( auto&& factor : factors )
     {
       std::cout << factor << ", ";
