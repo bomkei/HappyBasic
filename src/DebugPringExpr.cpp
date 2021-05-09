@@ -32,9 +32,10 @@ std::ostream& operator << (std::ostream& ss, const AST::Expr& expr)
 
     switch( token->type )
     {
-      case Token::Operator:
-        ss << "{" << token->str << "}";
-        break;
+      //case Token::Operator:
+      //  ss << "{" << token->str << "}";
+      //  break;
+
       case Token::Ident:
         ss << token->str << "'";
         break;
@@ -48,18 +49,19 @@ std::ostream& operator << (std::ostream& ss, const AST::Expr& expr)
   }
   else if( expr.type == AST::Expr::Variable )
   {
-    ss << "var[" << expr.varIndex << "]";
+    ss << "var[" << expr.varIndex << "](" << expr.token->str << ")";
   }
   else if( expr.type == AST::Expr::Callfunc )
   {
     auto callfunc = reinterpret_cast<AST::Callfunc*>((AST::Expr*)&expr);
     ss << callfunc->token->str << "(";
 
-    for( auto arg : callfunc->args )
+    for( size_t i = 0; i < callfunc->args.size(); i++ )
     {
-      ss << arg << ",";
+      ss << *(callfunc->args[i]);
+      if( i < callfunc->args.size() - 1 ) ss << ", ";
     }
-
+    
     ss << ")";
   }
 
