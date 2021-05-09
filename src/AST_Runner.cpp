@@ -102,6 +102,9 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
       *dest.var_ptr = src;
 
+      //alart;
+      //std::cout << dest.var_ptr->ToString() << '\n';
+
       return src;
     }
 
