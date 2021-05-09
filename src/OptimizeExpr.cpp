@@ -152,17 +152,7 @@ void iterateFactors(AST::Expr& expr, F func)
 
 void getNumreFactors(AST::Expr& expr, std::vector<AST::Expr>& dest)
 {
-  if( expr.type != AST::Expr::Mul )
-  {
-    dest.emplace_back(expr);
-  }
-  else
-  {
-    if( expr.left )
-      getNumreFactors(*expr.left, dest);
-    if( expr.right )
-      getNumreFactors(*expr.right, dest);
-  }
+  iterateFactors(expr, [&](auto expr) { dest.emplace_back(expr); });
 }
 
 /* internal functions */
