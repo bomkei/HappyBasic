@@ -9,7 +9,7 @@ AST::For* ParserCore::For()
     auto ast = new AST::For;
     ast->token = csmtok;
 
-    ast->counter = Expr();
+    ast->counter = IndexRef();
 
     expect("=");
     ast->begin = Expr();
