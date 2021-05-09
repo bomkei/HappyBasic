@@ -325,7 +325,7 @@ AST::Expr* ParserCore::Expr()
 {
   auto expr = Assign();
 
-  Debug(expr);
+  //Debug(expr);
   //exit(10);
 
   return expr;

@@ -26,7 +26,7 @@ std::string AST::Expr::ToString() const
       std::string s;
 
       auto&& elems = ((AST::Array*)this)->elems;
-      
+
       for( int i = 0; i < elems.size(); i++ )
       {
         s += elems[i]->ToString();
@@ -65,7 +65,7 @@ std::string AST::Expr::ToString() const
       auto left = this->left->ToString();
       auto right = this->right->ToString();
 
-      return "("+left+")" +
+      return "(" + left + ")" +
         [] (Type t) {
         switch( t ) {
           case Add: return "+";
