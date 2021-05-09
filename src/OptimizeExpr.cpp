@@ -134,9 +134,9 @@ class TypedExpr
 /* internal types - end */
 
 /* internal functions */
-void Expr_Summarize(std::vector<TypedExpr>& expr)
+void Expr_Summarize(std::vector<TypedExpr>& parts)
 {
-  for( auto&& _expr : expr )
+  for( auto&& _expr : parts )
   {
     std::cout << *_expr.expr << std::endl;
   }
