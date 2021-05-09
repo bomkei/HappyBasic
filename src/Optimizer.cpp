@@ -1,110 +1,74 @@
 #include "main.h"
-//
-//bool operator == (Optimizer::Alphabet const& a, Optimizer::Alphabet const& b)
-//{
-//  return a.name == b.name;
-//}
 
-namespace Optimizer
+namespace AST_Utils
 {
-  bool Alphabet::operator == (Alphabet const& a)
+  struct Alphabet
   {
-    return type == a.type && name == a.name;
-  }
+    // true  = *
+    // false = /
+    bool IsNumerator;
 
+    std::string Name;
+    AST::Expr* ptr;
 
-  bool IsHaveAlphabet(AST::Expr* expr, Alphabet const& alpha)
-  {
-    auto dont_r = false;
-    auto res_r = false;
-
-    if( !expr )
-      return false;
-
-    alart;
-    std::cout << expr->token->str << '\n';
-
-    //if( expr->type == AST::Expr::Variable )
-    //  if( expr->token->str == alpha.name )
-    //    return true;
-
-    //return IsHaveAlphabet(expr->left, alpha) || IsHaveAlphabet(expr->right, alpha);
-
-    if( expr->type == AST::Expr::Variable )
+    Alphabet(std::string const& name = "", AST::Expr* ptr = nullptr)
+      :IsNumerator(true), Name(name), ptr(ptr)
     {
-      return expr->token->str == alpha.name;
-    }
-    else if( expr->right && expr->right->type == AST::Expr::Variable )
-    {
-      auto check = false;
-
-      if( expr->type == AST::Expr::Mul )
-      {
-        if( alpha.type == Alphabet::Type::Mul )
-          check = true;
-      }
-      else if( expr->type == AST::Expr::Div && alpha.type == Alphabet::Type::Div )
-        check = true;
-
-      if( check )
-      {
-        res_r = expr->right->token->str == alpha.name;
-      }
     }
 
-    auto left = IsHaveAlphabet(expr->left, alpha);
-
-    if( !dont_r )
-      left = left && IsHaveAlphabet(expr->right, alpha);
-
-    return left;
-  }
-
-  void RemoveAlphabet(AST::Expr* expr, std::string const& name)
-  {
-    if( !expr )
-      return;
-    
-    if( expr->left && expr->right )
+    bool operator == (Alphabet const& a) const
     {
-      if( expr->left->token->str == name )
-      {
-        *expr = *expr->right;
-        //return;
-      }
-      else if( expr->right->token->str == name )
-      {
-        *expr = *expr->left;
-        //return;
-      }
+      return
+        IsNumerator == a.IsNumerator &&
+        Name == a.Name;
     }
+  };
 
-    RemoveAlphabet(expr->left, name);
-    RemoveAlphabet(expr->right, name);
-  }
+  struct Term
+  {
+    enum Sign
+    {
+      Plus,
+      Minus
+    };
+
+    Sign sign;
+    AST::Expr* ptr;
+
+    Term(AST::Expr* p = nullptr)
+      :sign(Sign::Plus), ptr(p)
+    {
+
+    }
+  };
 
   std::vector<Term> GetTerms(AST::Expr* expr)
   {
-    std::vector<Term> terms;
+    std::vector<Term> ret;
 
-    if( expr->type != AST::Expr::Add && expr->type != AST::Expr::Sub )
+    if( !expr )
+      return ret;
+
+    // add / sub
+    if( expr->type == AST::Expr::Add || expr->type == AST::Expr::Sub )
     {
-      terms.push_back(expr);
-      return terms;
+      auto left = GetTerms(expr->left);
+      auto right = GetTerms(expr->right);
+      
+      right[0].sign = expr->type == AST::Expr::Add ? Term::Sign::Plus : Term::Sign::Minus;
+
+      ret.insert(ret.end(), left.begin(), left.end());
+      ret.insert(ret.end(), right.begin(), right.end());
+
+      return ret;
     }
+    
 
-    auto left = GetTerms(expr->left);
-    auto right = GetTerms(expr->right);
+    Term term;
+    term.ptr = expr;
+    ret.emplace_back(term);
 
-    right[0].sign = expr->type == AST::Expr::Add ? Term::Sign::Plus : Term::Sign::Minus;
-
-    for( auto&& t : left )
-      terms.emplace_back(t);
-
-    for( auto&& t : right )
-      terms.emplace_back(t);
-
-    return terms;
+    return ret;
   }
 
   std::vector<Alphabet> GetAlphabets(AST::Expr* expr)
@@ -114,140 +78,181 @@ namespace Optimizer
 
     if( !expr )
       return ret;
-    
+
     if( expr->type == AST::Expr::Variable )
     {
-      ret.push_back(expr->token->str);
+      ret.emplace_back(expr->token->str, expr);
       return ret;
     }
     else if( expr->right && expr->right->type == AST::Expr::Variable )
     {
-      Alphabet a;
-      
-      if( expr->type == AST::Expr::Mul )
-        a.type = Alphabet::Type::Mul;
-      else
-        a.type = Alphabet::Type::Div;
-
-      a.name = expr->right->token->str;
-      ret.emplace_back(a);
-
       dont_r = true;
+      
+      Alphabet ab;
+      ab.IsNumerator = expr->type == AST::Expr::Mul;
+      ab.Name = expr->right->token->str;
+      ab.ptr = expr->right;
+
+      ret.emplace_back(ab);
     }
 
-    auto left = GetAlphabets(expr->left);
+    for( auto&& alpha : GetAlphabets(expr->left) )
+    {
+      if( std::count(ret.begin(), ret.end(), alpha) == 0 )
+      {
+        ret.emplace_back(alpha);
+      }
+    }
     
-    for( auto&& t : left )
-      ret.emplace_back(t);
-
     if( !dont_r )
     {
-      for( auto&& t : GetAlphabets(expr->right) )
-        ret.emplace_back(t);
+      for( auto&& alpha : GetAlphabets(expr->right) )
+      {
+        if( std::count(ret.begin(), ret.end(), alpha) == 0 )
+        {
+          ret.emplace_back(alpha);
+        }
+      }
     }
 
     return ret;
   }
 
-  AST::Expr* ConstructAST_FromTerms(std::vector<Term> const& terms)
+  bool RemoveAlphabet(AST::Expr* expr, Alphabet const& alpha)
+  {
+    if( !expr )
+      return false;
+
+    if( expr->type == AST::Expr::Mul )
+    {
+      if( !alpha.IsNumerator )
+        return false;
+    }
+    else if( expr->type == AST::Expr::Div )
+      if( alpha.IsNumerator )
+        goto L;
+
+    if( !expr->right || !expr->right )
+      return false;
+
+    if( expr->right->token->str == alpha.Name )
+    {
+      *expr = *expr->left;
+      return true;
+    }
+    else if( expr->left->token->str == alpha.Name )
+    {
+      *expr = *expr->right;
+      return true;
+    }
+
+  L:
+    return RemoveAlphabet(expr->left, alpha);
+  }
+
+  AST::Expr* ConstructAST(std::vector<Term> const& terms)
   {
     if( terms.empty() )
       return nullptr;
 
-    auto ast = terms[0].term;
+    auto ast = terms[0].ptr;
 
     for( size_t i = 1; i < terms.size(); i++ )
     {
-      auto tk = new Token;
-      tk->type = Token::Operator;
-      tk->str = terms[i].sign == Term::Sign::Plus ? "+" : "-";
-
-      ast =
-        new AST::Expr(
-          terms[i].sign == Term::Sign::Plus ? AST::Expr::Add : AST::Expr::Sub,
-          ast, terms[i].term, tk
-        );
+      ast = new AST::Expr(terms[i].sign == Term::Plus ? AST::Expr::Add : AST::Expr::Sub, ast, terms[i].ptr, nullptr);
     }
 
     return ast;
   }
+
 }
 
-
-void Debug(AST::Expr* expr)
+std::ostream& operator << (std::ostream& ost, AST_Utils::Alphabet const& a)
 {
-  std::vector<Optimizer::Alphabet> Alphabets; // of terms
+  ost << (a.IsNumerator ? "*" : "/") << " " << a.Name;
+  return ost;
+}
 
-  auto terms = Optimizer::GetTerms(expr);
+std::ostream& operator << (std::ostream& ost, AST_Utils::Term const& t)
+{
+  ost << (t.sign == AST_Utils::Term::Sign::Plus ? "+" : "-") << " " << t.ptr->ToString();
+  return ost;
+}
+
+void Debug(AST::Expr* ast)
+{
+  using namespace AST_Utils;
+
+  std::cout << "\nTerms(before):\n";
+  auto terms = GetTerms(ast);
+  for( auto&& t : terms )
+  {
+    std::cout << t << '\n';
+  }
+
+  std::cout << "\nAlphabets:\n";
+  auto alphabets = GetAlphabets(ast);
+  for( auto&& alpha : alphabets )
+  {
+    std::cout << alpha << '\n';
+  }
+
   
+  std::cout << "\nReduce alphabets!\n";
 
-  std::cout << "\nterms(before):\n";
-  for( auto&& te : terms )
+  std::vector<Term> after_terms;
+  
+  for( auto&& alpha : alphabets )
   {
-    std::cout << (te.sign == Optimizer::Term::Sign::Plus ? "+" : "-") << " " << te.term->ToString() << '\n';
-  }
-
-  std::cout << "\nalphabets:\n";
-  for( auto&& te : terms )
-  {
-    // get alphabets
-    auto alphas = Optimizer::GetAlphabets(te.term);
-
-    // add to Alphabets if not exist
-    for( auto&& n : alphas )
+    std::vector<Term> sub;
+    
+    for( auto it = terms.begin(); it != terms.end(); )
     {
-      if( std::count(Alphabets.begin(), Alphabets.end(), n) == 0 )
-        Alphabets.emplace_back(n);
-    }
-  }
-
-  for( auto&& a : Alphabets )
-  {
-    std::cout << (a.type == Optimizer::Alphabet::Type::Mul ? "*" : "/") << " " << a.name << '\n';
-  }
-
-  std::cout << "\nreduce alphabets!\n";
-
-  for( auto&& alpha : Alphabets )
-  {
-    std::vector<Optimizer::Term> alphaTerms;
-
-    // search alpha in all terms
-    for( auto it = terms.begin(); it < terms.end();)
-    {
-      // if have
-      if( Optimizer::IsHaveAlphabet(it->term, alpha) )
+      if( it->ptr->right && it->ptr->left && RemoveAlphabet(it->ptr, alpha) )
       {
-        alart;
+        std::cout << "Reduced: " << alpha << '\n';
+        std::cout << *it << '\n';
 
-        // remove
-        Optimizer::RemoveAlphabet(it->term, alpha.name);
-
-        alphaTerms.emplace_back(*it);
+        sub.emplace_back(*it);
         terms.erase(it);
+
       }
       else
         it++;
     }
 
-    auto ast = Optimizer::ConstructAST_FromTerms(alphaTerms);
+    if( sub.empty() )
+      continue;
 
-    if( ast != nullptr )
-    {
-      //std::cout << "\nconstructed:\n";
-      //std::cout << ast->ToString() << '\n';
-    }
+    auto ast_sub = ConstructAST(sub);
+    ast_sub = new AST::Expr(AST::Expr::Mul, ast_sub, alpha.ptr, nullptr);
+
+    std::cout << "|Reduce process is completed: " << alpha << '\n';
+    std::cout << "| " << ast_sub->ToString() << '\n';
+
+    alart;
+    after_terms.emplace_back(Term(ast_sub));
 
     break;
   }
 
-  std::cout << "\nterms(after):\n";
-  for( auto&& te : terms )
+  alart;
+  for( auto&& t : terms )
+    after_terms.emplace_back(t);
+
+  
+
+  std::cout << "\nTerms(after):\n";
+  for( auto&& t : after_terms )
   {
-    std::cout << (te.sign == Optimizer::Term::Sign::Plus ? "+" : "-") << " " << te.term->ToString() << '\n';
+    std::cout << t << '\n';
   }
 
+  alart;
+  std::cout << after_terms.size() << '\n';
+
+  *ast = *ConstructAST(after_terms);
 
 
-  exit(10);
+  //exit(1);
 }

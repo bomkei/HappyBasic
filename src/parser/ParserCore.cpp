@@ -306,8 +306,6 @@ AST::Expr* ParserCore::Equal()
   return x;
 }
 
-void Debug(AST::Expr*);
-
 AST::Expr* ParserCore::Assign()
 {
   auto x = Equal();
@@ -321,13 +319,14 @@ AST::Expr* ParserCore::Assign()
   return x;
 }
 
+void Debug(AST::Expr*);
+
 AST::Expr* ParserCore::Expr()
 {
   auto expr = Assign();
 
-  //Debug(expr);
-  //exit(10);
-
+  expr->Optimize();
+  
   return expr;
 }
 
