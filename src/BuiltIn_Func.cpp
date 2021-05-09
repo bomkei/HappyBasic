@@ -7,11 +7,23 @@ Object AST_Runner::Function(AST::Callfunc* ast)
   Object ret;
 
   for( auto&& i : ast->args )
+  {
     args.emplace_back(Expr(i));
+  }
+
+  //
+  // print
+  if( name == "print" )
+  {
+    for( auto&& i : args )
+      std::cout << i.ToString();
+
+    std::cout << '\n';
+  }
 
   //
   // range
-  if( name == "range" )
+  else if( name == "range" )
   {
     ret.type = Object::Array;
 
@@ -76,7 +88,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
     auto end = args[args.size() > 1].v_int;
 
     if( begin > end )
-      Program::Error(*ast->token, "begin > end");
+      Program::Error(*ast->args[0]->token, "begin > end");
 
     if( begin == end )
       ret.v_int = begin;
@@ -130,7 +142,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
       {
         try
         {
-          auto str = args[0].to_string();
+          auto str = args[0].ToString();
           args[0].v_int = std::stoi(str, nullptr, str.find("0x") == std::string::npos ? 10 : 16);
         }
         catch( ... )
@@ -151,7 +163,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
     if( args.size() != 1 )
       Program::Error(*ast->token, "no matching args");
 
-    auto str = args[0].to_string();
+    auto str = args[0].ToString();
 
     ret.type = Object::Array;
 

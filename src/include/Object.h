@@ -8,11 +8,12 @@ struct Object
     Float,
     Char,
     Array,
+    ClassObj
   };
 
   Type type = Int;
   std::string name;
-
+  
   int v_int = 0;
   float v_float = 0;
   char v_char = 0;
@@ -22,30 +23,30 @@ struct Object
 
   Object& operator = (Object const& obj);
 
-  std::string to_string() const;
-  bool is_string() const;
-  bool eval() const;
-  bool equal(Object const&) const;
+  std::string ToString() const;
+  bool IsString() const;
+  bool Eval() const;
+  bool Equal(Object const&) const;
 
   template<typename T>
-  T as(){
+  T as()
+  {
     switch( type )
     {
-    case Int:
-      return static_cast<T>(v_int);
-      break;
+      case Int:
+        return static_cast<T>(v_int);
 
-    case Float:
-      return static_cast<T>(v_float);
-      break;
+      case Float:
+        return static_cast<T>(v_float);
 
-    case Char:
-      return static_cast<T>(v_char);
-      break;
+      case Char:
+        return static_cast<T>(v_char);
 
-    default:
-      return T();
+      default:
+        break;
     }
+    
+    return T();
   }
 };
 

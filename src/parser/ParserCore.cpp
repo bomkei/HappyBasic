@@ -306,9 +306,24 @@ AST::Expr* ParserCore::Equal()
   return x;
 }
 
+AST::Expr* ParserCore::Assign()
+{
+  auto x = Equal();
+
+  if( consume("=") )
+  {
+    auto tk = csmtok;
+    x = new AST::Expr(AST::Expr::Assign, x, Assign(), tk);
+  }
+
+  return x;
+}
+
+void Debug(AST::Expr*);
+
 AST::Expr* ParserCore::Expr()
 {
-  auto expr = Equal();
+  auto expr = Assign();
 
   expr->Optimize();
   

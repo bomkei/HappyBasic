@@ -16,7 +16,7 @@ std::string AST::Expr::ToString() const
   switch( type )
   {
     case Immidiate:
-      return token->obj.to_string();
+      return token->obj.ToString();
 
     case Variable:
       return token->str;
@@ -26,7 +26,7 @@ std::string AST::Expr::ToString() const
       std::string s;
 
       auto&& elems = ((AST::Array*)this)->elems;
-      
+
       for( int i = 0; i < elems.size(); i++ )
       {
         s += elems[i]->ToString();
@@ -55,6 +55,9 @@ std::string AST::Expr::ToString() const
       return left->ToString() + "[" + right->ToString() + "]";
     }
 
+    case Assign:
+      return left->ToString() + " = " + right->ToString();
+
     default:
     {
       if( !left || !right )
@@ -65,7 +68,7 @@ std::string AST::Expr::ToString() const
       auto left = this->left->ToString();
       auto right = this->right->ToString();
 
-      return left +
+      return "(" + left + ")" +
         [] (Type t) {
         switch( t ) {
           case Add: return "+";
@@ -126,7 +129,7 @@ bool AST::Expr::equal(AST::Expr const& ast) const
   switch( type )
   {
     case Immidiate:
-      return token->obj.equal(ast.token->obj);
+      return token->obj.Equal(ast.token->obj);
 
     case Variable:
       return varIndex == ast.varIndex;
@@ -198,21 +201,21 @@ std::string AST::Stmt::ToString(int tab) const
         "while " + ((AST::While*)this)->cond->ToString() + "\n"
         + ((AST::While*)this)->code->ToString(tab + 1) + "wend\n";
 
-    case Type::Assign:
-      return std::string(tab, ' ') + ((AST::Assign*)this)->var->ToString() + " = " + ((AST::Assign*)this)->value->ToString() + "\n";
+    //case Type::Assign:
+    //  return std::string(tab, ' ') + ((AST::Assign*)this)->var->ToString() + " = " + ((AST::Assign*)this)->value->ToString() + "\n";
 
-    case Type::Instruction:
-    {
-      std::string s = std::string(tab, ' ') + ((AST::Instruction*)this)->name + " ";
+    //case Type::Instruction:
+    //{
+    //  std::string s = std::string(tab, ' ') + ((AST::Instruction*)this)->name + " ";
 
-      for( size_t i = 0; i < ((AST::Instruction*)this)->args.size(); i++ )
-      {
-        s += ((AST::Instruction*)this)->args[i]->ToString();
-        if( i < ((AST::Instruction*)this)->args.size() - 1 ) s += ", ";
-      }
+    //  for( size_t i = 0; i < ((AST::Instruction*)this)->args.size(); i++ )
+    //  {
+    //    s += ((AST::Instruction*)this)->args[i]->ToString();
+    //    if( i < ((AST::Instruction*)this)->args.size() - 1 ) s += ", ";
+    //  }
 
-      return s + "\n";
-    }
+    //  return s + "\n";
+    //}
 
     case Type::Block:
     {

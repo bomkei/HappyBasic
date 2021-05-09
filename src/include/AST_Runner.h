@@ -14,7 +14,7 @@ public:
   static Object Stmt(AST::Stmt* ast);
 
   static Object Function(AST::Callfunc* ast);
-  static void Instruction(AST::Instruction* inst);
+  //static void Instruction(AST::Instruction* inst);
 
   static Object UserFunc(AST::Callfunc* fun);
 

@@ -9,6 +9,7 @@
 #include <vector>
 #include <utility>
 #include <ctime>
+#include <algorithm>
 
 #include "include/common.h"
 #include "include/utils.h"

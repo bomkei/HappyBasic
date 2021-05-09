@@ -156,8 +156,6 @@ std::vector<Token> Tokenizer::Tokenize()
 
       while( check() && (isalnum(c = peek()) || c == '_') )
       {
-        if( c >= 'A' && c <= 'Z' ) c += 0x20;
-
         tok.str += c, next();
       }
 

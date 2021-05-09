@@ -1,157 +1,258 @@
 #include "main.h"
 
-Optimizer::Term::Term(AST::Expr* term)
-  :term(term), sign(Sign::Plus)
+namespace AST_Utils
 {
-
-}
-
-// return: whether of reduced
-bool Optimizer::ReduceFactors(AST::Expr* expr)
-{
-  // loop is continue if true !!
-
-  switch( expr->type )
+  struct Alphabet
   {
-    case AST::Expr::Immidiate:
-    case AST::Expr::Variable:
-      return false;
+    // true  = *
+    // false = /
+    bool IsNumerator;
 
-    case AST::Expr::Callfunc:
+    std::string Name;
+    AST::Expr* ptr;
+
+    Alphabet(std::string const& name = "", AST::Expr* ptr = nullptr)
+      :IsNumerator(true), Name(name), ptr(ptr)
     {
-      auto ret = false;
+    }
 
-      for( auto&& arg : ((AST::Callfunc*)expr)->args )
-      {
-        if( ReduceFactors(arg) )
-          ret = true;
-      }
+    bool operator == (Alphabet const& a) const
+    {
+      return
+        IsNumerator == a.IsNumerator &&
+        Name == a.Name;
+    }
+  };
+
+  struct Term
+  {
+    enum Sign
+    {
+      Plus,
+      Minus
+    };
+
+    Sign sign;
+    AST::Expr* ptr;
+
+    Term(AST::Expr* p = nullptr)
+      :sign(Sign::Plus), ptr(p)
+    {
+
+    }
+  };
+
+  std::vector<Term> GetTerms(AST::Expr* expr)
+  {
+    std::vector<Term> ret;
+
+    if( !expr )
+      return ret;
+
+    // add / sub
+    if( expr->type == AST::Expr::Add || expr->type == AST::Expr::Sub )
+    {
+      auto left = GetTerms(expr->left);
+      auto right = GetTerms(expr->right);
+      
+      right[0].sign = expr->type == AST::Expr::Add ? Term::Sign::Plus : Term::Sign::Minus;
+
+      ret.insert(ret.end(), left.begin(), left.end());
+      ret.insert(ret.end(), right.begin(), right.end());
 
       return ret;
     }
+    
 
-    case AST::Expr::Array:  // ???
-    {
-      for( auto&& i : ((AST::Array*)expr)->elems )
-      {
-        while( ReduceFactors(i) );
-      }
-      break;
-    }
+    Term term;
+    term.ptr = expr;
+    ret.emplace_back(term);
 
-    default:
-    {
-      auto L = ReduceFactors(expr->left);
-      auto R = ReduceFactors(expr->right);
-
-      if( expr->left->IsConstexpr() && expr->right->IsConstexpr() )
-      {
-        expr->token->obj = AST_Runner::Expr(expr);
-        expr->type = AST::Expr::Immidiate;
-
-        delete expr->left;
-        delete expr->right;
-      }
-
-      return L || R;
-    }
+    return ret;
   }
 
-  return false;
+  std::vector<Alphabet> GetAlphabets(AST::Expr* expr)
+  {
+    std::vector<Alphabet> ret;
+    auto dont_r = false;
+
+    if( !expr )
+      return ret;
+
+    if( expr->type == AST::Expr::Variable )
+    {
+      ret.emplace_back(expr->token->str, expr);
+      return ret;
+    }
+    else if( expr->right && expr->right->type == AST::Expr::Variable )
+    {
+      dont_r = true;
+      
+      Alphabet ab;
+      ab.IsNumerator = expr->type == AST::Expr::Mul;
+      ab.Name = expr->right->token->str;
+      ab.ptr = expr->right;
+
+      ret.emplace_back(ab);
+    }
+
+    for( auto&& alpha : GetAlphabets(expr->left) )
+    {
+      if( std::count(ret.begin(), ret.end(), alpha) == 0 )
+      {
+        ret.emplace_back(alpha);
+      }
+    }
+    
+    if( !dont_r )
+    {
+      for( auto&& alpha : GetAlphabets(expr->right) )
+      {
+        if( std::count(ret.begin(), ret.end(), alpha) == 0 )
+        {
+          ret.emplace_back(alpha);
+        }
+      }
+    }
+
+    return ret;
+  }
+
+  bool RemoveAlphabet(AST::Expr* expr, Alphabet const& alpha)
+  {
+    if( !expr )
+      return false;
+
+    if( expr->type == AST::Expr::Mul )
+    {
+      if( !alpha.IsNumerator )
+        return false;
+    }
+    else if( expr->type == AST::Expr::Div )
+      if( alpha.IsNumerator )
+        goto L;
+
+    if( !expr->right || !expr->right )
+      return false;
+
+    if( expr->right->token->str == alpha.Name )
+    {
+      *expr = *expr->left;
+      return true;
+    }
+    else if( expr->left->token->str == alpha.Name )
+    {
+      *expr = *expr->right;
+      return true;
+    }
+
+  L:
+    return RemoveAlphabet(expr->left, alpha);
+  }
+
+  AST::Expr* ConstructAST(std::vector<Term> const& terms)
+  {
+    if( terms.empty() )
+      return nullptr;
+
+    auto ast = terms[0].ptr;
+
+    for( size_t i = 1; i < terms.size(); i++ )
+    {
+      ast = new AST::Expr(terms[i].sign == Term::Plus ? AST::Expr::Add : AST::Expr::Sub, ast, terms[i].ptr, nullptr);
+    }
+
+    return ast;
+  }
+
 }
 
-std::vector<Optimizer::Term> Optimizer::GetTermsFromExpr(AST::Expr* expr)
+std::ostream& operator << (std::ostream& ost, AST_Utils::Alphabet const& a)
 {
-  std::vector<Term> terms;
-
-  if( expr->type != AST::Expr::Add && expr->type != AST::Expr::Sub )
-  {
-    terms.push_back(expr);
-    return terms;
-  }
-
-  auto left = GetTermsFromExpr(expr->left);
-  auto right = GetTermsFromExpr(expr->right);
-
-  right[0].sign = expr->type == AST::Expr::Add ? Term::Sign::Plus : Term::Sign::Minus;
-
-  for( auto&& t : left )
-    terms.emplace_back(t);
-
-  for( auto&& t : right )
-    terms.emplace_back(t);
-
-  return terms;
+  ost << (a.IsNumerator ? "*" : "/") << " " << a.Name;
+  return ost;
 }
 
-void Debug(AST::Expr* expr)
+std::ostream& operator << (std::ostream& ost, AST_Utils::Term const& t)
 {
+  ost << (t.sign == AST_Utils::Term::Sign::Plus ? "+" : "-") << " " << t.ptr->ToString();
+  return ost;
+}
 
-  // before
-  std::cout << expr->ToString() << '\n';
-  std::cout << "start optimize\n\n";
+void Debug(AST::Expr* ast)
+{
+  using namespace AST_Utils;
 
-  //Optimizer::ReduceConstexpr(expr);
-
-  auto terms = Optimizer::GetTermsFromExpr(expr);
-
-
-  for( size_t i = 0; i < terms.size() - 1; )
+  std::cout << "\nTerms(before):\n";
+  auto terms = GetTerms(ast);
+  for( auto&& t : terms )
   {
-    if( terms[i].term->IsConstexpr() && terms[i + 1].term->IsConstexpr() )
+    std::cout << t << '\n';
+  }
+
+  std::cout << "\nAlphabets:\n";
+  auto alphabets = GetAlphabets(ast);
+  for( auto&& alpha : alphabets )
+  {
+    std::cout << alpha << '\n';
+  }
+
+  
+  std::cout << "\nReduce alphabets!\n";
+
+  std::vector<Term> after_terms;
+  
+  for( auto&& alpha : alphabets )
+  {
+    std::vector<Term> sub;
+    
+    for( auto it = terms.begin(); it != terms.end(); )
     {
-      auto ast = new AST::Expr;
-
-      ast->type =
-        (terms[i + 1].sign == Optimizer::Term::Sign::Minus) ? AST::Expr::Sub : AST::Expr::Add;
-
-      ast->left = terms[i].term;
-      ast->right = terms[i + 1].term;
-      ast->token = ast->left->token;
-
-      ast->left->token->obj = AST_Runner::Expr(ast);
-      ast->left->type = AST::Expr::Immidiate;
-
-      terms[i].term = ast->left;
-      delete ast->right;
-
-      terms.erase(terms.begin() + i + 1);
-    }
-    else if( !terms[i].term->IsConstexpr() )
-    {
-      while( Optimizer::ReduceFactors(terms[i].term) )
+      if( it->ptr->right && it->ptr->left && RemoveAlphabet(it->ptr, alpha) )
       {
-        alart;
+        std::cout << "Reduced: " << alpha << '\n';
+        std::cout << *it << '\n';
+
+        sub.emplace_back(*it);
+        terms.erase(it);
+
       }
-      i++;
+      else
+        it++;
     }
-    else
-      i++;
+
+    if( sub.empty() )
+      continue;
+
+    auto ast_sub = ConstructAST(sub);
+    ast_sub = new AST::Expr(AST::Expr::Mul, ast_sub, alpha.ptr, nullptr);
+
+    std::cout << "|Reduce process is completed: " << alpha << '\n';
+    std::cout << "| " << ast_sub->ToString() << '\n';
+
+    alart;
+    after_terms.emplace_back(Term(ast_sub));
+
+    break;
   }
 
   alart;
+  for( auto&& t : terms )
+    after_terms.emplace_back(t);
 
-  for( size_t i = 0; i < terms.size(); i++ )
+  
+
+  std::cout << "\nTerms(after):\n";
+  for( auto&& t : after_terms )
   {
-    if( terms[i].term->IsConstexpr() )
-    {
-      auto copy = terms[i];
-      terms.erase(terms.begin() + i);
-      terms.insert(terms.begin(), copy);
-    }
+    std::cout << t << '\n';
   }
 
   alart;
+  std::cout << after_terms.size() << '\n';
+
+  *ast = *ConstructAST(after_terms);
 
 
-  for( auto&& i : terms )
-  {
-  //  std::cout << i.term->ToString() << '\n';
-  }
-
-  alart;
-  std::cout << expr->ToString() << '\n';
-
-  alart;
-  exit(100);
+  //exit(1);
 }
