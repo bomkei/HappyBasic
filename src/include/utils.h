@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 #if _DEBUG_BUILD_
 #define  alart  fprintf(stderr,"\t%s:%d\n",get_file_name(__FILE__),__LINE__)
 #define  view_pointer(p)  fprintf(stderr,"\t%s = %p\n", #p, p)
