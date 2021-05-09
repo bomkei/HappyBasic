@@ -134,11 +134,11 @@ class TypedExpr
 
 /* internal types - end */
 
-void getFactors(AST::Expr& expr, std::vector<int>& dest)
+void getFactors(AST::Expr& expr, std::vector<AST::Expr>& dest)
 {
   if( expr.type != AST::Expr::Mul )
   {
-    dest.emplace_back(expr.varIndex);
+    dest.emplace_back(expr);
   }
   else
   {
