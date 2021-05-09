@@ -179,6 +179,14 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
 
   for( auto&& part : parts )
   {
+    std::cout << *part.expr << "|";
+    std::vector<AST::Expr> factors;
+    getFactors(*part.expr, factors);
+    for( auto&& factor : factors )
+    {
+      std::cout << factor << ", ";
+    }
+    std::cout << std::endl;
   }
 }
 /* internal functions - end */
