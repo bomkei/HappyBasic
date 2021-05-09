@@ -133,6 +133,8 @@ class TypedExpr
 
 /* internal types - end */
 
+/* internal functions */
+/* internal functions - end */
 void AST::Expr::Optimize()
 {
   Expr ret;
