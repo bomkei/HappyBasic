@@ -144,6 +144,12 @@ void _getVariables(AST::Expr& expr, std::vector<int>& dest)
   _getVariables(*expr.left, dest);
   _getVariables(*expr.right, dest);
 }
+std::vector<int> getVariables(AST::Expr& expr)
+{
+  static std::vector<int> ret;
+  _getVariables(expr, ret);
+  return ret;
+}
 void Expr_Summarize(std::vector<TypedExpr>& parts)
 {
   for( auto&& expr : parts )
