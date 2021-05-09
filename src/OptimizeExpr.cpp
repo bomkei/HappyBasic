@@ -264,15 +264,6 @@ void AST::Expr::Optimize()
       else
         it++;
     }
-    for( auto&& denom : denoms )
-    {
-      std::cout << *denom.expr << std::endl;
-    }
-    std::cout << "-----" << std::endl;
-    for( auto&& numer : numers )
-    {
-      std::cout << *numer.expr << std::endl;
-    }
   }
 
   // reconstructing Expr (to ret)
