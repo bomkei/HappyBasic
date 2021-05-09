@@ -136,6 +136,7 @@ class TypedExpr
 /* internal functions */
 void getVariables(TypedExpr& expr, std::vector<std::string>& dest)
 {
+  assert(expr.kind == ExprType::Term);
 }
 void Expr_Summarize(std::vector<TypedExpr>& parts)
 {
