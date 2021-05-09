@@ -125,8 +125,9 @@ class TypedExpr
       }
     }
   }
-  bool operator==(TypedExpr& target){
-    return this->expr->equal(*target.expr) and kind==target.kind;
+  bool operator==(TypedExpr& target)
+  {
+    return this->expr->equal(*target.expr) and kind == target.kind;
   }
 };
 
@@ -254,13 +255,24 @@ void AST::Expr::Optimize()
     // reduct step2: remove duplicate(s)
     for( auto it = numers.begin(); it != numers.end(); )
     {
-      auto numer=*it;
-      if(Utils::VectorHasItem(denoms,numer)){
-          denoms.erase(denoms.begin()+Utils::VectorFindItem(denoms,numer));
-          numers.erase(it);
+      auto numer = *it;
+      if( Utils::VectorHasItem(denoms, numer) )
+      {
+        denoms.erase(denoms.begin() + Utils::VectorFindItem(denoms, numer));
+        numers.erase(it);
       }
+      else
+        it++;
     }
-    
+    for( auto&& denom : denoms )
+    {
+      std::cout << *denom.expr << std::endl;
+    }
+    std::cout << "-----" << std::endl;
+    for( auto&& numer : numers )
+    {
+      std::cout << *numer.expr << std::endl;
+    }
   }
 
   // reconstructing Expr (to ret)
