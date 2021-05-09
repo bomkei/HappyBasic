@@ -134,6 +134,21 @@ class TypedExpr
 
 /* internal types - end */
 
+void getFactors(AST::Expr& expr, std::vector<int>& dest)
+{
+  if( expr.type != AST::Expr::Mul )
+  {
+    dest.emplace_back(expr.varIndex);
+  }
+  else
+  {
+    if( expr.left )
+      getFactors(*expr.left, dest);
+    if( expr.right )
+      getFactors(*expr.right, dest);
+  }
+}
+
 /* internal functions */
 void _getVariables(AST::Expr& expr, std::vector<int>& dest)
 {
@@ -161,6 +176,10 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     _getVariables(*expr.expr, variables);
   }
   Utils::VectorUnique(variables);
+
+  for( auto&& part : parts )
+  {
+  }
 }
 /* internal functions - end */
 void AST::Expr::Optimize()
