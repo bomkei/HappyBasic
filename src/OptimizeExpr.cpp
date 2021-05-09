@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cmath>
 #include <numeric>
+#include <map>
 
 /* internal types */
 class ExprType
