@@ -139,8 +139,8 @@ void _getVariables(AST::Expr& expr, std::vector<int>& dest)
   if( expr.type == AST::Expr::Variable )
     dest.emplace_back(expr.varIndex);
 
-  if(!expr.left)_getVariables(*expr.left, dest);
-  if(!expr.right)_getVariables(*expr.right, dest);
+  if(expr.left)_getVariables(*expr.left, dest);
+  if(expr.right)_getVariables(*expr.right, dest);
 }
 std::vector<int> getVariables(AST::Expr& expr)
 {
