@@ -152,6 +152,7 @@ std::vector<int> getVariables(AST::Expr& expr)
   Utils::VectorUnique(ret);
   return ret;
 }
+// parts = std::vector<TypedExpr(Term) >
 void Expr_Summarize(std::vector<TypedExpr>& parts)
 {
   std::vector<int> variables;
