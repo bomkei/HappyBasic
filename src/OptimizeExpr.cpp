@@ -126,7 +126,7 @@ class TypedExpr
     }
   }
   bool operator==(TypedExpr& target){
-    return expr->equal(*target.expr) and kind==target.kind and type==target.type;
+    return this->expr->equal(*target.expr) and kind==target.kind;
   }
 };
 
