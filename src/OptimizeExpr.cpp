@@ -134,6 +134,22 @@ class TypedExpr
 
 /* internal types - end */
 
+template <typename F>
+void iterateFactors(AST::Expr& expr, F func)
+{
+  if( expr.type != AST::Expr::Mul )
+  {
+    func(expr);
+  }
+  else
+  {
+    if( expr.left )
+      getNumreFactors(*expr.left, dest);
+    if( expr.right )
+      getNumreFactors(*expr.right, dest);
+  }
+}
+
 void getNumreFactors(AST::Expr& expr, std::vector<AST::Expr>& dest)
 {
   if( expr.type != AST::Expr::Mul )
