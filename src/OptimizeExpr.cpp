@@ -134,7 +134,7 @@ class TypedExpr
 /* internal types - end */
 
 /* internal functions */
-void getVariables(AST::Expr& expr, std::vector<std::string>& dest)
+void getVariables(AST::Expr& expr, std::vector<int>& dest)
 {
   getVariables(*expr.left, dest);
   getVariables(*expr.right, dest);
