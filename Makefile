@@ -1,30 +1,22 @@
-TARGET		= HappyBasic
-EXT       =
+TARGET		:= HappyBasic
 
-SRCDIR		= src
-INCLUDE   = src/include
-OBJDIR		= build
+SRCDIR		:= src
+INCLUDE		:= src/include
+OBJDIR		:= build
 
-CXXFILES	= \
+CXXFILES	:= \
   $(wildcard $(SRCDIR)/*.cpp) \
   $(wildcard $(SRCDIR)/parser/*.cpp)
 
-OFILES		= $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(CXXFILES)))
+OFILES		:= $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(CXXFILES)))
 
-CXXFLAGS	= -O1 -std=gnu++17 -Wno-psabi
-LDFLAGS		= -Wl,--gc-sections
-
-ifeq ($(OS), Windows_NT)
-  EXT  = .exe
-else
-  EXT  =
-endif
+CXXFLAGS	:= -O1 -std=gnu++17 -Wno-psabi
+LDFLAGS		:= -Wl,--gc-sections
 
 all: $(TARGET)
 
 clean:
-	@rm -f $(OBJDIR)/*.o
-	@rm -f $(TARGET)
+	@rm -rf $(OBJDIR) $(TARGET)
 
 re: clean all
 
@@ -40,5 +32,5 @@ $(OBJDIR)/%.o: $(SRCDIR)/parser/%.cpp $(wildcard $(SRCDIR)/*.h) $(wildcard $(INC
 
 $(TARGET): $(OFILES)
 	@echo linking...
-	@g++ $(LDFLAGS) $^ -o $@$(EXT)
+	@g++ $(LDFLAGS) $^ -o $@
 
