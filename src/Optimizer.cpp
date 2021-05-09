@@ -122,8 +122,13 @@ namespace AST_Utils
       return;
 
     if( expr->type == AST::Expr::Mul )
+    {
       if( !alpha.IsNumerator )
         return;
+    }
+    else if( expr->type == AST::Expr::Div )
+      if( alpha.IsNumerator )
+        goto L;
 
     if( !expr->right || !expr->right )
       return;
@@ -133,7 +138,13 @@ namespace AST_Utils
       *expr = *expr->left;
       return;
     }
+    else if( expr->left->token->str == alpha.Name )
+    {
+      *expr = *expr->right;
+      return;
+    }
 
+  L:
     RemoveAlphabet(expr->left, alpha);
   }
 
@@ -160,7 +171,15 @@ void Debug(AST::Expr* ast)
   auto terms = GetTerms(ast);
   for( auto&& t : terms )
   {
+    //RemoveAlphabet(t.ptr, Alphabet("x"));
     std::cout << t << '\n';
+  }
+
+  std::cout << "\nAlphabets:\n";
+  auto alphabets = GetAlphabets(ast);
+  for( auto&& alpha : alphabets )
+  {
+    std::cout << alpha << '\n';
   }
 
   
