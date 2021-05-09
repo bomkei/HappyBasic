@@ -55,6 +55,9 @@ std::string AST::Expr::ToString() const
       return left->ToString() + "[" + right->ToString() + "]";
     }
 
+    case Assign:
+      return left->ToString() + " = " + right->ToString();
+
     default:
     {
       if( !left || !right )
