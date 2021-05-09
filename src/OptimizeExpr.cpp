@@ -264,6 +264,12 @@ void AST::Expr::Optimize()
       else
         it++;
     }
+    // reduct step3: reconstructing parts
+    parts.clear();
+    for( auto&& numer : numers )
+      parts.emplace_back(numer);
+    for( auto&& denom : denoms )
+      parts.emplace_back(denom);
   }
 
   // reconstructing Expr (to ret)
