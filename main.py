@@ -19,28 +19,31 @@ class msg(commands.Cog):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
         _ = await process_output(p, m, msg, ctx)
+        p = subprocess.Popen(["chmod","a+x","./plugin/BASIC_lang/HappyBasic"],
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        _ = p.communicate()[0]
         await ctx.send("ENDED.")
     
     @commands.command(aliases=["basic"])
     async def runbasic(self, ctx):
-        if ctx.message.content[:11] != ',basic\n```\n':
+        if ctx.message.content.splitlines()[1] != '```':
             return
         
-        if ctx.message.content[-3:] != '```':
+        if ctx.message.content.splitlines()[-1] != '```':
             return
         
         program = ctx.message.content[11:-3]
         
         with open('./plugin/BASIC_lang/test.txt', 'w') as f:
             f.write(program)
-
-        p = subprocess.Popen(["make","-C","./plugin/BASIC_lang/"],
+        
+        if ctx.message.content.splitlines()[0].split(" ")[-1] == "safety":
+            p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic","-safety","./plugin/BASIC_lang/test.txt"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
-        p = subprocess.Popen(["chmod","a+x","./plugin/BASIC_lang/HappyBasic"],
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-        p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic"],
+        else:
+            p = subprocess.Popen(["./plugin/BASIC_lang/HappyBasic","./plugin/BASIC_lang/test.txt"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         msg,m = await process_output(p, await ctx.send("RUN DEBUG"), "```basic\n", ctx)
