@@ -208,7 +208,7 @@ void Debug(AST::Expr* ast)
     
     for( auto it = terms.begin(); it != terms.end(); )
     {
-      if( RemoveAlphabet(it->ptr, alpha) )
+      if( it->ptr->right && it->ptr->left && RemoveAlphabet(it->ptr, alpha) )
       {
         std::cout << "Reduced: " << alpha << '\n';
         std::cout << *it << '\n';
@@ -220,6 +220,9 @@ void Debug(AST::Expr* ast)
       else
         it++;
     }
+
+    if( sub.empty() )
+      continue;
 
     auto ast_sub = ConstructAST(sub);
     ast_sub = new AST::Expr(AST::Expr::Mul, ast_sub, alpha.ptr, nullptr);
