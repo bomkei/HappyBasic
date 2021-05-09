@@ -134,6 +134,9 @@ class TypedExpr
 /* internal types - end */
 
 /* internal functions */
+void getVariables(TypedExpr& expr, std::vector<std::string>& dest)
+{
+}
 void Expr_Summarize(std::vector<TypedExpr>& parts)
 {
   for( auto&& expr : parts )
