@@ -152,16 +152,12 @@ std::vector<int> getVariables(AST::Expr& expr)
 }
 void Expr_Summarize(std::vector<TypedExpr>& parts)
 {
+  std::vector<int> variables;
   for( auto&& expr : parts )
   {
-    std::cout << *expr.expr << std::endl;
-    for (auto &&variable : getVariables(*expr.expr))
-    {
-      std::cout<<variable<<" ";
-    }
-    std::cout<<std::endl;
-    
+    _getVariables(*expr.expr,variables);
   }
+  Utils::VectorUnique(variables);
 }
 /* internal functions - end */
 void AST::Expr::Optimize()
