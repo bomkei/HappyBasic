@@ -137,9 +137,9 @@ class TypedExpr
 void _getVariables(AST::Expr& expr, std::vector<int>& dest)
 {
   if( expr.type == AST::Expr::Variable )
-    dest.emplace_back(expr.left->varIndex);
+    dest.emplace_back(expr.varIndex);
   if( expr.type == AST::Expr::Variable )
-    dest.emplace_back(expr.right->varIndex);
+    dest.emplace_back(expr.varIndex);
 
   _getVariables(*expr.left, dest);
   _getVariables(*expr.right, dest);
