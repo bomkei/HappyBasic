@@ -13,7 +13,7 @@ struct Object
 
   Type type = Int;
   std::string name;
-
+  
   int v_int = 0;
   float v_float = 0;
   char v_char = 0;

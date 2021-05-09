@@ -1,12 +1,16 @@
 #include "main.h"
 #include <ostream>
 
-std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr) {
-  if( &expr == nullptr ) {
+std::ostream& operator << (std::ostream& ss, const AST::Expr& expr)
+{
+  if( &expr == nullptr )
+  {
     ss << "null";
     return ss;
   }
-  if( expr.type >= AST::Expr::Add && AST::Expr::Div >= expr.type ) {
+
+  if( expr.type >= AST::Expr::Add && AST::Expr::Div >= expr.type )
+  {
     ss << *expr.left;
     ss << (
       expr.type == AST::Expr::Add ? "+"
@@ -16,16 +20,22 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr) {
       : "?");
     ss << *expr.right;
   }
-  else if( expr.type == AST::Expr::Immidiate ) {
+  else if( expr.type == AST::Expr::Immidiate )
+  {
     auto token = expr.token;
-    if( token == nullptr ) {
+
+    if( token == nullptr )
+    {
       ss << "null";
       return ss;
     }
-    switch( token->type ) {
-      case Token::Operator:
-        ss << "{" << token->str << "}";
-        break;
+
+    switch( token->type )
+    {
+      //case Token::Operator:
+      //  ss << "{" << token->str << "}";
+      //  break;
+
       case Token::Ident:
         ss << token->str << "'";
         break;
@@ -37,15 +47,21 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr) {
         break;
     }
   }
-  else if( expr.type == AST::Expr::Variable ) {
-    ss << "var[" << expr.varIndex << "]";
+  else if( expr.type == AST::Expr::Variable )
+  {
+    ss << "var[" << expr.varIndex << "](" << expr.token->str << ")";
   }
-  else if( expr.type == AST::Expr::Callfunc ) {
+  else if( expr.type == AST::Expr::Callfunc )
+  {
     auto callfunc = reinterpret_cast<AST::Callfunc*>((AST::Expr*)&expr);
     ss << callfunc->token->str << "(";
-    for( auto arg : callfunc->args ) {
-      ss << arg << ",";
+
+    for( size_t i = 0; i < callfunc->args.size(); i++ )
+    {
+      ss << *(callfunc->args[i]);
+      if( i < callfunc->args.size() - 1 ) ss << ", ";
     }
+    
     ss << ")";
   }
 

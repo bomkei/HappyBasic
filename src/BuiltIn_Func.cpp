@@ -7,7 +7,9 @@ Object AST_Runner::Function(AST::Callfunc* ast)
   Object ret;
 
   for( auto&& i : ast->args )
+  {
     args.emplace_back(Expr(i));
+  }
 
   //
   // print
