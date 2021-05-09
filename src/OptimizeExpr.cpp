@@ -144,9 +144,9 @@ void iterateFactors(AST::Expr& expr, F func)
   else
   {
     if( expr.left )
-      getNumreFactors(*expr.left, dest);
+      iterateFactors(*expr.left, func);
     if( expr.right )
-      getNumreFactors(*expr.right, dest);
+      iterateFactors(*expr.right, func);
   }
 }
 
