@@ -9,9 +9,10 @@ namespace AST_Utils
     bool IsNumerator;
 
     std::string Name;
+    AST::Expr* ptr;
 
-    Alphabet(std::string const& name = "")
-      :IsNumerator(true), Name(name)
+    Alphabet(std::string const& name = "", AST::Expr* ptr = nullptr)
+      :IsNumerator(true), Name(name), ptr(ptr)
     {
     }
 
@@ -80,7 +81,7 @@ namespace AST_Utils
 
     if( expr->type == AST::Expr::Variable )
     {
-      ret.push_back(expr->token->str);
+      ret.emplace_back(expr->token->str, expr);
       return ret;
     }
     else if( expr->right && expr->right->type == AST::Expr::Variable )
@@ -90,6 +91,7 @@ namespace AST_Utils
       Alphabet ab;
       ab.IsNumerator = expr->type == AST::Expr::Mul;
       ab.Name = expr->right->token->str;
+      ab.ptr = expr->right;
 
       ret.emplace_back(ab);
     }
@@ -116,39 +118,53 @@ namespace AST_Utils
     return ret;
   }
 
-  void RemoveAlphabet(AST::Expr* expr, Alphabet const& alpha)
+  bool RemoveAlphabet(AST::Expr* expr, Alphabet const& alpha)
   {
     if( !expr )
-      return;
+      return false;
 
     if( expr->type == AST::Expr::Mul )
     {
       if( !alpha.IsNumerator )
-        return;
+        return false;
     }
     else if( expr->type == AST::Expr::Div )
       if( alpha.IsNumerator )
         goto L;
 
     if( !expr->right || !expr->right )
-      return;
+      return false;
 
     if( expr->right->token->str == alpha.Name )
     {
       *expr = *expr->left;
-      return;
+      return true;
     }
     else if( expr->left->token->str == alpha.Name )
     {
       *expr = *expr->right;
-      return;
+      return true;
     }
 
   L:
-    RemoveAlphabet(expr->left, alpha);
+    return RemoveAlphabet(expr->left, alpha);
   }
 
-  
+  AST::Expr* ConstructAST(std::vector<Term> const& terms)
+  {
+    if( terms.empty() )
+      return nullptr;
+
+    auto ast = terms[0].ptr;
+
+    for( size_t i = 1; i < terms.size(); i++ )
+    {
+      ast = new AST::Expr(terms[i].sign == Term::Plus ? AST::Expr::Add : AST::Expr::Sub, ast, terms[i].ptr, nullptr);
+    }
+
+    return ast;
+  }
+
 }
 
 std::ostream& operator << (std::ostream& ost, AST_Utils::Alphabet const& a)
@@ -167,11 +183,10 @@ void Debug(AST::Expr* ast)
 {
   using namespace AST_Utils;
 
-  std::cout << "\nTerms:\n";
+  std::cout << "\nTerms(before):\n";
   auto terms = GetTerms(ast);
   for( auto&& t : terms )
   {
-    //RemoveAlphabet(t.ptr, Alphabet("x"));
     std::cout << t << '\n';
   }
 
@@ -183,7 +198,58 @@ void Debug(AST::Expr* ast)
   }
 
   
+  std::cout << "\nReduce alphabets!\n";
+
+  std::vector<Term> after_terms;
+  
+  for( auto&& alpha : alphabets )
+  {
+    std::vector<Term> sub;
+    
+    for( auto it = terms.begin(); it != terms.end(); )
+    {
+      if( RemoveAlphabet(it->ptr, alpha) )
+      {
+        std::cout << "Reduced: " << alpha << '\n';
+        std::cout << *it << '\n';
+
+        sub.emplace_back(*it);
+        terms.erase(it);
+
+      }
+      else
+        it++;
+    }
+
+    auto ast_sub = ConstructAST(sub);
+    ast_sub = new AST::Expr(AST::Expr::Mul, ast_sub, alpha.ptr, nullptr);
+
+    std::cout << "|Reduce process is completed: " << alpha << '\n';
+    std::cout << "| " << ast_sub->ToString() << '\n';
+
+    alart;
+    after_terms.emplace_back(Term(ast_sub));
+
+    break;
+  }
+
+  alart;
+  for( auto&& t : terms )
+    after_terms.emplace_back(t);
+
+  
+
+  std::cout << "\nTerms(after):\n";
+  for( auto&& t : after_terms )
+  {
+    std::cout << t << '\n';
+  }
+
+  alart;
+  std::cout << after_terms.size() << '\n';
+
+  *ast = *ConstructAST(after_terms);
 
 
-  exit(1);
+  //exit(1);
 }

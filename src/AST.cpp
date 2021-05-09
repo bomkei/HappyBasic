@@ -65,7 +65,7 @@ std::string AST::Expr::ToString() const
       auto left = this->left->ToString();
       auto right = this->right->ToString();
 
-      return left +
+      return "("+left+")" +
         [] (Type t) {
         switch( t ) {
           case Add: return "+";
