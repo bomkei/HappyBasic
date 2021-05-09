@@ -6,7 +6,6 @@
 *.lnk
 *.url
 *.exe
-*.out
 
 *.bat
 *.txt
