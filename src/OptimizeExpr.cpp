@@ -134,6 +134,7 @@ class TypedExpr
 /* internal types - end */
 
 /* internal functions */
+void Expr_Summarize(std::vector<TypedExpr>& expr) {};
 /* internal functions - end */
 void AST::Expr::Optimize()
 {
