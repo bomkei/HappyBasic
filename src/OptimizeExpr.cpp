@@ -197,7 +197,7 @@ void AST::Expr::Optimize()
       }
 
       auto obj = it->expr->token->obj;
-      if( it->type == TypedExpr::Innormal )
+      if( it->type == TypedExpr::Normal )
       {
         if( obj.type == Object::Int )
           imm_numer_int *= obj.v_int;
@@ -288,8 +288,8 @@ void AST::Expr::Optimize()
       cur = cur->left = new Expr();
     }
   }
-
   this->left = ret.left;
   this->type = ret.type;
   this->right = ret.right;
+  std::cout << "expr optimizer: " << *this << std::endl;
 }
