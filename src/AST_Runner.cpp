@@ -131,6 +131,11 @@ Object AST_Runner::Expr(AST::Expr* ast)
             case Object::Int: left.v_int += right.v_int; break;
             case Object::Char: left.v_char += right.v_char; break;
             case Object::Float: left.v_float += right.v_float; break;
+            
+            case Object::Array: {
+              left.list.emplace_back(right);
+              break;
+            }
           }
           break;
 
