@@ -272,6 +272,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
   switch( ast->type )
   {
+    case AST::Stmt::Class:
     case AST::Stmt::Function:
       break;
 
