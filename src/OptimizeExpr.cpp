@@ -195,9 +195,24 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     }
     if( TermsWithVariable.size() != 0 )
     {
-      AST::Expr newExpr;
+      auto newExpr = new AST::Expr();
+      auto cur = newExpr;
       // TODO: constructing Expr from TermsWithVariable to newExpr
-      TypedExpr typed(TypedExpr::Normal, TypedExpr::Term, &newExpr);
+      int i = 0;
+      for( auto&& term : TermsWithVariable )
+      {
+        if( TermsWithVariable.size() == ++i )
+        {
+          *cur = term;
+        }
+        else
+        {
+          cur->right = &term;
+          cur->type = AST::Expr::Add;
+          cur = cur->left = new AST::Expr();
+        }
+      }
+      TypedExpr typed(TypedExpr::Normal, TypedExpr::Term, newExpr);
       parts.emplace_back(typed);
     }
   }
