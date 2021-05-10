@@ -29,7 +29,8 @@ namespace AST
       Param,
       
       New,
-      MemberAccess
+      MemberAccess,
+      MemberVariable
     };
 
     Type type;
