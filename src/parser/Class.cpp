@@ -29,9 +29,7 @@ AST::Class *ParserCore::Class()
 {
   auto ast = new AST::Class;
   ast->token = &get_tok();
-
-  std::cout << ast->token->str << '\n';
-
+  
   auto closed = false;
  
   next();
