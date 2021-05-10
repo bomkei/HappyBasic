@@ -138,21 +138,22 @@ bool removeVariableOnce(AST::Expr& expr, int variable)
 {
   if( !expr.right ) // it has not depth...
   {
-    return;
+    return false;
   }
 
   if( expr.right->type == AST::Expr::Variable and expr.right->varIndex == variable )
   {
     expr = *expr.left;
+    return true;
   }
   else if( expr.left->type == AST::Expr::Variable and expr.left->varIndex == variable )
   {
     expr = *expr.right;
+    return true;
   }
   else
   {
-    removeVariableOnce(*expr.right, variable);
-    removeVariableOnce(*expr.left, variable);
+    return removeVariableOnce(*expr.right, variable) or removeVariableOnce(*expr.left, variable);
   }
 }
 
