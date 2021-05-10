@@ -46,6 +46,9 @@ std::string Object::ToString() const
 
       return  "[" + s + "]";
     }
+
+    case ClassObj:
+      return "<ClassObj>";
   }
 
   return "";
