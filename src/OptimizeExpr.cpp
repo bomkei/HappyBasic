@@ -193,6 +193,12 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
       else
         it++;
     }
+    if( TermsWithVariable.size() != 0 )
+    {
+      AST::Expr newExpr;
+      // TODO: constructing Expr from TermsWithVariable to newExpr
+      parts.emplace_back(newExpr);
+    }
   }
 }
 /* internal functions - end */
