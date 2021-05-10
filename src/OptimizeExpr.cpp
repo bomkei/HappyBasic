@@ -150,6 +150,22 @@ void iterateFactors(AST::Expr& expr, F func)
   }
 }
 
+void removeVariable(AST::Expr& expr, int variable)
+{
+  if( !expr.right ) // it has not depth...
+  {
+    return;
+  }
+
+  if( expr.right->type == AST::Expr::Variable and expr.right->varIndex == variable )
+  {
+    expr = *expr.left;
+  }
+  else if( expr.left->type == AST::Expr::Variable and expr.left->varIndex == variable )
+  {
+    expr = *expr.right;
+  }
+}
 void getNumreFactors(AST::Expr& expr, std::vector<AST::Expr>& dest)
 {
   iterateFactors(expr, [&](auto expr) { dest.emplace_back(expr); });
