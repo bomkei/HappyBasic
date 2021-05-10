@@ -8,10 +8,11 @@ Object make_new_class_Obj(std::string& name)
 AST::Class *ParserCore::Class()
 {
   auto ast = new AST::Class;
-  ast->token = csmtok;
+  ast->token = &get_tok();
 
   auto closed = false;
-
+ 
+  next();
   expect("\n");
 
   while( check() ) {
