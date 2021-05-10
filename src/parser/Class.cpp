@@ -1,14 +1,21 @@
 #include "../main.h"
 
-Object make_new_class_Obj(std::string& name)
+Object make_new_class_Obj(AST::Expr* ast)
 {
+  auto& className = ast->token->str;
+
   Object ret;
   ret.type = Object::ClassObj;
 
   for( auto&& i : Program::instance->classes ) {
-
+    if( i->token->str == className ) {
+      ret.class_ptr = i;
+      break;
+    }
   }
-  if(ret.class )
+  if( !ret.class_ptr )
+    Program::Error();
+
 
 
 

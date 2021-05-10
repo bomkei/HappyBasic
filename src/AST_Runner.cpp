@@ -7,7 +7,7 @@ bool* AST_Runner::FuncReturned = nullptr;
 Object* AST_Runner::ReturnValue = nullptr;
 
 
-Object make_new_class_Obj(std::string& name);
+Object make_new_class_Obj(AST::Expr*);
 
 
 void ObjectAdjuster(Object& L, Object& R)
@@ -114,7 +114,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
     case AST::Expr::New:
     {
-      return make_new_class_Obj(ast->left->token->str);
+      return make_new_class_Obj(ast->left);
     }
 
     default:
