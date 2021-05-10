@@ -190,11 +190,17 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
       std::cout << *part.expr << "|";
       std::vector<AST::Expr> factors;
       getNumreFactors(*part.expr, factors);
+      // remove <variable> once
       for( auto it = factors.begin(); it != factors.end(); )
       {
         auto factor = *it;
-        std::cout << factor << ", ";
-        it++;
+        if( factor.type == AST::Expr::Variable and factor.varIndex == variable )
+        {
+          factors.erase(it);
+          break; // once
+        }
+        else
+          it++;
       }
       std::cout << std::endl;
     }
