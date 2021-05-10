@@ -222,7 +222,7 @@ AST::Expr* ParserCore::MemberAccess() {
 AST::Expr* ParserCore::Unary()
 {
   if( consume("-") )
-    return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), IndexRef(), csmtok);
+    return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), MemberAccess(), csmtok);
 
   if( consume("New") )
   {
@@ -235,7 +235,7 @@ AST::Expr* ParserCore::Unary()
     return new AST::Expr(AST::Expr::New, fun, nullptr, tk);
   }
 
-  return IndexRef();
+  return MemberAccess();
 }
 
 AST::Expr* ParserCore::Mul()
