@@ -134,7 +134,7 @@ class TypedExpr
 
 /* internal types - end */
 
-void removeVariableOnce(AST::Expr& expr, int variable)
+bool removeVariableOnce(AST::Expr& expr, int variable)
 {
   if( !expr.right ) // it has not depth...
   {
