@@ -8,13 +8,14 @@ Object make_new_class_Obj(AST::Expr* ast)
   ret.type = Object::ClassObj;
 
   for( auto&& i : Program::instance->classes ) {
+    alart;
     if( i->token->str == className ) {
       ret.class_ptr = i;
       break;
     }
   }
   if( !ret.class_ptr )
-    Program::Error();
+    Program::Error(*ast->token, "undefined class");
 
 
 
@@ -26,6 +27,9 @@ AST::Class *ParserCore::Class()
 {
   auto ast = new AST::Class;
   ast->token = &get_tok();
+
+  alart;
+  std::cout << ast->token->str << '\n';
 
   auto closed = false;
  
@@ -53,6 +57,9 @@ AST::Class *ParserCore::Class()
 
   if( !closed )
     Program::Error(*ast->token, "not closed");
+
+  alart;
+  classes.emplace_back(ast);
 
   return ast;
 }

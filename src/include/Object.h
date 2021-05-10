@@ -1,5 +1,9 @@
 #pragma once
 
+namespace AST {
+  class Class;
+}
+
 struct Object
 {
   enum Type

@@ -5,7 +5,7 @@ class ParserCore
 public:
   std::vector<Object>& variables;
   std::vector<AST::Function*>& functions;
-  std::vector<AST::Class*> classes;
+  std::vector<AST::Class*>& classes;
 
   std::vector<Token> tokens;
   size_t index;
