@@ -10,10 +10,8 @@ AST::While* ParserCore::While()
   std::vector<AST::Stmt*> block;
   auto closed = false;
 
-  while( check() )
-  {
-    if( consume("Wend") )
-    {
+  while( check() ) {
+    if( consume("Wend") ) {
       expect("\n");
       closed = true;
       break;

@@ -13,11 +13,9 @@ AST::If* ParserCore::If()
   expect("Then");
   expect("\n");
 
-  while( check() )
-  {
+  while( check() ) {
     // End If
-    if( consume("End") )
-    {
+    if( consume("End") ) {
       expect("If");
       expect("\n");
       ast->pairs.emplace_back(pair);
@@ -26,8 +24,7 @@ AST::If* ParserCore::If()
     }
 
     // ElseIf
-    else if( consume("ElseIf") )
-    {
+    else if( consume("ElseIf") ) {
       ast->pairs.emplace_back(pair);
 
       pair = std::make_pair(Expr(), new AST::Block);
@@ -37,17 +34,14 @@ AST::If* ParserCore::If()
     }
 
     // Else
-    else if( consume("Else") )
-    {
+    else if( consume("Else") ) {
       ast->pairs.emplace_back(pair);
       pair = std::make_pair(AST::Expr::FromInt(1), new AST::Block);
 
       expect("\n");
 
-      while( check() )
-      {
-        if( consume("") )
-        {
+      while( check() ) {
+        if( consume("") ) {
           expect("\n");
           closed = true;
           break;
@@ -67,8 +61,7 @@ AST::If* ParserCore::If()
     }
   }
 
-  if( !closed )
-  {
+  if( !closed ) {
     Program::Error(*ast->token, "not closed");
   }
 
