@@ -183,16 +183,19 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
   }
   Utils::VectorUnique(variables);
 
-  for( auto&& part : parts )
+  for( auto&& variable : variables )
   {
-    std::cout << *part.expr << "|";
-    std::vector<AST::Expr> factors;
-    getNumreFactors(*part.expr, factors);
-    for( auto&& factor : factors )
+    for( auto&& part : parts )
     {
-      std::cout << factor << ", ";
+      std::cout << *part.expr << "|";
+      std::vector<AST::Expr> factors;
+      getNumreFactors(*part.expr, factors);
+      for( auto&& factor : factors )
+      {
+        std::cout << factor << ", ";
+      }
+      std::cout << std::endl;
     }
-    std::cout << std::endl;
   }
 }
 /* internal functions - end */
