@@ -4,7 +4,7 @@ AST::While* ParserCore::While()
 {
   //
   // while
-  if( consume("while") )
+  if( consume("While") )
   {
     auto tk = csmtok;
 
@@ -16,7 +16,7 @@ AST::While* ParserCore::While()
 
     while( check() )
     {
-      if( consume("wend") )
+      if( consume("Wend") )
       {
         expect("\n");
         closed = true;
