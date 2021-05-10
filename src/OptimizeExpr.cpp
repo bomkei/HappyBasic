@@ -134,22 +134,6 @@ class TypedExpr
 
 /* internal types - end */
 
-template <typename F>
-void iterateFactors(AST::Expr& expr, F func)
-{
-  if( expr.type != AST::Expr::Mul )
-  {
-    func(expr);
-  }
-  else
-  {
-    if( expr.left )
-      iterateFactors(*expr.left, func);
-    if( expr.right )
-      iterateFactors(*expr.right, func);
-  }
-}
-
 void removeVariable(AST::Expr& expr, int variable)
 {
   if( !expr.right ) // it has not depth...
