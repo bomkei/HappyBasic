@@ -2,6 +2,8 @@
 
 class Program
 {
+public:
+
   static Program* instance;
 
   //---------- global ----------------
@@ -25,9 +27,6 @@ class Program
 
   i64 find_func(std::string const&) const;
 
-  friend class AST_Runner;
-
-public:
   Program();
 
   void OpenFile();
