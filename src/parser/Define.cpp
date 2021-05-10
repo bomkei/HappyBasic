@@ -71,6 +71,8 @@ AST::Function* ParserCore::Define()
   ast->code = new AST::Block;
   ast->code->list = std::move(block);
 
-  functions.emplace_back(ast);
+  if( !in_class )
+    functions.emplace_back(ast);
+
   return ast;
 }
