@@ -190,9 +190,11 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
       std::cout << *part.expr << "|";
       std::vector<AST::Expr> factors;
       getNumreFactors(*part.expr, factors);
-      for( auto&& factor : factors )
+      for( auto it = factors.begin(); it != factors.end(); )
       {
+        auto factor = *it;
         std::cout << factor << ", ";
+        it++;
       }
       std::cout << std::endl;
     }
