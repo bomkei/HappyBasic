@@ -178,13 +178,7 @@ void _getVariables(AST::Expr& expr, std::vector<int>& dest)
   if( expr.right )
     _getVariables(*expr.right, dest);
 }
-std::vector<int> getVariables(AST::Expr& expr)
-{
-  static std::vector<int> ret;
-  _getVariables(expr, ret);
-  Utils::VectorUnique(ret);
-  return ret;
-}
+
 // parts = std::vector<TypedExpr(Term) >
 void Expr_Summarize(std::vector<TypedExpr>& parts)
 {
