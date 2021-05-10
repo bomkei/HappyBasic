@@ -17,7 +17,7 @@ Object make_new_class_Obj(AST::Expr* ast)
     Program::Error(*ast->token, "undefined class");
 
   for( auto&& i : ret.class_ptr->member_list ) {
-    if(i->type==AST::Stmt::Var)
+    if( i->type == AST::Stmt::Var )
       ret.list.emplace_back(AST_Runner::Expr(i->expr);
   }
 
