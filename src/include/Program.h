@@ -24,6 +24,7 @@ public:
 
   AST::Stmt* prs_result;
   AST::Function* cur_func;
+  AST::Class* cur_class = nullptr;
 
   i64 find_func(std::string const&) const;
 
