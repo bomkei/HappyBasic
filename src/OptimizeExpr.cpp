@@ -134,7 +134,7 @@ class TypedExpr
 
 /* internal types - end */
 
-void removeVariable(AST::Expr& expr, int variable)
+void removeVariableOnce(AST::Expr& expr, int variable)
 {
   if( !expr.right ) // it has not depth...
   {
@@ -151,8 +151,8 @@ void removeVariable(AST::Expr& expr, int variable)
   }
   else
   {
-    removeVariable(*expr.right, variable);
-    removeVariable(*expr.left, variable);
+    removeVariableOnce(*expr.right, variable);
+    removeVariableOnce(*expr.left, variable);
   }
 }
 
@@ -183,7 +183,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     for( auto&& part : parts )
     {
       std::cout << *part.expr << "|";
-      removeVariable(*part.expr, variable);
+      removeVariableOnce(*part.expr, variable);
       std::cout << *part.expr << std::endl;
     }
   }
