@@ -16,19 +16,12 @@ Object make_new_class_Obj(AST::Expr* ast)
   if( !ret.class_ptr )
     Program::Error(*ast->token, "undefined class");
 
-  alart;
   for( auto&& i : ret.class_ptr->member_list ) {
-    alart;
-
     if( i->type == AST::Stmt::Var ) {
       auto& obj = i->expr->left->token->obj;
 
       obj = AST_Runner::Expr(i->expr->right);
-      //obj.name = i->expr->left->token->str;
       obj.var_ptr = &obj;
-
-      alart;
-      std::cout << obj.name << '\n';
 
       ret.list.emplace_back(obj);
     }
