@@ -185,7 +185,13 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     for( auto it = parts.begin(); it != parts.end(); )
     {
       bool hasVariable = removeVariableOnce(*it->expr, variable);
-      it++;
+      if( hasVariable )
+      {
+        TermsWithVariable.emplace_back(*it->expr);
+        parts.erase(it);
+      }
+      else
+        it++;
     }
   }
 }
