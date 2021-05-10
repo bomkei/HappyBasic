@@ -202,6 +202,11 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
         else
           it++;
       }
+      for( auto&& factor : factors )
+      {
+        std::cout << factor << ", ";
+      }
+
       std::cout << std::endl;
     }
   }
