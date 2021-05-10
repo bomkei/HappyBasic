@@ -203,7 +203,7 @@ AST::Expr* ParserCore::Unary()
   if( consume("-") )
     return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), IndexRef(), csmtok);
 
-  if( consume("new") )
+  if( consume("New") )
   {
     auto tk = csmtok;
     auto fun = Primary();
