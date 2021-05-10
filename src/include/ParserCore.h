@@ -11,8 +11,12 @@ public:
   size_t index;
 
   Token* csmtok;
+  
   bool in_function;
   std::vector<AST::Expr*>* func_args;
+
+  bool in_class = false;
+  AST::Class* cur_class = nullptr;
 
   Token& get_tok();
 
