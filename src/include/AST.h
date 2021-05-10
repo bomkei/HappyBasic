@@ -181,7 +181,6 @@ namespace AST
   public:
     std::string name;
     std::vector<Stmt*> member_list;
-    Object* this_ptr = nullptr;
 
     Class()
     {
