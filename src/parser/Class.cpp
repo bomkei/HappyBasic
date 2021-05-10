@@ -2,7 +2,17 @@
 
 Object make_new_class_Obj(std::string& name)
 {
+  Object ret;
+  ret.type = Object::ClassObj;
 
+  for( auto&& i : Program::instance->classes ) {
+
+  }
+  if(ret.class )
+
+
+
+  return ret;
 }
 
 AST::Class *ParserCore::Class()
