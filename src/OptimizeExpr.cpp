@@ -149,6 +149,11 @@ void removeVariable(AST::Expr& expr, int variable)
   {
     expr = *expr.right;
   }
+  else
+  {
+    removeVariable(*expr.right, variable);
+    removeVariable(*expr.left, variable);
+  }
 }
 
 /* internal functions */
