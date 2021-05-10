@@ -87,6 +87,7 @@ namespace AST
       If,
       For,
       While,
+      Var,
       Block,
       Function,
       Break,
