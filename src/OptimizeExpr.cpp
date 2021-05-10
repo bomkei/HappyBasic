@@ -166,10 +166,6 @@ void removeVariable(AST::Expr& expr, int variable)
     expr = *expr.right;
   }
 }
-void getNumreFactors(AST::Expr& expr, std::vector<AST::Expr>& dest)
-{
-  iterateFactors(expr, [&](auto expr) { dest.emplace_back(expr); });
-}
 
 /* internal functions */
 void _getVariables(AST::Expr& expr, std::vector<int>& dest)
@@ -204,26 +200,8 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     for( auto&& part : parts )
     {
       std::cout << *part.expr << "|";
-      std::vector<AST::Expr> factors;
-      getNumreFactors(*part.expr, factors);
-      // remove <variable> once
-      for( auto it = factors.begin(); it != factors.end(); )
-      {
-        auto factor = *it;
-        if( factor.type == AST::Expr::Variable and factor.varIndex == variable )
-        {
-          factors.erase(it);
-          break; // once
-        }
-        else
-          it++;
-      }
-      for( auto&& factor : factors )
-      {
-        std::cout << factor << ", ";
-      }
-
-      std::cout << std::endl;
+      removeVariable(*part.expr, variable);
+      std::cout << *part.expr << std::endl;
     }
   }
 }
