@@ -1,7 +1,7 @@
 #include "main.h"
 #include <ostream>
 
-std::ostream& operator << (std::ostream& ss, const AST::Expr& expr)
+std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
 {
   if( &expr == nullptr )
   {
@@ -12,12 +12,11 @@ std::ostream& operator << (std::ostream& ss, const AST::Expr& expr)
   if( expr.type >= AST::Expr::Add && AST::Expr::Div >= expr.type )
   {
     ss << *expr.left;
-    ss << (
-      expr.type == AST::Expr::Add ? "+"
-      : expr.type == AST::Expr::Sub ? "-"
-      : expr.type == AST::Expr::Mul ? "*"
-      : expr.type == AST::Expr::Div ? "/"
-      : "?");
+    ss << (expr.type == AST::Expr::Add    ? "+"
+            : expr.type == AST::Expr::Sub ? "-"
+            : expr.type == AST::Expr::Mul ? "*"
+            : expr.type == AST::Expr::Div ? "/"
+                                          : "?");
     ss << *expr.right;
   }
   else if( expr.type == AST::Expr::Immidiate )
@@ -32,9 +31,9 @@ std::ostream& operator << (std::ostream& ss, const AST::Expr& expr)
 
     switch( token->type )
     {
-      //case Token::Operator:
-      //  ss << "{" << token->str << "}";
-      //  break;
+        //case Token::Operator:
+        //  ss << "{" << token->str << "}";
+        //  break;
 
       case Token::Ident:
         ss << token->str << "'";
@@ -59,9 +58,10 @@ std::ostream& operator << (std::ostream& ss, const AST::Expr& expr)
     for( size_t i = 0; i < callfunc->args.size(); i++ )
     {
       ss << *(callfunc->args[i]);
-      if( i < callfunc->args.size() - 1 ) ss << ", ";
+      if( i < callfunc->args.size() - 1 )
+        ss << ", ";
     }
-    
+
     ss << ")";
   }
 
