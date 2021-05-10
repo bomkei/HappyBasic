@@ -310,12 +310,26 @@ AST::Expr* ParserCore::Equal()
 
 AST::Expr* ParserCore::Assign()
 {
-  auto x = Equal();
+  auto x = Equal()
+  auto tk = &get_tok();
 
-  if( consume("=") )
-  {
-    auto tk = csmtok;
+  if( consume("=") ) {
     x = new AST::Expr(AST::Expr::Assign, x, Assign(), tk);
+  }
+  else if( consume("+=") ) {
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Add, x, Assign()), tk);
+  }
+  else if( consume("-=") ) {
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Sub, x, Assign()), tk);
+  }
+  else if( consume("*=") ) {
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Mul, x, Assign()), tk);
+  }
+  else if( consume("%=") ) {
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Mod, x, Assign()), tk);
+  }
+  else if( consume("/=") ) {
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Div, x, Assign()), tk);
   }
 
   return x;
