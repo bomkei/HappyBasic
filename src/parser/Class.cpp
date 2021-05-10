@@ -18,7 +18,7 @@ Object make_new_class_Obj(AST::Expr* ast)
 
   for( auto&& i : ret.class_ptr->member_list ) {
     if( i->type == AST::Stmt::Var )
-      ret.list.emplace_back(AST_Runner::Expr(i->expr);
+      ret.list.emplace_back(AST_Runner::Expr(i->expr));
   }
 
   return ret;
@@ -68,7 +68,7 @@ AST::Class *ParserCore::Class()
       expect("=");
       auto expr = Expr();
       expect("\n");
-      ss->expr = new AST::Expr(AST::Expr::Assign, AST::Expr::FromName(v_tok->str), expr);
+      ss->expr = new AST::Expr(AST::Expr::Assign, AST::Expr::FromName(v_tok->str), expr, v_tok + 1);
       ast->member_list.emplace_back(ss);
     }
     else ast->member_list.emplace_back(Statements());
