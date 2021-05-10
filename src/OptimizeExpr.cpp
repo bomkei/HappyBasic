@@ -183,7 +183,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
   {
     for( auto&& part : parts )
     {
-      removeVariableOnce(*part.expr, variable);
+      bool hasVariable = removeVariableOnce(*part.expr, variable);
     }
   }
 }
