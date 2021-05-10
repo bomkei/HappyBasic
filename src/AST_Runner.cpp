@@ -126,12 +126,8 @@ Object AST_Runner::Expr(AST::Expr* ast)
         }
       }
       else if( ast->right->type == AST::Expr::Callfunc ) {
-        alart;
-
         for( auto&& i : obj.class_ptr->member_list ) {
-          alart;
-          
-          if( i->type == AST::Stmt::Function && ((AST::Function*)i)->token->str == name ) {
+          if( i->type == AST::Stmt::Function && ((AST::Function*)i)->name == name ) {
             auto ptr = Program::instance->cur_class;
 
             Program::instance->cur_class = obj.class_ptr;
