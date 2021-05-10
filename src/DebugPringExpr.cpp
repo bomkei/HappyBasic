@@ -64,6 +64,11 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
 
     ss << ")";
   }
-
+  else if( expr.type == AST::Expr::Assign )
+  {
+    ss << *expr.left;
+    ss << "=";
+    ss << *expr.right;
+  }
   return ss;
 }
