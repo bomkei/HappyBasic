@@ -38,7 +38,7 @@ AST::While* ParserCore::DoWhile()
         breakk->list.emplace_back(bruh);
       }
 
-      iff->pairs.emplace_back(std::make_pair(cond, breakk))
+      iff->pairs.emplace_back(std::make_pair(cond, breakk));
     }
     ast->code->list.emplace_back(iff);
   }
