@@ -30,6 +30,7 @@ AST::Stmt* ParserCore::Statements()
     jjj->type = AST::Stmt::Var;
     jjj->expr = cc;
     jjj->token = tk;
+    expect("\n");
     return jjj;
   }
 
