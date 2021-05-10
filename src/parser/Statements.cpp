@@ -20,6 +20,19 @@ AST::Stmt* ParserCore::Statements()
   if( consume("Class") )
     return Class();
 
+  if( consume("Var") ) {
+    auto tk = csmtok;
+    auto cc = Expr();
+    if( cc->type != AST::Expr::Assign ) {
+      Program::Error(*tk, "89t4308tg5342");
+    }
+    auto jjj = new AST::Stmt;
+    jjj->type = AST::Stmt::Var;
+    jjj->expr = cc;
+    jjj->token = tk;
+    return jjj;
+  }
+
   //
   // return
   if( consume("return") )
