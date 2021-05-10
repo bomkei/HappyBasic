@@ -117,6 +117,36 @@ Object AST_Runner::Expr(AST::Expr* ast)
       return make_new_class_Obj(ast->left);
     }
 
+    case AST::Expr::MemberAccess: {
+      auto obj = Expr(ast->left);
+      auto& name = ast->right->token->str;
+
+      if( obj.type != Object::ClassObj ) {
+        Program::Error(*ast->token, "left object isnt a class instance");
+      }
+
+      for( auto&& i : obj.class_ptr->member_list ) {
+        alart;
+
+        if( ast->right->type == AST::Expr::Variable ) {
+          alart;
+
+          if( i->type == AST::Stmt::Var && i->expr->left->token->str == name ) {
+            alart;
+            auto& rr = i->expr->left->token->obj;
+            rr.var_ptr = &rr;
+            return rr;
+          }
+        }
+        else if( ast->right->type == AST::Expr::Callfunc ) {
+          alart;
+          Program::Error(*ast->token, "TODO: Impl call member funcS");
+        }
+      }
+
+      Program::Error(*ast->right->token, "dont have '" + name + "'");
+    }
+
     default:
     {
       auto left = Expr(ast->left);
