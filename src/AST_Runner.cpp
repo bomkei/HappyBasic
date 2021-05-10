@@ -125,27 +125,20 @@ Object AST_Runner::Expr(AST::Expr* ast)
         Program::Error(*ast->token, "left object isnt a class instance");
       }
 
-      alart;
-      for( auto&& i : obj.list ) {
-        alart;
-
-        if( i.name == name ) {
-          return i;
-        }
-      }
-     /* for( auto&& i : obj.class_ptr->member_list ) {
-        if( i->type == AST::Stmt::Var ) {
-          if( i->expr->left->token->obj.name == name ) {
-            auto& ret = i->expr->left->token->obj;
-            
-            alart;
-            std::cout << ret.ToString() << '\n';
-
-            ret.var_ptr = &ret;
-            return ret;
+      if( ast->right->type == AST::Expr::Variable ) {
+        for( auto&& i : obj.list ) {
+          if( i.name == name ) {
+            return i;
           }
         }
-      }*/
+      }
+      else {
+        // not found in member variables, it is maybe member function
+        for( auto&& i : obj.class_ptr->member_list ) {
+
+        }
+      }
+
 
       Program::Error(*ast->right->token, "dont have '" + name + "'");
     }
