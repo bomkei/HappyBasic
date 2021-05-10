@@ -419,6 +419,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       break;
     }
 
+    case AST::Stmt::Var:
     default:
       return Expr(ast->expr);
   }
