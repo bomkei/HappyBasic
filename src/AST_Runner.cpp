@@ -126,7 +126,6 @@ Object AST_Runner::Expr(AST::Expr* ast)
         }
       }
       else {
-        // not found in member variables, it is maybe member function
         for( auto&& i : obj.class_ptr->member_list ) {
 
         }
