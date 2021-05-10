@@ -4,9 +4,16 @@ class Program
 {
   static Program* instance;
 
+  //---------- global ----------------
+  // variables
   std::vector<Object> variables;
+
+  // functions
   std::vector<AST::Function*> functions;
+  
+  // classes
   std::vector<AST::Class*> classes;
+  //----------------------------------
 
   std::string source;
 
