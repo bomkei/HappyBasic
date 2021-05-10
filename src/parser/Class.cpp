@@ -58,8 +58,22 @@ AST::Class *ParserCore::Class()
       }
     }
 
-    if( )
-    ast->member_list.emplace_back(Statements());
+    if( tk->str == "Var" ) {
+      auto ss = new AST::Stmt;
+      ss->token = tk;
+      next();
+      if( get_tok().type != Token::Ident ) {
+        Program::Error(get_tok(), "expect identifier");
+      }
+      auto v_tok = &get_tok();
+      next();
+      expect("=");
+      auto expr = Expr();
+      expect("\n");
+      ss->expr = new AST::Expr(AST::Expr::Assign, AST::Expr::FromName(v_tok->str), expr);
+      ast->member_list.emplace_back(ss);
+    }
+    else ast->member_list.emplace_back(Statements());
   }
 
   if( !closed )
