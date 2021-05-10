@@ -4,7 +4,7 @@ AST::Function* ParserCore::Define()
 {
   //
   // def
-  if( consume("def") )
+  if( consume("Func") )
   {
     auto tk = csmtok;
 
@@ -49,9 +49,10 @@ AST::Function* ParserCore::Define()
 
     while( check() )
     {
-      if( consume("end") )
+      if( consume("End") )
       {
         closed = true;
+        expect("Func");
         expect("\n");
         break;
       }
