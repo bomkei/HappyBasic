@@ -310,26 +310,26 @@ AST::Expr* ParserCore::Equal()
 
 AST::Expr* ParserCore::Assign()
 {
-  auto x = Equal()
+  auto x = Equal();
   auto tk = &get_tok();
 
   if( consume("=") ) {
     x = new AST::Expr(AST::Expr::Assign, x, Assign(), tk);
   }
   else if( consume("+=") ) {
-    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Add, x, Assign()), tk);
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Add, x, Assign(), tk), tk);
   }
   else if( consume("-=") ) {
-    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Sub, x, Assign()), tk);
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Sub, x, Assign(), tk), tk);
   }
   else if( consume("*=") ) {
-    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Mul, x, Assign()), tk);
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Mul, x, Assign(), tk), tk);
   }
   else if( consume("%=") ) {
-    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Mod, x, Assign()), tk);
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Mod, x, Assign(), tk), tk);
   }
   else if( consume("/=") ) {
-    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Div, x, Assign()), tk);
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Div, x, Assign(), tk), tk);
   }
 
   return x;
