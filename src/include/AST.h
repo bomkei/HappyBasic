@@ -53,6 +53,13 @@ namespace AST
       x->token->obj.v_int = 1;
       return x;
     }
+
+    static Expr* FromName(std::string const& name) {
+      auto x = new Expr;
+      x->token = new Token;
+      x->token->obj.name = name;
+      return x;
+    }
   };
 
   class Array : public Expr

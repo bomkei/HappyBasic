@@ -18,7 +18,8 @@ Object make_new_class_Obj(AST::Expr* ast)
 
   for( auto&& i : ret.class_ptr->member_list ) {
     switch( i->type ) {
-
+      case AST::Stmt::Var:
+        ret.list.emplace_back(
     }
   }
 
@@ -57,6 +58,7 @@ AST::Class *ParserCore::Class()
       }
     }
 
+    if( )
     ast->member_list.emplace_back(Statements());
   }
 
