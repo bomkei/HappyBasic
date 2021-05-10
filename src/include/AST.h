@@ -27,7 +27,9 @@ namespace AST
       Array,
       IndexRef,
       Param,
-      New
+      
+      New,
+      MemberAccess
     };
 
     Type type;

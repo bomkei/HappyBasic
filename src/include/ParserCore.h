@@ -38,6 +38,7 @@ public:
 
   AST::Expr* Primary();
   AST::Expr* IndexRef();
+  AST::Expr* MemberAccess();
   AST::Expr* Unary();
   AST::Expr* Mul();
   AST::Expr* Add();
