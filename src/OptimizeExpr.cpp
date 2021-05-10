@@ -198,6 +198,12 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
 /* internal functions - end */
 void AST::Expr::Optimize()
 {
+  if( type == Assign )
+  {
+    right->Optimize();
+    return;
+  }
+
   Expr ret;
   Expr* cur = &ret;
   // get expr type
