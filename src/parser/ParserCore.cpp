@@ -157,6 +157,16 @@ AST::Expr* ParserCore::Primary()
         }
       }
 
+      // class
+      if( in_class ) {
+        for( auto&& i : cur_class->member_list ) {
+          if( i->type == AST::Stmt::Var && i->expr->left->token->str == tok->str ) {
+            next();
+            return i->expr->left;
+          }
+        }
+      }
+
       auto ast = new AST::Expr;
       ast->type = AST::Expr::Variable;
       ast->token = tok;
