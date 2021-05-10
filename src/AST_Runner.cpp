@@ -6,6 +6,10 @@ bool* AST_Runner::LoopContinued = nullptr;
 bool* AST_Runner::FuncReturned = nullptr;
 Object* AST_Runner::ReturnValue = nullptr;
 
+
+Object make_new_class_Obj(std::string& name);
+
+
 void ObjectAdjuster(Object& L, Object& R)
 {
   if( L.type == Object::Array || R.type == Object::Array )
@@ -108,6 +112,11 @@ Object AST_Runner::Expr(AST::Expr* ast)
       return src;
     }
 
+    case AST::Expr::New:
+    {
+      return make_new_class_Obj(ast->left->token->str);
+    }
+
     default:
     {
       auto left = Expr(ast->left);
@@ -155,11 +164,28 @@ Object AST_Runner::Expr(AST::Expr* ast)
             break;
           }
 
-          left.v_int *= right.v_int;
-          left.v_char *= right.v_char;
-          left.v_float *= right.v_float;
+          switch( left.type ) {
+            case Object::Int: left.v_int *= right.v_int; break;
+            case Object::Char: left.v_char *= right.v_char; break;
+            case Object::Float: left.v_float *= right.v_float; break;
+          }
           break;
 
+        case AST::Expr::Mod:
+          if( !right.Eval() )
+          {
+            Program::Error(*ast->token, "cant division with zero");
+          }
+          else if( !left.Eval() )
+            break;
+
+          switch( left.type ) {
+            case Object::Int: left.v_int /= right.v_int; break;
+            case Object::Char: left.v_char /= right.v_char; break;
+            case Object::Float: Program::Error(*ast->token, "cannot mod with float");
+          }
+          break;
+          
         case AST::Expr::Div:
           if( !right.Eval() )
           {
@@ -167,16 +193,20 @@ Object AST_Runner::Expr(AST::Expr* ast)
           }
           else if( !left.Eval() )
             break;
-          switch(left.type) {
-            case Object::Int:left.v_int /= right.v_int;break;
-            case Object::Char:left.v_char /= right.v_char;break;
-            case Object::Float:left.v_float /= right.v_float;break;
+
+          switch( left.type ) {
+            case Object::Int: left.v_int /= right.v_int; break;
+            case Object::Char: left.v_char /= right.v_char; break;
+            case Object::Float: left.v_float /= right.v_float; break;
           }
           break;
 
         case AST::Expr::Shift:
-          left.v_int <<= right.v_int;
-          left.v_char <<= right.v_char;
+          switch( left.type ) {
+            case Object::Int: left.v_int <<= right.v_int; break;
+            case Object::Char: left.v_char <<= right.v_char; break;
+            case Object::Float: Program::Error(*ast->token, "cannot shift float-type object");
+          }
           break;
 
         case AST::Expr::Bigger:

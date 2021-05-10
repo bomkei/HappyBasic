@@ -2,22 +2,22 @@
 
 AST::Stmt* ParserCore::Statements()
 {
-  if( match("if") )
+  if( consume("if") )
     return If();
 
-  if( match("for") )
+  if( match("For") )
     return For();
 
-  if( match("while") )
+  if( match("While") )
     return While();
 
-  if( match("do") )
+  if( match("Do") )
     return DoWhile();
 
-  if( match("def") )
+  if( match("Func") )
     return Define();
 
-  if( match("class") )
+  if( match("Class") )
     return Class();
 
   //

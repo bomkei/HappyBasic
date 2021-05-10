@@ -2,46 +2,39 @@
 
 AST::For* ParserCore::For()
 {
-  //
-  // for
-  if( consume("for") )
+  auto ast = new AST::For;
+  ast->token = csmtok;
+
+  ast->counter = IndexRef();
+
+  expect("=");
+  ast->begin = Expr();
+
+  expect("To");
+  ast->end = Expr();
+
+  ast->code = new AST::Block;
+
+  expect("\n");
+
+  auto closed = false;
+
+  while( check() )
   {
-    auto ast = new AST::For;
-    ast->token = csmtok;
-
-    ast->counter = IndexRef();
-
-    expect("=");
-    ast->begin = Expr();
-
-    expect("to");
-    ast->end = Expr();
-
-    ast->code = new AST::Block;
-
-    expect("\n");
-
-    auto closed = false;
-
-    while( check() )
+    if( consume("Next") )
     {
-      if( consume("next") )
-      {
-        expect("\n");
-        closed = true;
-        break;
-      }
-
-      ast->code->list.emplace_back(Statements());
+      expect("\n");
+      closed = true;
+      break;
     }
 
-    if( !closed )
-    {
-      Program::Error(*ast->token, "not closed");
-    }
-
-    return ast;
+    ast->code->list.emplace_back(Statements());
   }
 
-  return nullptr;
+  if( !closed )
+  {
+    Program::Error(*ast->token, "not closed");
+  }
+
+  return ast;
 }

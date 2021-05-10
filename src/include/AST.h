@@ -12,6 +12,7 @@ namespace AST
       Sub,
       Mul,
       Div,
+      Mod,
       Shift,
       Bigger,
       BiggerOrEqual,

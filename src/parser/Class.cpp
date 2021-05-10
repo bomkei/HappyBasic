@@ -1,10 +1,14 @@
 #include "../main.h"
 
+Object make_new_class_Obj(std::string& name)
+{
+
+}
+
 AST::Class *ParserCore::Class()
 {
-  // todo
+  auto ast = new AST::Class;
 
 
-  return nullptr;
 }
 

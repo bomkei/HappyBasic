@@ -225,6 +225,8 @@ AST::Expr* ParserCore::Mul()
   {
     if( consume("*") )
       x = new AST::Expr(AST::Expr::Mul, x, Unary(), csmtok);
+    else if( consume("%") )
+      x = new AST::Expr(AST::Expr::Mod, x, Unary(), csmtok);
     else if( consume("/") )
       x = new AST::Expr(AST::Expr::Div, x, Unary(), csmtok);
     else
