@@ -6,9 +6,7 @@ bool* AST_Runner::LoopContinued = nullptr;
 bool* AST_Runner::FuncReturned = nullptr;
 Object* AST_Runner::ReturnValue = nullptr;
 
-
 Object make_new_class_Obj(AST::Expr*);
-
 
 void ObjectAdjuster(Object& L, Object& R)
 {
@@ -104,12 +102,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
       if( !dest.var_ptr )
         Program::Error(*ast->token, "cannot assign to rvalue");
 
-      *dest.var_ptr = src;
-
-      //alart;
-      //std::cout << dest.var_ptr->ToString() << '\n';
-
-      return src;
+      return *dest.var_ptr = src;
     }
 
     case AST::Expr::New:
