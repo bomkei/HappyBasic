@@ -2,41 +2,34 @@
 
 AST::While* ParserCore::While()
 {
-  //
-  // while
-  if( consume("While") )
+  auto tk = csmtok;
+
+  auto cond = Expr();
+  expect("\n");
+
+  std::vector<AST::Stmt*> block;
+  auto closed = false;
+
+  while( check() )
   {
-    auto tk = csmtok;
-
-    auto cond = Expr();
-    expect("\n");
-
-    std::vector<AST::Stmt*> block;
-    auto closed = false;
-
-    while( check() )
+    if( consume("Wend") )
     {
-      if( consume("Wend") )
-      {
-        expect("\n");
-        closed = true;
-        break;
-      }
-
-      block.emplace_back(Statements());
+      expect("\n");
+      closed = true;
+      break;
     }
 
-    if( !closed )
-      Program::Error(*tk, "not closed");
-
-    auto ast = new AST::While;
-    ast->token = tk;
-    ast->cond = cond;
-    ast->code = new AST::Block;
-    ast->code->list = std::move(block);
-
-    return ast;
+    block.emplace_back(Statements());
   }
 
-  return nullptr;
+  if( !closed )
+    Program::Error(*tk, "not closed");
+
+  auto ast = new AST::While;
+  ast->token = tk;
+  ast->cond = cond;
+  ast->code = new AST::Block;
+  ast->code->list = std::move(block);
+
+  return ast;
 }
