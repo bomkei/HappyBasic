@@ -53,9 +53,4 @@ public:
   AST::Stmt* Statements();
   AST::Block* Parse();
 
-  //AST::Stmt* Stmt();
-
-  //AST::Stmt* Parse();
-
-
 };
