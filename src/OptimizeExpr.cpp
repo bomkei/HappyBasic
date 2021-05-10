@@ -181,6 +181,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
 
   for( auto&& variable : variables )
   {
+    std::vector<AST::Expr> TermsWithVariable;
     for( auto it = parts.begin(); it != parts.end(); )
     {
       bool hasVariable = removeVariableOnce(*it->expr, variable);
