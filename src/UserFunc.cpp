@@ -4,13 +4,27 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
 {
   auto find = Program::instance->find_func(fun->token->str);
 
+  AST::Function* ast = nullptr;
+
   // not found
   if( find == -1 )
   {
-    Program::Error(*fun->token, "undefined function");
-  }
+    if( Program::instance->cur_class ) {
+      for( auto&& i : Program::instance->cur_class->member_list ) {
+        if( i->type == AST::Stmt::Function && ((AST::Function*)i)->name == fun->token->str ) {
+          ast = ((AST::Function*)i);
+          break;
+        }
+      }
+    }
 
-  auto ast = Program::instance->functions[find];
+    if( !ast )
+      Program::Error(*fun->token, "undefined function");
+  }
+  else ast = Program::instance->functions[find];
+
+
+  //auto ast = Program::instance->functions[find];
   std::vector<Object> old_args;
 
   if( ast->args.size() != fun->args.size() )
