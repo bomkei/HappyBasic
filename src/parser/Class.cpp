@@ -71,11 +71,14 @@ AST::Class *ParserCore::Class()
         Program::Error(get_tok(), "expect identifier");
       }
       auto v_tok = &get_tok();
+      auto var = new AST::Expr;
+      var->type = AST::Expr::MemberVariable;
+      var->token = v_tok;
       next();
       expect("=");
       auto expr = Expr();
       expect("\n");
-      ss->expr = new AST::Expr(AST::Expr::Assign, AST::Expr::FromName(v_tok->str), expr, v_tok + 1);
+      ss->expr = new AST::Expr(AST::Expr::Assign, var, expr, v_tok + 1);
       ast->member_list.emplace_back(ss);
     }
     else ast->member_list.emplace_back(Statements());

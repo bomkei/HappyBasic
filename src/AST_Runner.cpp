@@ -125,14 +125,39 @@ Object AST_Runner::Expr(AST::Expr* ast)
           }
         }
       }
-      else {
-        for( auto&& i : obj.class_ptr->member_list ) {
+      else if( ast->right->type == AST::Expr::Callfunc ) {
+        alart;
 
+        for( auto&& i : obj.class_ptr->member_list ) {
+          alart;
+          
+          if( i->type == AST::Stmt::Function && ((AST::Function*)i)->token->str == name ) {
+            auto ptr = Program::instance->cur_class;
+
+            Program::instance->cur_class = obj.class_ptr;
+            auto ret = AST_Runner::UserFunc((AST::Callfunc*)ast->right);
+
+            Program::instance->cur_class = ptr;
+            return ret;
+          }
         }
       }
 
 
       Program::Error(*ast->right->token, "dont have '" + name + "'");
+    }
+
+    case AST::Expr::MemberVariable:
+    {
+      for( auto&& i : Program::instance->cur_class->member_list ) {
+        if( i->type == AST::Stmt::Var && ast->token->str == i->expr->left->token->str ) {
+          auto& ret = i->expr->left->token->obj;
+          ret.var_ptr = &ret;
+          return ret;
+        }
+      }
+
+      break;
     }
 
     default:
