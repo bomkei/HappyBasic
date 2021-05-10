@@ -125,12 +125,11 @@ Object AST_Runner::Expr(AST::Expr* ast)
           }
         }
       }
-      else {
+      else if( ast->right->type == AST::Expr::Callfunc ) {
         for( auto&& i : obj.class_ptr->member_list ) {
 
         }
       }
-
 
       Program::Error(*ast->right->token, "dont have '" + name + "'");
     }
