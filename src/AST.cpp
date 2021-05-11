@@ -27,6 +27,17 @@ AST::Expr::Expr(float flt)
   token->obj.v_float = flt;
 }
 
+AST::Expr::Expr(int _int)
+    : type(Immidiate)
+    , left(nullptr)
+    , right(nullptr)
+    , token(nullptr)
+{
+  token = new Token();
+  token->obj.type = Object::Int;
+  token->obj.v_float = _int;
+}
+
 std::string AST::Expr::ToString() const
 {
   switch( type )

@@ -39,6 +39,7 @@ public:
     Expr(Type type = Immidiate);
     Expr(Type type, Expr* left, Expr* right, Token* tok);
     Expr(float flt);
+    Expr(int _int);
 
     void Optimize();
     std::string ToString() const;
