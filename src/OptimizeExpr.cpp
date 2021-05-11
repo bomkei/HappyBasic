@@ -255,7 +255,6 @@ void AST::Expr::Optimize()
   }
 
   Expr ret;
-  Expr* cur = &ret;
   // get expr type
   ExprType exprtype;
   if( type == Add or type == Sub )
@@ -293,11 +292,11 @@ void AST::Expr::Optimize()
 
     if( immidiate != 0 )
     {
-      cur->right = new Expr();
-      cur->right->token = new Token();
-      cur->right->token->obj.v_int = std::abs(immidiate);
-      cur->type = immidiate > 0 ? Expr::Add : Expr::Sub;
-      cur = cur->left = new Expr();
+      auto imm = new Expr();
+      imm->token = new Token();
+      imm->token->obj.v_int = immidiate;
+
+      ret += *imm;
     }
     Expr_Summarize(parts);
   }
@@ -340,21 +339,19 @@ void AST::Expr::Optimize()
     double imm_denom = imm_denom_dbl * (double)imm_denom_int / gcd;
     if( imm_numer != 1.0 )
     {
-      cur->right = new Expr();
-      cur->right->token = new Token();
-      cur->right->token->obj.type = Object::Float;
-      cur->right->token->obj.v_float = imm_numer;
-      cur->type = Expr::Mul;
-      cur = cur->left = new Expr();
+      auto numer = new Expr();
+      numer->token = new Token();
+      numer->token->obj.type = Object::Float;
+      numer->token->obj.v_float = imm_numer;
+      ret *= *numer;
     }
     if( imm_denom != 1.0 )
     {
-      cur->right = new Expr();
-      cur->right->token = new Token();
-      cur->right->token->obj.type = Object::Float;
-      cur->right->token->obj.v_float = imm_denom;
-      cur->type = Expr::Div;
-      cur = cur->left = new Expr();
+      auto denom = new Expr();
+      denom->token = new Token();
+      denom->token->obj.type = Object::Float;
+      denom->token->obj.v_float = imm_denom;
+      ret /= *denom;
     }
 
     // reduction!!!
