@@ -389,7 +389,6 @@ void AST::Expr::Optimize()
   // reconstructing Expr (to ret)
   for( auto&& part : parts )
   {
-    std::cout << part.kind << part.type << " " << *part.expr << std::endl;
     AST::Expr& target = *part.expr;
     AST::Expr::Type op;
     if( part.kind == TypedExpr::Kind::Expr )
