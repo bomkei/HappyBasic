@@ -335,8 +335,8 @@ void AST::Expr::Optimize()
 
     // imm
     int gcd = std::gcd(imm_denom_int, imm_numer_int);
-    double imm_numer = imm_numer_dbl * (double)imm_numer_int / gcd;
-    double imm_denom = imm_denom_dbl * (double)imm_denom_int / gcd;
+    float imm_numer = imm_numer_dbl * (float)imm_numer_int / gcd;
+    float imm_denom = imm_denom_dbl * (float)imm_denom_int / gcd;
     if( imm_numer != 1.0 )
     {
       ret *= *(new Expr(imm_numer));
