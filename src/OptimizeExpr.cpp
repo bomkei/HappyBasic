@@ -201,16 +201,18 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
       int i = 0;
       for( auto it = TermsWithVariable.begin(); it != TermsWithVariable.end(); )
       {
-        auto tmp = newExpr;
-        newExpr->left = *++it;
-        if( it == TermsWithVariable.begin() )
-        {
-          newExpr->right = *++it;
-          newExpr->type = AST::Expr::Add;
-        }
-        newExpr = new AST::Expr();
         newExpr->type = AST::Expr::Add;
-        newExpr->right = tmp;
+        auto child = newExpr;
+        if( i++ == 0 )
+        {
+          newExpr->left = *(it++);
+        }
+        else
+        {
+          newExpr = new AST::Expr();
+          newExpr->left = child;
+        }
+        newExpr->right = *(it++);
       }
       TypedExpr typed(TypedExpr::Normal, TypedExpr::Term, newExpr);
       parts.emplace_back(typed);
