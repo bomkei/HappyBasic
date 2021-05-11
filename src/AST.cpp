@@ -38,6 +38,14 @@ AST::Expr::Expr(int _int)
   token->obj.v_float = _int;
 }
 
+void AST::Expr::fix()
+{
+  if( right == nullptr )
+  {
+    *this = *left;
+  }
+}
+
 std::string AST::Expr::ToString() const
 {
   switch( type )
