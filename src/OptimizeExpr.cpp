@@ -255,7 +255,6 @@ void AST::Expr::Optimize()
   }
   //std::cout << "expropt before: " << *this << std::endl;
 
-  Expr ret;
   // get expr type
   ExprType exprtype;
   if( type == Add or type == Sub )
@@ -275,6 +274,11 @@ void AST::Expr::Optimize()
   }
   parts.emplace_back(TypedExpr(TypedExpr::Normal, TypedExpr::getKindFromExprType(exprtype), cur_left));
 
+  // clear this
+  this->right = nullptr;
+  this->left = nullptr;
+
+  // optimize each types
   if( exprtype.type == ExprType::Expr )
   {
     // calculate immidiate
@@ -297,7 +301,7 @@ void AST::Expr::Optimize()
       imm->token = new Token();
       imm->token->obj.v_int = immidiate;
 
-      ret += *imm;
+      *this += *imm;
     }
     //Expr_Summarize(parts);
   }
@@ -340,11 +344,11 @@ void AST::Expr::Optimize()
     float imm_denom = imm_denom_dbl * (float)imm_denom_int / gcd;
     if( imm_numer != 1.0 )
     {
-      ret *= *(new Expr(imm_numer));
+      *this *= *(new Expr(imm_numer));
     }
     if( imm_denom != 1.0 )
     {
-      ret /= *(new Expr(imm_denom));
+      *this /= *(new Expr(imm_denom));
     }
 
     // reduction!!!
@@ -392,28 +396,25 @@ void AST::Expr::Optimize()
     {
       if( part.type == TypedExpr::Type::Normal )
       {
-        ret += target;
+        *this += target;
       }
       else
       {
-        ret -= target;
+        *this -= target;
       }
     }
     else if( part.kind == TypedExpr::Kind::Term )
     {
       if( part.type == TypedExpr::Type::Normal )
       {
-        ret *= target;
+        *this *= target;
       }
       else
       {
-        ret /= target;
+        *this /= target;
       }
     }
   }
-  this->left = ret.left;
-  this->type = ret.type;
-  this->right = ret.right;
   std::cout << "expr optimizer: " << *this //<< std::endl
             << std::endl;
 }
