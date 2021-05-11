@@ -229,7 +229,6 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     dest->right->varIndex = variable.first;
     dest->right->token = new Token();
     dest->right->token->str = variable.second;
-    std::cout << "dest          : " << *dest << std::endl;
     auto obj = new TypedExpr(TypedExpr::Normal, TypedExpr::Term, dest);
     parts.emplace_back(*obj);
   }
