@@ -202,7 +202,6 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     else if( TermsWithVariable.size() != 0 )
     {
       auto newExpr = new AST::Expr();
-      // TODO: constructing Expr from TermsWithVariable to newExprparts.emplace_back(typed);
       int i = 0;
       for( auto it = TermsWithVariable.begin(); it != TermsWithVariable.end(); )
       {
