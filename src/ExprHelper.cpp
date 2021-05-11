@@ -81,3 +81,12 @@ AST::Expr& AST::Expr::operator+=(AST::Expr& target)
   *this = *newObject;
   return *this;
 }
+AST::Expr& AST::Expr::operator*=(AST::Expr& target)
+{
+  auto newObject = new AST::Expr;
+  newObject->right = this;
+  newObject->left = &target;
+  newObject->type = Mul;
+  *this = *newObject;
+  return *this;
+}
