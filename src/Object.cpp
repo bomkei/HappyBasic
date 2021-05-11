@@ -8,7 +8,9 @@ Object& Object::operator = (Object const& obj)
   v_char = obj.v_char;
 
   list = obj.list;
+  
   var_ptr = obj.var_ptr;
+  class_ptr = obj.class_ptr;
 
   return *this;
 }
