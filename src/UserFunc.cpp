@@ -1,28 +1,28 @@
 #include "main.h"
 
-Object AST_Runner::UserFunc(AST::Callfunc* fun)
-{
-  auto find = Program::instance->find_func(fun->token->str);
-
+Object AST_Runner::UserFunc(AST::Callfunc* fun) {
   AST::Function* ast = nullptr;
 
-  // not found
-  if( find == -1 )
-  {
-    if( Program::instance->cur_class ) {
-      for( auto&& i : Program::instance->cur_class->member_list ) {
-        if( i->type == AST::Stmt::Function && ((AST::Function*)i)->name == fun->token->str ) {
-          ast = ((AST::Function*)i);
-          break;
-        }
+  if( Program::instance->cur_class ) {
+    for( auto&& i : Program::instance->cur_class->member_list ) {
+      if( i->type == AST::Stmt::Function && ((AST::Function*)i)->name == fun->token->str ) {
+        ast = ((AST::Function*)i);
+        break;
       }
     }
 
     if( !ast )
       Program::Error(*fun->token, "undefined function");
   }
-  else ast = Program::instance->functions[find];
+  else {
+    auto find = Program::instance->find_func(fun->token->str);
 
+    if( find == -1 ) {
+      Program::Error(*fun->token, "undefined function");
+    }
+
+    ast = Program::instance->functions[find];
+  }
 
   //auto ast = Program::instance->functions[find];
   std::vector<Object> old_args;
