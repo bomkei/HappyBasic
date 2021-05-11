@@ -339,19 +339,11 @@ void AST::Expr::Optimize()
     double imm_denom = imm_denom_dbl * (double)imm_denom_int / gcd;
     if( imm_numer != 1.0 )
     {
-      auto numer = new Expr();
-      numer->token = new Token();
-      numer->token->obj.type = Object::Float;
-      numer->token->obj.v_float = imm_numer;
-      ret *= *numer;
+      ret *= *(new Expr(imm_numer));
     }
     if( imm_denom != 1.0 )
     {
-      auto denom = new Expr();
-      denom->token = new Token();
-      denom->token->obj.type = Object::Float;
-      denom->token->obj.v_float = imm_denom;
-      ret /= *denom;
+      ret /= *(new Expr(imm_denom));
     }
 
     // reduction!!!
