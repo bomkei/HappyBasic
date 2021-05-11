@@ -303,7 +303,7 @@ void AST::Expr::Optimize()
 
       *this += *imm;
     }
-    //Expr_Summarize(parts);
+    Expr_Summarize(parts);
   }
   else if( exprtype.type == ExprType::Term )
   {
@@ -415,6 +415,6 @@ void AST::Expr::Optimize()
     }
   }
   this->fix();
-  std::cout << "expr optimizer: " << *this //<< std::endl
-            << std::endl;
+  //std::cout << "expr optimizer: " << *this //<< std::endl
+  //          << std::endl;
 }
