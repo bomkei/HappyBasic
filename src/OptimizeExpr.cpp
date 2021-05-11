@@ -179,7 +179,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
   }
   Utils::VectorUnique(variables);
 
-  std::vector<AST::Expr> TermsWithVariable;
+  std::vector<AST::Expr*> TermsWithVariable;
   for( auto&& variable : variables )
   {
     TermsWithVariable.clear();
@@ -188,7 +188,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
       bool hasVariable = removeVariableOnce(*it->expr, variable);
       if( hasVariable )
       {
-        TermsWithVariable.emplace_back(*it->expr);
+        TermsWithVariable.emplace_back(it->expr);
         parts.erase(it);
       }
       else
@@ -202,10 +202,10 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
       for( auto it = TermsWithVariable.begin(); it != TermsWithVariable.end(); )
       {
         auto tmp = newExpr;
-        newExpr->left = &*++it;
+        newExpr->left = *++it;
         if( it == TermsWithVariable.begin() )
         {
-          newExpr->right = &*(++it);
+          newExpr->right = *++it;
           newExpr->type = AST::Expr::Add;
         }
         newExpr = new AST::Expr();
@@ -215,6 +215,10 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
       TypedExpr typed(TypedExpr::Normal, TypedExpr::Term, newExpr);
       parts.emplace_back(typed);
     }
+  }
+  for( auto&& part : parts )
+  {
+    std::cout << "summarize     : " << *part.expr << std::endl;
   }
 }
 /* internal functions - end */
@@ -271,7 +275,15 @@ void AST::Expr::Optimize()
       cur->type = immidiate > 0 ? Expr::Add : Expr::Sub;
       cur = cur->left = new Expr();
     }
+    for( auto&& part : parts )
+    {
+      std::cout << "parts         : " << *part.expr << std::endl;
+    }
     Expr_Summarize(parts);
+    for( auto&& part : parts )
+    {
+      std::cout << "parts         : " << *part.expr << std::endl;
+    }
   }
   else if( exprtype.type == ExprType::Term )
   {
