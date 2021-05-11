@@ -291,15 +291,7 @@ void AST::Expr::Optimize()
       cur->type = immidiate > 0 ? Expr::Add : Expr::Sub;
       cur = cur->left = new Expr();
     }
-    for( auto&& part : parts )
-    {
-      std::cout << "parts         : " << *part.expr << std::endl;
-    }
     Expr_Summarize(parts);
-    for( auto&& part : parts )
-    {
-      std::cout << "parts         : " << *part.expr << std::endl;
-    }
   }
   else if( exprtype.type == ExprType::Term )
   {
