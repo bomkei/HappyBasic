@@ -8,7 +8,6 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
     ss << "null";
     return ss;
   }
-
   if( expr.type >= AST::Expr::Add && AST::Expr::Div >= expr.type )
   {
     ss << *expr.left;
@@ -39,9 +38,7 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
         ss << token->str << "'";
         break;
 
-      case Token::Char:
-      case Token::Number:
-      case Token::String:
+      default:
         ss << token->obj.ToString();
         break;
     }
