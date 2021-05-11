@@ -158,6 +158,37 @@ bool removeVariableOnce(AST::Expr& expr, int variable)
 }
 
 /* internal functions */
+AST::Expr& makeExprFromExprs(std::vector<AST::Expr*>& parts)
+{
+  auto ret = new AST::Expr();
+
+  if( parts.size() == 1 )
+  {
+    ret = parts[0];
+  }
+  else if( parts.size() != 0 )
+  {
+    auto newExpr = new AST::Expr();
+    int i = 0;
+    for( auto it = parts.begin(); it != parts.end(); )
+    {
+      newExpr->type = AST::Expr::Add;
+      auto child = newExpr;
+      if( i++ == 0 )
+      {
+        newExpr->left = *it++;
+      }
+      else
+      {
+        newExpr = new AST::Expr();
+        newExpr->left = child;
+      }
+      newExpr->right = *it++;
+    }
+    ret = newExpr;
+  }
+  return *ret;
+}
 void _getVariables(AST::Expr& expr, std::vector<std::pair<int, std::string>>& dest)
 {
   if( expr.type == AST::Expr::Variable )
@@ -195,31 +226,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
         it++;
     }
     AST::Expr* coef;
-    if( TermsWithVariable.size() == 1 )
-    {
-      coef = TermsWithVariable[0];
-    }
-    else if( TermsWithVariable.size() != 0 )
-    {
-      auto newExpr = new AST::Expr();
-      int i = 0;
-      for( auto it = TermsWithVariable.begin(); it != TermsWithVariable.end(); )
-      {
-        newExpr->type = AST::Expr::Add;
-        auto child = newExpr;
-        if( i++ == 0 )
-        {
-          newExpr->left = *(it++);
-        }
-        else
-        {
-          newExpr = new AST::Expr();
-          newExpr->left = child;
-        }
-        newExpr->right = *(it++);
-      }
-      coef = newExpr;
-    }
+    coef = &makeExprFromExprs(TermsWithVariable);
     // TODO: make <coef> * <variable> AST
     auto dest = new AST::Expr();
     dest->type = AST::Expr::Add;
