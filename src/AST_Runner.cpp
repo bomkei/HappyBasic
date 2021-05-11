@@ -8,15 +8,12 @@ Object* AST_Runner::ReturnValue = nullptr;
 
 Object make_new_class_Obj(AST::Expr*);
 
-void ObjectAdjuster(Object& L, Object& R)
-{
+void ObjectAdjuster(Object& L, Object& R) {
   if( L.type == Object::Array || R.type == Object::Array )
     return;
 
-  if( L.type == Object::Float || R.type == Object::Float )
-  {
-    for( auto&& obj : { &L, &R } )
-    {
+  if( L.type == Object::Float || R.type == Object::Float ) {
+    for( auto&& obj : { &L, &R } ) {
       if( obj->type == Object::Int )
         obj->v_float = obj->v_int;
       else if( obj->type == Object::Char )
@@ -25,10 +22,8 @@ void ObjectAdjuster(Object& L, Object& R)
       obj->type = Object::Float;
     }
   }
-  else if( L.type != R.type )
-  {
-    for( auto&& obj : { &L, &R } )
-    {
+  else if( L.type != R.type ) {
+    for( auto&& obj : { &L, &R } ) {
       if( obj->type == Object::Char )
         obj->v_int = obj->v_char;
 
