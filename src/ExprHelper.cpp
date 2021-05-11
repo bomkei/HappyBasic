@@ -75,7 +75,8 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
 AST::Expr& AST::Expr::operator+=(AST::Expr& target)
 {
   auto newObject = new AST::Expr;
-  newObject->right = this;
+  newObject->right = new AST::Expr();
+  *newObject->right = *this;
   newObject->left = &target;
   newObject->type = Add;
   *this = *newObject;
@@ -84,7 +85,8 @@ AST::Expr& AST::Expr::operator+=(AST::Expr& target)
 AST::Expr& AST::Expr::operator*=(AST::Expr& target)
 {
   auto newObject = new AST::Expr;
-  newObject->right = this;
+  newObject->right = new AST::Expr();
+  *newObject->right = *this;
   newObject->left = &target;
   newObject->type = Mul;
   *this = *newObject;
