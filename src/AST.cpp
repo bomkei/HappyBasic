@@ -40,7 +40,7 @@ AST::Expr::Expr(int _int)
 
 void AST::Expr::fix()
 {
-  if( right == nullptr )
+  if( right == nullptr and left != nullptr )
   {
     *this = *left;
   }
