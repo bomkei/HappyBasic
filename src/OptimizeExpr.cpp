@@ -390,21 +390,6 @@ void AST::Expr::Optimize()
   }
 
   // reconstructing Expr (to ret)
-
-  int i = 0;
-  for( auto&& part : parts )
-  {
-    if( parts.size() == ++i )
-    {
-      *cur = *part.expr;
-    }
-    else
-    {
-      cur->right = part.expr;
-      cur->type = part.getType();
-      cur = cur->left = new Expr();
-    }
-  }
   this->left = ret.left;
   this->type = ret.type;
   this->right = ret.right;
