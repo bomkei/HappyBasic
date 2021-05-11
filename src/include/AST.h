@@ -52,6 +52,7 @@ public:
       x->token->obj.v_int = 1;
       return x;
     }
+    AST::Expr& _oprator(Type type, AST::Expr&);
     AST::Expr& operator+=(AST::Expr&);
     AST::Expr& operator*=(AST::Expr&);
     AST::Expr& operator/=(AST::Expr&);

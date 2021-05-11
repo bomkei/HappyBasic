@@ -72,6 +72,28 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
   }
   return ss;
 }
+AST::Expr& AST::Expr::_oprator(Type type, AST::Expr& target)
+{
+  if( left == nullptr )
+  {
+    left = &target;
+    return *this;
+  }
+  else if( right == nullptr )
+  {
+    type = type;
+    right = &target;
+    return *this;
+  }
+
+  auto newObject = new AST::Expr;
+  newObject->left = new AST::Expr();
+  *newObject->left = *this;
+  newObject->right = &target;
+  newObject->type = type;
+  *this = *newObject;
+  return *this;
+}
 AST::Expr& AST::Expr::operator+=(AST::Expr& target)
 {
   if( left == nullptr )
