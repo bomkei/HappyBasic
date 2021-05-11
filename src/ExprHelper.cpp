@@ -72,3 +72,12 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
   }
   return ss;
 }
+AST::Expr& AST::Expr::operator+=(AST::Expr& target)
+{
+  auto newObject = new AST::Expr;
+  newObject->right = this;
+  newObject->left = &target;
+  newObject->type = Add;
+  *this = *newObject;
+  return *this;
+}
