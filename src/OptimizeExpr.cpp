@@ -253,6 +253,7 @@ void AST::Expr::Optimize()
     right->Optimize();
     return;
   }
+  std::cout << "expropt before: " << *this << std::endl;
 
   Expr ret;
   // get expr type
@@ -385,5 +386,6 @@ void AST::Expr::Optimize()
   this->left = ret.left;
   this->type = ret.type;
   this->right = ret.right;
-  std::cout << "expr optimizer: " << *this << std::endl;
+  std::cout << "expr optimizer: " << *this << std::endl
+            << std::endl;
 }
