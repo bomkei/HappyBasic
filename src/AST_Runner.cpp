@@ -131,6 +131,9 @@ Object AST_Runner::Expr(AST::Expr* ast)
           }
         }
       }
+      else {
+        Program::Error(*ast->token, "syntax error");
+      }
 
       Program::Error(*ast->right->token, "dont have '" + name + "'");
     }
