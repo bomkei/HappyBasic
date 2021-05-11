@@ -194,10 +194,10 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
       else
         it++;
     }
-    TypedExpr* coef;
+    AST::Expr* coef;
     if( TermsWithVariable.size() == 1 )
     {
-      coef = new TypedExpr(TypedExpr::Normal, TypedExpr::Term, TermsWithVariable[0]);
+      coef = TermsWithVariable[0];
     }
     else if( TermsWithVariable.size() != 0 )
     {
@@ -218,7 +218,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
         }
         newExpr->right = *(it++);
       }
-      coef = new TypedExpr(TypedExpr::Normal, TypedExpr::Term, newExpr);
+      coef = newExpr;
     }
     // TODO: make <coef> * <variable> AST
   }
