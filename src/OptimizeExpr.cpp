@@ -414,6 +414,7 @@ void AST::Expr::Optimize()
       }
     }
   }
+  this->fix();
   std::cout << "expr optimizer: " << *this //<< std::endl
             << std::endl;
 }
