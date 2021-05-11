@@ -221,6 +221,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
       }
       coef = new TypedExpr(TypedExpr::Normal, TypedExpr::Term, newExpr);
     }
+    // TODO: make <coef> * <variable> AST
   }
   for( auto&& part : parts )
   {
