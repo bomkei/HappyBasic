@@ -114,11 +114,9 @@ Object AST_Runner::Expr(AST::Expr* ast)
       }
 
       if( ast->right->type == AST::Expr::Variable ) {
-        for( auto&& i : obj.list ) {
-          if( i.name == name ) {
+        for( auto&& i : obj.list )
+          if( i.name == name )
             return i;
-          }
-        }
       }
       else if( ast->right->type == AST::Expr::Callfunc ) {
         for( auto&& i : obj.class_ptr->member_list ) {
@@ -133,7 +131,6 @@ Object AST_Runner::Expr(AST::Expr* ast)
           }
         }
       }
-
 
       Program::Error(*ast->right->token, "dont have '" + name + "'");
     }
