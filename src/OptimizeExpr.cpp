@@ -253,7 +253,7 @@ void AST::Expr::Optimize()
     right->Optimize();
     return;
   }
-  std::cout << "expropt before: " << *this << std::endl;
+  //std::cout << "expropt before: " << *this << std::endl;
 
   Expr ret;
   // get expr type
@@ -299,7 +299,7 @@ void AST::Expr::Optimize()
 
       ret += *imm;
     }
-    Expr_Summarize(parts);
+    //Expr_Summarize(parts);
   }
   else if( exprtype.type == ExprType::Term )
   {
@@ -383,9 +383,37 @@ void AST::Expr::Optimize()
   }
 
   // reconstructing Expr (to ret)
+  for( auto&& part : parts )
+  {
+    std::cout << part.kind << part.type << " " << *part.expr << std::endl;
+    AST::Expr& target = *part.expr;
+    AST::Expr::Type op;
+    if( part.kind == TypedExpr::Kind::Expr )
+    {
+      if( part.type == TypedExpr::Type::Normal )
+      {
+        ret += target;
+      }
+      else
+      {
+        ret -= target;
+      }
+    }
+    else if( part.kind == TypedExpr::Kind::Term )
+    {
+      if( part.type == TypedExpr::Type::Normal )
+      {
+        ret *= target;
+      }
+      else
+      {
+        ret /= target;
+      }
+    }
+  }
   this->left = ret.left;
   this->type = ret.type;
   this->right = ret.right;
-  std::cout << "expr optimizer: " << *this << std::endl
+  std::cout << "expr optimizer: " << *this //<< std::endl
             << std::endl;
 }
