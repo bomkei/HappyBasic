@@ -96,67 +96,13 @@ AST::Expr& AST::Expr::_oprator(Type type, AST::Expr& target)
 }
 AST::Expr& AST::Expr::operator+=(AST::Expr& target)
 {
-  if( left == nullptr )
-  {
-    left = &target;
-    return *this;
-  }
-  else if( right == nullptr )
-  {
-    type = Add;
-    right = &target;
-    return *this;
-  }
-
-  auto newObject = new AST::Expr;
-  newObject->left = new AST::Expr();
-  *newObject->left = *this;
-  newObject->right = &target;
-  newObject->type = Add;
-  *this = *newObject;
-  return *this;
+  return _oprator(Add, target);
 }
 AST::Expr& AST::Expr::operator*=(AST::Expr& target)
 {
-  if( left == nullptr )
-  {
-    left = &target;
-    return *this;
-  }
-  else if( right == nullptr )
-  {
-    type = Mul;
-    right = &target;
-    return *this;
-  }
-
-  auto newObject = new AST::Expr;
-  newObject->left = new AST::Expr();
-  *newObject->left = *this;
-  newObject->right = &target;
-  newObject->type = Mul;
-  *this = *newObject;
-  return *this;
+  return _oprator(Mul, target);
 }
 AST::Expr& AST::Expr::operator/=(AST::Expr& target)
 {
-  if( left == nullptr )
-  {
-    left = &target;
-    return *this;
-  }
-  else if( right == nullptr )
-  {
-    type = Div;
-    right = &target;
-    return *this;
-  }
-
-  auto newObject = new AST::Expr;
-  newObject->left = new AST::Expr();
-  *newObject->left = *this;
-  newObject->right = &target;
-  newObject->type = Div;
-  *this = *newObject;
-  return *this;
+  return _oprator(Div, target);
 }
