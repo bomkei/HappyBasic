@@ -54,6 +54,7 @@ public:
     }
     AST::Expr& operator+=(AST::Expr&);
     AST::Expr& operator*=(AST::Expr&);
+    AST::Expr& operator/=(AST::Expr&);
   };
 
   class Array : public Expr

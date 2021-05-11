@@ -116,3 +116,25 @@ AST::Expr& AST::Expr::operator*=(AST::Expr& target)
   *this = *newObject;
   return *this;
 }
+AST::Expr& AST::Expr::operator/=(AST::Expr& target)
+{
+  if( left == nullptr )
+  {
+    left = &target;
+    return *this;
+  }
+  else if( right == nullptr )
+  {
+    type = Div;
+    right = &target;
+    return *this;
+  }
+
+  auto newObject = new AST::Expr;
+  newObject->left = new AST::Expr();
+  *newObject->left = *this;
+  newObject->right = &target;
+  newObject->type = Div;
+  *this = *newObject;
+  return *this;
+}
