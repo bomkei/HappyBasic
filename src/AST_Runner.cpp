@@ -113,29 +113,25 @@ Object AST_Runner::Expr(AST::Expr* ast)
         Program::Error(*ast->token, "left object isnt a class instance");
       }
 
-      if( ast->right->type == AST::Expr::Variable ) {
-        for( auto&& i : obj.list )
-          if( i.name == name )
-            return i;
-      }
-      else if( ast->right->type == AST::Expr::Callfunc ) {
-        for( auto&& i : obj.class_ptr->member_list ) {
-          if( i->type == AST::Stmt::Function && ((AST::Function*)i)->name == name ) {
-            auto ptr = Program::instance->cur_class;
+      auto ptr = Program::instance->cur_class;
+      Program::instance->cur_class = obj.class_ptr;
 
-            Program::instance->cur_class = obj.class_ptr;
-            auto ret = AST_Runner::UserFunc((AST::Callfunc*)ast->right);
+      if( ast->right->type == AST::Expr::Variable )
+        ast->right->type = AST::Expr::MemberVariable;
+      else if( ast->right->type == AST::Expr::IndexRef ) {
+        auto pp = ast->right;
 
-            Program::instance->cur_class = ptr;
-            return ret;
-          }
-        }
-      }
-      else {
-        Program::Error(*ast->token, "syntax error");
+        while( pp->type == AST::Expr::IndexRef )
+          pp = pp->left;
+
+        if( pp->type == AST::Expr::Variable )
+          pp->type = AST::Expr::MemberVariable;
       }
 
-      Program::Error(*ast->right->token, "dont have '" + name + "'");
+      auto ret = Expr(ast->right);
+
+      Program::instance->cur_class = ptr;
+      return ret;
     }
 
     case AST::Expr::MemberVariable:
