@@ -158,10 +158,10 @@ bool removeVariableOnce(AST::Expr& expr, int variable)
 }
 
 /* internal functions */
-void _getVariables(AST::Expr& expr, std::vector<int>& dest)
+void _getVariables(AST::Expr& expr, std::vector<std::pair<int, std::string>>& dest)
 {
   if( expr.type == AST::Expr::Variable )
-    dest.emplace_back(expr.varIndex);
+    dest.emplace_back(std::make_pair(expr.varIndex, expr.token->str));
 
   if( expr.left )
     _getVariables(*expr.left, dest);
@@ -172,7 +172,7 @@ void _getVariables(AST::Expr& expr, std::vector<int>& dest)
 // parts = std::vector<TypedExpr(Term) >
 void Expr_Summarize(std::vector<TypedExpr>& parts)
 {
-  std::vector<int> variables;
+  std::vector<std::pair<int, std::string>> variables;
   for( auto&& expr : parts )
   {
     _getVariables(*expr.expr, variables);
