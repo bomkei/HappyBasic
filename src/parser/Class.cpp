@@ -1,35 +1,5 @@
 #include "../main.h"
 
-Object make_new_class_Obj(AST::Expr* ast)
-{
-  auto& className = ast->token->str;
-
-  Object ret;
-  ret.type = Object::ClassObj;
-
-  for( auto&& i : Program::instance->classes ) {
-    if( i->token->str == className ) {
-      ret.class_ptr = i;
-      break;
-    }
-  }
-  if( !ret.class_ptr )
-    Program::Error(*ast->token, "undefined class");
-
-  for( auto&& i : ret.class_ptr->member_list ) {
-    if( i->type == AST::Stmt::Var ) {
-      auto& obj = i->expr->left->token->obj;
-
-      obj = AST_Runner::Expr(i->expr->right);
-      obj.var_ptr = &obj;
-
-      ret.list.emplace_back(obj);
-    }
-  }
-
-  return ret;
-}
-
 AST::Class *ParserCore::Class()
 {
   auto ast = new AST::Class;

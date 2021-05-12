@@ -6,8 +6,6 @@ bool* AST_Runner::LoopContinued = nullptr;
 bool* AST_Runner::FuncReturned = nullptr;
 Object* AST_Runner::ReturnValue = nullptr;
 
-Object make_new_class_Obj(AST::Expr*);
-
 void ObjectAdjuster(Object& L, Object& R) {
   if( L.type == Object::Array || R.type == Object::Array )
     return;
@@ -97,7 +95,6 @@ Object AST_Runner::Expr(AST::Expr* ast)
       if( !dest.var_ptr )
         Program::Error(*ast->token, "cannot assign to rvalue");
 
-      //auto name = dest.name;
       *dest.var_ptr = src;
       dest.var_ptr->name = dest.name;
 
@@ -106,7 +103,33 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
     case AST::Expr::New:
     {
-      return make_new_class_Obj(ast->left);
+      auto& className = ast->token->str;
+
+      Object ret;
+      ret.type = Object::ClassObj;
+
+      for( auto&& i : Program::instance->classes ) {
+        if( i->token->str == className ) {
+          ret.class_ptr = i;
+          break;
+        }
+      }
+
+      if( !ret.class_ptr )
+        Program::Error(*ast->token, "undefined class");
+
+      for( auto&& i : ret.class_ptr->member_list ) {
+        if( i->type == AST::Stmt::Var ) {
+          auto& obj = i->expr->left->token->obj;
+
+          obj = AST_Runner::Expr(i->expr->right);
+          obj.var_ptr = &obj;
+
+          ret.list.emplace_back(obj);
+        }
+      }
+
+      return ret;
     }
 
     case AST::Expr::MemberAccess: {
