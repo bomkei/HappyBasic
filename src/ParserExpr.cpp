@@ -329,6 +329,30 @@ AST::Expr* ParserCore::Equal()
   return x;
 }
 
+AST::Expr* ParserCore::LogAND() {
+  auto x = Equal();
+
+  while( check() ) {
+    if( consume("and") )
+      x = new AST::Expr(AST::Expr::LogAND, x, Equal(), csmtok);
+    else break;
+  }
+
+  return x;
+}
+
+AST::Expr* ParserCore::LogOR() {
+  auto x = Equal();
+
+  while( check() ) {
+    if( consume("or") )
+      x = new AST::Expr(AST::Expr::LogOR, x, LogAND(), csmtok);
+    else break;
+  }
+
+  return x;
+}
+
 AST::Expr* ParserCore::Assign()
 {
   auto x = Equal();

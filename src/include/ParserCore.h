@@ -45,6 +45,8 @@ public:
   AST::Expr* Shift();
   AST::Expr* Compare();
   AST::Expr* Equal();
+  AST::Expr* LogAND();
+  AST::Expr* LogOR();
   AST::Expr* Assign();
   AST::Expr* Expr();
 
