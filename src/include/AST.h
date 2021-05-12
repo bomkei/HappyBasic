@@ -18,6 +18,8 @@ namespace AST
       BiggerOrEqual,
       Equal,
       NotEqual,
+      LogAND,
+      LogOR,
 
       Assign,
 
