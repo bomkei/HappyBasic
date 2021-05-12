@@ -1,22 +1,5 @@
 #include "main.h"
 
-//Object& Object::operator = (Object const& obj)
-//{
-//  type = obj.type;
-//  v_int = obj.v_int;
-//  v_float = obj.v_float;
-//  v_char = obj.v_char;
-//
-//  list = obj.list;
-//  
-//  var_ptr = obj.var_ptr;
-//  class_ptr = obj.class_ptr;
-//
-//  name=
-//
-//  return *this;
-//}
-
 std::string Object::ToString() const
 {
   switch( type )

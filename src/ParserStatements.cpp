@@ -27,7 +27,7 @@ AST::Stmt* ParserCore::Statements()
 
         pair = std::make_pair(Expr(), new AST::Block);
 
-        expect("Then");
+        expect("then");
         expect("\n");
       }
       else if( consume("else") ) {
