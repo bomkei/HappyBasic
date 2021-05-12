@@ -37,7 +37,12 @@ AST::Expr::Expr(int _int)
   token->obj.type = Object::Int;
   token->obj.v_float = _int;
 }
-
+void AST::Expr::clear()
+{
+  type = Add;
+  left = right = nullptr;
+  token = nullptr;
+}
 void AST::Expr::fix()
 {
   if( right == nullptr and left != nullptr )

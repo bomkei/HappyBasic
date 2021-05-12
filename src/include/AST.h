@@ -55,6 +55,7 @@ public:
       return x;
     }
 
+    void clear();
     void fix();
     bool isPrimary();
     bool isBinary();
