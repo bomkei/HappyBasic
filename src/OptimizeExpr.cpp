@@ -132,6 +132,8 @@ class TypedExpr
   }
 };
 
+using variableType = std::pair<int, std::string>;
+
 /* internal types - end */
 
 bool removeVariableOnce(AST::Expr& expr, int variable)
