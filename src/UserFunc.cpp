@@ -38,6 +38,7 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun) {
   for( size_t i = 0; i < fun->args.size(); i++ )
     ast->args[i]->token->obj = AST_Runner::Expr(fun->args[i]);
 
+  auto cfunc = Program::instance->cur_func;
   Program::instance->cur_func = ast;
   
   Object ret;
@@ -63,6 +64,7 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun) {
 
   AST_Runner::ReturnValue = retp;
   AST_Runner::FuncReturned = flag;
+  Program::instance->cur_func = cfunc;
 
   CallCount--;
 
