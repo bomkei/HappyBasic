@@ -162,9 +162,7 @@ bool removeVariableOnce(AST::Expr& expr, int variable)
 /* internal functions */
 AST::Expr* makeExprFromExprs(std::vector<AST::Expr*>& parts)
 {
-  AST::Expr* ret;
-
-  ret = new AST::Expr;
+  auto ret = new AST::Expr;
   for( auto&& part : parts )
   {
     *ret += *part;
