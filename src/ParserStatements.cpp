@@ -37,7 +37,7 @@ AST::Stmt* ParserCore::Statements()
         expect("\n");
 
         while( check() ) {
-          if( consume("") ) {
+          if( consume("endif") ) {
             expect("\n");
             closed = true;
             break;
