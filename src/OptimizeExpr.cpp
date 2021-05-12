@@ -180,20 +180,31 @@ void _getVariables(AST::Expr& expr, std::vector<variableType>& dest)
   if( expr.right )
     _getVariables(*expr.right, dest);
 }
+void getAllParts(ExprType type, AST::Expr* expr, std::vector<TypedExpr>& parts)
+{
+  if( expr->isBinary() and expr->right != nullptr )
+  {
+    if( expr->right->isPrimary() )
+      parts.emplace_back(TypedExpr::FromExprRight(expr->right));
+  }
+
+  if( expr->left )
+    getAllParts(type, expr->left, parts);
+  if( expr->right )
+    getAllParts(type, expr->right, parts);
+};
 
 // parts = std::vector<TypedExpr(Term) >
 void Expr_Summarize(std::vector<TypedExpr>& parts)
 {
   if( parts.size() == 0 )
     return;
-
   std::vector<variableType> variables;
   for( auto&& expr : parts )
   {
     _getVariables(*expr.expr, variables);
   }
   Utils::VectorUnique(variables);
-
   std::vector<TypedExpr> terms;
   for( auto&& variable : variables )
   {
@@ -209,6 +220,9 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
       else
         it++;
     }
+
+    auto dest = makeExprFromExprs(terms);
+    std::cout << *dest << std::endl;
   }
 
   for( auto&& part : parts )
