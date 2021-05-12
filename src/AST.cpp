@@ -50,6 +50,11 @@ void AST::Expr::fix()
   }
 }
 
+bool AST::Expr::isPrimary()
+{
+  return AST::Expr::Immidiate < type;
+}
+
 std::string AST::Expr::ToString() const
 {
   switch( type )

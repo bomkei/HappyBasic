@@ -56,6 +56,7 @@ public:
     }
 
     void fix();
+    bool isPrimary();
 
     AST::Expr& _oprator(Type type, AST::Expr&);
     AST::Expr& operator+=(AST::Expr&);
