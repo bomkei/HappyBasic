@@ -251,6 +251,7 @@ void AST::Expr::Optimize()
   if( type == Assign )
   {
     right->Optimize();
+    std::cout << *this << std::endl;
     return;
   }
   //std::cout << "expropt before: " << *this << std::endl;
