@@ -158,36 +158,17 @@ bool removeVariableOnce(AST::Expr& expr, int variable)
 }
 
 /* internal functions */
-AST::Expr& makeExprFromExprs(std::vector<AST::Expr*>& parts)
+AST::Expr* makeExprFromExprs(std::vector<AST::Expr*>& parts)
 {
-  auto ret = new AST::Expr();
+  AST::Expr* ret;
 
-  if( parts.size() == 1 )
+  ret = new AST::Expr;
+  for( auto&& part : parts )
   {
-    ret = parts[0];
+    *ret += *part;
   }
-  else if( parts.size() != 0 )
-  {
-    auto newExpr = new AST::Expr();
-    int i = 0;
-    for( auto it = parts.begin(); it != parts.end(); )
-    {
-      newExpr->type = AST::Expr::Add;
-      auto child = newExpr;
-      if( i++ == 0 )
-      {
-        newExpr->left = *it++;
-      }
-      else
-      {
-        newExpr = new AST::Expr();
-        newExpr->left = child;
-      }
-      newExpr->right = *it++;
-    }
-    ret = newExpr;
-  }
-  return *ret;
+
+  return ret;
 }
 void _getVariables(AST::Expr& expr, std::vector<std::pair<int, std::string>>& dest)
 {
