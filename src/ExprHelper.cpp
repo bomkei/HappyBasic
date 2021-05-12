@@ -97,7 +97,7 @@ AST::Expr& AST::Expr::operator+=(AST::Expr& target)
 }
 AST::Expr& AST::Expr::operator-=(AST::Expr& target)
 {
-  return _oprator(Add, target);
+  return _oprator(Sub, target);
 }
 AST::Expr& AST::Expr::operator*=(AST::Expr& target)
 {
