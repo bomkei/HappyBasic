@@ -250,14 +250,7 @@ void AST::Expr::Optimize()
   //std::cout << "expropt before: " << *this << std::endl;
 
   // get expr type
-  ExprType exprtype;
-  if( type == Add or type == Sub )
-    exprtype.type = ExprType::Expr;
-  else if( type == Mul or type == Div )
-    exprtype.type = ExprType::Term;
-  else
-    exprtype.type = ExprType::Factor;
-
+  ExprType exprtype(*this);
   // get all parts
   std::vector<TypedExpr> parts;
   getAllParts(exprtype, this, parts);
