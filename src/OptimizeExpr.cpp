@@ -360,7 +360,6 @@ void AST::Expr::Optimize()
   }
 
   // reconstructing Expr (to ret)
-  AST::Expr ret;
   for( auto&& part : parts )
   {
     AST::Expr::Type op;
@@ -376,8 +375,5 @@ void AST::Expr::Optimize()
     // clang-format on  
     _oprator(op,*part.expr);
   }
-  this->right = ret.right;
-  this->type = ret.type;
-  this->left = ret.left;
   this->fix();
 }
