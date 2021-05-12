@@ -317,6 +317,15 @@ Object AST_Runner::Expr(AST::Expr* ast)
           left.type = Object::Int;
           break;
 
+        case AST::Expr::LogAND:
+          left.v_int = left.Eval() && right.Eval();
+          left.type = Object::Int;
+          break;
+          
+        case AST::Expr::LogOR:
+          left.v_int = left.Eval() || right.Eval();
+          left.type = Object::Int;
+          break;
 
 
       }

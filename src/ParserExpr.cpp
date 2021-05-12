@@ -342,7 +342,7 @@ AST::Expr* ParserCore::LogAND() {
 }
 
 AST::Expr* ParserCore::LogOR() {
-  auto x = Equal();
+  auto x = LogAND();
 
   while( check() ) {
     if( consume("or") )
@@ -355,7 +355,7 @@ AST::Expr* ParserCore::LogOR() {
 
 AST::Expr* ParserCore::Assign()
 {
-  auto x = Equal();
+  auto x = LogOR();
   auto tk = &get_tok();
 
   if( consume("=") ) {
