@@ -172,7 +172,7 @@ AST::Expr* makeExprFromExprs(std::vector<AST::Expr*>& parts)
 
   return ret;
 }
-void _getVariables(AST::Expr& expr, std::vector<std::pair<int, std::string>>& dest)
+void _getVariables(AST::Expr& expr, std::vector<variableType>& dest)
 {
   if( expr.type == AST::Expr::Variable )
     dest.emplace_back(std::make_pair(expr.varIndex, expr.token->str));
@@ -189,7 +189,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
   if( parts.size() == 0 )
     return;
 
-  std::vector<std::pair<int, std::string>> variables;
+  std::vector<variableType> variables;
   for( auto&& expr : parts )
   {
     _getVariables(*expr.expr, variables);
