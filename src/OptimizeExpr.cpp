@@ -184,6 +184,9 @@ void _getVariables(AST::Expr& expr, std::vector<std::pair<int, std::string>>& de
 // parts = std::vector<TypedExpr(Term) >
 void Expr_Summarize(std::vector<TypedExpr>& parts)
 {
+  if( parts.size() == 0 )
+    return;
+
   std::vector<std::pair<int, std::string>> variables;
   for( auto&& expr : parts )
   {
@@ -206,18 +209,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
       else
         it++;
     }
-    AST::Expr* dest;
-    dest = &makeExprFromExprs(TermsWithVariable);
-    std::cout << "> -----" << std::endl;
-    dest->Optimize();
-    std::cout << "< -----" << std::endl;
-    // TODO: make <dest> * <variable> AST
-    auto Var = new AST::Expr();
-    Var->type = AST::Expr::Type::Variable;
-    Var->varIndex = variable.first;
-    Var->token = new Token();
-    Var->token->str = variable.second;
-    *dest *= *Var;
+    auto dest = makeExprFromExprs(TermsWithVariable);
     auto obj = new TypedExpr(TypedExpr::Normal, TypedExpr::Term, dest);
     parts.emplace_back(*obj);
   }
