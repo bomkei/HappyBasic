@@ -252,13 +252,7 @@ void AST::Expr::Optimize()
 
   // get all parts
   std::vector<TypedExpr> parts;
-  Expr* cur_left = this;
-  while( exprtype.isMatchedType(*cur_left) ) // loop while cur_left kind = Expr
-  {
-    parts.emplace_back(TypedExpr::FromExprRight(cur_left));
-    cur_left = cur_left->left;
-  }
-  parts.emplace_back(TypedExpr(TypedExpr::Normal, TypedExpr::getKindFromExprType(exprtype), cur_left));
+  getAllParts(exprtype, this, parts);
 
   // clear this
   this->right = nullptr;
