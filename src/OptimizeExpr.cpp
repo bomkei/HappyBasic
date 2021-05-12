@@ -188,20 +188,15 @@ void _getVariables(AST::Expr& expr, std::vector<variableType>& dest)
   if( expr.right )
     _getVariables(*expr.right, dest);
 }
-void getAllParts(ExprType type, AST::Expr* expr, std::vector<TypedExpr>& parts)
+void getAllParts(ExprType type, AST::Expr* expr, std::vector<TypedExpr>& parts, bool isFirst = true)
 {
-  if( type.isMatchedType(*expr) )
+  AST::Expr* cur = expr;
+  while( type.isMatchedType(*cur) )
   {
-    if( expr->right->isPrimary() )
-    {
-      parts.emplace_back(TypedExpr::FromExprRight(expr));
-    }
+    parts.emplace_back(TypedExpr::FromExprRight(cur));
+    cur = cur->left;
   }
-
-  if( expr->left )
-    getAllParts(type, expr->left, parts);
-  if( expr->right )
-    getAllParts(type, expr->right, parts);
+  parts.emplace_back(TypedExpr(TypedExpr::Normal, TypedExpr::getKindFromExprType(type), cur));
 };
 
 // parts = std::vector<TypedExpr(Term) >
