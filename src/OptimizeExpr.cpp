@@ -249,7 +249,9 @@ void AST::Expr::Optimize()
   ExprType exprtype(*this);
   // get all parts
   std::vector<TypedExpr> parts;
-  getAllParts(exprtype, this, parts);
+  auto thisClone = new AST::Expr();
+  *thisClone = *this;
+  getAllParts(exprtype, thisClone, parts);
 
   // optimize each types
   if( exprtype.type == ExprType::Expr )
