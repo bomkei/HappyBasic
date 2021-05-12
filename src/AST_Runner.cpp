@@ -300,20 +300,12 @@ Object AST_Runner::Expr(AST::Expr* ast)
           break;
 
         case AST::Expr::Equal:
-          switch( left.type ) {
-            case Object::Int: left.v_int = left.v_int == right.v_int; break;
-            case Object::Char: left.v_int = left.v_char == right.v_char; break;
-            case Object::Float: left.v_int = left.v_float == right.v_float; break;
-          }
+          left.v_int = left.Equal(right);
           left.type = Object::Int;
           break;
 
         case AST::Expr::NotEqual:
-          switch( left.type ) {
-            case Object::Int: left.v_int = left.v_int != right.v_int; break;
-            case Object::Char: left.v_int = left.v_char != right.v_char; break;
-            case Object::Float: left.v_int = left.v_float != right.v_float; break;
-          }
+          left.v_int = !left.Equal(right);
           left.type = Object::Int;
           break;
 

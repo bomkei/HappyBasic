@@ -78,9 +78,6 @@ bool Object::Equal(Object const& obj) const
   if( obj.type != type )
     return false;
 
-  if( obj.name != name )
-    return false;
-
   switch( type )
   {
     case Int: return obj.v_int == v_int;
