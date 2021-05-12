@@ -190,10 +190,12 @@ void _getVariables(AST::Expr& expr, std::vector<variableType>& dest)
 }
 void getAllParts(ExprType type, AST::Expr* expr, std::vector<TypedExpr>& parts)
 {
-  if( expr->isBinary() )
+  if( type.isMatchedType(*expr) )
   {
     if( expr->right->isPrimary() )
+    {
       parts.emplace_back(TypedExpr::FromExprRight(expr));
+    }
   }
 
   if( expr->left )
