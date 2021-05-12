@@ -26,7 +26,7 @@ struct Object
   Object* var_ptr = nullptr;
   AST::Class* class_ptr = nullptr;
 
-  Object& operator = (Object const& obj);
+  //Object& operator = (Object const& obj);
 
   std::string ToString() const;
   bool IsString() const;
