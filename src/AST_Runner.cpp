@@ -97,7 +97,11 @@ Object AST_Runner::Expr(AST::Expr* ast)
       if( !dest.var_ptr )
         Program::Error(*ast->token, "cannot assign to rvalue");
 
-      return *dest.var_ptr = src;
+      //auto name = dest.name;
+      *dest.var_ptr = src;
+      dest.var_ptr->name = dest.name;
+
+      return src;
     }
 
     case AST::Expr::New:
