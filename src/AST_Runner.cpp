@@ -103,7 +103,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
     case AST::Expr::New:
     {
-      auto& className = ast->token->str;
+      auto& className = ast->left->token->str;
 
       Object ret;
       ret.type = Object::ClassObj;
@@ -116,7 +116,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
       }
 
       if( !ret.class_ptr )
-        Program::Error(*ast->token, "undefined class");
+        Program::Error(*ast->left->token, "undefined class");
 
       for( auto&& i : ret.class_ptr->member_list ) {
         if( i->type == AST::Stmt::Var ) {
