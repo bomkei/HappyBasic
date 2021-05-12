@@ -14,7 +14,15 @@ class ExprType
     Term,
     Factor
   } type;
-
+  ExprType(AST::Expr expr)
+  {
+    if( expr.type == AST::Expr::Add or expr.type == AST::Expr::Sub )
+      type = ExprType::Expr;
+    else if( expr.type == AST::Expr::Mul or expr.type == AST::Expr::Div )
+      type = ExprType::Term;
+    else
+      type = ExprType::Factor;
+  }
   bool isMatchedType(AST::Expr& src)
   {
     if(
