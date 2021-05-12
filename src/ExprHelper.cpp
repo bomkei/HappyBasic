@@ -10,6 +10,9 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
   }
   if( expr.type >= AST::Expr::Add && AST::Expr::Div >= expr.type )
   {
+    bool a = expr.type == AST::Expr::Mul or expr.type == AST::Expr::Div;
+    if( a )
+      ss << "(";
     ss << *expr.left;
     ss << (expr.type == AST::Expr::Add    ? "+"
             : expr.type == AST::Expr::Sub ? "-"
@@ -17,6 +20,8 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
             : expr.type == AST::Expr::Div ? "/"
                                           : "?");
     ss << *expr.right;
+    if( a )
+      ss << ")";
   }
   else if( expr.type == AST::Expr::Immidiate )
   {
