@@ -44,6 +44,10 @@ void AST::Expr::fix()
   {
     *this = *left;
   }
+  if( left == nullptr and right != nullptr )
+  {
+    *this = *right;
+  }
 }
 
 std::string AST::Expr::ToString() const
