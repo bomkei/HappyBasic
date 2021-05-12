@@ -76,24 +76,30 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
 }
 AST::Expr& AST::Expr::_oprator(Type type, AST::Expr& target)
 {
-  if( left == nullptr )
+  if( Add <= this->type and this->type <= Div )
   {
-    left = &target;
-    return *this;
-  }
-  else if( right == nullptr )
-  {
-    type = type;
-    right = &target;
-    return *this;
+    if( left == nullptr )
+    {
+      this->type = type;
+      left = &target;
+      return *this;
+    }
+    else if( right == nullptr )
+    {
+      this->type = type;
+      right = &target;
+      return *this;
+    }
   }
 
   auto newObject = new AST::Expr;
+
   newObject->left = new AST::Expr();
   *newObject->left = *this;
-  newObject->right = &target;
-  newObject->type = type;
+
   *this = *newObject;
+  this->right = &target;
+  this->type = type;
   return *this;
 }
 AST::Expr& AST::Expr::operator+=(AST::Expr& target)
