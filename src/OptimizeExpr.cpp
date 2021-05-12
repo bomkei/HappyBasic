@@ -193,7 +193,7 @@ void getAllParts(ExprType type, AST::Expr* expr, std::vector<TypedExpr>& parts)
   if( expr->isBinary() and expr->right != nullptr )
   {
     if( expr->right->isPrimary() )
-      parts.emplace_back(TypedExpr::FromExprRight(expr->right));
+      parts.emplace_back(TypedExpr::FromExprRight(expr));
   }
 
   if( expr->left )
@@ -279,7 +279,7 @@ void AST::Expr::Optimize()
 
       *this += *imm;
     }
-    Expr_Summarize(parts);
+    //Expr_Summarize(parts);
   }
   else if( exprtype.type == ExprType::Term )
   {
@@ -391,6 +391,8 @@ void AST::Expr::Optimize()
       }
     }
   }
-  *this = ret;
+  this->right = ret.right;
+  this->type = ret.type;
+  this->left = ret.left;
   this->fix();
 }
