@@ -255,10 +255,6 @@ void AST::Expr::Optimize()
   std::vector<TypedExpr> parts;
   getAllParts(exprtype, this, parts);
 
-  // clear this
-  this->right = nullptr;
-  this->left = nullptr;
-
   // optimize each types
   if( exprtype.type == ExprType::Expr )
   {
