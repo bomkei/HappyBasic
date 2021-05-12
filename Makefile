@@ -10,10 +10,13 @@ CXXFILES	:= \
 
 OFILES		:= $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(CXXFILES)))
 
-CXXFLAGS	:= -O1 -std=gnu++2a -Wno-psabi
+CXXFLAGS	?= -O1 -std=gnu++2a -Wno-psabi
 LDFLAGS		:= -Wl,--gc-sections
 
 all: $(TARGET)
+
+debug:
+	@$(MAKE) --no-print-directory CXXFLAGS='-O1 -std=gnu++2a -Wno-psabi -g'
 
 clean:
 	@rm -rf $(OBJDIR) $(TARGET)
