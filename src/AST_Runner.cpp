@@ -190,7 +190,13 @@ Object AST_Runner::Expr(AST::Expr* ast)
             case Object::Float: left.v_float += right.v_float; break;
             
             case Object::Array: {
-              left.list.emplace_back(right);
+              if( right.type == Object::Array ) {
+                for( auto&& i : right.list )
+                  left.list.emplace_back(i);
+              }
+              else {
+                left.list.emplace_back(right);
+              }
               break;
             }
           }

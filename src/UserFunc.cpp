@@ -21,11 +21,14 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun) {
   if( !ast )
     Program::Error(*fun->token, "undefined function");
 
-  //auto ast = Program::instance->functions[find];
   std::vector<Object> old_args;
 
-  if( ast->args.size() != fun->args.size() )
-    Program::Error(*fun->token, "no mathing arguments");
+  if( ast->args.size() != fun->args.size() ) {
+    Program::Error(*fun->token,
+      std::string(ast->args.size() > fun->args.size() ? "too few arguments" : "too many arguments") +
+      ". declared is " + std::to_string(ast->args.size()) + " count" +
+      " but this is written " + std::to_string(fun->args.size()) + " arguments");
+  }
 
   // save args before run
   for( auto&& i : ast->args )
@@ -47,8 +50,7 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun) {
   
   CallCount++;
 
-  if( Options::IsSafety && CallCount >= FUNC_CALL_DEPTH_MAX )
-  {
+  if( Options::IsSafety && CallCount >= FUNC_CALL_DEPTH_MAX ) {
     Program::Error(*fun->token, "prevented crash of stack overflow.");
   }
 
