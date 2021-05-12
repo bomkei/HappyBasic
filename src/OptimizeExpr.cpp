@@ -364,6 +364,7 @@ void AST::Expr::Optimize()
   }
 
   // reconstructing Expr (to ret)
+  AST::Expr ret;
   for( auto&& part : parts )
   {
     AST::Expr& target = *part.expr;
@@ -372,24 +373,25 @@ void AST::Expr::Optimize()
     {
       if( part.type == TypedExpr::Type::Normal )
       {
-        *this += target;
+        ret += target;
       }
       else
       {
-        *this -= target;
+        ret -= target;
       }
     }
     else if( part.kind == TypedExpr::Kind::Term )
     {
       if( part.type == TypedExpr::Type::Normal )
       {
-        *this *= target;
+        ret *= target;
       }
       else
       {
-        *this /= target;
+        ret /= target;
       }
     }
   }
+  *this = ret;
   this->fix();
 }
