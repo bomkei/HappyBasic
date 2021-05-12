@@ -247,7 +247,6 @@ void AST::Expr::Optimize()
     std::cout << *this << std::endl;
     return;
   }
-  //std::cout << "expropt before: " << *this << std::endl;
 
   // get expr type
   ExprType exprtype(*this);
