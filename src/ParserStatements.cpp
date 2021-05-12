@@ -16,15 +16,12 @@ AST::Stmt* ParserCore::Statements()
     expect("\n");
 
     while( check() ) {
-      // End If
       if( consume("endif") ) {
         expect("\n");
         ast->pairs.emplace_back(pair);
         closed = true;
         break;
       }
-
-      // ElseIf
       else if( consume("elseif") ) {
         ast->pairs.emplace_back(pair);
 
@@ -33,8 +30,6 @@ AST::Stmt* ParserCore::Statements()
         expect("Then");
         expect("\n");
       }
-
-      // Else
       else if( consume("else") ) {
         ast->pairs.emplace_back(pair);
         pair = std::make_pair(AST::Expr::FromInt(1), new AST::Block);
@@ -54,8 +49,6 @@ AST::Stmt* ParserCore::Statements()
         ast->pairs.emplace_back(pair);
         break;
       }
-
-      // stmt
       else
       {
         std::get<1>(pair)->list.emplace_back(Statements());
