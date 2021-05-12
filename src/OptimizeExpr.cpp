@@ -194,25 +194,6 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
   }
   Utils::VectorUnique(variables);
 
-  std::vector<AST::Expr*> TermsWithVariable;
-  for( auto&& variable : variables )
-  {
-    TermsWithVariable.clear();
-    for( auto it = parts.begin(); it != parts.end(); )
-    {
-      bool hasVariable = removeVariableOnce(*it->expr, variable.first);
-      if( hasVariable )
-      {
-        TermsWithVariable.emplace_back(it->expr);
-        parts.erase(it);
-      }
-      else
-        it++;
-    }
-    auto dest = makeExprFromExprs(TermsWithVariable);
-    auto obj = new TypedExpr(TypedExpr::Normal, TypedExpr::Term, dest);
-    parts.emplace_back(*obj);
-  }
   for( auto&& part : parts )
   {
     std::cout << "summarize     : " << *part.expr << std::endl;
