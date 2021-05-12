@@ -52,11 +52,11 @@ void AST::Expr::fix()
 
 bool AST::Expr::isPrimary()
 {
-  return AST::Expr::Immidiate < type;
+  return type == Immidiate or type == Variable or type == Callfunc or type == IndexRef;
 }
 bool AST::Expr::isBinary()
 {
-  return Add <= type and type <= Div;
+  return type == Add or type == Sub or type == Mul or type == Div;
 }
 
 std::string AST::Expr::ToString() const
