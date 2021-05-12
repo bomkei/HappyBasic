@@ -54,7 +54,7 @@ bool AST::Expr::isPrimary()
 {
   return AST::Expr::Immidiate < type;
 }
-bool AST::Expr::isPrimary()
+bool AST::Expr::isBinary()
 {
   return Add <= type and type <= Div;
 }
