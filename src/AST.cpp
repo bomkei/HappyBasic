@@ -54,6 +54,10 @@ bool AST::Expr::isPrimary()
 {
   return AST::Expr::Immidiate < type;
 }
+bool AST::Expr::isPrimary()
+{
+  return Add <= type and type <= Div;
+}
 
 std::string AST::Expr::ToString() const
 {
