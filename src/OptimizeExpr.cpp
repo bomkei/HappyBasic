@@ -363,30 +363,18 @@ void AST::Expr::Optimize()
   AST::Expr ret;
   for( auto&& part : parts )
   {
-    AST::Expr& target = *part.expr;
     AST::Expr::Type op;
-    if( part.kind == TypedExpr::Kind::Expr )
-    {
-      if( part.type == TypedExpr::Type::Normal )
-      {
-        ret += target;
-      }
-      else
-      {
-        ret -= target;
-      }
-    }
-    else if( part.kind == TypedExpr::Kind::Term )
-    {
-      if( part.type == TypedExpr::Type::Normal )
-      {
-        ret *= target;
-      }
-      else
-      {
-        ret /= target;
-      }
-    }
+    // clang-format off
+    op =
+      part.kind == TypedExpr::Kind::Expr ?
+        part.type == TypedExpr::Type::Normal ? Add : Sub
+
+      : part.kind == TypedExpr::Kind::Term ?
+        part.type == TypedExpr::Type::Normal ? Mul : Div
+
+      : Add;
+    // clang-format on  
+    _oprator(op,*part.expr);
   }
   this->right = ret.right;
   this->type = ret.type;
