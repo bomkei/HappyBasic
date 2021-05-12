@@ -50,7 +50,7 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
   }
   else if( expr.type == AST::Expr::Variable )
   {
-    ss << "var[" << expr.varIndex << "](" << expr.token->str << ")";
+    ss << expr.token->str;
   }
   else if( expr.type == AST::Expr::Callfunc )
   {
