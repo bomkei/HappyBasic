@@ -12,10 +12,6 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun) {
   }
   else {
     ast = Program::GetInstance()->GetFunction(fun->token->str);
-
-    //if( find != -1 ) {
-    //  ast = Program::GetInstance()->->functions[find];
-    //}
   }
 
   if( !ast )
