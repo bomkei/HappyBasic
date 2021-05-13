@@ -230,17 +230,14 @@ void Debug(AST::Expr* ast)
     std::cout << "|Reduce process is completed: " << alpha << '\n';
     std::cout << "| " << ast_sub->ToString() << '\n';
 
-    alart;
     after_terms.emplace_back(Term(ast_sub));
 
     break;
   }
 
-  alart;
   for( auto&& t : terms )
     after_terms.emplace_back(t);
 
-  
 
   std::cout << "\nTerms(after):\n";
   for( auto&& t : after_terms )
@@ -248,11 +245,9 @@ void Debug(AST::Expr* ast)
     std::cout << t << '\n';
   }
 
-  alart;
   std::cout << after_terms.size() << '\n';
 
   *ast = *ConstructAST(after_terms);
 
 
-  //exit(1);
 }

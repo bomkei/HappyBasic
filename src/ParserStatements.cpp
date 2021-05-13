@@ -130,8 +130,7 @@ AST::Stmt* ParserCore::Statements()
     return ast;
   }
 
-  if( consume("do") )
-  {
+  if( consume("do") ) {
     std::vector<AST::Stmt*> list;
     AST::Expr* cond = nullptr;
     auto closed = false;

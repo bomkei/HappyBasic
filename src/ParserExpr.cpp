@@ -316,14 +316,12 @@ AST::Expr* ParserCore::Equal()
 {
   auto x = Compare();
 
-  while( check() )
-  {
+  while( check() ) {
     if( consume("==") )
       x = new AST::Expr(AST::Expr::Equal, x, Compare(), csmtok);
     else if( consume("!=") )
       x = new AST::Expr(AST::Expr::NotEqual, x, Compare(), csmtok);
-    else
-      break;
+    else break;
   }
 
   return x;
