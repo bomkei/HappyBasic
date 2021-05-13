@@ -132,76 +132,37 @@ AST::Stmt* ParserCore::Statements() {
 
   if( consume("def") )
   {
-    auto tk = csmtok;
+    auto ast = new AST::Function;
+    ast->token = get_tok();
 
-    if( in_function )
-      Program::Error(*tk, "nested def");
 
-    if( get_tok().type != Token::Ident )
-      Program::Error(get_tok(), "expect identifier after 'def' keyword");
-
-    auto& name = get_tok().str;
     next();
-
-    std::vector<AST::Expr*> args;
-    std::vector<AST::Stmt*> block;
-
-    func_args = &args;
-
     expect("(");
 
-    if( !consume(")") )
-    {
-      do
-      {
-        if( get_tok().type != Token::Ident )
-          Program::Error(get_tok(), "syntax error");
+    if( !consume(")") ) {
+      do {
+        auto& tk = get_tok();
+
+        if( tk.type != Token::Ident )
+          Program::Error(tk, "syntax error");
 
         auto prm = new AST::Expr;
         prm->type = AST::Expr::Param;
-        prm->token = &get_tok();
+        prm->token = &tk;
         next();
 
-        args.emplace_back(prm);
+        ast->args.emplace_back(prm);
+
       } while( consume(",") );
-
-      expect(")");
     }
 
-    expect("\n");
-
-    auto closed = false;
     in_function = true;
-
-    while( check() )
-    {
-      if( consume("end") )
-      {
-        closed = true;
-        expect("\n");
-        break;
-      }
-
-      block.emplace_back(Statements());
-    }
-
-    if( !closed )
-      Program::Error(*tk, "not closed");
-
+    ast->code = Statements();
     in_function = false;
 
-    auto ast = new AST::Function;
-    ast->token = tk;
-    ast->name = name;
-
-    if( args.size() )
-      ast->args = args;
-
-    ast->code = new AST::Block;
-    ast->code->list = std::move(block);
-
-    if( !in_class )
+    if( !in_class ) {
       functions.emplace_back(ast);
+    }
 
     return ast;
   }

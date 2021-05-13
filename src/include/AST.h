@@ -193,7 +193,7 @@ public:
 public:
     std::string name;
     std::vector<Expr*> args;
-    AST::Block* code;
+    AST::Stmt* code;
 
     Function()
     {
