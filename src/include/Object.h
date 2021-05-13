@@ -4,10 +4,8 @@ namespace AST {
   class Class;
 }
 
-struct Object
-{
-  enum Type
-  {
+struct Object {
+  enum Type {
     Int,
     Float,
     Char,

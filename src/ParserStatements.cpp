@@ -1,7 +1,6 @@
 #include "main.h"
 
-AST::Stmt* ParserCore::Statements()
-{
+AST::Stmt* ParserCore::Statements() {
   if( consume("if") ) {
     auto ast = new AST::If;
 
