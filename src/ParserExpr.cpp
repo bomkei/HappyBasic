@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "main.h"
 
 ParserCore::ParserCore(
   std::vector<Object>& variables,
@@ -157,6 +157,16 @@ AST::Expr* ParserCore::Primary()
         }
       }
 
+      // class
+      if( in_class ) {
+        for( auto&& i : cur_class->member_list ) {
+          if( i->type == AST::Stmt::Var && i->expr->left->token->str == tok->str ) {
+            next();
+            return i->expr->left;
+          }
+        }
+      }
+
       auto ast = new AST::Expr;
       ast->type = AST::Expr::Variable;
       ast->token = tok;
@@ -198,12 +208,23 @@ AST::Expr* ParserCore::IndexRef()
   return x;
 }
 
+AST::Expr* ParserCore::MemberAccess() {
+  auto x = IndexRef(); {
+    while( check() ) {
+      if( consume(".") ) x = new AST::Expr(AST::Expr::MemberAccess, x, IndexRef(), csmtok);
+      else
+        break;
+    }
+  }
+  return x;
+}
+
 AST::Expr* ParserCore::Unary()
 {
   if( consume("-") )
-    return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), IndexRef(), csmtok);
+    return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), MemberAccess(), csmtok);
 
-  if( consume("new") )
+  if( consume("New") )
   {
     auto tk = csmtok;
     auto fun = Primary();
@@ -214,7 +235,7 @@ AST::Expr* ParserCore::Unary()
     return new AST::Expr(AST::Expr::New, fun, nullptr, tk);
   }
 
-  return IndexRef();
+  return MemberAccess();
 }
 
 AST::Expr* ParserCore::Mul()
@@ -225,6 +246,8 @@ AST::Expr* ParserCore::Mul()
   {
     if( consume("*") )
       x = new AST::Expr(AST::Expr::Mul, x, Unary(), csmtok);
+    else if( consume("%") )
+      x = new AST::Expr(AST::Expr::Mod, x, Unary(), csmtok);
     else if( consume("/") )
       x = new AST::Expr(AST::Expr::Div, x, Unary(), csmtok);
     else
@@ -309,11 +332,25 @@ AST::Expr* ParserCore::Equal()
 AST::Expr* ParserCore::Assign()
 {
   auto x = Equal();
+  auto tk = &get_tok();
 
-  if( consume("=") )
-  {
-    auto tk = csmtok;
+  if( consume("=") ) {
     x = new AST::Expr(AST::Expr::Assign, x, Assign(), tk);
+  }
+  else if( consume("+=") ) {
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Add, x, Assign(), tk), tk);
+  }
+  else if( consume("-=") ) {
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Sub, x, Assign(), tk), tk);
+  }
+  else if( consume("*=") ) {
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Mul, x, Assign(), tk), tk);
+  }
+  else if( consume("%=") ) {
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Mod, x, Assign(), tk), tk);
+  }
+  else if( consume("/=") ) {
+    x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Div, x, Assign(), tk), tk);
   }
 
   return x;

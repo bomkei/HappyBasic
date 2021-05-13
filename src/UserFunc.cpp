@@ -1,20 +1,34 @@
 #include "main.h"
 
-Object AST_Runner::UserFunc(AST::Callfunc* fun)
-{
-  auto find = Program::instance->find_func(fun->token->str);
+Object AST_Runner::UserFunc(AST::Callfunc* fun) {
+  AST::Function* ast = nullptr;
 
-  // not found
-  if( find == -1 )
-  {
-    Program::Error(*fun->token, "undefined function");
+  if( Program::instance->cur_class ) {
+    for( auto&& i : Program::instance->cur_class->member_list )
+      if( i->type == AST::Stmt::Function && ((AST::Function*)i)->name == fun->token->str ) {
+        ast = ((AST::Function*)i);
+        break;
+      }
+  }
+  else {
+    auto find = Program::instance->find_func(fun->token->str);
+
+    if( find != -1 ) {
+      ast = Program::instance->functions[find];
+    }
   }
 
-  auto ast = Program::instance->functions[find];
+  if( !ast )
+    Program::Error(*fun->token, "undefined function");
+
   std::vector<Object> old_args;
 
-  if( ast->args.size() != fun->args.size() )
-    Program::Error(*fun->token, "no mathing arguments");
+  if( ast->args.size() != fun->args.size() ) {
+    Program::Error(*fun->token,
+      std::string(ast->args.size() > fun->args.size() ? "too few arguments" : "too many arguments") +
+      ". declared is " + std::to_string(ast->args.size()) + " count" +
+      " but this is written " + std::to_string(fun->args.size()) + " arguments");
+  }
 
   // save args before run
   for( auto&& i : ast->args )
@@ -36,8 +50,7 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun)
   
   CallCount++;
 
-  if( Options::IsSafety && CallCount >= FUNC_CALL_DEPTH_MAX )
-  {
+  if( Options::IsSafety && CallCount >= FUNC_CALL_DEPTH_MAX ) {
     Program::Error(*fun->token, "prevented crash of stack overflow.");
   }
 

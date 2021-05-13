@@ -5,14 +5,18 @@ class ParserCore
 public:
   std::vector<Object>& variables;
   std::vector<AST::Function*>& functions;
-  std::vector<AST::Class*> classes;
+  std::vector<AST::Class*>& classes;
 
   std::vector<Token> tokens;
   size_t index;
 
   Token* csmtok;
+  
   bool in_function;
   std::vector<AST::Expr*>* func_args;
+
+  bool in_class = false;
+  AST::Class* cur_class = nullptr;
 
   Token& get_tok();
 
@@ -34,6 +38,7 @@ public:
 
   AST::Expr* Primary();
   AST::Expr* IndexRef();
+  AST::Expr* MemberAccess();
   AST::Expr* Unary();
   AST::Expr* Mul();
   AST::Expr* Add();
@@ -52,10 +57,5 @@ public:
 
   AST::Stmt* Statements();
   AST::Block* Parse();
-
-  //AST::Stmt* Stmt();
-
-  //AST::Stmt* Parse();
-
 
 };

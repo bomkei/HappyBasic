@@ -2,11 +2,20 @@
 
 class Program
 {
+public:
+
   static Program* instance;
 
+  //---------- global ----------------
+  // variables
   std::vector<Object> variables;
+
+  // functions
   std::vector<AST::Function*> functions;
+  
+  // classes
   std::vector<AST::Class*> classes;
+  //----------------------------------
 
   std::string source;
 
@@ -15,12 +24,10 @@ class Program
 
   AST::Stmt* prs_result;
   AST::Function* cur_func;
+  AST::Class* cur_class = nullptr;
 
   i64 find_func(std::string const&) const;
 
-  friend class AST_Runner;
-
-public:
   Program();
 
   void OpenFile();

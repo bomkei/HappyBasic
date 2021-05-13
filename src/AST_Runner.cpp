@@ -6,15 +6,12 @@ bool* AST_Runner::LoopContinued = nullptr;
 bool* AST_Runner::FuncReturned = nullptr;
 Object* AST_Runner::ReturnValue = nullptr;
 
-void ObjectAdjuster(Object& L, Object& R)
-{
+void ObjectAdjuster(Object& L, Object& R) {
   if( L.type == Object::Array || R.type == Object::Array )
     return;
 
-  if( L.type == Object::Float || R.type == Object::Float )
-  {
-    for( auto&& obj : { &L, &R } )
-    {
+  if( L.type == Object::Float || R.type == Object::Float ) {
+    for( auto&& obj : { &L, &R } ) {
       if( obj->type == Object::Int )
         obj->v_float = obj->v_int;
       else if( obj->type == Object::Char )
@@ -23,10 +20,8 @@ void ObjectAdjuster(Object& L, Object& R)
       obj->type = Object::Float;
     }
   }
-  else if( L.type != R.type )
-  {
-    for( auto&& obj : { &L, &R } )
-    {
+  else if( L.type != R.type ) {
+    for( auto&& obj : { &L, &R } ) {
       if( obj->type == Object::Char )
         obj->v_int = obj->v_char;
 
@@ -101,11 +96,82 @@ Object AST_Runner::Expr(AST::Expr* ast)
         Program::Error(*ast->token, "cannot assign to rvalue");
 
       *dest.var_ptr = src;
-
-      //alart;
-      //std::cout << dest.var_ptr->ToString() << '\n';
+      dest.var_ptr->name = dest.name;
 
       return src;
+    }
+
+    case AST::Expr::New:
+    {
+      auto& className = ast->left->token->str;
+
+      Object ret;
+      ret.type = Object::ClassObj;
+
+      for( auto&& i : Program::instance->classes ) {
+        if( i->token->str == className ) {
+          ret.class_ptr = i;
+          break;
+        }
+      }
+
+      if( !ret.class_ptr )
+        Program::Error(*ast->left->token, "undefined class");
+
+      for( auto&& i : ret.class_ptr->member_list ) {
+        if( i->type == AST::Stmt::Var ) {
+          auto& obj = i->expr->left->token->obj;
+
+          obj = AST_Runner::Expr(i->expr->right);
+          obj.var_ptr = &obj;
+
+          ret.list.emplace_back(obj);
+        }
+      }
+
+      return ret;
+    }
+
+    case AST::Expr::MemberAccess: {
+      auto obj = Expr(ast->left);
+      auto& name = ast->right->token->str;
+
+      if( obj.type != Object::ClassObj ) {
+        Program::Error(*ast->token, "left object isnt a class instance");
+      }
+
+      auto ptr = Program::instance->cur_class;
+      Program::instance->cur_class = obj.class_ptr;
+
+      if( ast->right->type == AST::Expr::Variable )
+        ast->right->type = AST::Expr::MemberVariable;
+      else if( ast->right->type == AST::Expr::IndexRef ) {
+        auto pp = ast->right;
+
+        while( pp->type == AST::Expr::IndexRef )
+          pp = pp->left;
+
+        if( pp->type == AST::Expr::Variable )
+          pp->type = AST::Expr::MemberVariable;
+      }
+
+      auto ret = Expr(ast->right);
+
+      Program::instance->cur_class = ptr;
+      return ret;
+    }
+
+    case AST::Expr::MemberVariable:
+    {
+      for( auto&& i : Program::instance->cur_class->member_list ) {
+        if( i->type == AST::Stmt::Var && ast->token->str == i->expr->left->token->str ) {
+          auto& ret = i->expr->left->token->obj;
+          ret.var_ptr = &ret;
+          return ret;
+        }
+      }
+
+      break;
     }
 
     default:
@@ -118,15 +184,30 @@ Object AST_Runner::Expr(AST::Expr* ast)
       switch( ast->type )
       {
         case AST::Expr::Add:
-          left.v_int += right.v_int;
-          left.v_char += right.v_char;
-          left.v_float += right.v_float;
+          switch( left.type ) {
+            case Object::Int: left.v_int += right.v_int; break;
+            case Object::Char: left.v_char += right.v_char; break;
+            case Object::Float: left.v_float += right.v_float; break;
+            
+            case Object::Array: {
+              if( right.type == Object::Array ) {
+                for( auto&& i : right.list )
+                  left.list.emplace_back(i);
+              }
+              else {
+                left.list.emplace_back(right);
+              }
+              break;
+            }
+          }
           break;
 
         case AST::Expr::Sub:
-          left.v_int -= right.v_int;
-          left.v_char -= right.v_char;
-          left.v_float -= right.v_float;
+          switch( left.type ) {
+            case Object::Int: left.v_int -= right.v_int; break;
+            case Object::Char: left.v_char -= right.v_char; break;
+            case Object::Float: left.v_float -= right.v_float; break;
+          }
           break;
 
         case AST::Expr::Mul:
@@ -155,11 +236,28 @@ Object AST_Runner::Expr(AST::Expr* ast)
             break;
           }
 
-          left.v_int *= right.v_int;
-          left.v_char *= right.v_char;
-          left.v_float *= right.v_float;
+          switch( left.type ) {
+            case Object::Int: left.v_int *= right.v_int; break;
+            case Object::Char: left.v_char *= right.v_char; break;
+            case Object::Float: left.v_float *= right.v_float; break;
+          }
           break;
 
+        case AST::Expr::Mod:
+          if( !right.Eval() )
+          {
+            Program::Error(*ast->token, "cant division with zero");
+          }
+          else if( !left.Eval() )
+            break;
+
+          switch( left.type ) {
+            case Object::Int: left.v_int /= right.v_int; break;
+            case Object::Char: left.v_char /= right.v_char; break;
+            case Object::Float: Program::Error(*ast->token, "cannot mod with float");
+          }
+          break;
+          
         case AST::Expr::Div:
           if( !right.Eval() )
           {
@@ -167,16 +265,20 @@ Object AST_Runner::Expr(AST::Expr* ast)
           }
           else if( !left.Eval() )
             break;
-          switch(left.type) {
-            case Object::Int:left.v_int /= right.v_int;break;
-            case Object::Char:left.v_char /= right.v_char;break;
-            case Object::Float:left.v_float /= right.v_float;break;
+
+          switch( left.type ) {
+            case Object::Int: left.v_int /= right.v_int; break;
+            case Object::Char: left.v_char /= right.v_char; break;
+            case Object::Float: left.v_float /= right.v_float; break;
           }
           break;
 
         case AST::Expr::Shift:
-          left.v_int <<= right.v_int;
-          left.v_char <<= right.v_char;
+          switch( left.type ) {
+            case Object::Int: left.v_int <<= right.v_int; break;
+            case Object::Char: left.v_char <<= right.v_char; break;
+            case Object::Float: Program::Error(*ast->token, "cannot shift float-type object");
+          }
           break;
 
         case AST::Expr::Bigger:
@@ -233,6 +335,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
   switch( ast->type )
   {
+    case AST::Stmt::Class:
     case AST::Stmt::Function:
       break;
 
@@ -379,6 +482,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       break;
     }
 
+    case AST::Stmt::Var:
     default:
       return Expr(ast->expr);
   }

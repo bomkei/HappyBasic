@@ -6,9 +6,7 @@ int main(int argc, char** argv)
 {
   srand((int)time(nullptr));
 
-  auto&& args = Utils::ToVector<std::string>(argc, argv);
-
-  args.erase(args.begin());
+  auto&& args = Utils::ToVector<std::string>(argc - 1, argv + 1);
 
   for( auto&& arg : args )
   {

@@ -12,6 +12,7 @@ public:
       Sub,
       Mul,
       Div,
+      Mod,
       Shift,
       Bigger,
       BiggerOrEqual,
@@ -26,7 +27,10 @@ public:
       Array,
       IndexRef,
       Param,
-      New
+      
+      New,
+      MemberAccess,
+      MemberVariable
     };
 
     Type type;
@@ -52,6 +56,14 @@ public:
       auto x = new Expr;
       x->token = new Token;
       x->token->obj.v_int = 1;
+      return x;
+    }
+    
+    static Expr* FromName(std::string const& name) {
+      auto x = new Expr;
+      x->type = Type::Variable;
+      x->token = new Token;
+      x->token->obj.name = name;
       return x;
     }
 
@@ -99,6 +111,7 @@ public:
       If,
       For,
       While,
+      Var,
       Block,
       Function,
       Break,
