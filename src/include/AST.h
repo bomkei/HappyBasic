@@ -171,7 +171,7 @@ public:
   {
 public:
     Expr* cond;
-    AST::Block* code;
+    AST::Stmt* code;
 
     While()
     {

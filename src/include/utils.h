@@ -10,6 +10,8 @@
 #define view_pointer(p) p
 #endif
 
+#define NOT_IMPL(msg)  ({printf("\t%s is not implemented.", msg);exit(1);})
+
 inline auto get_file_name(const char* s)
 {
   auto i = strlen(s) - 1;

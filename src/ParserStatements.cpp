@@ -77,32 +77,13 @@ AST::Stmt* ParserCore::Statements() {
   }
 
   if( consume("while") ) {
-    auto tk = csmtok;
-
-    auto cond = Expr();
-    expect("\n");
-
-    std::vector<AST::Stmt*> block;
-    auto closed = false;
-
-    while( check() ) {
-      if( consume("wend") ) {
-        expect("\n");
-        closed = true;
-        break;
-      }
-
-      block.emplace_back(Statements());
-    }
-
-    if( !closed )
-      Program::Error(*tk, "not closed");
-
     auto ast = new AST::While;
-    ast->token = tk;
-    ast->cond = cond;
-    ast->code = new AST::Block;
-    ast->code->list = std::move(block);
+
+    expect("(");
+    ast->cond = Expr();
+    expect(")");
+
+    ast->code = Statements();
 
     return ast;
   }
@@ -112,7 +93,7 @@ AST::Stmt* ParserCore::Statements() {
     ast->cond = AST::Expr::FromInt(1);
 
     ast->code = new AST::Block;
-    ast->code->list.emplace_back(Statements());
+    ((AST::Block*)ast->code)->list.emplace_back(Statements());
     
     auto cmp = new AST::If;
     expect("while");
@@ -124,14 +105,13 @@ AST::Stmt* ParserCore::Statements() {
     cmp->code = new AST::Stmt;
     cmp->code->type = AST::Stmt::Break;
 
-    ast->code->list.emplace_back(cmp);
+    ((AST::Block*)ast->code)->list.emplace_back(cmp);
 
     return ast;
   }
 
 
-  if( consume("def") )
-  {
+  if( consume("def") ) {
     auto ast = new AST::Function;
     ast->token = &get_tok();
 
@@ -159,9 +139,15 @@ AST::Stmt* ParserCore::Statements() {
       expect(")");
     }
 
+    auto ptr = func_args;
+
     in_function = true;
+    func_args = &(ast->args);
+    
     ast->code = Statements();
+    
     in_function = false;
+    func_args = ptr;
 
     if( !in_class ) {
       functions.emplace_back(ast);
@@ -172,85 +158,15 @@ AST::Stmt* ParserCore::Statements() {
 
   if( consume("class") )
   {
-    auto ast = new AST::Class;
-    ast->token = &get_tok();
-
-    auto closed = false;
-
-    next();
-    expect("\n");
-
-    auto flag = in_class;
-    auto ptr = cur_class;
-
-    in_class = true;
-    cur_class = ast;
-
-    while( check() ) {
-      if( consume("end") ) {
-        expect("\n");
-        closed = true;
-        break;
-      }
-
-      auto tk = &get_tok(); {
-        if( tk->str != "var" &&
-          tk->str != "def" &&
-          tk->str != "class" ) {
-          Program::Error(*tk, "only can place var or def or class statements on here");
-        }
-      }
-
-      if( tk->str == "var" ) {
-        auto ss = new AST::Stmt;
-        ss->type = AST::Stmt::Var;
-        ss->token = tk;
-        next();
-        if( get_tok().type != Token::Ident ) {
-          Program::Error(get_tok(), "expect identifier");
-        }
-        auto v_tok = &get_tok();
-        auto var = new AST::Expr;
-        var->type = AST::Expr::MemberVariable;
-        var->token = v_tok;
-        next();
-        expect("=");
-        auto expr = Expr();
-        expect("\n");
-        ss->expr = new AST::Expr(AST::Expr::Assign, var, expr, v_tok + 1);
-        ast->member_list.emplace_back(ss);
-      }
-      else ast->member_list.emplace_back(Statements());
-    }
-
-    if( !closed )
-      Program::Error(*ast->token, "not closed");
-
-    classes.emplace_back(ast);
-
-    in_class = flag;
-    cur_class = ptr;
-
-    return ast;
+    // TODO
+    NOT_IMPL("class");
   }
 
 
 
   if( consume("var") ) {
-    auto tk = csmtok;
-    auto cc = Expr();
-    if( cc->type != AST::Expr::Assign ) {
-      Program::Error(*tk, "89t4308tg5342");
-    }
-    auto jjj = new AST::Stmt;
-    jjj->type = AST::Stmt::Var;
-    jjj->expr = cc;
-    jjj->token = tk;
-    expect("\n");
-    return jjj;
-
-
-
+    // TODO
+    NOT_IMPL("var");
   }
 
   //
