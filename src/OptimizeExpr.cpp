@@ -143,7 +143,22 @@ class TypedExpr
 using variableType = std::pair<int, std::string>;
 
 /* internal types - end */
+bool hasVariable(AST::Expr& expr, variableType variable)
+{
+  if( expr.type == AST::Expr::Variable and expr.right->varIndex == variable.first )
+  {
+    return true;
+  }
 
+  if( not expr.right->isBinary() )
+  {
+    return hasVariable(*expr.right, variable) or hasVariable(*expr.left, variable);
+  }
+  else
+  {
+    return false;
+  }
+}
 bool removeVariableOnce(AST::Expr& expr, variableType variable)
 {
   auto var = new AST::Expr(AST::Expr::Variable);
