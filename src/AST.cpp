@@ -28,42 +28,6 @@ AST::Expr::Expr(float flt)
 }
 
 AST::Expr::Expr(int _int)
-  : type(Immidiate)
-  , left(nullptr)
-  , right(nullptr)
-  , token(nullptr)
-{
-  token = new Token();
-  token->obj.type = Object::Int;
-  token->obj.v_float = _int;
-}
-
-void AST::Expr::clear()
-{
-  type = Add;
-  left = right = nullptr;
-  token = nullptr;
-}
-
-void AST::Expr::fix()
-{
-  if( right == nullptr and left != nullptr )
-  {
-    *this = *left;
-  }
-  if( left == nullptr and right != nullptr )
-  {
-    *this = *right;
-  }
-}
-
-bool AST::Expr::isPrimary()
-{
-  return type == Immidiate or type == Variable or type == Callfunc or type == IndexRef;
-}
-
-
-AST::Expr::Expr(int _int)
     : type(Immidiate)
     , left(nullptr)
     , right(nullptr)
@@ -73,12 +37,14 @@ AST::Expr::Expr(int _int)
   token->obj.type = Object::Int;
   token->obj.v_float = _int;
 }
+
 void AST::Expr::clear()
 {
   type = Add;
   left = right = nullptr;
   token = nullptr;
 }
+
 void AST::Expr::fix()
 {
   if( right == nullptr and left != nullptr )
@@ -95,6 +61,7 @@ bool AST::Expr::isPrimary()
 {
   return type == Immidiate or type == Variable or type == Callfunc or type == IndexRef;
 }
+
 bool AST::Expr::isBinary()
 {
   return type == Add or type == Sub or type == Mul or type == Div;

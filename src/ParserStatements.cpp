@@ -133,14 +133,13 @@ AST::Stmt* ParserCore::Statements() {
   if( consume("def") )
   {
     auto ast = new AST::Function;
-    ast->token = get_tok();
-
+    ast->token = &get_tok();
 
     next();
     expect("(");
 
     if( !consume(")") ) {
-      do {
+      while( check() ) {
         auto& tk = get_tok();
 
         if( tk.type != Token::Ident )
@@ -153,7 +152,11 @@ AST::Stmt* ParserCore::Statements() {
 
         ast->args.emplace_back(prm);
 
-      } while( consume(",") );
+        if( !consume(",") )
+          break;
+      }
+
+      expect(")");
     }
 
     in_function = true;
