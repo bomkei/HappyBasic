@@ -144,27 +144,16 @@ using variableType = std::pair<int, std::string>;
 
 /* internal types - end */
 
-bool removeVariableOnce(AST::Expr& expr, int variable)
+bool removeVariableOnce(AST::Expr& expr, variableType variable)
 {
-  if( !expr.right ) // it has not depth...
-  {
-    return false;
-  }
+  auto var = new AST::Expr(AST::Expr::Variable);
+  var->varIndex = variable.first;
+  var->token = new Token();
+  var->token->type = Token::Ident;
+  var->token->str = variable.second;
 
-  if( expr.right->type == AST::Expr::Variable and expr.right->varIndex == variable )
-  {
-    expr = *expr.left;
-    return true;
-  }
-  else if( expr.left->type == AST::Expr::Variable and expr.left->varIndex == variable )
-  {
-    expr = *expr.right;
-    return true;
-  }
-  else
-  {
-    return removeVariableOnce(*expr.right, variable) or removeVariableOnce(*expr.left, variable);
-  }
+  expr /= *var;
+  expr.Optimize();
 }
 
 /* internal functions */
@@ -216,7 +205,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     terms.clear();
     for( auto it = parts.begin(); it != parts.end(); )
     {
-      bool hasVariable = removeVariableOnce(*it->expr, variable.first);
+      bool hasVariable = removeVariableOnce(*it->expr, variable);
       if( hasVariable )
       {
         terms.emplace_back(*it);
