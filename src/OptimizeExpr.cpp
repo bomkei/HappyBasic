@@ -1,6 +1,7 @@
 #include "main.h"
 #include <cassert>
 #include <cmath>
+#include <map>
 #include <numeric>
 
 /* internal types */
@@ -13,7 +14,15 @@ class ExprType
     Term,
     Factor
   } type;
-
+  ExprType(AST::Expr expr)
+  {
+    if( expr.type == AST::Expr::Add or expr.type == AST::Expr::Sub )
+      type = ExprType::Expr;
+    else if( expr.type == AST::Expr::Mul or expr.type == AST::Expr::Div )
+      type = ExprType::Term;
+    else
+      type = ExprType::Factor;
+  }
   bool isMatchedType(AST::Expr& src)
   {
     if(
@@ -131,41 +140,143 @@ class TypedExpr
   }
 };
 
-/* internal types - end */
+using variableType = std::pair<int, std::string>;
 
+/* internal types - end */
+bool hasVariable(AST::Expr& expr, variableType variable)
+{
+  if( expr.type == AST::Expr::Variable and expr.varIndex == variable.first )
+  {
+    return true;
+  }
+
+  if( expr.isBinary() )
+  {
+    return hasVariable(*expr.right, variable) or hasVariable(*expr.left, variable);
+  }
+  else
+  {
+    return false;
+  }
+}
+void removeVariableOnce(AST::Expr& expr, variableType variable)
+{
+  auto var = new AST::Expr(AST::Expr::Variable);
+  var->varIndex = variable.first;
+  var->token = new Token();
+  var->token->type = Token::Ident;
+  var->token->str = variable.second;
+
+  expr /= *var;
+  expr.Optimize();
+}
+
+/* internal functions */
+AST::Expr* makeExprFromExprs(std::vector<TypedExpr>& parts)
+{
+  auto ret = new AST::Expr;
+  ret->clear();
+  for( auto&& part : parts )
+  {
+    *ret += *part.expr;
+  }
+  ret->fix();
+  return ret;
+}
+void _getVariables(AST::Expr& expr, std::vector<variableType>& dest)
+{
+  if( expr.type == AST::Expr::Variable )
+    dest.emplace_back(std::make_pair(expr.varIndex, expr.token->str));
+
+  if( expr.left )
+    _getVariables(*expr.left, dest);
+  if( expr.right )
+    _getVariables(*expr.right, dest);
+}
+void getAllParts(ExprType type, AST::Expr* expr, std::vector<TypedExpr>& parts, bool isFirst = true)
+{
+  AST::Expr* cur = expr;
+  while( type.isMatchedType(*cur) )
+  {
+    parts.emplace_back(TypedExpr::FromExprRight(cur));
+    cur = cur->left;
+  }
+  parts.emplace_back(TypedExpr(TypedExpr::Normal, TypedExpr::getKindFromExprType(type), cur));
+};
+
+// parts = std::vector<TypedExpr(Term) >
+void Expr_Summarize(std::vector<TypedExpr>& parts)
+{
+  if( parts.size() == 0 )
+    return;
+  std::vector<variableType> variables;
+  for( auto&& expr : parts )
+  {
+    _getVariables(*expr.expr, variables);
+  }
+  Utils::VectorUnique(variables);
+  std::vector<TypedExpr> terms;
+  for( auto&& variable : variables )
+  {
+    terms.clear();
+    for( auto it = parts.begin(); it != parts.end(); )
+    {
+      if( hasVariable(*it->expr, variable) )
+      {
+        removeVariableOnce(*it->expr, variable);
+        terms.emplace_back(*it);
+        parts.erase(it);
+      }
+      else
+        it++;
+    }
+
+    auto dest = makeExprFromExprs(terms);
+    dest->Optimize();
+
+    auto var = new AST::Expr(AST::Expr::Variable);
+    var->varIndex = variable.first;
+    var->token = new Token();
+    var->token->type = Token::Ident;
+    var->token->str = variable.second;
+    *dest *= *var;
+
+    dest->Optimize();
+
+    parts.emplace_back(TypedExpr(TypedExpr::Normal, TypedExpr::Expr, dest));
+  }
+}
+/* internal functions - end */
 void AST::Expr::Optimize()
 {
-  Expr ret;
-  Expr* cur = &ret;
-  // get expr type
-  ExprType exprtype;
-  if( type == Add or type == Sub )
-    exprtype.type = ExprType::Expr;
-  else if( type == Mul or type == Div )
-    exprtype.type = ExprType::Term;
-  else
-    exprtype.type = ExprType::Factor;
+  if( type == Assign )
+  {
+    right->Optimize();
+    return;
+  }
 
+  // get expr type
+  ExprType exprtype(*this);
   // get all parts
   std::vector<TypedExpr> parts;
-  Expr* cur_left = this;
-  while( exprtype.isMatchedType(*cur_left) ) // loop while cur_left kind = Expr
-  {
-    parts.emplace_back(TypedExpr::FromExprRight(cur_left));
-    cur_left = cur_left->left;
-  }
-  parts.emplace_back(TypedExpr(TypedExpr::Normal, TypedExpr::getKindFromExprType(exprtype), cur_left));
+  auto thisClone = new AST::Expr();
+  *thisClone = *this;
+  getAllParts(exprtype, thisClone, parts);
 
+  //clear this
+  this->clear();
+
+  // optimize each types
   if( exprtype.type == ExprType::Expr )
   {
     // calculate immidiate
-    double immidiate = 0;
+    float immidiate = 0;
     for( auto it = parts.begin(); it != parts.end(); )
     {
       it->expr->Optimize();
       if( it->expr->type == Immidiate )
       {
-        immidiate += it->expr->token->obj.v_int * it->getSign();
+        immidiate += it->expr->token->obj.as<float>() * it->getSign();
         parts.erase(it);
       }
       else
@@ -174,12 +285,11 @@ void AST::Expr::Optimize()
 
     if( immidiate != 0 )
     {
-      cur->right = new Expr();
-      cur->right->token = new Token();
-      cur->right->token->obj.v_int = std::abs(immidiate);
-      cur->type = immidiate > 0 ? Expr::Add : Expr::Sub;
-      cur = cur->left = new Expr();
+      auto imm = new Expr(immidiate);
+
+      *this += *imm;
     }
+    Expr_Summarize(parts);
   }
   else if( exprtype.type == ExprType::Term )
   {
@@ -197,7 +307,7 @@ void AST::Expr::Optimize()
       }
 
       auto obj = it->expr->token->obj;
-      if( it->type == TypedExpr::Innormal )
+      if( it->type == TypedExpr::Normal )
       {
         if( obj.type == Object::Int )
           imm_numer_int *= obj.v_int;
@@ -216,25 +326,15 @@ void AST::Expr::Optimize()
 
     // imm
     int gcd = std::gcd(imm_denom_int, imm_numer_int);
-    double imm_numer = imm_numer_dbl * (double)imm_numer_int / gcd;
-    double imm_denom = imm_denom_dbl * (double)imm_denom_int / gcd;
+    float imm_numer = imm_numer_dbl * (float)imm_numer_int / gcd;
+    float imm_denom = imm_denom_dbl * (float)imm_denom_int / gcd;
     if( imm_numer != 1.0 )
     {
-      cur->right = new Expr();
-      cur->right->token = new Token();
-      cur->right->token->obj.type = Object::Float;
-      cur->right->token->obj.v_float = imm_numer;
-      cur->type = Expr::Mul;
-      cur = cur->left = new Expr();
+      *this *= *(new Expr(imm_numer));
     }
     if( imm_denom != 1.0 )
     {
-      cur->right = new Expr();
-      cur->right->token = new Token();
-      cur->right->token->obj.type = Object::Float;
-      cur->right->token->obj.v_float = imm_denom;
-      cur->type = Expr::Div;
-      cur = cur->left = new Expr();
+      *this /= *(new Expr(imm_denom));
     }
 
     // reduction!!!
@@ -273,23 +373,20 @@ void AST::Expr::Optimize()
   }
 
   // reconstructing Expr (to ret)
-
-  int i = 0;
   for( auto&& part : parts )
   {
-    if( parts.size() == ++i )
-    {
-      *cur = *part.expr;
-    }
-    else
-    {
-      cur->right = part.expr;
-      cur->type = part.getType();
-      cur = cur->left = new Expr();
-    }
-  }
+    AST::Expr::Type op;
+    // clang-format off
+    op =
+      part.kind == TypedExpr::Kind::Expr ?
+        part.type == TypedExpr::Type::Normal ? Add : Sub
 
-  this->left = ret.left;
-  this->type = ret.type;
-  this->right = ret.right;
+      : part.kind == TypedExpr::Kind::Term ?
+        part.type == TypedExpr::Type::Normal ? Mul : Div
+
+      : Add;
+    // clang-format on  
+    _oprator(op,*part.expr);
+  }
+  this->fix();
 }
