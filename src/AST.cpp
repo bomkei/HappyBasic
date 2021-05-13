@@ -242,14 +242,8 @@ std::string AST::Stmt::ToString(int tab) const
   {
     case Type::If:
     {
-      std::string s = "if pairs:\n";
-
-      for( auto&& p : ((AST::If*)this)->pairs )
-      {
-        s += " " + std::get<0>(p)->ToString() + ":\n" + " " + std::get<1>(p)->ToString(tab + 1);
-      }
-
-      return s + "\n";
+      // TODO
+      return "if<TODO>";
     }
 
     case Type::For:

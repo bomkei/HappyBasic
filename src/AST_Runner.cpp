@@ -384,7 +384,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       break;
 
     case AST::Stmt::If: {
-      if( Expr(((AST::If*)ast)->cond) ) {
+      if( Expr(((AST::If*)ast)->cond).Eval() ) {
         return Stmt(((AST::If*)ast)->code);
       }
       else if( ((AST::If*)ast)->elseCode ) {

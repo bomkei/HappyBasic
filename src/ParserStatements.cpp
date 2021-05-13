@@ -10,7 +10,7 @@ AST::Stmt* ParserCore::Statements() {
 
     ast->code = Statements();
 
-    if( consume("else") {
+    if( consume("else") ) {
       ast->elseCode = Statements();
     }
 
