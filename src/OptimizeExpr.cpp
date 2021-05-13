@@ -269,7 +269,7 @@ void AST::Expr::Optimize()
   if( exprtype.type == ExprType::Expr )
   {
     // calculate immidiate
-    double immidiate = 0;
+    float immidiate = 0;
     for( auto it = parts.begin(); it != parts.end(); )
     {
       it->expr->Optimize();
@@ -284,9 +284,7 @@ void AST::Expr::Optimize()
 
     if( immidiate != 0 )
     {
-      auto imm = new Expr();
-      imm->token = new Token();
-      imm->token->obj.v_int = immidiate;
+      auto imm = new Expr(immidiate);
 
       *this += *imm;
     }
