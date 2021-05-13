@@ -42,6 +42,9 @@ namespace AST
 
     int varIndex = 0;
 
+    Expr(float);
+    Expr(int);
+
     Expr(Type type = Immidiate);
     Expr(Type type, Expr* left, Expr* right, Token* tok);
 
@@ -50,6 +53,12 @@ namespace AST
     bool IsConstexpr() const;
 
     bool equal(AST::Expr const&) const;
+
+    void clear();
+    void fix();
+    bool isPrimary();
+    bool isBinary();
+
 
     static Expr* FromInt(int v)
     {

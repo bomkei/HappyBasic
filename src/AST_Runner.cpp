@@ -383,16 +383,14 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
       *FuncReturned = true;
       break;
 
-    case AST::Stmt::If:
-    {
-      for( auto&& pair : ((AST::If*)ast)->pairs )
-      {
-        auto cond = Expr(std::get<0>(pair));
-
-        if( cond.Eval() )
-          return Stmt(std::get<1>(pair));
+    case AST::Stmt::If: {
+      if( Expr(((AST::If*)ast)->cond) ) {
+        return Stmt(((AST::If*)ast)->code);
       }
-
+      else if( ((AST::If*)ast)->elseCode ) {
+        return Stmt(((AST::If*)ast)->elseCode);
+      }
+      
       break;
     }
 
