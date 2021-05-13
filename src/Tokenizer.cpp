@@ -42,7 +42,6 @@ static auto op_tokens =
   ".",
   ";",
   ":",
-  "\n",
 };
 
 static std::vector<std::pair<std::string, int>> ReservedWords =
@@ -228,6 +227,8 @@ std::vector<Token> Tokenizer::Tokenize()
     pass_space();
   }
 
+  /*
+  
   // reduce new line token
   for( size_t i = 0; i < tokens.size() - 1;) {
     if( tokens[i].str == "\n" && tokens[i + 1].str == "\n" )
@@ -250,6 +251,8 @@ std::vector<Token> Tokenizer::Tokenize()
       }
     }
   }
+
+  */
 
   return tokens;
 }

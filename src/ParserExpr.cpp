@@ -366,7 +366,7 @@ AST::Expr* ParserCore::Expr()
 {
   auto expr = Assign();
 
-  expr->Optimize();
+  //expr->Optimize();
   
   return expr;
 }
