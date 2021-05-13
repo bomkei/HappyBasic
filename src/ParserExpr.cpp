@@ -129,20 +129,21 @@ AST::Expr* ParserCore::Primary()
       // remove scope resolution operator
       next();
       while( consume("::") ) {
-        tok->str = tokens[index + 1].str;
+        tok->str += "::";
+        tok->str += get_tok().str;
         next();
       }
+      
+      alart;
+      std::cout << tok->str << '\n';
 
       // callfunc
-      if( consume("(") )
-      {
+      if( consume("(") ) {
         auto ast = new AST::Callfunc;
         ast->token = tok;
 
-        if( !consume(")") )
-        {
-          do
-          {
+        if( !consume(")") ) {
+          do {
             ast->args.emplace_back(Expr());
           } while( consume(",") );
           expect(")");
@@ -152,24 +153,19 @@ AST::Expr* ParserCore::Primary()
       }
 
       // find parameter
-      if( in_function )
-      {
+      if( in_function ) {
         for( auto&& i : *func_args )
-        {
-          if( i->token->str == tok->str )
-          {
+          if( i->token->str == tok->str ) {
             return i;
           }
-        }
       }
 
       // class
       if( in_class ) {
-        for( auto&& i : cur_class->member_list ) {
+        for( auto&& i : cur_class->member_list )
           if( i->type == AST::Stmt::Var && i->expr->left->token->str == tok->str ) {
             return i->expr->left;
           }
-        }
       }
 
       auto ast = new AST::Expr;
@@ -178,8 +174,7 @@ AST::Expr* ParserCore::Primary()
 
       auto find = find_var(tok->str);
 
-      if( find == -1 )
-      {
+      if( find == -1 ) {
         find = variables.size();
         variables.emplace_back(tok->obj);
       }
