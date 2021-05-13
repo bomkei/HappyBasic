@@ -128,18 +128,16 @@ AST::Expr* ParserCore::Primary()
       //
       // remove scope resolution operator
       next();
-      while( get_tok().str == "::" ) {
+      while( consume("::") ) {
         tok->str = tokens[index + 1].str;
-        index += 2;
+        next();
       }
 
-
       // callfunc
-      if( index + 1 < tokens.size() && tokens[index + 1].str == "(" )
+      if( consume("(") )
       {
         auto ast = new AST::Callfunc;
         ast->token = tok;
-        index += 2;
 
         if( !consume(")") )
         {
@@ -160,7 +158,6 @@ AST::Expr* ParserCore::Primary()
         {
           if( i->token->str == tok->str )
           {
-     //       next();
             return i;
           }
         }
@@ -170,7 +167,6 @@ AST::Expr* ParserCore::Primary()
       if( in_class ) {
         for( auto&& i : cur_class->member_list ) {
           if( i->type == AST::Stmt::Var && i->expr->left->token->str == tok->str ) {
-         //   next();
             return i->expr->left;
           }
         }
@@ -179,7 +175,6 @@ AST::Expr* ParserCore::Primary()
       auto ast = new AST::Expr;
       ast->type = AST::Expr::Variable;
       ast->token = tok;
-   //   next();
 
       auto find = find_var(tok->str);
 
