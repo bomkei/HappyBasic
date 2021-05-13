@@ -8,12 +8,12 @@ public:
   std::vector<AST::Class*>& classes;
 
   std::vector<Token> tokens;
-  size_t index;
+  size_t index = 0;
 
-  Token* csmtok;
+  Token* csmtok = nullptr;
   
-  bool in_function;
-  std::vector<AST::Expr*>* func_args;
+  bool in_function = false;
+  std::vector<AST::Expr*>* func_args = nullptr;
 
   bool in_class = false;
   AST::Class* cur_class = nullptr;

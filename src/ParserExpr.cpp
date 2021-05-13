@@ -7,9 +7,7 @@ ParserCore::ParserCore(
 )
   :variables(variables),
   functions(functions),
-  classes(classes),
-  in_function(false),
-  func_args(nullptr)
+  classes(classes)
 {
 
 }
