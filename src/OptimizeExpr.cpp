@@ -5,17 +5,14 @@
 #include <numeric>
 
 /* internal types */
-class ExprType
-{
+class ExprType {
   public:
-  enum Type
-  {
+  enum Type {
     Expr,
     Term,
     Factor
   } type;
-  ExprType(AST::Expr expr)
-  {
+  ExprType(AST::Expr expr) {
     if( expr.type == AST::Expr::Add or expr.type == AST::Expr::Sub )
       type = ExprType::Expr;
     else if( expr.type == AST::Expr::Mul or expr.type == AST::Expr::Div )
@@ -23,8 +20,7 @@ class ExprType
     else
       type = ExprType::Factor;
   }
-  bool isMatchedType(AST::Expr& src)
-  {
+  bool isMatchedType(AST::Expr& src) {
     if(
         type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div) )
       return true;
@@ -32,8 +28,7 @@ class ExprType
     return false;
   }
 
-  static bool isMatchedType(Type type, AST::Expr& src)
-  {
+  static bool isMatchedType(Type type, AST::Expr& src) {
     if(
         type == Expr and (src.type == AST::Expr::Add or src.type == AST::Expr::Sub) or type == Term and (src.type == AST::Expr::Mul or src.type == AST::Expr::Div) )
       return true;
@@ -42,17 +37,14 @@ class ExprType
   }
 };
 
-class TypedExpr
-{
+class TypedExpr {
   public:
-  enum Kind
-  {
+  enum Kind {
     Expr,
     Term
   } kind;
 
-  enum Type
-  {
+  enum Type {
     Normal = 1,
     Innormal = -1,
   } type;
@@ -62,80 +54,54 @@ class TypedExpr
   TypedExpr(T type, Kind kind, AST::Expr* expr)
       : type((Type)type)
       , kind(kind)
-      , expr(expr)
-  {
+      , expr(expr) {
   }
-  static Kind getKindFromExprType(ExprType srctype)
-  {
-    if( srctype.type == ExprType::Expr )
-    {
+  static Kind getKindFromExprType(ExprType srctype) {
+    if( srctype.type == ExprType::Expr ) {
       return Kind::Expr;
-    }
-    else if( srctype.type == ExprType::Term )
-    {
+    } else if( srctype.type == ExprType::Term ) {
       return Kind::Term;
-    }
-    else
-    {
+    } else {
       return Kind::Expr; // it's default
     }
   }
-  static TypedExpr FromExprRight(AST::Expr* expr)
-  {
+  static TypedExpr FromExprRight(AST::Expr* expr) {
     Type type;
     Kind kind;
     AST::Expr::Type srctype = expr->type;
-    if( srctype == AST::Expr::Mul or srctype == AST::Expr::Add )
-    {
+    if( srctype == AST::Expr::Mul or srctype == AST::Expr::Add ) {
       type = Normal;
-    }
-    else
-    {
+    } else {
       type = Innormal;
     }
 
-    if( srctype == AST::Expr::Mul or srctype == AST::Expr::Div )
-    {
+    if( srctype == AST::Expr::Mul or srctype == AST::Expr::Div ) {
       kind = Term;
-    }
-    else
-    {
+    } else {
       kind = Expr;
     }
 
     return TypedExpr(type, kind, expr->right);
   }
-  int getSign()
-  {
+  int getSign() {
     return type == Normal ? 1 : -1;
   }
-  AST::Expr::Type getType()
-  {
-    if( kind == Expr )
-    {
-      if( type == Normal )
-      {
+  AST::Expr::Type getType() {
+    if( kind == Expr ) {
+      if( type == Normal ) {
         return AST::Expr::Add;
-      }
-      else
-      { // type == Innormal
+      } else { // type == Innormal
         return AST::Expr::Sub;
       }
-    }
-    else
-    { // kind == Term
-      if( type == Normal )
-      {
+    } else { // kind == Term
+      if( type == Normal ) {
         return AST::Expr::Mul;
-      }
-      else
-      { // type == Innormal
+      } else { // type == Innormal
         return AST::Expr::Div;
       }
     }
   }
-  bool operator==(TypedExpr& target)
-  {
+  bool operator==(TypedExpr& target) {
     return this->expr->equal(*target.expr) and kind == target.kind;
   }
 };
@@ -143,24 +109,18 @@ class TypedExpr
 using variableType = std::pair<int, std::string>;
 
 /* internal types - end */
-bool hasVariable(AST::Expr& expr, variableType variable)
-{
-  if( expr.type == AST::Expr::Variable and expr.varIndex == variable.first )
-  {
+bool hasVariable(AST::Expr& expr, variableType variable) {
+  if( expr.type == AST::Expr::Variable and expr.varIndex == variable.first ) {
     return true;
   }
 
-  if( expr.isBinary() )
-  {
+  if( expr.isBinary() ) {
     return hasVariable(*expr.right, variable) or hasVariable(*expr.left, variable);
-  }
-  else
-  {
+  } else {
     return false;
   }
 }
-void removeVariableOnce(AST::Expr& expr, variableType variable)
-{
+void removeVariableOnce(AST::Expr& expr, variableType variable) {
   auto var = new AST::Expr(AST::Expr::Variable);
   var->varIndex = variable.first;
   var->token = new Token();
@@ -172,19 +132,16 @@ void removeVariableOnce(AST::Expr& expr, variableType variable)
 }
 
 /* internal functions */
-AST::Expr* makeExprFromExprs(std::vector<TypedExpr>& parts)
-{
+AST::Expr* makeExprFromExprs(std::vector<TypedExpr>& parts) {
   auto ret = new AST::Expr;
   ret->clear();
-  for( auto&& part : parts )
-  {
+  for( auto&& part : parts ) {
     *ret += *part.expr;
   }
   ret->fix();
   return ret;
 }
-void _getVariables(AST::Expr& expr, std::vector<variableType>& dest)
-{
+void _getVariables(AST::Expr& expr, std::vector<variableType>& dest) {
   if( expr.type == AST::Expr::Variable )
     dest.emplace_back(std::make_pair(expr.varIndex, expr.token->str));
 
@@ -193,11 +150,9 @@ void _getVariables(AST::Expr& expr, std::vector<variableType>& dest)
   if( expr.right )
     _getVariables(*expr.right, dest);
 }
-void getAllParts(ExprType type, AST::Expr* expr, std::vector<TypedExpr>& parts, bool isFirst = true)
-{
+void getAllParts(ExprType type, AST::Expr* expr, std::vector<TypedExpr>& parts, bool isFirst = true) {
   AST::Expr* cur = expr;
-  while( type.isMatchedType(*cur) )
-  {
+  while( type.isMatchedType(*cur) ) {
     parts.emplace_back(TypedExpr::FromExprRight(cur));
     cur = cur->left;
   }
@@ -205,29 +160,23 @@ void getAllParts(ExprType type, AST::Expr* expr, std::vector<TypedExpr>& parts, 
 };
 
 // parts = std::vector<TypedExpr(Term) >
-void Expr_Summarize(std::vector<TypedExpr>& parts)
-{
+void Expr_Summarize(std::vector<TypedExpr>& parts) {
   if( parts.size() == 0 )
     return;
   std::vector<variableType> variables;
-  for( auto&& expr : parts )
-  {
+  for( auto&& expr : parts ) {
     _getVariables(*expr.expr, variables);
   }
   Utils::VectorUnique(variables);
   std::vector<TypedExpr> terms;
-  for( auto&& variable : variables )
-  {
+  for( auto&& variable : variables ) {
     terms.clear();
-    for( auto it = parts.begin(); it != parts.end(); )
-    {
-      if( hasVariable(*it->expr, variable) )
-      {
+    for( auto it = parts.begin(); it != parts.end(); ) {
+      if( hasVariable(*it->expr, variable) ) {
         removeVariableOnce(*it->expr, variable);
         terms.emplace_back(*it);
         parts.erase(it);
-      }
-      else
+      } else
         it++;
     }
 
@@ -247,10 +196,8 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
   }
 }
 /* internal functions - end */
-void AST::Expr::Optimize()
-{
-  if( type == Assign )
-  {
+void AST::Expr::Optimize() {
+  if( type == Assign ) {
     right->Optimize();
     return;
   }
@@ -267,55 +214,43 @@ void AST::Expr::Optimize()
   this->clear();
 
   // optimize each types
-  if( exprtype.type == ExprType::Expr )
-  {
+  if( exprtype.type == ExprType::Expr ) {
     // calculate immidiate
     float immidiate = 0;
-    for( auto it = parts.begin(); it != parts.end(); )
-    {
+    for( auto it = parts.begin(); it != parts.end(); ) {
       it->expr->Optimize();
-      if( it->expr->type == Immidiate )
-      {
+      if( it->expr->type == Immidiate ) {
         immidiate += it->expr->token->obj.as<float>() * it->getSign();
         parts.erase(it);
-      }
-      else
+      } else
         it++;
     }
 
-    if( immidiate != 0 )
-    {
+    if( immidiate != 0 ) {
       auto imm = new Expr(immidiate);
 
       *this += *imm;
     }
     Expr_Summarize(parts);
-  }
-  else if( exprtype.type == ExprType::Term )
-  {
+  } else if( exprtype.type == ExprType::Term ) {
     // remove immidiate!
     double imm_denom_dbl = 1;
     int imm_denom_int = 1;
     double imm_numer_dbl = 1;
     int imm_numer_int = 1;
-    for( auto it = parts.begin(); it != parts.end(); )
-    {
-      if( it->expr->type != Immidiate )
-      { // skip not immidiate
+    for( auto it = parts.begin(); it != parts.end(); ) {
+      if( it->expr->type != Immidiate ) { // skip not immidiate
         it++;
         continue;
       }
 
       auto obj = it->expr->token->obj;
-      if( it->type == TypedExpr::Normal )
-      {
+      if( it->type == TypedExpr::Normal ) {
         if( obj.type == Object::Int )
           imm_numer_int *= obj.v_int;
         else
           imm_numer_dbl *= obj.as<double>();
-      }
-      else
-      {
+      } else {
         if( obj.type == Object::Int )
           imm_denom_int *= obj.v_int;
         else
@@ -328,12 +263,10 @@ void AST::Expr::Optimize()
     int gcd = std::gcd(imm_denom_int, imm_numer_int);
     float imm_numer = imm_numer_dbl * (float)imm_numer_int / gcd;
     float imm_denom = imm_denom_dbl * (float)imm_denom_int / gcd;
-    if( imm_numer != 1.0 )
-    {
+    if( imm_numer != 1.0 ) {
       *this *= *(new Expr(imm_numer));
     }
-    if( imm_denom != 1.0 )
-    {
+    if( imm_denom != 1.0 ) {
       *this /= *(new Expr(imm_denom));
     }
 
@@ -341,27 +274,20 @@ void AST::Expr::Optimize()
     // reduct step1: split to denom and numer
     std::vector<TypedExpr> numers; // type == normal
     std::vector<TypedExpr> denoms; // type == innormal
-    for( auto&& factor : parts )
-    {
-      if( factor.type == TypedExpr::Normal )
-      {
+    for( auto&& factor : parts ) {
+      if( factor.type == TypedExpr::Normal ) {
         numers.emplace_back(factor);
-      }
-      else
-      {
+      } else {
         denoms.emplace_back(factor);
       }
     }
     // reduct step2: remove duplicate(s)
-    for( auto it = numers.begin(); it != numers.end(); )
-    {
+    for( auto it = numers.begin(); it != numers.end(); ) {
       auto numer = *it;
-      if( Utils::VectorHasItem(denoms, numer) )
-      {
+      if( Utils::VectorHasItem(denoms, numer) ) {
         denoms.erase(denoms.begin() + Utils::VectorFindItem(denoms, numer));
         numers.erase(it);
-      }
-      else
+      } else
         it++;
     }
     // reduct step3: reconstructing parts
@@ -373,8 +299,7 @@ void AST::Expr::Optimize()
   }
 
   // reconstructing Expr (to ret)
-  for( auto&& part : parts )
-  {
+  for( auto&& part : parts ) {
     AST::Expr::Type op;
     // clang-format off
     op =
