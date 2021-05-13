@@ -133,9 +133,6 @@ AST::Expr* ParserCore::Primary()
         tok->str += get_tok().str;
         next();
       }
-      
-      alart;
-      std::cout << tok->str << '\n';
 
       // callfunc
       if( consume("(") ) {
@@ -284,12 +281,10 @@ AST::Expr* ParserCore::Shift()
   return x;
 }
 
-AST::Expr* ParserCore::Compare()
-{
+AST::Expr* ParserCore::Compare() {
   auto x = Shift();
 
-  while( check() )
-  {
+  while( check() ) {
     if( consume(">") )
       x = new AST::Expr(AST::Expr::Bigger, x, Shift(), csmtok);
     else if( consume("<") )
@@ -305,8 +300,7 @@ AST::Expr* ParserCore::Compare()
   return x;
 }
 
-AST::Expr* ParserCore::Equal()
-{
+AST::Expr* ParserCore::Equal() {
   auto x = Compare();
 
   while( check() ) {
@@ -344,29 +338,24 @@ AST::Expr* ParserCore::LogOR() {
   return x;
 }
 
-AST::Expr* ParserCore::Assign()
-{
+AST::Expr* ParserCore::Assign() {
   auto x = LogOR();
   auto tk = &get_tok();
 
-  if( consume("=") ) {
+  if( consume("=") )
     x = new AST::Expr(AST::Expr::Assign, x, Assign(), tk);
-  }
-  else if( consume("+=") ) {
+
+  else if( consume("+=") )
     x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Add, x, Assign(), tk), tk);
-  }
-  else if( consume("-=") ) {
+  else if( consume("-=") )
     x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Sub, x, Assign(), tk), tk);
-  }
-  else if( consume("*=") ) {
+  else if( consume("*=") )
     x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Mul, x, Assign(), tk), tk);
-  }
-  else if( consume("%=") ) {
+  else if( consume("%=") )
     x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Mod, x, Assign(), tk), tk);
-  }
-  else if( consume("/=") ) {
+  else if( consume("/=") )
     x = new AST::Expr(AST::Expr::Assign, x, new AST::Expr(AST::Expr::Div, x, Assign(), tk), tk);
-  }
+
 
   return x;
 }

@@ -17,16 +17,14 @@ std::string Object::ToString() const
     {
       std::string s = "";
 
-      if( IsString() )
-      {
+      if( IsString() ) {
         for( auto&& c : list )
           s += c.v_char;
 
         return s;
       }
 
-      for( int i = 0; i < list.size(); i++ )
-      {
+      for( int i = 0; i < list.size(); i++ ) {
         s += list[i].ToString();
         if( i < list.size() - 1 ) s += ", ";
       }
