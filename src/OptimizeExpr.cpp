@@ -232,7 +232,6 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     }
 
     auto dest = makeExprFromExprs(terms);
-    dest->Optimize();
 
     auto var = new AST::Expr(AST::Expr::Variable);
     var->varIndex = variable.first;
@@ -240,6 +239,8 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     var->token->type = Token::Ident;
     var->token->str = variable.second;
     *dest *= *var;
+
+    dest->Optimize();
 
     parts.emplace_back(TypedExpr(TypedExpr::Normal, TypedExpr::Expr, dest));
   }
