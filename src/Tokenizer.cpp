@@ -89,7 +89,7 @@ void Tokenizer::next(int n)
 
 void Tokenizer::pass_space()
 {
-  while( check() && peek() <= ' ' && peek() != '\n' )
+  while( check() && peek() <= ' ' )
     next();
 }
 
