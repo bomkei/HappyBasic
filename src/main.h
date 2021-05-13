@@ -26,3 +26,5 @@
 #include "include/Optimizer.h"
 #include "include/Options.h"
 
+Object MakeObjectFromString(std::string const& str);
+

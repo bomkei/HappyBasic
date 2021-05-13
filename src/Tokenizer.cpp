@@ -228,23 +228,21 @@ std::vector<Token> Tokenizer::Tokenize()
     pass_space();
   }
 
-  for( size_t i = 0; i < tokens.size() - 1;)
-  {
+  // reduce new line token
+  for( size_t i = 0; i < tokens.size() - 1;) {
     if( tokens[i].str == "\n" && tokens[i + 1].str == "\n" )
       tokens.erase(tokens.begin() + i);
     else
       i++;
   }
 
-  for( auto&& tk : tokens )
-  {
-    if( tk.str == "__happybasic__" )
-    {
+  // replace happy token to string
+  for( auto&& tk : tokens ) {
+    if( tk.str == "__happybasic__" ) {
       tk.type = Token::String;
       tk.obj.type = Object::Array;
 
-      for( auto&& c : "HappyBasic" )
-      {
+      for( auto&& c : "HappyBasic" ) {
         Object ch;
         ch.type = Object::Char;
         ch.v_char = c;

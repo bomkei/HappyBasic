@@ -78,8 +78,7 @@ bool Object::Equal(Object const& obj) const
   if( obj.type != type )
     return false;
 
-  switch( type )
-  {
+  switch( type ) {
     case Int: return obj.v_int == v_int;
     case Float: return obj.v_float == v_float;
     case Char: return obj.v_char == v_char;
@@ -95,4 +94,18 @@ bool Object::Equal(Object const& obj) const
   }
 
   return false;
+}
+
+Object MakeObjectFromString(std::string const& str) {
+  Object ret;
+  ret.type = Object::Array;
+
+  for( auto&& c : str ) {
+    Object cc;
+    cc.type = Object::Char;
+    cc.v_char = c;
+    ret.list.emplace_back(cc);
+  }
+
+  return ret;
 }
