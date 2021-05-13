@@ -1,6 +1,29 @@
 #include "main.h"
 
 AST::Stmt* ParserCore::Statements() {
+  if( consume("{") ) {
+    auto ast = new AST::Block;
+    ast->token = csmtok;
+
+    auto closed = false;
+    
+    while( 1 ) {
+      if( consume("}") ) {
+        closed = true;
+        break;
+      }
+
+      ast->list.emplace_back(Statements());
+    }
+
+    if( !closed ) {
+      Program::Error(*ast->token, "not closed");
+    }
+
+    return ast;
+  }
+
+
   if( consume("if") ) {
     auto ast = new AST::If;
 
