@@ -232,6 +232,7 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     }
 
     auto dest = makeExprFromExprs(terms);
+    dest->Optimize();
 
     auto var = new AST::Expr(AST::Expr::Variable);
     var->varIndex = variable.first;
