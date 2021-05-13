@@ -175,6 +175,7 @@ void removeVariableOnce(AST::Expr& expr, variableType variable)
 AST::Expr* makeExprFromExprs(std::vector<TypedExpr>& parts)
 {
   auto ret = new AST::Expr;
+  ret->clear();
   for( auto&& part : parts )
   {
     *ret += *part.expr;
@@ -231,6 +232,14 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     }
 
     auto dest = makeExprFromExprs(terms);
+    dest->Optimize();
+
+    auto var = new AST::Expr(AST::Expr::Variable);
+    var->varIndex = variable.first;
+    var->token = new Token();
+    var->token->type = Token::Ident;
+    var->token->str = variable.second;
+    *dest *= *var;
 
     parts.emplace_back(TypedExpr(TypedExpr::Normal, TypedExpr::Expr, dest));
   }
