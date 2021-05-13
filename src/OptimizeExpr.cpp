@@ -150,7 +150,7 @@ bool hasVariable(AST::Expr& expr, variableType variable)
     return true;
   }
 
-  if( not expr.right->isBinary() )
+  if( expr.isBinary() )
   {
     return hasVariable(*expr.right, variable) or hasVariable(*expr.left, variable);
   }
