@@ -50,13 +50,6 @@ public:
   AST::Expr* Assign();
   AST::Expr* Expr();
 
-  AST::If* If();
-  AST::For* For();
-  AST::While* While();
-  AST::While* DoWhile();
-  AST::Function* Define();
-  AST::Class* Class();
-
   AST::Stmt* Statements();
   AST::Block* Parse();
 
