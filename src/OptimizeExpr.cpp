@@ -220,9 +220,9 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     terms.clear();
     for( auto it = parts.begin(); it != parts.end(); )
     {
-      bool hasVariable = removeVariableOnce(*it->expr, variable);
-      if( hasVariable )
+      if( hasVariable(*it->expr, variable) )
       {
+        removeVariableOnce(*it->expr, variable);
         terms.emplace_back(*it);
         parts.erase(it);
       }
