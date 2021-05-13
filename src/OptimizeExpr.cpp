@@ -145,7 +145,7 @@ using variableType = std::pair<int, std::string>;
 /* internal types - end */
 bool hasVariable(AST::Expr& expr, variableType variable)
 {
-  if( expr.type == AST::Expr::Variable and expr.right->varIndex == variable.first )
+  if( expr.type == AST::Expr::Variable and expr.varIndex == variable.first )
   {
     return true;
   }
