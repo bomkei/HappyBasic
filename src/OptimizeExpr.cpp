@@ -281,7 +281,7 @@ void AST::Expr::Optimize()
 
       *this += *imm;
     }
-    //Expr_Summarize(parts);
+    Expr_Summarize(parts);
   }
   else if( exprtype.type == ExprType::Term )
   {
