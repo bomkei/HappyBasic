@@ -1,21 +1,76 @@
 #include "main.h"
 
-Program::Program()
+class ProgramImpl
 {
-  tokenizer = new Tokenizer(source);
-  parser = new ParserCore(variables, functions, classes);
+  std::vector<Token> tokens;
+  std::vector<Object> variables;
+  std::vector<AST::Function*> functions;
+  std::vector<AST::Class*> classes;
 
-  instance = this;
-  prs_result = nullptr;
-  cur_func = nullptr;
+  std::string source;
+
+  Tokenizer* tokenizer;
+  ParserCore* parser;
+
+  AST::Stmt* prs_result;
+  AST::Function* cur_func;
+  AST::Class* cur_class = nullptr;
+
+
+
+  friend class Program;
+
+  ProgramImpl() {
+    tokenizer = new Tokenizer(source);
+    parser = new ParserCore(tokens, variables, functions, classes);
+
+    prs_result = nullptr;
+    cur_func = nullptr;
+  }
+
+public:
+  ~ProgramImpl() {
+
+  }
+};
+
+Program::Program()
+  :_impl(new ProgramImpl())
+{
+  _instance = this;
 }
 
-i64 Program::find_func(std::string const& name) const
-{
-  for( i64 i = 0; i < functions.size(); i++ )
-    if( functions[i]->name == name ) return i;
+Program::~Program() = default;
 
-  return -1;
+AST::Function* Program::GetFunction(std::string const& name) const
+{
+  for( auto&& i : _impl->functions ) {
+    if( i->name == name )
+      return i;
+  }
+
+  return nullptr;
+}
+
+Object* Program::GetVariable(std::string const& name) const {
+  for( auto&& i : _impl->variables ) {
+    if( i.name == name )
+      return &i;
+  }
+
+  return nullptr;
+}
+
+std::vector<AST::Class*>& Program::GetClasses() const {
+  return _impl->classes;
+}
+
+AST::Class*& Program::GetCurrentClass() const {
+  return _impl->cur_class;
+}
+
+AST::Function*& Program::GetCurrentFunction() const {
+  return _impl->cur_func;
 }
 
 void Program::OpenFile()
@@ -51,10 +106,10 @@ void Program::OpenFile()
     while( line.length() && line[0] <= ' ' )
       line.erase(line.begin());
 
-    source += line + '\n';
+    _impl->source += line + '\n';
   }
 
-  if( is_empty(source) )
+  if( is_empty(_impl->source) )
   {
     std::cout << "empty source file";
     exit(1);
@@ -63,24 +118,28 @@ void Program::OpenFile()
 
 void Program::Tokenize()
 {
-  parser->Initialize(std::move(tokenizer->Tokenize()));
+  _impl->tokens = std::move(_impl->tokenizer->Tokenize());
 }
 
 void Program::Parse()
 {
-  prs_result = parser->Parse();
+  _impl->prs_result = _impl->parser->Parse();
 }
 
 void Program::ViewNodes() {
 
-  std::cout << prs_result->ToString() << '\n';
+  std::cout << _impl->prs_result->ToString() << '\n';
 
 }
 
 Object Program::Run()
 {
 
-  return AST_Runner::Stmt(prs_result);
+  return AST_Runner::Stmt(_impl->prs_result);
+}
+
+Program* Program::GetInstance() {
+  return _instance;
 }
 
 void Program::Error(Token const& tok, std::string const& msg)
@@ -88,21 +147,19 @@ void Program::Error(Token const& tok, std::string const& msg)
   size_t
     line = 1,
     begin = 0,
-    end = instance->source.length();
+    end = GetInstance()->_impl->source.length();
   
   for( size_t i = 0; i < tok.srcpos; i++ )
   {
-    if( instance->source[i] == '\n' )
+    if( GetInstance()->_impl->source[i] == '\n' )
     {
       line++;
       begin = i + 1;
     }
   }
 
-  for( auto i = begin; i < end; i++ )
-  {
-    if( instance->source[i] == '\n' )
-    {
+  for( auto i = begin; i < end; i++ ) {
+    if( GetInstance()->_impl->source[i] == '\n' ) {
       end = i;
       break;
     }
@@ -111,7 +168,7 @@ void Program::Error(Token const& tok, std::string const& msg)
   std::cout
     << '\n'
     << "Error:\n"
-    << format("%6zd|", line) + instance->source.substr(begin, end - begin) << '\n'
+    << format("%6zd|", line) + Program::GetInstance()->_impl->source.substr(begin, end - begin) << '\n'
     << "      |" << std::string(tok.srcpos - begin, ' ')
     << "^" << std::string(tok.str.length() > 1 ? tok.str.length() - 1 : 0, '~')
     << "   " << msg << "\n\n";

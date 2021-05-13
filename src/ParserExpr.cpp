@@ -1,13 +1,15 @@
 #include "main.h"
 
 ParserCore::ParserCore(
+  std::vector<Token>& tokens,
   std::vector<Object>& variables,
   std::vector<AST::Function*>& functions,
   std::vector<AST::Class*>& classes
 )
-  :variables(variables),
-  functions(functions),
-  classes(classes)
+  : tokens(tokens)
+  , variables(variables)
+  , functions(functions)
+  , classes(classes)
 {
 
 }
@@ -72,10 +74,10 @@ int ParserCore::find_var(std::string const& name)
   return -1;
 }
 
-void ParserCore::Initialize(std::vector<Token>&& tokens)
-{
-  this->tokens = std::move(tokens);
-}
+//void ParserCore::Initialize(std::vector<Token>&& tokens)
+//{
+//  this->tokens = std::move(tokens);
+//}
 
 AST::Expr* ParserCore::Primary()
 {

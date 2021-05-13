@@ -2,12 +2,11 @@
 
 class ParserCore
 {
-public:
   std::vector<Object>& variables;
   std::vector<AST::Function*>& functions;
   std::vector<AST::Class*>& classes;
 
-  std::vector<Token> tokens;
+  std::vector<Token>& tokens;
   size_t index = 0;
 
   Token* csmtok = nullptr;
@@ -28,13 +27,16 @@ public:
   void next();
   int find_var(std::string const& name);
 
+public:
+
   ParserCore(
+    std::vector<Token>& tokens,
     std::vector<Object>& variables,
     std::vector<AST::Function*>& functions,
     std::vector<AST::Class*>& classes
   );
 
-  void Initialize(std::vector<Token>&& tokens);
+  //void Initialize(std::vector<Token>&& tokens);
 
   AST::Expr* Primary();
   AST::Expr* IndexRef();

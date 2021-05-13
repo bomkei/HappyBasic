@@ -42,9 +42,14 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
     case AST::Expr::Variable:
     {
-      auto& var = Program::instance->variables[ast->varIndex];
-      var.var_ptr = &var;
-      return var;
+      auto var = Program::GetInstance()->GetVariable(ast->token->str);
+
+      if( var ) {
+        var->var_ptr = var;
+        return *var;
+      }
+      
+      Program::Error(*ast->token, ABNORMAL_ERR_MSG);
     }
 
     case AST::Expr::Callfunc:
@@ -108,7 +113,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
       Object ret;
       ret.type = Object::ClassObj;
 
-      for( auto&& i : Program::instance->classes ) {
+      for( auto&& i : Program::GetInstance()->GetClasses() ) {
         if( i->token->str == className ) {
           ret.class_ptr = i;
           break;
@@ -140,8 +145,8 @@ Object AST_Runner::Expr(AST::Expr* ast)
         Program::Error(*ast->token, "left object isnt a class instance");
       }
 
-      auto ptr = Program::instance->cur_class;
-      Program::instance->cur_class = obj.class_ptr;
+      auto ptr = Program::GetInstance()->GetCurrentClass();
+      Program::GetInstance()->GetCurrentClass() = obj.class_ptr;
 
       if( ast->right->type == AST::Expr::Variable )
         ast->right->type = AST::Expr::MemberVariable;
@@ -157,13 +162,13 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
       auto ret = Expr(ast->right);
 
-      Program::instance->cur_class = ptr;
+      Program::GetInstance()->GetCurrentClass() = ptr;
       return ret;
     }
 
     case AST::Expr::MemberVariable:
     {
-      for( auto&& i : Program::instance->cur_class->member_list ) {
+      for( auto&& i : Program::GetInstance()->GetCurrentClass()->member_list ) {
         if( i->type == AST::Stmt::Var && ast->token->str == i->expr->left->token->str ) {
           auto& ret = i->expr->left->token->obj;
           ret.var_ptr = &ret;

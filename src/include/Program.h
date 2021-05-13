@@ -1,34 +1,16 @@
 #pragma once
 
+#include <memory>
+
+class ProgramImpl;
 class Program
 {
+  std::unique_ptr<ProgramImpl> _impl;
+  static inline Program* _instance;
+
 public:
-
-  static Program* instance;
-
-  //---------- global ----------------
-  // variables
-  std::vector<Object> variables;
-
-  // functions
-  std::vector<AST::Function*> functions;
-  
-  // classes
-  std::vector<AST::Class*> classes;
-  //----------------------------------
-
-  std::string source;
-
-  Tokenizer* tokenizer;
-  ParserCore* parser;
-
-  AST::Stmt* prs_result;
-  AST::Function* cur_func;
-  AST::Class* cur_class = nullptr;
-
-  i64 find_func(std::string const&) const;
-
   Program();
+  ~Program();
 
   void OpenFile();
 
@@ -37,7 +19,16 @@ public:
 
   void ViewNodes();
 
+  AST::Function* GetFunction(std::string const&) const;
+  Object* GetVariable(std::string const&) const;
+
+  std::vector<AST::Class*>& GetClasses() const;
+  AST::Class*& GetCurrentClass() const;
+  AST::Function*& GetCurrentFunction() const;
+
   Object Run();
+
+  static Program* GetInstance();
 
   [[noreturn]]
   static void Error(Token const& tok, std::string const& msg);

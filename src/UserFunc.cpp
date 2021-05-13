@@ -3,19 +3,19 @@
 Object AST_Runner::UserFunc(AST::Callfunc* fun) {
   AST::Function* ast = nullptr;
 
-  if( Program::instance->cur_class ) {
-    for( auto&& i : Program::instance->cur_class->member_list )
+  if( Program::GetInstance()->GetCurrentClass() ) {
+    for( auto&& i : Program::GetInstance()->GetCurrentClass()->member_list )
       if( i->type == AST::Stmt::Function && ((AST::Function*)i)->name == fun->token->str ) {
         ast = ((AST::Function*)i);
         break;
       }
   }
   else {
-    auto find = Program::instance->find_func(fun->token->str);
+    ast = Program::GetInstance()->GetFunction(fun->token->str);
 
-    if( find != -1 ) {
-      ast = Program::instance->functions[find];
-    }
+    //if( find != -1 ) {
+    //  ast = Program::GetInstance()->->functions[find];
+    //}
   }
 
   if( !ast )
@@ -38,8 +38,8 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun) {
   for( size_t i = 0; i < fun->args.size(); i++ )
     ast->args[i]->token->obj = AST_Runner::Expr(fun->args[i]);
 
-  auto cfunc = Program::instance->cur_func;
-  Program::instance->cur_func = ast;
+  auto cfunc = Program::GetInstance()->GetCurrentFunction();
+  Program::GetInstance()->GetCurrentFunction() = ast;
   
   Object ret;
   auto retp = AST_Runner::ReturnValue;
@@ -64,7 +64,7 @@ Object AST_Runner::UserFunc(AST::Callfunc* fun) {
 
   AST_Runner::ReturnValue = retp;
   AST_Runner::FuncReturned = flag;
-  Program::instance->cur_func = cfunc;
+  Program::GetInstance()->GetCurrentFunction() = cfunc;
 
   CallCount--;
 
