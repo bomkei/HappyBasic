@@ -159,7 +159,7 @@ bool hasVariable(AST::Expr& expr, variableType variable)
     return false;
   }
 }
-bool removeVariableOnce(AST::Expr& expr, variableType variable)
+void removeVariableOnce(AST::Expr& expr, variableType variable)
 {
   auto var = new AST::Expr(AST::Expr::Variable);
   var->varIndex = variable.first;
