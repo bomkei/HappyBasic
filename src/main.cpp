@@ -21,13 +21,12 @@ int main(int argc, char** argv)
     else
     {
       std::cout
-        << "fatal: this argument is specified or unknown.\n"
+        << "fatal: this is already specified or unknown.\n"
         << "  " << arg << '\n';
 
       exit(2);
     }
   }
-
 
   Program prg;
 

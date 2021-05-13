@@ -5,7 +5,7 @@ namespace AST
 
   class Expr
   {
-  public:
+public:
     enum Type
     {
       Add,
@@ -42,6 +42,8 @@ namespace AST
 
     Expr(Type type = Immidiate);
     Expr(Type type, Expr* left, Expr* right, Token* tok);
+    Expr(float flt);
+    Expr(int _int);
 
     void Optimize();
     std::string ToString() const;
@@ -56,7 +58,7 @@ namespace AST
       x->token->obj.v_int = 1;
       return x;
     }
-
+    
     static Expr* FromName(std::string const& name) {
       auto x = new Expr;
       x->type = Type::Variable;
@@ -64,11 +66,22 @@ namespace AST
       x->token->obj.name = name;
       return x;
     }
+
+    void clear();
+    void fix();
+    bool isPrimary();
+    bool isBinary();
+
+    AST::Expr& _oprator(Type type, AST::Expr&);
+    AST::Expr& operator+=(AST::Expr&);
+    AST::Expr& operator-=(AST::Expr&);
+    AST::Expr& operator*=(AST::Expr&);
+    AST::Expr& operator/=(AST::Expr&);
   };
 
   class Array : public Expr
   {
-  public:
+public:
     std::vector<Expr*> elems;
 
     Array()
@@ -79,7 +92,7 @@ namespace AST
 
   class Callfunc : public Expr
   {
-  public:
+public:
     std::vector<Expr*> args;
 
     Callfunc()
@@ -92,7 +105,7 @@ namespace AST
   // Statement
   class Stmt
   {
-  public:
+public:
     enum Type
     {
       If,
@@ -117,7 +130,7 @@ namespace AST
 
   class Block : public Stmt
   {
-  public:
+public:
     std::vector<Stmt*> list;
 
     Block()
@@ -128,7 +141,7 @@ namespace AST
 
   class If : public Stmt
   {
-  public:
+public:
     using Pair = std::pair<AST::Expr*, AST::Block*>;
 
     std::vector<Pair> pairs;
@@ -141,7 +154,7 @@ namespace AST
 
   class For : public Stmt
   {
-  public:
+public:
     Expr* counter;
     Expr* begin;
     Expr* end;
@@ -155,7 +168,7 @@ namespace AST
 
   class While : public Stmt
   {
-  public:
+public:
     Expr* cond;
     AST::Block* code;
 
@@ -167,7 +180,7 @@ namespace AST
 
   class Function : public Stmt
   {
-  public:
+public:
     std::string name;
     std::vector<Expr*> args;
     AST::Block* code;
@@ -180,7 +193,7 @@ namespace AST
 
   class Class : public Stmt
   {
-  public:
+public:
     std::string name;
     std::vector<Stmt*> member_list;
 
@@ -190,8 +203,6 @@ namespace AST
     }
   };
 
-
 }
 
-std::ostream& operator << (std::ostream& ss, const AST::Expr& expr);
-
+std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr);
