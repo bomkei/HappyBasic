@@ -271,7 +271,7 @@ void AST::Expr::Optimize()
       it->expr->Optimize();
       if( it->expr->type == Immidiate )
       {
-        immidiate += it->expr->token->obj.v_int * it->getSign();
+        immidiate += it->expr->token->obj.as<float>() * it->getSign();
         parts.erase(it);
       }
       else
