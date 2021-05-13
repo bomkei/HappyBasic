@@ -2,61 +2,17 @@
 
 AST::Stmt* ParserCore::Statements()
 {
-  if( consume("if") )
-  {
-    AST::If::Pair pair;
-    auto closed = false;
-
+  if( consume("if") ) {
     auto ast = new AST::If;
-    ast->token = csmtok;
 
-    pair = std::make_pair(Expr(), new AST::Block);
+    expect("(");
+    ast->cond = Expr();
+    expect(")");
 
-    expect("then");
-    expect("\n");
+    ast->code = Statements();
 
-    while( check() ) {
-      if( consume("endif") ) {
-        expect("\n");
-        ast->pairs.emplace_back(pair);
-        closed = true;
-        break;
-      }
-      else if( consume("elseif") ) {
-        ast->pairs.emplace_back(pair);
-
-        pair = std::make_pair(Expr(), new AST::Block);
-
-        expect("then");
-        expect("\n");
-      }
-      else if( consume("else") ) {
-        ast->pairs.emplace_back(pair);
-        pair = std::make_pair(AST::Expr::FromInt(1), new AST::Block);
-
-        expect("\n");
-
-        while( check() ) {
-          if( consume("endif") ) {
-            expect("\n");
-            closed = true;
-            break;
-          }
-
-          std::get<1>(pair)->list.emplace_back(Statements());
-        }
-
-        ast->pairs.emplace_back(pair);
-        break;
-      }
-      else
-      {
-        std::get<1>(pair)->list.emplace_back(Statements());
-      }
-    }
-
-    if( !closed ) {
-      Program::Error(*ast->token, "not closed");
+    if( consume("else") {
+      ast->elseCode = Statements();
     }
 
     return ast;
@@ -338,48 +294,44 @@ AST::Stmt* ParserCore::Statements()
   // return
   if( consume("return") )
   {
-    auto ast = new AST::Stmt;
-    ast->type = AST::Stmt::Return;
-    ast->token = csmtok;
+    auto s = new AST::Stmt;
+    s->type = AST::Stmt::Return;
 
-    if( !consume("\n") )
-    {
-      ast->expr = Expr();
-      expect("\n");
-    }
-    else
-    {
-      ast->expr = nullptr;
+    if( consume(";") ) {
+      return s;
     }
 
-    return ast;
+    s->expr = Expr();
+    expect(";");
+
+    return s;
   }
 
   //
   // break
   if( consume("break") ) {
-    auto ast = new AST::Stmt;
-    ast->type = AST::Stmt::Break;
-    ast->token = csmtok;
-    expect("\n");
-    return ast;
+    expect(";");
+    
+    auto s = new AST::Stmt;
+    s->type = AST::Stmt::Break;
+    return s;
   }
 
   //
   // continue
   if( consume("continue") ) {
-    auto ast = new AST::Stmt;
-    ast->type = AST::Stmt::Continue;
-    ast->token = csmtok;
-    expect("\n");
-    return ast;
+    expect(";");
+
+    auto s = new AST::Stmt;
+    s->type = AST::Stmt::Continue;
+    return s;
   }
 
 
   auto st = new AST::Stmt;
 
   st->expr = Expr();
-  expect("\n");
+  expect(";");
 
   return st;
 }

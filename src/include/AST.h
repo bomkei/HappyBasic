@@ -131,12 +131,11 @@ namespace AST
   class If : public Stmt
   {
   public:
-    using Pair = std::pair<AST::Expr*, AST::Block*>;
+    AST::Expr* cond;
+    AST::Stmt* code;
+    AST::Stmt* elseCode = nullptr;
 
-    std::vector<Pair> pairs;
-
-    If()
-    {
+    If() {
       type = Type::If;
     }
   };
