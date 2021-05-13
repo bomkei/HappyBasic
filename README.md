@@ -23,6 +23,9 @@ if, then, else, elseif, endif
 for-next
 while
 do-while
+break
+continue
+return
 ```
 
 user-defined function
