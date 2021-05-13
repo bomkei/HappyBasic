@@ -174,6 +174,8 @@ bool AST::Expr::equal(AST::Expr const& ast) const
 
 std::string AST::Stmt::ToString(int tab) const
 {
+  auto space = std::string(tab, ' ');
+
   switch( type )
   {
     case Type::If:
@@ -201,17 +203,44 @@ std::string AST::Stmt::ToString(int tab) const
         "while " + ((AST::While*)this)->cond->ToString() + "\n"
         + ((AST::While*)this)->code->ToString(tab + 1) + "wend\n";
 
-    case Type::Block:
-    {
+    case Type::Break:
+      return "break\n";
+
+    case Type::Continue:
+      return "continue\n";
+
+    case Type::Return:
+      return "return" + expr->ToString() + "\n";
+
+    case Type::Block: {
       std::string str;
 
-      for( auto&& s : ((AST::Block*)this)->list )
-      {
+      for( auto&& s : ((AST::Block*)this)->list ) {
         str += s->ToString(tab + 1);
       }
 
       return str + "\n";
     }
+
+    case Type::Function:
+    {
+      std::string str;
+      
+      str += "def " + ((AST::Function*)this)->name + "("; {
+        for( size_t i = 0; i < ((AST::Function*)this)->args.size(); i++ ) {
+          str += ((AST::Function*)this)->args[i]->token->str;
+          if( i < ((AST::Function*)this)->args.size() - 1 ) str += ", ";
+        }
+        str += ")\n";
+      }
+
+      str += ((AST::Function*)this)->code->ToString();
+
+      return str + "end\n";
+    }
+
+    default:
+      return space + expr->ToString() + '\n';
   }
 
   return "";

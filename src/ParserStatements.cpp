@@ -98,8 +98,7 @@ AST::Stmt* ParserCore::Statements()
     return ast;
   }
 
-  if( consume("while") )
-  {
+  if( consume("while") ) {
     auto tk = csmtok;
 
     auto cond = Expr();
@@ -355,8 +354,7 @@ AST::Stmt* ParserCore::Statements()
 
   //
   // break
-  if( consume("break") )
-  {
+  if( consume("break") ) {
     auto ast = new AST::Stmt;
     ast->type = AST::Stmt::Break;
     ast->token = csmtok;
@@ -366,8 +364,7 @@ AST::Stmt* ParserCore::Statements()
 
   //
   // continue
-  if( consume("continue") )
-  {
+  if( consume("continue") ) {
     auto ast = new AST::Stmt;
     ast->type = AST::Stmt::Continue;
     ast->token = csmtok;

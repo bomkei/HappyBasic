@@ -14,6 +14,9 @@ int main(int argc, char** argv)
     {
       Options::IsSafety = true;
     }
+    else if( arg == "-node" && !Options::ViewNodes ) {
+      Options::ViewNodes = true;
+    }
     else if( Options::FileName.empty() )
     {
       Options::FileName = arg;
@@ -36,6 +39,11 @@ int main(int argc, char** argv)
   prg.Tokenize();
  
   prg.Parse();
+
+  if( Options::ViewNodes ) {
+    prg.ViewNodes();
+    return 0;
+  }
 
   auto res = prg.Run();
 

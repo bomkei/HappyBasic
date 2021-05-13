@@ -6,7 +6,7 @@ class Options
 {
 public:
   static inline std::string FileName;
-  static inline bool Compile;
+  static inline bool ViewNodes;
   static inline bool IsSafety;
 
 };

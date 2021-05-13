@@ -71,6 +71,12 @@ void Program::Parse()
   prs_result = parser->Parse();
 }
 
+void Program::ViewNodes() {
+
+  std::cout << prs_result->ToString() << '\n';
+
+}
+
 Object Program::Run()
 {
 

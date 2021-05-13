@@ -35,6 +35,8 @@ public:
   void Tokenize();
   void Parse();
 
+  void ViewNodes();
+
   Object Run();
 
   [[noreturn]]
