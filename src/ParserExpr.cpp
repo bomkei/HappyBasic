@@ -226,15 +226,8 @@ AST::Expr* ParserCore::Unary()
     return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), MemberAccess(), csmtok);
 
   if( consume("new") )
-  {
-    auto tk = csmtok;
-    auto fun = Primary();
-
-    if( fun->type != AST::Expr::Callfunc )
-      Program::Error(*tk, "expect call function expression after 'new'");
-
-    return new AST::Expr(AST::Expr::New, fun, nullptr, tk);
-  }
+    return new AST::Expr(AST::Expr::New, MemberAccess(), nullptr, csmtok);
+  
 
   return MemberAccess();
 }

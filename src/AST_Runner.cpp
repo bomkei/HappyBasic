@@ -250,11 +250,13 @@ Object AST_Runner::Expr(AST::Expr* ast)
           }
           else if( !left.Eval() )
             break;
+          else if( right.type != Object::Int )
+            Program::Error(*ast->token, "only can use integer at mod operator");
 
           switch( left.type ) {
             case Object::Int: left.v_int /= right.v_int; break;
             case Object::Char: left.v_char /= right.v_char; break;
-            case Object::Float: Program::Error(*ast->token, "cannot mod with float");
+            case Object::Float: Program::Error(*ast->token, "cannot mod float");
           }
           break;
           
