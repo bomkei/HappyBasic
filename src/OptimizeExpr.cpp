@@ -231,12 +231,8 @@ void Expr_Summarize(std::vector<TypedExpr>& parts)
     }
 
     auto dest = makeExprFromExprs(terms);
-    std::cout << *dest << std::endl;
-  }
 
-  for( auto&& part : parts )
-  {
-    std::cout << "summarize     : " << *part.expr << std::endl;
+    parts.emplace_back(TypedExpr(TypedExpr::Normal, TypedExpr::Expr, dest));
   }
 }
 /* internal functions - end */
