@@ -209,13 +209,14 @@ AST::Expr* ParserCore::IndexRef()
 }
 
 AST::Expr* ParserCore::MemberAccess() {
-  auto x = IndexRef(); {
-    while( check() ) {
-      if( consume(".") ) x = new AST::Expr(AST::Expr::MemberAccess, x, IndexRef(), csmtok);
-      else
-        break;
-    }
+  auto x = IndexRef();
+
+  while( check() ) {
+    if( consume(".") ) x = new AST::Expr(AST::Expr::MemberAccess, x, IndexRef(), csmtok);
+    else
+      break;
   }
+
   return x;
 }
 
@@ -224,7 +225,7 @@ AST::Expr* ParserCore::Unary()
   if( consume("-") )
     return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), MemberAccess(), csmtok);
 
-  if( consume("New") )
+  if( consume("new") )
   {
     auto tk = csmtok;
     auto fun = Primary();
