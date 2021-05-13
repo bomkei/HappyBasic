@@ -180,7 +180,7 @@ AST::Expr* makeExprFromExprs(std::vector<TypedExpr>& parts)
   {
     *ret += *part.expr;
   }
-
+  ret->fix();
   return ret;
 }
 void _getVariables(AST::Expr& expr, std::vector<variableType>& dest)
