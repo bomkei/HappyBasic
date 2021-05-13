@@ -254,8 +254,7 @@ void AST::Expr::Optimize()
   getAllParts(exprtype, thisClone, parts);
 
   //clear this
-  this->right = this->left = nullptr;
-  this->type = Add;
+  this->clear();
 
   // optimize each types
   if( exprtype.type == ExprType::Expr )
