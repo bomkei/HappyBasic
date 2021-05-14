@@ -28,3 +28,5 @@
 
 Object MakeObjectFromString(std::string const& str);
 
+void CheckExpr(AST::Expr* expr);
+

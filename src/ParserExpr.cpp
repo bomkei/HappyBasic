@@ -169,14 +169,6 @@ AST::Expr* ParserCore::Primary()
       ast->type = AST::Expr::Variable;
       ast->token = tok;
 
-      auto find = find_var(tok->str);
-
-      if( find == -1 ) {
-        find = variables.size();
-        variables.emplace_back(tok->obj);
-      }
-
-      ast->varIndex = find;
 
       return ast;
     }

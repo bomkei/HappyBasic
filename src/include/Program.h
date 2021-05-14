@@ -8,6 +8,8 @@ class Program
   std::unique_ptr<ProgramImpl> _impl;
   static inline Program* _instance;
 
+  friend void CheckExpr(AST::Expr*);
+
 public:
   Program();
   ~Program();
