@@ -116,7 +116,7 @@ Token* Tokenizer::Tokenize()
     tok.srcpos = position;
 
     alart;
-    std::cout << c << '\n';
+    //std::cout << c << '\n';
 
     if( isdigit(c) )
     {

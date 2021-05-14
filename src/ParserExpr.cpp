@@ -20,7 +20,7 @@ Token& ParserCore::get_tok()
 
   alart;
   view_pointer(token);
-  std::cout << token->str << '\n';
+  //std::cout << token->str << '\n';
 
   return *token;
 }
