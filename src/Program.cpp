@@ -126,14 +126,21 @@ void Program::OpenFile()
       for( ++i; src[i] != '"'; i++ );
       i++;
     }
-    
+
     if( i + 2 <= src.length() && src.substr(i, 2) == "//" ) {
       while( src[i] != '\n' ) {
         src.erase(src.begin() + i);
       }
     }
-    else
-      i++;
+
+    else if( i + 2 <= src.length() && src.substr(i, 2) == "/*" ) {
+      src.erase(src.begin() + i, src.begin() + i + 2);
+      while( i + 2 <= src.length() && src.substr(i, 2) != "*/" ) {
+        src.erase(src.begin() + i);
+      }
+    }
+
+    else i++;
   }
 }
 
