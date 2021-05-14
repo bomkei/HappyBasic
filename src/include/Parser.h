@@ -8,7 +8,7 @@ class ParserCore
 
   //std::vector<Token>& tokens;
   //size_t index = 0;
-  Token* token = nullptr;
+  Token*& token;
   Token* csmtok = nullptr;
   
   bool in_function = false;
@@ -31,7 +31,7 @@ public:
 
   ParserCore(
     //std::vector<Token>& tokens,
-    Token* topToken,
+    Token*& topToken,
     std::vector<Object>& variables,
     std::vector<AST::Function*>& functions,
     std::vector<AST::Class*>& classes

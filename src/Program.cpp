@@ -2,7 +2,8 @@
 
 class ProgramImpl
 {
-  std::vector<Token> tokens;
+  //std::vector<Token> tokens;
+  Token* token;
   std::vector<Object> variables;
   std::vector<AST::Function*> functions;
   std::vector<AST::Class*> classes;
@@ -22,7 +23,7 @@ class ProgramImpl
 
   ProgramImpl() {
     tokenizer = new Tokenizer(source);
-    parser = new ParserCore(tokens, variables, functions, classes);
+    parser = new ParserCore(token, variables, functions, classes);
 
     prs_result = nullptr;
     cur_func = nullptr;
@@ -146,11 +147,17 @@ void Program::OpenFile()
 
 void Program::Tokenize()
 {
-  _impl->tokens = std::move(_impl->tokenizer->Tokenize());
+  //_impl->tokens = std::move(_impl->tokenizer->Tokenize());
+  _impl->token = _impl->tokenizer->Tokenize();
+
+  alart;
+  view_pointer(_impl->token);
+
 }
 
 void Program::Parse()
 {
+  alart;
   _impl->prs_result = _impl->parser->Parse();
 }
 

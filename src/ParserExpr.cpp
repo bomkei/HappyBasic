@@ -1,12 +1,12 @@
 #include "main.h"
 
 ParserCore::ParserCore(
-  Token* topToken,
+  Token*& topToken,
   std::vector<Object>& variables,
   std::vector<AST::Function*>& functions,
   std::vector<AST::Class*>& classes
 )
-  : token
+  : token(topToken)
   , variables(variables)
   , functions(functions)
   , classes(classes)
@@ -18,11 +18,17 @@ Token& ParserCore::get_tok()
 {
   //return tokens[index];
 
+  alart;
+  view_pointer(token);
+  std::cout << token->str << '\n';
+
+  return *token;
 }
 
 bool ParserCore::check()
 {
-  return index < tokens.size();
+  //return index < tokens.size();
+  return token->type != Token::End;
 }
 
 void ParserCore::swaptoken(std::string const& str)
@@ -50,20 +56,12 @@ bool ParserCore::consume(std::string const& str)
 void ParserCore::expect(std::string const& str)
 {
   if( !consume(str) )
-  {
-    if( str == "\n" )
-    {
-      index--;
-      Program::Error(get_tok(), "expect new line after this token");
-    }
-    else
-      Program::Error(get_tok(), "expect '" + str + "'");
-  }
+    Program::Error(get_tok(), "expect '" + str + "'");
 }
 
 void ParserCore::next()
 {
-  index++;
+  token = token->next;
 }
 
 int ParserCore::find_var(std::string const& name)
@@ -367,6 +365,8 @@ AST::Expr* ParserCore::Expr()
 AST::Block* ParserCore::Parse()
 {
   auto ast = new AST::Block;
+
+  alart;
 
   while( check() )
   {

@@ -8,7 +8,9 @@ struct Token
     String,
     Char,
     Ident,
-    Operator
+    Operator,
+
+    End
   };
 
   Type type = Number;
@@ -18,6 +20,10 @@ struct Token
   size_t srcpos = 0;
 
   Token* next = nullptr;
+
+  Token() {
+
+  }
 
   Token(Type type, Token* back, size_t pos) {
     type = type;

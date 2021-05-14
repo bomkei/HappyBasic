@@ -33,9 +33,13 @@ int main(int argc, char** argv)
 
   prg.OpenFile();
 
+  alart;
   prg.Tokenize();
- 
+  
+  alart;
   prg.Parse();
+
+  alart;
 
   return 0;
 
