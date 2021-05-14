@@ -15,6 +15,6 @@ public:
 
   Tokenizer(std::string const& src);
 
-  std::vector<Token> Tokenize();
+  Token* Tokenize();
 };
 

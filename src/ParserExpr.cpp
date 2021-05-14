@@ -1,12 +1,12 @@
 #include "main.h"
 
 ParserCore::ParserCore(
-  std::vector<Token>& tokens,
+  Token* topToken,
   std::vector<Object>& variables,
   std::vector<AST::Function*>& functions,
   std::vector<AST::Class*>& classes
 )
-  : tokens(tokens)
+  : token
   , variables(variables)
   , functions(functions)
   , classes(classes)
@@ -16,7 +16,8 @@ ParserCore::ParserCore(
 
 Token& ParserCore::get_tok()
 {
-  return tokens[index];
+  //return tokens[index];
+
 }
 
 bool ParserCore::check()

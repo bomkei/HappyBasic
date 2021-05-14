@@ -99,9 +99,12 @@ Tokenizer::Tokenizer(std::string const& src)
 
 }
 
-std::vector<Token> Tokenizer::Tokenize()
+//std::vector<Token> Tokenizer::Tokenize()
+Token* Tokenizer::Tokenize()
 {
-  std::vector<Token> tokens;
+  //std::vector<Token> tokens;
+  Token top;
+  auto cur = &top;
 
   pass_space();
 
@@ -223,9 +226,12 @@ std::vector<Token> Tokenizer::Tokenize()
       }
     }
 
-    tokens.emplace_back(tok);
+    //tokens.emplace_back(tok);
+    tok.next = cur;
+    cur = new Token(*tok);
+    
     pass_space();
   }
 
-  return tokens;
+  return top.next;
 }

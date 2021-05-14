@@ -2,6 +2,10 @@
 
 using namespace AST;
 
+void CheckStmt(Stmt* stmt) {
+
+}
+
 void CheckExpr(Expr* expr) {
 
   if( !expr ) {
@@ -33,12 +37,9 @@ void CheckExpr(Expr* expr) {
       break;
     }
 
-    case Expr::Assign: {
-
-    }
-
     default: {
-
+      CheckExpr(expr->left);
+      CheckExpr(expr->right);
     }
   }
 
