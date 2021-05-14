@@ -60,6 +60,11 @@ Object* Program::GetVariable(std::string const& name) const {
 
   return nullptr;
 }
+
+std::vector<Object> Program::GetVariables() const {
+  return _impl->variables;
+}
+
 //
 //std::vector<AST::Class*>& Program::GetClasses() const {
 //  return _impl->classes;

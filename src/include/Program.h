@@ -24,6 +24,8 @@ public:
   AST::Function* GetFunction(std::string const&) const;
   Object* GetVariable(std::string const&) const;
 
+  std::vector<Object> GetVariables() const;
+
  // std::vector<AST::Class*>& GetClasses() const;
   //AST::Class*& GetCurrentClass() const;
   AST::Function*& GetCurrentFunction() const;
