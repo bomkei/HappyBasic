@@ -165,8 +165,23 @@ AST::Stmt* ParserCore::Statements() {
 
 
   if( consume("var") ) {
-    // TODO
-    NOT_IMPL("var");
+    auto tok = csmtok;
+    auto var_tok = &get_tok();
+
+    if( var_tok->type != Token::Ident ) {
+      Program::Error(*tok, "expected variable name when after this token");
+    }
+
+    next();
+    expect("=");
+
+    auto ast = new AST::Stmt;
+    ast->type = AST::Stmt::Var;
+    ast->expr = new AST::Expr(AST::Expr::Assign, AST::Expr::FromName(var_tok->str), Expr(), tok);
+
+    expect(";");
+
+    return ast;
   }
 
   //
