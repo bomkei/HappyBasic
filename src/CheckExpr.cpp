@@ -10,19 +10,12 @@ void CheckExpr(Expr* expr) {
 
   switch( expr->type ) {
     case Expr::Variable: {
-      auto find = -1;
-      auto& vv = Program::GetInstance()->GetVariables();
+      auto find = Program::GetInstance()->GetVariable(expr->token->str);
 
-      for( int i = 0; i < vv.size(); i++ ) {
-        if( vv[i].name == expr->token->str ) {
-          find = i;
-          break;
-        }
+      if( !find ) {
+        Program::GetInstance()->GetVariables().emplace_back(expr->token->obj);
       }
 
-      if( find == -1 ) {
-        vv.emplace_back(expr->token->obj);
-      }
       break;
     }
 
