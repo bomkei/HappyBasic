@@ -37,6 +37,9 @@ void CheckExpr(Expr* expr) {
 
     }
 
+    default: {
+
+    }
   }
 
 }

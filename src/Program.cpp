@@ -90,6 +90,7 @@ void Program::OpenFile()
 
   std::ifstream ifs(Options::FileName);
   std::string line;
+  auto& src = _impl->source;
 
   if( Options::FileName.empty() )
   {
@@ -111,13 +112,28 @@ void Program::OpenFile()
     while( line.length() && line[0] <= ' ' )
       line.erase(line.begin());
 
-    _impl->source += line + '\n';
+    src += line + '\n';
   }
 
-  if( is_empty(_impl->source) )
+  if( is_empty(src) )
   {
     std::cout << "empty source file";
     exit(1);
+  }
+
+  for( size_t i = 0; i < src.length(); ) {
+    if( src[i] == '"' ) {
+      for( ++i; src[i] != '"'; i++ );
+      i++;
+    }
+    
+    if( i + 2 <= src.length() && src.substr(i, 2) == "//" ) {
+      while( src[i] != '\n' ) {
+        src.erase(src.begin() + i);
+      }
+    }
+    else
+      i++;
   }
 }
 
