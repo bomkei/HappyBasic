@@ -3,7 +3,7 @@ Easy and Simple BASIC language.
 join developers server!!
 https://discord.gg/gjtxXcsFgx
 
-#Warning
+`Warning`
 Now project is busy very much.
 Cannot use some statements, and master branch is have some debugs.
 Please wait until calm down.
@@ -14,10 +14,10 @@ def fibo(n) {
   if( n < 2 )
     return 1;
   
-  return fibo(n - 2) + fibo(n - 1)
+  return fibo(n - 2) + fibo(n - 1);
 }
 
-print(fibo(10))
+print(fibo(10));
 ```
 
 statements:
@@ -33,10 +33,29 @@ return
 
 user-defined function
 ```
-def
+def MyFunc(a, b, c) {
+  return [a, b, c] * 2;
+}
+```
+
+struct
+```
+struct People {
+  name,
+  age,
+  width,
+  height
+}
 ```
 
 class
 ```
-class
+class MyClass {
+  var a = 0;
+  var b = 0;
+  
+  def yeah() {
+    return a + b;
+  }
+}
 ```
