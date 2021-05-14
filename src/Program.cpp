@@ -60,14 +60,14 @@ Object* Program::GetVariable(std::string const& name) const {
 
   return nullptr;
 }
-
-std::vector<AST::Class*>& Program::GetClasses() const {
-  return _impl->classes;
-}
-
-AST::Class*& Program::GetCurrentClass() const {
-  return _impl->cur_class;
-}
+//
+//std::vector<AST::Class*>& Program::GetClasses() const {
+//  return _impl->classes;
+//}
+//
+//AST::Class*& Program::GetCurrentClass() const {
+//  return _impl->cur_class;
+//}
 
 AST::Function*& Program::GetCurrentFunction() const {
   return _impl->cur_func;

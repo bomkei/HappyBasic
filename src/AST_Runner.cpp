@@ -108,73 +108,14 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
     case AST::Expr::New:
     {
-      auto& className = ast->left->token->str;
-
-      Object ret;
-      ret.type = Object::ClassObj;
-
-      for( auto&& i : Program::GetInstance()->GetClasses() ) {
-        if( i->token->str == className ) {
-          ret.class_ptr = i;
-          break;
-        }
-      }
-
-      if( !ret.class_ptr )
-        Program::Error(*ast->left->token, "undefined class");
-
-      for( auto&& i : ret.class_ptr->member_list ) {
-        if( i->type == AST::Stmt::Var ) {
-          auto& obj = i->expr->left->token->obj;
-
-          obj = AST_Runner::Expr(i->expr->right);
-          obj.var_ptr = &obj;
-
-          ret.list.emplace_back(obj);
-        }
-      }
-
-      return ret;
+      break;
     }
 
     case AST::Expr::MemberAccess: {
-      auto obj = Expr(ast->left);
-      auto& name = ast->right->token->str;
-
-      if( obj.type != Object::ClassObj ) {
-        Program::Error(*ast->token, "left object isnt a class instance");
-      }
-
-      auto ptr = Program::GetInstance()->GetCurrentClass();
-      Program::GetInstance()->GetCurrentClass() = obj.class_ptr;
-
-      if( ast->right->type == AST::Expr::Variable )
-        ast->right->type = AST::Expr::MemberVariable;
-      else if( ast->right->type == AST::Expr::IndexRef ) {
-        auto pp = ast->right;
-
-        while( pp->type == AST::Expr::IndexRef )
-          pp = pp->left;
-
-        if( pp->type == AST::Expr::Variable )
-          pp->type = AST::Expr::MemberVariable;
-      }
-
-      auto ret = Expr(ast->right);
-
-      Program::GetInstance()->GetCurrentClass() = ptr;
-      return ret;
+      break;
     }
 
-    case AST::Expr::MemberVariable:
-    {
-      for( auto&& i : Program::GetInstance()->GetCurrentClass()->member_list ) {
-        if( i->type == AST::Stmt::Var && ast->token->str == i->expr->left->token->str ) {
-          auto& ret = i->expr->left->token->obj;
-          ret.var_ptr = &ret;
-          return ret;
-        }
-      }
+    case AST::Expr::MemberVariable: {
 
       break;
     }
@@ -343,7 +284,7 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
 
   switch( ast->type )
   {
-    case AST::Stmt::Class:
+    //case AST::Stmt::Class:
     case AST::Stmt::Function:
       break;
 

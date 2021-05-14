@@ -37,6 +37,8 @@ int main(int argc, char** argv)
  
   prg.Parse();
 
+  return 0;
+
   if( Options::ViewNodes ) {
     prg.ViewNodes();
     return 0;

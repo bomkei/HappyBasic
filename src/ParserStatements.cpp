@@ -156,12 +156,46 @@ AST::Stmt* ParserCore::Statements() {
     return ast;
   }
 
-  if( consume("class") )
-  {
+  if( consume("class") ) {
     // TODO
     NOT_IMPL("class");
   }
 
+  if( consume("struct") ) {
+    auto tok = csmtok;
+    auto name_tok = &get_tok();
+    
+    next();
+    expect("{");
+    
+    auto ast = new AST::Struct;
+
+    do {
+      auto var_tok = &get_tok();
+      auto var = new AST::Expr;
+      var->type = AST::Expr::Variable;
+      var->token = var_tok;
+
+      if( var_tok->type != Token::Ident ) {
+        Program::Error(*var_tok, "syntax error");
+      }
+
+      next();
+
+      if( consume("=") ) {
+        auto tk = csmtok;
+        ast->member_list.emplace_back(new AST::Expr(AST::Expr::Assign, var, Expr(), tk));
+      }
+      else {
+        ast->member_list.emplace_back(new AST::Expr(AST::Expr::Assign, var, AST::Expr::FromInt(0), csmtok));
+      }
+    } while( consume(",") );
+    
+    expect("}");
+
+
+    return ast;
+  }
 
 
   if( consume("var") ) {
