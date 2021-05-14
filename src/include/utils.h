@@ -10,7 +10,7 @@
 #define view_pointer(p) p
 #endif
 
-#define NOT_IMPL(msg)  ({printf("\t%s is not implemented.\n\n", msg);exit(1);})
+#define NOT_IMPL(name)  ({printf("\t" name " is not implemented.\n\n");exit(1);})
 
 inline auto get_file_name(const char* s)
 {

@@ -119,7 +119,7 @@ public:
       Break,
       Continue,
       Return,
-      Class,
+      Struct,
       Default
     };
 
@@ -192,15 +192,15 @@ public:
     }
   };
 
-  class Class : public Stmt
+  class Struct : public Stmt
   {
 public:
     std::string name;
-    std::vector<Stmt*> member_list;
+    std::vector<AST::Expr*> member_list;
 
-    Class()
+    Struct()
     {
-      type = Type::Class;
+      type = Type::Struct;
     }
   };
 
