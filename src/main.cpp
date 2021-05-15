@@ -36,8 +36,8 @@ int main(int argc, char** argv)
   alart;
   prg.Parse();
 
-  alart;
-  prg.Check();
+  //alart;
+  //prg.Check();
 
   alart;
   return 0;

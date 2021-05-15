@@ -28,6 +28,6 @@
 
 Object MakeObjectFromString(std::string const& str);
 
-void CheckStmt(AST::Stmt*);
-void CheckExpr(AST::Expr*);
+//void CheckStmt(AST::Stmt*);
+//void CheckExpr(AST::Expr*);
 

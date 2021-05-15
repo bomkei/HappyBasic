@@ -14,20 +14,30 @@ public:
   Program();
   ~Program();
 
-  void OpenFile();
+  void OpenFile();  // ファイルを開く ( Options::FileName )
 
-  void Tokenize();
-  void Parse();
-  void Check();
+  void Tokenize();  // トークナイズ
+  void Parse();     // パース
+  //void Check();     // チェック
 
   void ViewNodes();
 
-  Object* GetVariable(std::string const&) const;
-  std::vector<Object> GetVariables() const;
 
+  // 変数を探し、見つかった場合はそれへのポインタを返します
+  // 存在しない場合は nullptr を返します
+  Object* GetVariable(std::string const&) const;
+  
+  // 変数リストへの参照
+  std::vector<Object>& GetVariables() const;
+
+  // 関数を探す
+  // 無い場合は nullptr
   AST::Function* GetFunction(std::string const&) const;
+  
+  // 現在実行中の関数
   AST::Function*& GetCurrentFunction() const;
 
+  // AST 実行
   Object Run();
 
   static Program* GetInstance();

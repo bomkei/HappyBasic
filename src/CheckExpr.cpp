@@ -68,10 +68,12 @@ void CheckExpr(Expr* expr) {
     case Expr::Immidiate:
       break;
     
+    // •Ï”
     case Expr::Variable: {
-      auto find = Program::GetInstance()->GetVariable(expr->token->str);
+      // –¼‘O‚Å•Ï”‚ð’T‚·
+      auto var = Program::GetInstance()->GetVariable(expr->token->str);
 
-      if( !find ) {
+      if( !var ) {
         Program::GetInstance()->GetVariables().emplace_back(expr->token->obj);
       }
 

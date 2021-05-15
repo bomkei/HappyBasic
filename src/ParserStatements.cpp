@@ -88,12 +88,13 @@ AST::Stmt* ParserCore::Statements() {
     return ast;
   }
 
+  // do - while
   if( consume("do") ) {
     auto ast = new AST::While;
     ast->cond = AST::Expr::FromInt(1);
 
-    ast->code = new AST::Block;
-    ((AST::Block*)ast->code)->list.emplace_back(Statements());
+    auto block = new AST::Block;
+    block->list.emplace_back(Statements());
     
     auto cmp = new AST::If;
     expect("while");
@@ -105,12 +106,15 @@ AST::Stmt* ParserCore::Statements() {
     cmp->code = new AST::Stmt;
     cmp->code->type = AST::Stmt::Break;
 
-    ((AST::Block*)ast->code)->list.emplace_back(cmp);
+    block->list.emplace_back(cmp);
 
+    ast->code = block;
     return ast;
   }
 
-
+  //
+  // ユーザー定義関数
+  // def - end
   if( consume("def") ) {
     auto ast = new AST::Function;
     ast->token = &get_tok();

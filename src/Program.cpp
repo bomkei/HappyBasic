@@ -155,10 +155,6 @@ void Program::Parse()
   _impl->prs_result = _impl->parser->Parse();
 }
 
-void Program::Check() {
-  CheckStmt(_impl->prs_result);
-}
-
 void Program::ViewNodes() {
 
   std::cout << _impl->prs_result->ToString() << '\n';
