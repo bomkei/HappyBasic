@@ -66,6 +66,14 @@ std::vector<AST::Struct*> Program::GetStructs() const {
   return _impl->structs;
 }
 
+AST::Struct* Program::GetStruct(std::string const& name) const {
+  for( auto&& i : _impl->structs ) {
+    if( i->name == name ) return i;
+  }
+
+  return nullptr;
+}
+
 AST::Function*& Program::GetCurrentFunction() const {
   return _impl->cur_func;
 }

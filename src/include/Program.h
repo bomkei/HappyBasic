@@ -31,6 +31,10 @@ public:
   // 構造体リストへの参照
   std::vector<AST::Struct*> GetStructs() const;
 
+  // 構造体を探す
+  // 無い場合は nullptr
+  AST::Struct* GetStruct(std::string const&) const;
+
   // 関数を探す
   // 無い場合は nullptr
   AST::Function* GetFunction(std::string const&) const;

@@ -108,6 +108,10 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
     case AST::Expr::New:
     {
+      auto& name = ast->left->token->str;
+
+
+
       break;
     }
 
