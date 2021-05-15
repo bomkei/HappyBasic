@@ -65,6 +65,9 @@ void CheckExpr(Expr* expr) {
   }
 
   switch( expr->type ) {
+    case Expr::Immidiate:
+      break;
+    
     case Expr::Variable: {
       auto find = Program::GetInstance()->GetVariable(expr->token->str);
 
