@@ -15,7 +15,7 @@ class ParserCore
   std::vector<AST::Expr*>* func_args = nullptr;
 
   bool in_struct = false;
-  AST::Struct* cur_struct;
+  AST::Struct* cur_struct = nullptr;
 
   Token& get_tok();
 
