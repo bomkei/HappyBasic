@@ -199,7 +199,8 @@ AST::Stmt* ParserCore::Statements() {
     return ast;
   }
 
-
+  //
+  // var
   if( consume("var") ) {
     auto tok = csmtok;
     auto var_tok = &get_tok();

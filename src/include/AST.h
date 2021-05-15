@@ -196,7 +196,7 @@ public:
   {
 public:
     std::string name;
-    std::vector<AST::Expr*> member_list;
+    std::vector<AST::Stmt*> member_list;
 
     Struct()
     {
