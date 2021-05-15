@@ -6,8 +6,6 @@ class ParserCore
   std::vector<AST::Function*>& functions;
   std::vector<AST::Struct*>& structs;
 
-  //std::vector<Token>& tokens;
-  //size_t index = 0;
   Token*& token;
   Token* csmtok = nullptr;
   

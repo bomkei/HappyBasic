@@ -16,7 +16,6 @@ public:
 
   void Tokenize();  // トークナイズ
   void Parse();     // パース
-  //void Check();     // チェック
 
   void ViewNodes();
 

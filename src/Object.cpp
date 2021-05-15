@@ -13,8 +13,7 @@ std::string Object::ToString() const
     case Char:
       return std::string(1, v_char);
 
-    case Array:
-    {
+    case Array: {
       std::string s = "";
 
       if( IsString() ) {
@@ -47,8 +46,7 @@ std::string Object::ToString() const
   return "";
 }
 
-bool Object::IsString() const
-{
+bool Object::IsString() const {
   if( type != Array )
     return false;
 
