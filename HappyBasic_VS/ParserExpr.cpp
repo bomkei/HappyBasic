@@ -139,6 +139,11 @@ AST::Expr* ParserCore::Primary()
         auto ast = new AST::Callfunc;
         ast->token = tok;
 
+        // 不完全である場合、使用不可能
+        if( cur_struct && cur_struct->name == tok->str ) {
+          PrgCtx::Error(*tok, "cannot use incomplete struct");
+        }
+
         if( !consume(")") ) {
           do {
             ast->args.emplace_back(Expr());
