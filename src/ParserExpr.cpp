@@ -84,6 +84,8 @@ AST::Expr* ParserCore::Primary()
     return x;
   }
 
+  //
+  // 配列
   if( consume("[") )
   {
     auto x = new AST::Array;
@@ -153,6 +155,16 @@ AST::Expr* ParserCore::Primary()
           if( i->token->str == tok->str ) {
             return i;
           }
+      }
+
+      // 構造体の中にいる場合、メンバーから探す
+      if( in_struct ) {
+        for( auto&& i : cur_struct->member_list ) {
+          if( i->type == AST::Stmt::Var &&
+            i->expr->left->token->str == tok->str ) {
+            return i->expr->left;
+          }
+        }
       }
 
       auto ast = new AST::Expr;
