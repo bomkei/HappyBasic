@@ -162,9 +162,7 @@ AST::Stmt* ParserCore::Statements() {
     in_function = false;
     func_args = ptr;
 
-    if( !in_class ) {
-      functions.emplace_back(ast);
-    }
+    functions.emplace_back(ast);
 
     return ast;
   }
