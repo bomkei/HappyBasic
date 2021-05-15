@@ -116,8 +116,11 @@ Object AST_Runner::Expr(AST::Expr* ast)
       auto ptr = Program::GetInstance()->GetStruct(name);
 
       if( !ptr ) {
-
+        Program::Error(*ast->left->token, "this is doesnt exists");
       }
+
+      Object ret;
+
 
       break;
     }

@@ -10,7 +10,7 @@ struct Object {
     Float,
     Char,
     Array,
-    ClassObj
+    StructObj
   };
 
   Type type = Int;
@@ -22,7 +22,7 @@ struct Object {
   std::vector<Object> list;
 
   Object* var_ptr = nullptr;
-  AST::Class* class_ptr = nullptr;
+  AST::Struct* struct_ptr = nullptr;
 
   std::string ToString() const;
   bool IsString() const;
