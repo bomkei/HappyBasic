@@ -161,6 +161,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
             case Object::Int: left.v_int -= right.v_int; break;
             case Object::Char: left.v_char -= right.v_char; break;
             case Object::Float: left.v_float -= right.v_float; break;
+            case Object::Array: Program::Error(*ast->token, "type mismatch");
           }
           break;
 
@@ -211,6 +212,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
             case Object::Int: left.v_int /= right.v_int; break;
             case Object::Char: left.v_char /= right.v_char; break;
             case Object::Float: Program::Error(*ast->token, "cannot mod float");
+            case Object::Array: Program::Error(*ast->token, "type mismatch");
           }
           break;
           
@@ -226,6 +228,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
             case Object::Int: left.v_int /= right.v_int; break;
             case Object::Char: left.v_char /= right.v_char; break;
             case Object::Float: left.v_float /= right.v_float; break;
+            case Object::Array: Program::Error(*ast->token, "type mismatch");
           }
           break;
 
@@ -234,6 +237,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
             case Object::Int: left.v_int <<= right.v_int; break;
             case Object::Char: left.v_char <<= right.v_char; break;
             case Object::Float: Program::Error(*ast->token, "cannot shift float-type object");
+            case Object::Array: Program::Error(*ast->token, "type mismatch");
           }
           break;
 
@@ -242,6 +246,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
             case Object::Int: left.v_int = left.v_int > right.v_int; break;
             case Object::Char: left.v_int = left.v_char > right.v_char; break;
             case Object::Float: left.v_int = left.v_float > right.v_float; break;
+            case Object::Array: Program::Error(*ast->token, "type mismatch");
           }
           left.type = Object::Int;
           break;
@@ -251,6 +256,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
             case Object::Int: left.v_int = left.v_int >= right.v_int; break;
             case Object::Char: left.v_int = left.v_char >= right.v_char; break;
             case Object::Float: left.v_int = left.v_float >= right.v_float; break;
+            case Object::Array: Program::Error(*ast->token, "type mismatch");
           }
           left.type = Object::Int;
           break;
