@@ -108,9 +108,16 @@ Object AST_Runner::Expr(AST::Expr* ast)
 
     case AST::Expr::New:
     {
+      if( ast->left->type != AST::Expr::Callfunc ) {
+        Program::Error(*ast->token, "9201u20");
+      }
+
       auto& name = ast->left->token->str;
+      auto ptr = Program::GetInstance()->GetStruct(name);
 
+      if( !ptr ) {
 
+      }
 
       break;
     }
