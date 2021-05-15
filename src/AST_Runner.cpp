@@ -134,14 +134,13 @@ Object AST_Runner::Expr(AST::Expr* ast)
         }
       }
 
-      alart;
-      debugmsg("%s", ret.ToString().c_str());
-
       return ret;
     }
 
     case AST::Expr::MemberAccess: {
-      break;
+      auto obj = Expr(ast->left);
+
+      
     }
 
     case AST::Expr::MemberVariable: {

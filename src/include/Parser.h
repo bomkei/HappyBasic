@@ -17,6 +17,8 @@ class ParserCore
   bool in_struct = false;
   AST::Struct* cur_struct = nullptr;
 
+  bool DontPlace_v = false;
+
   Token& get_tok();
 
   bool check();

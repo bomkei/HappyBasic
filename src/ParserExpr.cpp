@@ -177,9 +177,11 @@ AST::Expr* ParserCore::Primary()
       ast->type = AST::Expr::Variable;
       ast->token = tok;
 
-      if( (ast->varIndex = find_var(tok->str)) == -1 ) {
-        ast->varIndex = variables.size();
-        variables.emplace_back(tok->obj);
+      if( !DontPlace_v ) {
+        if( (ast->varIndex = find_var(tok->str)) == -1 ) {
+          ast->varIndex = variables.size();
+          variables.emplace_back(tok->obj);
+        }
       }
 
       return ast;
@@ -211,11 +213,15 @@ AST::Expr* ParserCore::IndexRef()
 AST::Expr* ParserCore::MemberAccess() {
   auto x = IndexRef();
 
+  DontPlace_v = true;
+
   while( check() ) {
     if( consume(".") ) x = new AST::Expr(AST::Expr::MemberAccess, x, IndexRef(), csmtok);
     else
       break;
   }
+
+  DontPlace_v = false;
 
   return x;
 }
@@ -225,9 +231,14 @@ AST::Expr* ParserCore::Unary()
   if( consume("-") )
     return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), MemberAccess(), csmtok);
 
-  if( consume("new") )
-    return new AST::Expr(AST::Expr::New, MemberAccess(), nullptr, csmtok);
-  
+  if( consume("new") ) {
+    DontPlace_v = true;
+    
+    auto x = new AST::Expr(AST::Expr::New, MemberAccess(), nullptr, csmtok);
+    DontPlace_v = false;
+    
+    return x;
+  }
 
   return MemberAccess();
 }
