@@ -4,9 +4,9 @@ join developers server!!
 https://discord.gg/gjtxXcsFgx
 
 `Warning`
-Now project is busy very much.
+**Now project is busy very much.
 Cannot use some statements, and master branch is have some debugs.
-Please wait until calm down.
+Please wait until calm down.**
 
 example:
 ```
