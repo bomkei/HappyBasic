@@ -3,11 +3,13 @@
 #include <algorithm>
 
 #if _DEBUG_BUILD_
-#define  alart  fprintf(stderr,"\t%s:%d\n",get_file_name(__FILE__),__LINE__)
-#define  view_pointer(p)  fprintf(stderr,"\t%s = %p\n", #p, p)
+#define  alart               fprintf(stderr,"\t%s:%d\n",get_file_name(__FILE__),__LINE__)
+#define  view_pointer(p)     fprintf(stderr,"\t%s = %p\n", #p, p)
+#define  debugmsg(fmt,...)   printf(fmt,__VA_ARGS__)
 #else
 #define alart
-#define view_pointer(p) p
+#define view_pointer(p)   p
+#define debugmsg(...)     123
 #endif
 
 #define NOT_IMPL(name)  ({printf("\t" name " is not implemented.\n\n");exit(1);})
