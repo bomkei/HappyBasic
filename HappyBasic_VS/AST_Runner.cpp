@@ -143,7 +143,9 @@ namespace AST_Runner {
               /*auto var = Expr(i->expr->right);
               var.name = i->expr->left->token->str;
               ret.list.emplace_back(var);*/
-              ret.list.emplace_back(Expr(i->expr));
+              auto vv = Expr(i->expr);
+              vv.name = i->expr->left->token->str;
+              ret.list.emplace_back(vv);
               break;
             }
           }
