@@ -120,13 +120,12 @@ AST::Expr* ParserCore::Primary()
     // 識別子
     case Token::Ident:
     {
+      next();
+
       //
       // スコープ解決演算子
-      next();
-      while( consume("::") ) {
-        tok->str += "::";
-        tok->str += get_tok().str;
-        next();
+      if( consume("::") ) {
+
       }
 
       // 関数呼び出し

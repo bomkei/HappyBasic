@@ -30,6 +30,7 @@ namespace AST
       Array,
       IndexRef,
       Param,
+      Lv_obj,
 
       New,
       MemberAccess,

@@ -170,7 +170,9 @@ AST::Stmt* ParserCore::Statements() {
     debugmsg("%s", ast->name.c_str());
 
     auto oldptr = cur_struct;
+    auto oldflag = in_struct;
     cur_struct = ast;
+    in_struct = true;
 
     next();
     expect("{");
@@ -188,6 +190,7 @@ AST::Stmt* ParserCore::Statements() {
     }
 
     cur_struct = oldptr;
+    in_struct = oldflag;
     PrgCtx::Instance->structs.emplace_back(ast);
 
     return ast;

@@ -101,5 +101,10 @@ int main(int argc, char** argv) {
   alart;
   auto obj = AST_Runner::Stmt(ast);
 
+  std::cout << "variables:\n";
+  for( auto&& i : context->variables ) {
+    std::cout << " " << i.name << ": " << i.ToString() << '\n';
+  }
+
 
 }

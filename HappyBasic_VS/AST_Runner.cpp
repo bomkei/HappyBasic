@@ -46,6 +46,12 @@ namespace AST_Runner {
     
     switch( ast->type )
     {
+      case AST::Expr::Lv_obj: {
+        auto& v = ast->token->obj;
+        v.var_ptr = &v;
+        return v;
+      }
+
       case AST::Expr::Immidiate:
         return ast->token->obj;
 
@@ -119,8 +125,7 @@ namespace AST_Runner {
         }
 
         auto& name = ast->left->token->str;
-        //auto ptr = Program::GetInstance()->GetStruct(name);
-        auto find = find_vector(PrgCtx::Instance->structs, [] (auto s, auto n) {return s->name == n; }, name);
+        auto find = find_vector(PrgCtx::Instance->structs, [] (auto s, auto n) { return s->name == n; }, name);
 
         if( find == -1 ) {
           PrgCtx::Error(*ast->left->token, "this is doesnt exists");
@@ -135,9 +140,10 @@ namespace AST_Runner {
         for( auto&& i : ptr->member_list ) {
           switch( i->type ) {
             case AST::Stmt::Var: {
-              auto var = Expr(i->expr->right);
+              /*auto var = Expr(i->expr->right);
               var.name = i->expr->left->token->str;
-              ret.list.emplace_back(var);
+              ret.list.emplace_back(var);*/
+              ret.list.emplace_back(Expr(i->expr));
               break;
             }
           }
