@@ -14,8 +14,8 @@ class ParserCore
   bool in_function = false;
   std::vector<AST::Expr*>* func_args = nullptr;
 
-  bool in_class = false;
-  AST::Class* cur_class = nullptr;
+  bool in_struct = false;
+  AST::Struct* cur_struct;
 
   Token& get_tok();
 
@@ -30,14 +30,11 @@ class ParserCore
 public:
 
   ParserCore(
-    //std::vector<Token>& tokens,
     Token*& topToken,
     std::vector<Object>& variables,
     std::vector<AST::Function*>& functions,
     std::vector<AST::Class*>& classes
   );
-
-  //void Initialize(std::vector<Token>&& tokens);
 
   AST::Expr* Primary();
   AST::Expr* IndexRef();

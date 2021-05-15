@@ -177,7 +177,7 @@ Object AST_Runner::Function(AST::Callfunc* ast)
       }
     }
     catch( ... ) {
-      Program::Error(*ast->args[0]->token, ABNORMAL_ERR_MSG);
+      Program::Error(*ast->args[0]->token, SERIOUS_ERROR);
     }
   }
 

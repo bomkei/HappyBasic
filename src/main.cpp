@@ -39,13 +39,10 @@ int main(int argc, char** argv)
   //alart;
   //prg.Check();
 
-  alart;
-  return 0;
-
-  if( Options::ViewNodes ) {
-    prg.ViewNodes();
-    return 0;
-  }
+  //if( Options::ViewNodes ) {
+  //  prg.ViewNodes();
+  //  return 0;
+  //}
 
   alart;
   auto res = prg.Run();
