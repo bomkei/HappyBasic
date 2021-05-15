@@ -115,9 +115,6 @@ Token* Tokenizer::Tokenize()
     Token tok;
     tok.srcpos = position;
 
-    alart;
-    //std::cout << c << '\n';
-
     if( isdigit(c) )
     {
       tok.type = Token::Number;
@@ -229,7 +226,6 @@ Token* Tokenizer::Tokenize()
       }
     }
 
-    //tokens.emplace_back(tok);
     auto tk = new Token(tok);
     cur->next = tk;
     cur = tk;
@@ -237,9 +233,6 @@ Token* Tokenizer::Tokenize()
     pass_space();
   }
 
-  alart;
-  //std::cout << top.next << '\n';
-  
   auto tk = new Token;
   tk->type = Token::End;
   cur->next = tk;

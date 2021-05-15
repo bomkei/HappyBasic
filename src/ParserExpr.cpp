@@ -16,12 +16,6 @@ ParserCore::ParserCore(
 
 Token& ParserCore::get_tok()
 {
-  //return tokens[index];
-
-  alart;
-  view_pointer(token);
-  //std::cout << token->str << '\n';
-
   return *token;
 }
 
@@ -72,11 +66,6 @@ int ParserCore::find_var(std::string const& name)
 
   return -1;
 }
-
-//void ParserCore::Initialize(std::vector<Token>&& tokens)
-//{
-//  this->tokens = std::move(tokens);
-//}
 
 AST::Expr* ParserCore::Primary()
 {
@@ -156,18 +145,9 @@ AST::Expr* ParserCore::Primary()
           }
       }
 
-      //// class
-      //if( in_class ) {
-      //  for( auto&& i : cur_class->member_list )
-      //    if( i->type == AST::Stmt::Var && i->expr->left->token->str == tok->str ) {
-      //      return i->expr->left;
-      //    }
-      //}
-
       auto ast = new AST::Expr;
       ast->type = AST::Expr::Variable;
       ast->token = tok;
-
 
       return ast;
     }
@@ -365,8 +345,6 @@ AST::Expr* ParserCore::Expr()
 AST::Block* ParserCore::Parse()
 {
   auto ast = new AST::Block;
-
-  alart;
 
   while( check() )
   {

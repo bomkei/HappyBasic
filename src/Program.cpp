@@ -2,7 +2,6 @@
 
 class ProgramImpl
 {
-  //std::vector<Token> tokens;
   Token* token;
   std::vector<Object> variables;
   std::vector<AST::Function*> functions;
@@ -16,8 +15,6 @@ class ProgramImpl
   AST::Stmt* prs_result;
   AST::Function* cur_func;
   AST::Class* cur_class = nullptr;
-
-
 
   friend class Program;
 
@@ -65,15 +62,6 @@ Object* Program::GetVariable(std::string const& name) const {
 std::vector<Object> Program::GetVariables() const {
   return _impl->variables;
 }
-
-//
-//std::vector<AST::Class*>& Program::GetClasses() const {
-//  return _impl->classes;
-//}
-//
-//AST::Class*& Program::GetCurrentClass() const {
-//  return _impl->cur_class;
-//}
 
 AST::Function*& Program::GetCurrentFunction() const {
   return _impl->cur_func;
@@ -158,18 +146,17 @@ void Program::OpenFile()
 
 void Program::Tokenize()
 {
-  //_impl->tokens = std::move(_impl->tokenizer->Tokenize());
   _impl->token = _impl->tokenizer->Tokenize();
-
-  alart;
-  view_pointer(_impl->token);
 
 }
 
 void Program::Parse()
 {
-  alart;
   _impl->prs_result = _impl->parser->Parse();
+}
+
+void Program::Check() {
+  CheckStmt(_impl->prs_result);
 }
 
 void Program::ViewNodes() {

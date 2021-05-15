@@ -18,16 +18,14 @@ public:
 
   void Tokenize();
   void Parse();
+  void Check();
 
   void ViewNodes();
 
-  AST::Function* GetFunction(std::string const&) const;
   Object* GetVariable(std::string const&) const;
-
   std::vector<Object> GetVariables() const;
 
- // std::vector<AST::Class*>& GetClasses() const;
-  //AST::Class*& GetCurrentClass() const;
+  AST::Function* GetFunction(std::string const&) const;
   AST::Function*& GetCurrentFunction() const;
 
   Object Run();

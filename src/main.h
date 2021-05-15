@@ -1,6 +1,6 @@
 #pragma once
 
-#define  _DEBUG_BUILD_    0
+#define  _DEBUG_BUILD_    1
 
 #include <iostream>
 #include <fstream>
@@ -28,5 +28,6 @@
 
 Object MakeObjectFromString(std::string const& str);
 
-void CheckExpr(AST::Expr* expr);
+void CheckStmt(AST::Stmt*);
+void CheckExpr(AST::Expr*);
 
