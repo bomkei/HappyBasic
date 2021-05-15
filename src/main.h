@@ -26,7 +26,7 @@
 #include "include/Optimizer.h"
 #include "include/Options.h"
 
-Object MakeObjectFromString(std::string const& str);
+//Object MakeObjectFromString(std::string const& str);
 
 std::string readfile(std::string path);
 

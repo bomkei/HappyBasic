@@ -100,7 +100,7 @@ bool Object::Equal(Object const& obj) const
   return false;
 }
 
-Object MakeObjectFromString(std::string const& str) {
+Object Object::FromString(std::string const& str) {
   Object ret;
   ret.type = Object::Array;
 

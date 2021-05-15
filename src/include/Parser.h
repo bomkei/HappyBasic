@@ -1,7 +1,6 @@
 #pragma once
 
-class ParserCore
-{
+class ParserCore {
   std::vector<Object>& variables;
   std::vector<AST::Function*>& functions;
   std::vector<AST::Struct*>& structs;

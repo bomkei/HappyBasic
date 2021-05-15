@@ -29,6 +29,8 @@ struct Object {
   bool Eval() const;
   bool Equal(Object const&) const;
 
+  static Object FromString(std::string const&);
+
   template<typename T>
   T as()
   {
