@@ -20,16 +20,14 @@ void debugmsg(T&& fmt, Args ...args) {
 
 #define NOT_IMPL(name)  ({printf("\t" name " is not implemented.\n\n");exit(1);})
 
-inline auto get_file_name(const char* s)
-{
+inline auto get_file_name(const char* s) {
   auto i = strlen(s) - 1;
   while( s[i] != '\\' && s[i] != '/' ) i--;
   return s + i + 1;
 }
 
 template <class T, class F, class... Args>
-int find_vector(std::vector<T>& vec, F compare, Args ...args)
-{
+int find_vector(std::vector<T>& vec, F compare, Args ...args) {
   for( int i = 0; i < vec.size(); i++ )
     if( compare(vec[i], args...) )
       return i;
@@ -38,29 +36,18 @@ int find_vector(std::vector<T>& vec, F compare, Args ...args)
 }
 
 template <class... Args>
-std::string format(std::string const& fmt, Args... args)
-{
+std::string format(std::string const& fmt, Args... args) {
   char buf[1000];
-
-#ifdef _MSC_VER
-  sprintf_s
-#else
-  sprintf
-#endif
-    (buf, fmt.c_str(), args...);
-  
+  sprintf_s(buf, fmt.c_str(), args...);
   return buf;
 }
 
-namespace Utils
-{
+namespace Utils {
   template <class T, class U, class Count>
-  auto ToVector(Count count, U** items)
-  {
+  auto ToVector(Count count, U** items) {
     std::vector<T> ret;
 
-    for( size_t i = 0; i < count; i++ )
-    {
+    for( size_t i = 0; i < count; i++ ) {
       ret.emplace_back(T(items[i]));
     }
 
@@ -68,32 +55,26 @@ namespace Utils
   }
 
   template <class T>
-  T Random(T max)
-  {
+  T Random(T max) {
     return rand() % max;
   }
 
   template <class T>
-  T Random(T begin, T end)
-  {
+  T Random(T begin, T end) {
     return begin + rand() % (end - begin);
   }
 
   template <class T>
-  T GetRandomStr(int len = 20)
-  {
+  T GetRandomStr(int len = 20) {
     T str;
 
-    for( int i = 0; i < len; i++ )
-    {
-      if( Random(0, len) == 0 )
-      {
+    for( int i = 0; i < len; i++ ) {
+      if( Random(0, len) == 0 ) {
         str += '_';
         continue;
       }
 
-      switch( Random<int>(3) )
-      {
+      switch( Random<int>(3) ) {
         case 0:
           str += Random('a', 'z');
           break;
@@ -111,22 +92,22 @@ namespace Utils
     return str;
   }
   template<typename T>
-  int VectorFindItem(std::vector<T>& vec, T val){
-    return ::find_vector(vec,[](T v,T t){return v==t;},val);
+  int VectorFindItem(std::vector<T>& vec, T val) {
+    return ::find_vector(vec, [] (T v, T t) {return v == t; }, val);
   }
 
   template<typename T>
-  bool VectorHasItem(std::vector<T>& vec, T val){
-    for (auto &&elem : vec) 
-      if (elem == val)
+  bool VectorHasItem(std::vector<T>& vec, T val) {
+    for( auto&& elem : vec )
+      if( elem == val )
         return true;
-    
+
     return false;
   }
 
   template<typename T>
-  void VectorUnique(std::vector<T>& vec){
-    std::sort(vec.begin(),vec.end());
-    vec.erase(std::unique(vec.begin(),vec.end()),vec.end());
+  void VectorUnique(std::vector<T>& vec) {
+    std::sort(vec.begin(), vec.end());
+    vec.erase(std::unique(vec.begin(), vec.end()), vec.end());
   }
-};
+}
