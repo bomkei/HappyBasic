@@ -7,6 +7,10 @@ namespace AST_Runner {
   bool* FuncReturned;
   Object* ReturnValue;
 
+  // Object::Type を調節します
+  // どちらかが配列の場合、何も行いません
+  // どちらかが Float の場合、両方 Float になるように調節します
+  //   たとえば、`3.14 + 10` という式の場合は 10 を 10.0 に変換します
   void ObjectAdjuster(Object& L, Object& R) {
     if( L.type == Object::Array || R.type == Object::Array )
       return;
@@ -178,10 +182,6 @@ namespace AST_Runner {
         auto left = Expr(ast->left);
         auto right = Expr(ast->right);
 
-        // Object::Type を調節します
-        // どちらかが配列の場合、何も行いません
-        // どちらかが Float の場合、両方 Float になるように調節します
-        //   たとえば、`3.14 + 10` という式の場合は 10 を 10.0 に変換します
         ObjectAdjuster(left, right);
 
         switch( ast->type )
