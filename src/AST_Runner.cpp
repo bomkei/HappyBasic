@@ -137,7 +137,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
       alart;
       debugmsg("%s", ret.ToString().c_str());
 
-      break;
+      return ret;
     }
 
     case AST::Expr::MemberAccess: {
