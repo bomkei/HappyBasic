@@ -351,15 +351,17 @@ namespace AST_Runner {
         break;
 
       case AST::Stmt::Block: {
+        Object obj;
+
         for( auto&& i : ((AST::Block*)ast)->list ) {
-          Stmt(i);
+          obj = Stmt(i);
 
           if( LoopBreaked && *LoopBreaked ) break;
           if( LoopContinued && *LoopContinued ) break;
           if( FuncReturned && *FuncReturned ) break;
         }
 
-        break;
+        return obj;
       }
 
       case AST::Stmt::Break:
@@ -380,9 +382,8 @@ namespace AST_Runner {
         if( !ReturnValue )
           PrgCtx::Error(*ast->token, "cannot use 'return' here");
 
-        *ReturnValue = Expr(ast->expr);
         *FuncReturned = true;
-        break;
+        return *ReturnValue = Expr(ast->expr);
 
       case AST::Stmt::If: {
         if( Expr(((AST::If*)ast)->cond).Eval() ) {
@@ -397,57 +398,7 @@ namespace AST_Runner {
 
       case AST::Stmt::For:
       {
-        auto for_ast = (AST::For*)(ast);
-
-        auto counter = Expr(for_ast->counter);
-        auto begin = Expr(for_ast->begin);
-
-        // save pointers
-        auto oldptr1 = LoopBreaked;
-        auto oldptr2 = LoopContinued;
-
-        // make new flags
-        bool flag1 = false, flag2 = false;
-
-        // set new pointer
-        LoopBreaked = &flag1;
-        LoopContinued = &flag2;
-
-        if( !counter.var_ptr )
-          PrgCtx::Error(*(for_ast->counter->token), "not a lvalue");
-
-        if( begin.type != Object::Int )
-          PrgCtx::Error(*(for_ast->begin->token), "must be a integer");
-
-        *(counter.var_ptr) = begin;
-
-        while( 1 )
-        {
-          auto end = Expr(for_ast->end);
-
-          if( end.type != Object::Int )
-            PrgCtx::Error(*(for_ast->end->token), "must be a integer");
-
-          if( counter.var_ptr->v_int > end.v_int )
-            break;
-
-          *LoopBreaked = *LoopContinued = false;
-          Stmt(for_ast->code);
-
-          if( *LoopBreaked )
-            break;
-
-          if( FuncReturned && *FuncReturned )
-            break;
-
-          counter.var_ptr->v_int++;
-        }
         
-        // restore pointers
-        LoopBreaked = oldptr1;
-        LoopContinued = oldptr2;
-
-        break;
       }
 
       case AST::Stmt::While:

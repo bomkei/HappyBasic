@@ -162,10 +162,9 @@ public:
   class For : public Stmt
   {
 public:
-    Expr* counter;
-    Expr* begin;
-    Expr* end;
-    AST::Block* code;
+    Expr* iterator;
+    Expr* list;
+    Stmt* code;
 
     For()
     {

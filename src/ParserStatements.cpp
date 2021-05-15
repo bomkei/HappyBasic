@@ -49,33 +49,19 @@ AST::Stmt* ParserCore::Statements() {
     auto ast = new AST::For;
     ast->token = csmtok;
 
-    ast->counter = IndexRef();
+    expect("(");
+    auto it = Expr();
 
-    expect("=");
-    ast->begin = Expr();
+    expect("in");
+    auto list = Expr();
+    
+    expect(")");
+    
+    auto code = Stmt();
 
-    expect("to");
-    ast->end = Expr();
-
-    ast->code = new AST::Block;
-
-    expect("\n");
-
-    auto closed = false;
-
-    while( check() ) {
-      if( consume("next") ) {
-        expect("\n");
-        closed = true;
-        break;
-      }
-
-      ast->code->list.emplace_back(Statements());
-    }
-
-    if( !closed ) {
-      PrgCtx::Error(*ast->token, "not closed");
-    }
+    ast->iterator = it;
+    ast->list = list;
+    ast->code = code;
 
     return ast;
   }

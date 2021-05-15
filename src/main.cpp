@@ -94,7 +94,8 @@ int main(int argc, char** argv) {
   alart;
   auto ast = parser.Parse();
 
-
+  alart;
+  auto obj = AST_Runner::Stmt(ast);
 
 
 }
