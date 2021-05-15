@@ -1,21 +1,12 @@
 #pragma once
 
-class AST_Runner
+namespace AST_Runner
 {
-public:
-  static size_t CallCount;
+  Object Expr(AST::Expr* ast);
+  Object Stmt(AST::Stmt* ast);
 
-  static bool* LoopBreaked;
-  static bool* LoopContinued;
-  static bool* FuncReturned;
-  static Object* ReturnValue;
+  Object Function(AST::Callfunc* ast);
+  Object UserFunc(AST::Callfunc* fun);
 
-  static Object Expr(AST::Expr* ast);
-  static Object Stmt(AST::Stmt* ast);
-
-  static Object Function(AST::Callfunc* ast);
-  static Object UserFunc(AST::Callfunc* fun);
-
-  static Object BuiltInMember(AST::Expr*);
-
+  Object BuiltInMember(AST::Expr*);
 };
