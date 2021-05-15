@@ -398,7 +398,37 @@ namespace AST_Runner {
 
       case AST::Stmt::For:
       {
-        
+        Object obj;
+
+        // save pointers
+        auto oldptr1 = LoopBreaked;
+        auto oldptr2 = LoopContinued;
+
+        // make new flags
+        bool flag1 = false, flag2 = false;
+
+        // set new pointer
+        LoopBreaked = &flag1;
+        LoopContinued = &flag2;
+
+        while( 1 ) {
+          auto it = Expr(((AST::For*)ast)->iterator);
+          auto list = Expr(((AST::For*)ast)->list);
+
+          if( !it.var_ptr )
+            PrgCtx::Error(*(((AST::For*)ast)->iterator->token), "this isnt a lvalue");
+
+          if( list.type != Object::Array )
+            PrgCtx::Error(*ast->token, "cannot iterate in not an array type object");
+
+
+        }
+
+        // restore pointers
+        LoopBreaked = oldptr1;
+        LoopContinued = oldptr2;
+
+        return obj;
       }
 
       case AST::Stmt::While:
