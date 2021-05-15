@@ -24,11 +24,6 @@ bool ParserCore::check()
   return token->type != Token::End;
 }
 
-//void ParserCore::swaptoken(std::string const& str)
-//{
-//  token->str = str;
-//}
-
 bool ParserCore::match(std::string const& str)
 {
   return token->str == str;
