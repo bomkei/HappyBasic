@@ -9,6 +9,7 @@
 
 *.bat
 *.txt
+LineCount.py
 
 /BASIC_DEBUG
 
