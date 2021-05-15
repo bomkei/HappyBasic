@@ -31,6 +31,10 @@ namespace AST_Runner {
     }
   }
 
+  Object BuiltInMember(AST::Expr* expr) {
+    
+  }
+
   Object Expr(AST::Expr* ast)
   {
     if( !ast )
