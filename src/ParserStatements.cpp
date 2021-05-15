@@ -1,6 +1,8 @@
 #include "main.h"
 
 AST::Stmt* ParserCore::Statements() {
+  //
+  // ブロック文
   if( consume("{") ) {
     auto ast = new AST::Block;
     ast->token = csmtok;
@@ -23,7 +25,8 @@ AST::Stmt* ParserCore::Statements() {
     return ast;
   }
 
-
+  //
+  // if
   if( consume("if") ) {
     auto ast = new AST::If;
 
@@ -40,7 +43,8 @@ AST::Stmt* ParserCore::Statements() {
     return ast;
   }
 
-
+  //
+  // for
   if( consume("for") ) {
     auto ast = new AST::For;
     ast->token = csmtok;
@@ -76,6 +80,8 @@ AST::Stmt* ParserCore::Statements() {
     return ast;
   }
 
+  //
+  // while
   if( consume("while") ) {
     auto ast = new AST::While;
 
@@ -88,7 +94,10 @@ AST::Stmt* ParserCore::Statements() {
     return ast;
   }
 
+  //
   // do - while
+  // while 文として置き換えます
+  // README を参照
   if( consume("do") ) {
     auto ast = new AST::While;
     ast->cond = AST::Expr::FromInt(1);
@@ -168,35 +177,24 @@ AST::Stmt* ParserCore::Statements() {
   if( consume("struct") ) {
     auto tok = csmtok;
     auto name_tok = &get_tok();
-    
+
+    auto ast = new AST::Struct;
+    ast->name = name_tok->str;
+
     next();
     expect("{");
-    
-    auto ast = new AST::Struct;
 
-    do {
-      auto var_tok = &get_tok();
-      auto var = new AST::Expr;
-      var->type = AST::Expr::Variable;
-      var->token = var_tok;
+    while( !consume("}") ) {
+      auto tk = &get_tok();
 
-      if( var_tok->type != Token::Ident ) {
-        Program::Error(*var_tok, "syntax error");
+      if( tk->str != "var" &&
+        tk->str != "struct" ) {
+        Program::Error(*tk, "002r03u4290tu4930tu");
       }
 
-      next();
-
-      if( consume("=") ) {
-        auto tk = csmtok;
-        ast->member_list.emplace_back(new AST::Expr(AST::Expr::Assign, var, Expr(), tk));
-      }
-      else {
-        ast->member_list.emplace_back(new AST::Expr(AST::Expr::Assign, var, AST::Expr::FromInt(0), csmtok));
-      }
-    } while( consume(",") );
-    
-    expect("}");
-
+      auto member = Statements();
+      ast->member_list.emplace_back(member);
+    }
 
     return ast;
   }
