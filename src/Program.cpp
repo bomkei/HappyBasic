@@ -174,8 +174,18 @@ void Program::ViewNodes() {
 
 Object Program::Run()
 {
+  auto ret = AST_Runner::Stmt(_impl->prs_result);
 
-  return AST_Runner::Stmt(_impl->prs_result);
+  alart;
+  debugmsg("variables:");
+  for( auto&& i : _impl->variables ) {
+    debugmsg(" %s: %s", i.name.c_str(), i.ToString().c_str());
+  }
+
+  alart;
+  debugmsg("ret: %s",ret.ToString().c_str());
+
+  return ret;
 }
 
 Program* Program::GetInstance() {
