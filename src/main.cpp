@@ -39,6 +39,7 @@ int main(int argc, char** argv)
   alart;
   prg.Check();
 
+  alart;
   return 0;
 
   if( Options::ViewNodes ) {
@@ -51,5 +52,5 @@ int main(int argc, char** argv)
 
 
   alart;
-
+  debugmsg("good bye.");
 }

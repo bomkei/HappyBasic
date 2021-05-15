@@ -3,7 +3,18 @@
 using namespace AST;
 
 void CheckStmt(Stmt* stmt) {
+  if( !stmt ) {
+    return;
+  }
 
+  switch( stmt->type ) {
+    case Block:
+      for( auto&& i : ((Block*)stmt)->list )
+        CheckStmt(i);
+      break;
+
+      
+  }
 }
 
 void CheckExpr(Expr* expr) {

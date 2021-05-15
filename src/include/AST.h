@@ -5,7 +5,7 @@ namespace AST
 
   class Expr
   {
-public:
+  public:
     enum Type
     {
       Add,
@@ -29,7 +29,7 @@ public:
       Array,
       IndexRef,
       Param,
-      
+
       New,
       MemberAccess,
       MemberVariable
@@ -60,7 +60,7 @@ public:
       x->token->obj.v_int = 1;
       return x;
     }
-    
+
     static Expr* FromName(std::string const& name) {
       auto x = new Expr;
       x->type = Type::Variable;
@@ -75,10 +75,10 @@ public:
     bool isBinary();
 
     AST::Expr& _oprator(Type type, AST::Expr&);
-    AST::Expr& operator+=(AST::Expr&);
-    AST::Expr& operator-=(AST::Expr&);
-    AST::Expr& operator*=(AST::Expr&);
-    AST::Expr& operator/=(AST::Expr&);
+    AST::Expr& operator += (AST::Expr&);
+    AST::Expr& operator -= (AST::Expr&);
+    AST::Expr& operator *= (AST::Expr&);
+    AST::Expr& operator /= (AST::Expr&);
   };
 
   class Array : public Expr
