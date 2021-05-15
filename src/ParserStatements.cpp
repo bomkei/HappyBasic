@@ -198,6 +198,8 @@ AST::Stmt* ParserCore::Statements() {
     }
 
     cur_struct = oldptr;
+    Program::GetInstance()->GetStructs().emplace_back(ast);
+    
     return ast;
   }
 
