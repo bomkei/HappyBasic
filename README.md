@@ -91,3 +91,10 @@ class MyClass {
 a = new MyClass();
 print(a.yeah())
 ```
+
+statements in to a expression
+```
+print(({ for(i in range(10)) i*2; }));
+```
+this is say `18`
+
