@@ -120,6 +120,10 @@ Object AST_Runner::Expr(AST::Expr* ast)
       break;
     }
 
+    case AST::Expr::Statements: {
+      return AST_Runner::Stmt(ast->stmt);
+    }
+
     default:
     {
       auto left = Expr(ast->left);

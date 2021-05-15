@@ -3,6 +3,7 @@
 namespace AST
 {
 
+  class Stmt;
   class Expr
   {
   public:
@@ -32,13 +33,17 @@ namespace AST
 
       New,
       MemberAccess,
-      MemberVariable
+      MemberVariable,
+
+      Statements
     };
 
     Type type;
     Expr* left;
     Expr* right;
     Token* token;
+
+    Stmt* stmt = nullptr;
 
     int varIndex = 0;
 

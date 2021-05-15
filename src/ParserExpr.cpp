@@ -21,7 +21,6 @@ Token& ParserCore::get_tok()
 
 bool ParserCore::check()
 {
-  //return index < tokens.size();
   return token->type != Token::End;
 }
 
@@ -71,6 +70,15 @@ AST::Expr* ParserCore::Primary()
 {
   if( consume("(") )
   {
+    // 複文
+    if( get_tok().str == "{" ) {
+      auto x = new AST::Expr;
+      x->stmt = Statements();
+      x->type = AST::Expr::Statements;
+      expect(")");
+      return x;
+    }
+
     auto x = Expr();
     expect(")");
     return x;
@@ -98,6 +106,7 @@ AST::Expr* ParserCore::Primary()
 
   switch( tok->type )
   {
+    // 即値
     case Token::Char:
     case Token::String:
     case Token::Number:
@@ -111,10 +120,11 @@ AST::Expr* ParserCore::Primary()
       return ast;
     }
 
+    // 識別子
     case Token::Ident:
     {
       //
-      // remove scope resolution operator
+      // スコープ解決演算子
       next();
       while( consume("::") ) {
         tok->str += "::";
@@ -122,7 +132,7 @@ AST::Expr* ParserCore::Primary()
         next();
       }
 
-      // callfunc
+      // 関数呼び出し
       if( consume("(") ) {
         auto ast = new AST::Callfunc;
         ast->token = tok;
@@ -137,7 +147,7 @@ AST::Expr* ParserCore::Primary()
         return ast;
       }
 
-      // find parameter
+      // 関数の中にいる場合、引数を探す
       if( in_function ) {
         for( auto&& i : *func_args )
           if( i->token->str == tok->str ) {
