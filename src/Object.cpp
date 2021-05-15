@@ -32,8 +32,16 @@ std::string Object::ToString() const
       return  "[" + s + "]";
     }
 
-    case StructObj:
-      return "<StructObj>";
+    case StructObj: {
+      std::string s;
+
+      for( size_t i = 0; i < list.size(); i++ ) {
+        s += list[i].name + ":" + list[i].ToString();
+        if( i < list.size() - 1 ) s += ", ";
+      }
+
+      return "struct<" + struct_ptr->name + ">{" + s + "}";
+    }
   }
 
   return "";

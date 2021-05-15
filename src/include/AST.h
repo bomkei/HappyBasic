@@ -70,6 +70,7 @@ namespace AST
       auto x = new Expr;
       x->type = Type::Variable;
       x->token = new Token;
+      x->token->str = name;
       x->token->obj.name = name;
       return x;
     }

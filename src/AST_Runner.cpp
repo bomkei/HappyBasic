@@ -128,10 +128,14 @@ Object AST_Runner::Expr(AST::Expr* ast)
           case AST::Stmt::Var: {
             auto var = AST_Runner::Expr(i->expr->right);
             var.name = i->expr->left->token->str;
+            ret.list.emplace_back(var);
             break;
           }
         }
       }
+
+      alart;
+      debugmsg("%s", ret.ToString().c_str());
 
       break;
     }
