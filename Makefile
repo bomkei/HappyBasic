@@ -10,7 +10,7 @@ CXXFILES	:= \
 
 OFILES		:= $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(CXXFILES)))
 
-CXXFLAGS	?= -O1 -std=gnu++2a -Wno-psabi
+CXXFLAGS	?= $(foreach dir, -I $(dir), $(INCLUDE)) -O1 -std=gnu++2a -Wno-psabi
 LDFLAGS		:= -Wl,--gc-sections
 
 all: $(TARGET)

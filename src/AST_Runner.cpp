@@ -49,7 +49,7 @@ Object AST_Runner::Expr(AST::Expr* ast)
         return *var;
       }
       
-      Program::Error(*ast->token, ABNORMAL_ERR_MSG);
+      Program::Error(*ast->token, SERIOUS_ERROR);
     }
 
     case AST::Expr::Callfunc:
@@ -296,26 +296,18 @@ Object AST_Runner::Stmt(AST::Stmt* ast)
   if( !ast )
     return { };
 
-  switch( ast->type )
-  {
+  switch( ast->type ) {
     //case AST::Stmt::Class:
     case AST::Stmt::Function:
       break;
 
-    case AST::Stmt::Block:
-    {
-      for( auto&& i : ((AST::Block*)ast)->list )
-      {
+    case AST::Stmt::Block: {
+      for( auto&& i : ((AST::Block*)ast)->list ) {
         Stmt(i);
 
-        if( LoopBreaked && *LoopBreaked )
-          break;
-        
-        if( LoopContinued && *LoopContinued )
-          break;
-
-        if( FuncReturned && *FuncReturned )
-          break;
+        if( LoopBreaked && *LoopBreaked ) break;
+        if( LoopContinued && *LoopContinued ) break;
+        if( FuncReturned && *FuncReturned ) break;
       }
 
       break;
