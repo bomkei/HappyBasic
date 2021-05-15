@@ -20,7 +20,6 @@ class ParserCore
   Token& get_tok();
 
   bool check();
-  void swaptoken(std::string const& str);
   bool match(std::string const& str);
   bool consume(std::string const& str);
   void expect(std::string const& str);

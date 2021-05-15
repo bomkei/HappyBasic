@@ -24,21 +24,21 @@ bool ParserCore::check()
   return token->type != Token::End;
 }
 
-void ParserCore::swaptoken(std::string const& str)
-{
-  get_tok().str = str;
-}
+//void ParserCore::swaptoken(std::string const& str)
+//{
+//  token->str = str;
+//}
 
 bool ParserCore::match(std::string const& str)
 {
-  return get_tok().str == str;
+  return token->str == str;
 }
 
 bool ParserCore::consume(std::string const& str)
 {
-  if( match(str) )
+  if( token->str == str )
   {
-    csmtok = &get_tok();
+    csmtok = token;
     next();
     return true;
   }
@@ -49,7 +49,7 @@ bool ParserCore::consume(std::string const& str)
 void ParserCore::expect(std::string const& str)
 {
   if( !consume(str) )
-    PrgCtx::Error(get_tok(), "expect '" + str + "'");
+    PrgCtx::Error(*token, "expect '" + str + "'");
 }
 
 void ParserCore::next()
