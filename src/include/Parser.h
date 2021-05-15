@@ -4,7 +4,7 @@ class ParserCore
 {
   std::vector<Object>& variables;
   std::vector<AST::Function*>& functions;
-  std::vector<AST::Class*>& classes;
+  std::vector<AST::Struct*>& structs;
 
   //std::vector<Token>& tokens;
   //size_t index = 0;
@@ -33,7 +33,7 @@ public:
     Token*& topToken,
     std::vector<Object>& variables,
     std::vector<AST::Function*>& functions,
-    std::vector<AST::Class*>& classes
+    std::vector<AST::Struct*>& structs
   );
 
   AST::Expr* Primary();

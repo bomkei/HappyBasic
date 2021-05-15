@@ -8,8 +8,6 @@ class Program
   std::unique_ptr<ProgramImpl> _impl;
   static inline Program* _instance;
 
-  friend void CheckExpr(AST::Expr*);
-
 public:
   Program();
   ~Program();
@@ -29,6 +27,9 @@ public:
   
   // 変数リストへの参照
   std::vector<Object>& GetVariables() const;
+
+  // 構造体リストへの参照
+  std::vector<AST::Struct*> GetStructs() const;
 
   // 関数を探す
   // 無い場合は nullptr

@@ -4,12 +4,12 @@ ParserCore::ParserCore(
   Token*& topToken,
   std::vector<Object>& variables,
   std::vector<AST::Function*>& functions,
-  std::vector<AST::Class*>& classes
+  std::vector<AST::Struct*>& structs
 )
   : token(topToken)
   , variables(variables)
   , functions(functions)
-  , classes(classes)
+  , structs(structs)
 {
 
 }

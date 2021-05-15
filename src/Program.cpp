@@ -5,7 +5,7 @@ class ProgramImpl
   Token* token;
   std::vector<Object> variables;
   std::vector<AST::Function*> functions;
-  std::vector<AST::Class*> classes;
+  std::vector<AST::Struct*> structs;
 
   std::string source;
 
@@ -14,13 +14,12 @@ class ProgramImpl
 
   AST::Stmt* prs_result;
   AST::Function* cur_func;
-  AST::Class* cur_class = nullptr;
 
   friend class Program;
 
   ProgramImpl() {
     tokenizer = new Tokenizer(source);
-    parser = new ParserCore(token, variables, functions, classes);
+    parser = new ParserCore(token, variables, functions, structs);
 
     prs_result = nullptr;
     cur_func = nullptr;
@@ -61,6 +60,10 @@ Object* Program::GetVariable(std::string const& name) const {
 
 std::vector<Object>& Program::GetVariables() const {
   return _impl->variables;
+}
+
+std::vector<AST::Struct*> Program::GetStructs() const {
+  return _impl->structs;
 }
 
 AST::Function*& Program::GetCurrentFunction() const {
