@@ -385,20 +385,24 @@ namespace AST_Runner {
         *FuncReturned = true;
         return *ReturnValue = Expr(ast->expr);
 
-      case AST::Stmt::If: {
+      case AST::Stmt::If:
+      {
         if( Expr(((AST::If*)ast)->cond).Eval() ) {
           return Stmt(((AST::If*)ast)->code);
         }
         else if( ((AST::If*)ast)->elseCode ) {
           return Stmt(((AST::If*)ast)->elseCode);
         }
-        
+
         break;
       }
 
+      //
+      // For-statement
       case AST::Stmt::For:
       {
         Object obj;
+        size_t index = 0;
 
         // save pointers
         auto oldptr1 = LoopBreaked;
@@ -421,7 +425,20 @@ namespace AST_Runner {
           if( list.type != Object::Array )
             PrgCtx::Error(*ast->token, "cannot iterate in not an array type object");
 
+          if( index >= list.list.size() )
+            break;
 
+          *it.var_ptr = list.list[index];
+          *LoopBreaked = *LoopContinued = false;
+
+          obj = Stmt(((AST::For*)ast)->code);
+          index++;
+
+          if( *LoopBreaked )
+            break;
+
+          if( FuncReturned && *FuncReturned )
+            break;
         }
 
         // restore pointers

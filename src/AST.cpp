@@ -246,8 +246,8 @@ std::string AST::Stmt::ToString(int tab) const
       return "if<TODO>";
     }
 
-    case Type::For:
-      return "for " + ((AST::For*)this)->counter->ToString() + " = " + ((AST::For*)this)->begin->ToString() + " to " + ((AST::For*)this)->end->ToString() + "\n" + ((AST::For*)this)->code->ToString(tab + 1) + "next\n";
+    //case Type::For:
+    //  return "for " + ((AST::For*)this)->counter->ToString() + " = " + ((AST::For*)this)->begin->ToString() + " to " + ((AST::For*)this)->end->ToString() + "\n" + ((AST::For*)this)->code->ToString(tab + 1) + "next\n";
 
     case Type::While:
       return "while " + ((AST::While*)this)->cond->ToString() + "\n"

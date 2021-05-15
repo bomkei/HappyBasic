@@ -57,7 +57,7 @@ AST::Stmt* ParserCore::Statements() {
     
     expect(")");
     
-    auto code = Stmt();
+    auto code = Statements();
 
     ast->iterator = it;
     ast->list = list;
