@@ -211,7 +211,7 @@ AST::Stmt* ParserCore::Statements() {
 
     auto ast = new AST::Stmt;
     ast->type = AST::Stmt::Var;
-    ast->expr = new AST::Expr(AST::Expr::Assign, AST::Expr::FromName(var_tok->str), Expr(), tok);
+    ast->expr = new AST::Expr(AST::Expr::Assign, AST::Expr::ToLOBJ_FromName(var_tok->str), Expr(), tok);
 
     expect(";");
 

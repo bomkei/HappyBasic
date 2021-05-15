@@ -352,7 +352,7 @@ namespace AST_Runner {
       return { };
 
     switch( ast->type ) {
-      //case AST::Stmt::Class:
+      case AST::Stmt::Struct:
       case AST::Stmt::Function:
         break;
 

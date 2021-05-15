@@ -76,6 +76,12 @@ namespace AST
       return x;
     }
 
+    static Expr* ToLOBJ_FromName(std::string const& name) {
+      auto x = FromName(name);
+      x->type = Type::Lv_obj;
+      return x;
+    }
+
     void clear();
     void fix();
     bool isPrimary();
