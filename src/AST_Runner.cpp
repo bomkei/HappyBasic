@@ -120,7 +120,18 @@ Object AST_Runner::Expr(AST::Expr* ast)
       }
 
       Object ret;
+      ret.type = Object::StructObj;
+      ret.struct_ptr = ptr;
 
+      for( auto&& i : ptr->member_list ) {
+        switch( i->type ) {
+          case AST::Stmt::Var: {
+            auto var = AST_Runner::Expr(i->expr->right);
+            var.name = i->expr->left->token->str;
+            break;
+          }
+        }
+      }
 
       break;
     }

@@ -1,7 +1,7 @@
 #pragma once
 
 namespace AST {
-  class Class;
+  class Struct;
 }
 
 struct Object {

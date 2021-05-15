@@ -32,8 +32,8 @@ std::string Object::ToString() const
       return  "[" + s + "]";
     }
 
-    case ClassObj:
-      return "<ClassObj>";
+    case StructObj:
+      return "<StructObj>";
   }
 
   return "";
