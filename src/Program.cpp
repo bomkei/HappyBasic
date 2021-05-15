@@ -127,20 +127,31 @@ void Program::OpenFile()
       for( ++i; src[i] != '"'; i++ );
       i++;
     }
+    else if( i + 2 <= src.length() && src.substr(i, 2) == "//" ) {
+      src[i] = src[i + 1] = ' ';
+      i += 2;
 
-    if( i + 2 <= src.length() && src.substr(i, 2) == "//" ) {
       while( src[i] != '\n' ) {
-        src.erase(src.begin() + i);
+        src[i] = ' ';
+        i++;
       }
     }
-
     else if( i + 2 <= src.length() && src.substr(i, 2) == "/*" ) {
-      src.erase(src.begin() + i, src.begin() + i + 2);
-      while( i + 2 <= src.length() && src.substr(i, 2) != "*/" ) {
-        src.erase(src.begin() + i);
+      src[i] = src[i + 1] = ' ';
+      i += 2;
+
+      while( i < src.length() ) {
+        if( i + 2 <= src.length() && src.substr(i, 2) == "*/" ) {
+          src[i] = src[i + 1] = ' ';
+          i += 2;
+          break;
+        }
+        else {
+          src[i] = ' ';
+          i++;
+        }
       }
     }
-
     else i++;
   }
 }
