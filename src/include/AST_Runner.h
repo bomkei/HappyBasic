@@ -16,4 +16,6 @@ public:
   static Object Function(AST::Callfunc* ast);
   static Object UserFunc(AST::Callfunc* fun);
 
+  static Object BuiltInMember(AST::Expr*);
+
 };

@@ -140,7 +140,23 @@ Object AST_Runner::Expr(AST::Expr* ast)
     case AST::Expr::MemberAccess: {
       auto obj = Expr(ast->left);
 
-      
+      if( obj.type != Object::StructObj ) {
+        // TODO: BuiltInMember
+        Program::Error(*ast->token, "not struct");
+      }
+
+      if( ast->right->type != AST::Expr::Variable ) {
+        Program::Error(*ast->right->token, "syntax error");
+      }
+
+      auto& name = ast->right->token->str;
+
+      for( auto&& i : obj.list ) {
+        if( i.name == name )
+          return i;
+      }
+
+      Program::Error(*ast->right->token, "");
     }
 
     case AST::Expr::MemberVariable: {
