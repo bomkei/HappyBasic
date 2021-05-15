@@ -44,67 +44,18 @@ static auto op_tokens =
   ":",
 };
 
-static std::vector<std::pair<std::string, int>> ReservedWords =
+
+Token* Tokenize(std::string const& source)
 {
-  { "COL_WHITE", 0 },
-  { "COL_BLACK", 0x00 },
-  { "COL_DARK_BLUE", 0x01 },
-  { "COL_DARK_GREEN", 0x02 },
-  { "COL_DARK_CYAN", 0x03 },
-  { "COL_DARK_RED", 0x04 },
-  { "COL_DARK_VIOLET", 0x05 },
-  { "COL_DARK_YELLOW", 0x06 },
-  { "COL_GRAY", 0x07 },
-  { "COL_LIGHT_GRAY", 0x08 },
-  { "COL_BLUE", 0x09 },
-  { "COL_GREEN", 0x0a },
-  { "COL_CYAN", 0x0b },
-  { "COL_RED", 0x0c },
-  { "COL_VIOLET", 0x0d },
-  { "COL_YELLOW", 0x0e },
-  { "COL_WHITE", 0x0f },
-
-};
-
-
-bool Tokenizer::check() const
-{
-  return position < source.length();
-}
-
-char Tokenizer::peek() const
-{
-  return source[position];
-}
-
-bool Tokenizer::match(std::string const& str) const
-{
-  return position + str.length() <= source.length() && source.substr(position, str.length()) == str;
-}
-
-void Tokenizer::next(int n)
-{
-  position += n;
-}
-
-void Tokenizer::pass_space()
-{
-  while( check() && peek() <= ' ' )
-    next();
-}
-
-Tokenizer::Tokenizer(std::string const& src)
-  :source(src), position(0)
-{
-
-}
-
-//std::vector<Token> Tokenizer::Tokenize()
-Token* Tokenizer::Tokenize()
-{
-  //std::vector<Token> tokens;
+  size_t position = 0;
   Token top;
   auto cur = &top;
+
+  static auto check = [&] {return position < source.length(); };
+  static auto peek = [&] {return source[position]; };
+  static auto match = [&] (std::string str) { return position + str.length() <= source.length() && source.substr(position, str.length()) == str; };
+  static auto next = [&] (int n = 1) {position += n; };
+  static auto pass_space = [&] { while( check() && peek() <= ' ' )next(); };
 
   pass_space();
 
@@ -115,10 +66,12 @@ Token* Tokenizer::Tokenize()
     Token tok;
     tok.srcpos = position;
 
+    // 数字
     if( isdigit(c) )
     {
       tok.type = Token::Number;
 
+      // 16 進数
       if( match("0x") )
       {
         next(2);
@@ -134,6 +87,7 @@ Token* Tokenizer::Tokenize()
         while( check() && isdigit(c = peek()) )
           tok.str += c, next();
 
+        // 浮動小数点数
         if( peek() == '.' )
         {
           next();
@@ -146,13 +100,15 @@ Token* Tokenizer::Tokenize()
           tok.obj.v_float = std::stof(tok.str);
         }
 
+        // 整数
         else
         {
           tok.obj.v_int = std::stoi(tok.str);
         }
       }
     }
-
+    
+    // 識別子
     else if( isalnum(c) || c == '_' )
     {
       tok.type = Token::Ident;
@@ -165,6 +121,7 @@ Token* Tokenizer::Tokenize()
       tok.obj.name = tok.str;
     }
 
+    // 文字
     else if( c == '\'' )
     {
       next();
@@ -175,11 +132,12 @@ Token* Tokenizer::Tokenize()
 
       next();
       if( peek() != '\'' )
-        Program::Error(tok, "unclosed char literal");
+        PrgCtx::Error(tok, "unclosed char literal");
 
       next();
     }
 
+    // 文字列
     else if( c == '"' )
     {
       tok.type = Token::String;
@@ -204,6 +162,7 @@ Token* Tokenizer::Tokenize()
       tok.str += '"';
     }
 
+    // 演算子 / 記号
     else
     {
       auto hit = false;
@@ -222,7 +181,7 @@ Token* Tokenizer::Tokenize()
 
       if( !hit )
       {
-        Program::Error(tok, "unknown token");
+        PrgCtx::Error(tok, "unknown token");
       }
     }
 

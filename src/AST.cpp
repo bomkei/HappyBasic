@@ -59,12 +59,12 @@ void AST::Expr::fix()
 
 bool AST::Expr::isPrimary()
 {
-  return type == Immidiate or type == Variable or type == Callfunc or type == IndexRef;
+  return type == Immidiate || type == Variable || type == Callfunc || type == IndexRef;
 }
 
 bool AST::Expr::isBinary()
 {
-  return type == Add or type == Sub or type == Mul or type == Div;
+  return type == Add || type == Sub || type == Mul || type == Div;
 }
 
 std::string AST::Expr::ToString() const
@@ -120,7 +120,7 @@ std::string AST::Expr::ToString() const
     {
       if( !left || !right )
       {
-        Program::Error(*token, "ERROR");
+        PrgCtx::Error(*token, "ERROR");
       }
 
       auto left = this->left->ToString();

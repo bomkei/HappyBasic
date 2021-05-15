@@ -21,11 +21,12 @@
 #include "include/Tokenizer.h"
 #include "include/Parser.h"
 #include "include/AST_Runner.h"
-#include "include/Program.h"
+#include "include/ProgramContext.h"
 
 #include "include/Optimizer.h"
 #include "include/Options.h"
 
 Object MakeObjectFromString(std::string const& str);
 
+std::string readfile(std::string path);
 

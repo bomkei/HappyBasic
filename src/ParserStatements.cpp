@@ -19,7 +19,7 @@ AST::Stmt* ParserCore::Statements() {
     }
 
     if( !closed ) {
-      Program::Error(*ast->token, "not closed");
+      PrgCtx::Error(*ast->token, "not closed");
     }
 
     return ast;
@@ -74,7 +74,7 @@ AST::Stmt* ParserCore::Statements() {
     }
 
     if( !closed ) {
-      Program::Error(*ast->token, "not closed");
+      PrgCtx::Error(*ast->token, "not closed");
     }
 
     return ast;
@@ -136,7 +136,7 @@ AST::Stmt* ParserCore::Statements() {
         auto& tk = get_tok();
 
         if( tk.type != Token::Ident )
-          Program::Error(tk, "syntax error");
+          PrgCtx::Error(tk, "syntax error");
 
         auto prm = new AST::Expr;
         prm->type = AST::Expr::Param;
@@ -193,7 +193,7 @@ AST::Stmt* ParserCore::Statements() {
 
       if( tk->str != "var" &&
         tk->str != "struct" ) {
-        Program::Error(*tk, "002r03u4290tu4930tu");
+        PrgCtx::Error(*tk, "002r03u4290tu4930tu");
       }
 
       auto member = Statements();
@@ -201,8 +201,9 @@ AST::Stmt* ParserCore::Statements() {
     }
 
     cur_struct = oldptr;
-    Program::GetInstance()->GetStructs().emplace_back(ast);
-    
+    //Program::GetInstance()->GetStructs().emplace_back(ast);
+    PrgCtx::Instance->structs.emplace_back(ast);
+
     return ast;
   }
 
@@ -213,7 +214,7 @@ AST::Stmt* ParserCore::Statements() {
     auto var_tok = &get_tok();
 
     if( var_tok->type != Token::Ident ) {
-      Program::Error(*tok, "expected variable name when after this token");
+      PrgCtx::Error(*tok, "expected variable name when after this token");
     }
 
     next();

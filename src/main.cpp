@@ -1,53 +1,100 @@
+#include <memory>
 #include "main.h"
 
-int main(int argc, char** argv)
-{
-  srand((int)time(nullptr));
+std::string readfile(std::string path) {
+  static auto is_empty = [] (std::string const& str) {
+    for( auto&& c : str )
+      if( c > ' ' )
+        return false;
 
-  auto&& args = Utils::ToVector<std::string>(argc - 1, argv + 1);
+    return true;
+  };
 
-  for( auto&& arg : args ) {
-    if( arg == "-safety" && !Options::IsSafety ) {
-      Options::IsSafety = true;
-    }
-    else if( arg == "-node" && !Options::ViewNodes ) {
-      Options::ViewNodes = true;
-    }
-    else if( Options::FileName.empty() ) {
-      Options::FileName = arg;
-    }
-    else {
-      std::cout
-        << "fatal: this argument is already specified or unknown.\n"
-        << "  " << arg << '\n';
+  std::ifstream ifs(path);
+  std::string src, line;
 
-      exit(2);
-    }
+  if( ifs.fail() ) {
+    std::cout << "cannot open file: " << path << '\n';
+    exit(1);
   }
 
-  Program prg;
+  while( std::getline(ifs, line) ) {
+    while( line.length() && line[line.length() - 1] <= ' ' )
+      line.pop_back();
+
+    while( line.length() && line[0] <= ' ' )
+      line.erase(line.begin());
+
+    src += line + '\n';
+  }
+
+  if( is_empty(src) ) {
+    std::cout << "empty source file";
+    exit(1);
+  }
+
+  for( size_t i = 0; i < src.length(); ) {
+    if( src[i] == '"' ) {
+      for( ++i; src[i] != '"'; i++ );
+      i++;
+    }
+    else if( i + 2 <= src.length() && src.substr(i, 2) == "//" ) {
+      src[i] = src[i + 1] = ' ';
+      i += 2;
+
+      while( src[i] != '\n' ) {
+        src[i] = ' ';
+        i++;
+      }
+    }
+    else if( i + 2 <= src.length() && src.substr(i, 2) == "/*" ) {
+      src[i] = src[i + 1] = ' ';
+      i += 2;
+
+      while( i < src.length() ) {
+        if( i + 2 <= src.length() && src.substr(i, 2) == "*/" ) {
+          src[i] = src[i + 1] = ' ';
+          i += 2;
+          break;
+        }
+        else {
+          src[i] = ' ';
+          i++;
+        }
+      }
+    }
+    else i++;
+  }
+
+  return src;
+}
+
+int main(int argc, char** argv) {
+  alart;
+  srand((int)time(nullptr));
 
   alart;
-  prg.OpenFile();
+  std::unique_ptr<ProgramContext> context;
+  context.reset(new ProgramContext);
 
   alart;
-  prg.Tokenize();
-  
-  alart;
-  prg.Parse();
-
-  //alart;
-  //prg.Check();
-
-  //if( Options::ViewNodes ) {
-  //  prg.ViewNodes();
-  //  return 0;
-  //}
+  context->source = readfile("script.txt");
 
   alart;
-  auto res = prg.Run();
-
+  context->token = Tokenize(context->source);
 
   alart;
-  debugmsg("good bye.");
+  auto parser = ParserCore(
+    context->token,
+    context->variables,
+    context->functions,
+    context->structs
+  );
+
+  alart;
+  auto ast = parser.Parse();
+
+
+
+
 }

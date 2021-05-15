@@ -26,7 +26,7 @@ Object AST_Runner::Function(AST::Callfunc* ast) {
     switch( args.size() ) {
       case 1:
         if( args[0].type != Object::Int )
-          Program::Error(*(ast->args[0]->token), "must be a integer");
+          PrgCtx::Error(*(ast->args[0]->token), "must be a integer");
 
         for( int i = 0; i < args[0].v_int; i++ ) {
           Object obj;
@@ -38,10 +38,10 @@ Object AST_Runner::Function(AST::Callfunc* ast) {
 
       case 2:
         if( args[0].type != Object::Int )
-          Program::Error(*(ast->args[0]->token), "must be a integer");
+          PrgCtx::Error(*(ast->args[0]->token), "must be a integer");
 
         if( args[1].type != Object::Int )
-          Program::Error(*(ast->args[1]->token), "must be a integer");
+          PrgCtx::Error(*(ast->args[1]->token), "must be a integer");
 
         for( int i = args[0].v_int; i < args[1].v_int; i++ ) {
           Object obj;
@@ -52,7 +52,7 @@ Object AST_Runner::Function(AST::Callfunc* ast) {
         break;
 
       default:
-        Program::Error(*ast->token, "no matching args");
+        PrgCtx::Error(*ast->token, "no matching args");
     }
   }
 
@@ -60,10 +60,10 @@ Object AST_Runner::Function(AST::Callfunc* ast) {
   // length
   else if( name == "length" ) {
     if( args.size() != 1 )
-      Program::Error(*ast->token, "no matching args");
+      PrgCtx::Error(*ast->token, "no matching args");
 
     if( args[0].type != Object::Array )
-      Program::Error(*(ast->args[0]->token), "this is not array");
+      PrgCtx::Error(*(ast->args[0]->token), "this is not array");
 
     ret.v_int = args[0].list.size();
   }
@@ -73,13 +73,13 @@ Object AST_Runner::Function(AST::Callfunc* ast) {
   else if( name == "random" ) {
     for( auto&& i : args )
       if( i.type != Object::Int )
-        Program::Error(*ast->token, "only use integer in args of random()");
+        PrgCtx::Error(*ast->token, "only use integer in args of random()");
 
     auto begin = args.size() > 1 ? args[0].v_int : 0;
     auto end = args[args.size() > 1].v_int;
 
     if( begin > end )
-      Program::Error(*ast->args[0]->token, "begin > end");
+      PrgCtx::Error(*ast->args[0]->token, "begin > end");
 
     if( begin == end )
       ret.v_int = begin;
@@ -91,7 +91,7 @@ Object AST_Runner::Function(AST::Callfunc* ast) {
   // randomstr
   else if( name == "randomstr" ) {
     if( args.size() > 1 )
-      Program::Error(*ast->token, "no matching args");
+      PrgCtx::Error(*ast->token, "no matching args");
 
     auto len = args.size() ? args[0].v_int : 30;
 
@@ -111,7 +111,7 @@ Object AST_Runner::Function(AST::Callfunc* ast) {
   // int
   else if( name == "int" ) {
     if( args.size() != 1 )
-      Program::Error(*ast->token, "no matching args");
+      PrgCtx::Error(*ast->token, "no matching args");
 
     switch( args[0].type ) {
       case Object::Int:
@@ -131,7 +131,7 @@ Object AST_Runner::Function(AST::Callfunc* ast) {
           args[0].v_int = std::stoi(str, nullptr, str.find("0x") == std::string::npos ? 10 : 16);
         }
         catch( ... ) {
-          Program::Error(*ast->args[0]->token, "cannot cast to integer");
+          PrgCtx::Error(*ast->args[0]->token, "cannot cast to integer");
         }
       }
     }
@@ -144,7 +144,7 @@ Object AST_Runner::Function(AST::Callfunc* ast) {
   // to_string
   else if( name == "to_string" ) {
     if( args.size() != 1 )
-      Program::Error(*ast->token, "no matching args");
+      PrgCtx::Error(*ast->token, "no matching args");
 
     try {
       auto str = args[0].ToString();
@@ -159,7 +159,7 @@ Object AST_Runner::Function(AST::Callfunc* ast) {
       }
     }
     catch( ... ) {
-      Program::Error(*ast->args[0]->token, SERIOUS_ERROR);
+      PrgCtx::Error(*ast->args[0]->token, SERIOUS_ERROR);
     }
   }
 

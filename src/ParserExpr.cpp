@@ -49,7 +49,7 @@ bool ParserCore::consume(std::string const& str)
 void ParserCore::expect(std::string const& str)
 {
   if( !consume(str) )
-    Program::Error(get_tok(), "expect '" + str + "'");
+    PrgCtx::Error(get_tok(), "expect '" + str + "'");
 }
 
 void ParserCore::next()
@@ -113,7 +113,7 @@ AST::Expr* ParserCore::Primary()
     case Token::String:
     case Token::Number:
     {
-      auto ast = new AST::Expr();
+      auto ast = new AST::Expr;
 
       ast->type = AST::Expr::Immidiate;
       ast->token = tok;
@@ -189,7 +189,7 @@ AST::Expr* ParserCore::Primary()
 
   }
 
-  Program::Error(*tok, "syntax error");
+  PrgCtx::Error(*tok, "syntax error");
 }
 
 AST::Expr* ParserCore::IndexRef()

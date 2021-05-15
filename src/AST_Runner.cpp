@@ -45,16 +45,14 @@ namespace AST_Runner {
       case AST::Expr::Immidiate:
         return ast->token->obj;
 
-      case AST::Expr::Variable:
-      {
-        auto var = Program::GetInstance()->GetVariable(ast->token->str);
-
-        if( var ) {
-          var->var_ptr = var;
-          return *var;
+      case AST::Expr::Variable: {
+        if( ast->varIndex == -1 ) {
+          PrgCtx::Error(*ast->token, SERIOUS_ERROR);
         }
-        
-        Program::Error(*ast->token, SERIOUS_ERROR);
+
+        auto& var = PrgCtx::Instance->variables[ast->varIndex];
+        var.var_ptr = &var;
+        return var;
       }
 
       case AST::Expr::Callfunc:
@@ -79,13 +77,13 @@ namespace AST_Runner {
         auto sub = Expr(ast->right);
 
         if( obj.type != Object::Array )
-          Program::Error(*ast->left->token, "this is not array");
+          PrgCtx::Error(*ast->left->token, "this is not array");
 
         if( sub.type != Object::Int )
-          Program::Error(*ast->right->token, "subscript type mismatch");
+          PrgCtx::Error(*ast->right->token, "subscript type mismatch");
 
         if( sub.v_int < 0 || sub.v_int >= obj.list.size() )
-          Program::Error(*ast->right->token, "subscript out of range");
+          PrgCtx::Error(*ast->right->token, "subscript out of range");
 
         return obj.list[sub.v_int];
       }
@@ -103,7 +101,7 @@ namespace AST_Runner {
         auto src = Expr(ast->right);
 
         if( !dest.var_ptr )
-          Program::Error(*ast->token, "cannot assign to rvalue");
+          PrgCtx::Error(*ast->token, "cannot assign to rvalue");
 
         *dest.var_ptr = src;
         dest.var_ptr->name = dest.name;
@@ -113,15 +111,18 @@ namespace AST_Runner {
 
       case AST::Expr::New: {
         if( ast->left->type != AST::Expr::Callfunc ) {
-          Program::Error(*ast->token, "9201u20");
+          PrgCtx::Error(*ast->token, "9201u20");
         }
 
         auto& name = ast->left->token->str;
-        auto ptr = Program::GetInstance()->GetStruct(name);
+        //auto ptr = Program::GetInstance()->GetStruct(name);
+        auto find = find_vector(PrgCtx::Instance->structs, [] (auto s, auto n) {return s->name == n; }, name);
 
-        if( !ptr ) {
-          Program::Error(*ast->left->token, "this is doesnt exists");
+        if( find == -1 ) {
+          PrgCtx::Error(*ast->left->token, "this is doesnt exists");
         }
+
+        auto ptr = PrgCtx::Instance->structs[find];
 
         Object ret;
         ret.type = Object::StructObj;
@@ -146,11 +147,11 @@ namespace AST_Runner {
 
         if( obj.type != Object::StructObj ) {
           // TODO: BuiltInMember
-          Program::Error(*ast->token, "not struct");
+          PrgCtx::Error(*ast->token, "not struct");
         }
 
         if( ast->right->type != AST::Expr::Variable ) {
-          Program::Error(*ast->right->token, "syntax error");
+          PrgCtx::Error(*ast->right->token, "syntax error");
         }
 
         auto& name = ast->right->token->str;
@@ -160,7 +161,7 @@ namespace AST_Runner {
             return i;
         }
 
-        Program::Error(*ast->right->token, "");
+        PrgCtx::Error(*ast->right->token, "");
       }
 
       case AST::Expr::MemberVariable: {
@@ -209,7 +210,7 @@ namespace AST_Runner {
               case Object::Int: left.v_int -= right.v_int; break;
               case Object::Char: left.v_char -= right.v_char; break;
               case Object::Float: left.v_float -= right.v_float; break;
-              case Object::Array: Program::Error(*ast->token, "type mismatch");
+              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
             }
             break;
 
@@ -220,7 +221,7 @@ namespace AST_Runner {
                 std::swap(left, right);
 
               if( right.type != Object::Int )
-                Program::Error(*ast->token, "type mismatch");
+                PrgCtx::Error(*ast->token, "type mismatch");
               
               auto list = left.list;
 
@@ -249,25 +250,25 @@ namespace AST_Runner {
           case AST::Expr::Mod:
             if( !right.Eval() )
             {
-              Program::Error(*ast->token, "cant division with zero");
+              PrgCtx::Error(*ast->token, "cant division with zero");
             }
             else if( !left.Eval() )
               break;
             else if( right.type != Object::Int )
-              Program::Error(*ast->token, "only can use integer at mod operator");
+              PrgCtx::Error(*ast->token, "only can use integer at mod operator");
 
             switch( left.type ) {
               case Object::Int: left.v_int /= right.v_int; break;
               case Object::Char: left.v_char /= right.v_char; break;
-              case Object::Float: Program::Error(*ast->token, "cannot mod float");
-              case Object::Array: Program::Error(*ast->token, "type mismatch");
+              case Object::Float: PrgCtx::Error(*ast->token, "cannot mod float");
+              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
             }
             break;
             
           case AST::Expr::Div:
             if( !right.Eval() )
             {
-              Program::Error(*ast->token, "cant division with zero");
+              PrgCtx::Error(*ast->token, "cant division with zero");
             }
             else if( !left.Eval() )
               break;
@@ -276,7 +277,7 @@ namespace AST_Runner {
               case Object::Int: left.v_int /= right.v_int; break;
               case Object::Char: left.v_char /= right.v_char; break;
               case Object::Float: left.v_float /= right.v_float; break;
-              case Object::Array: Program::Error(*ast->token, "type mismatch");
+              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
             }
             break;
 
@@ -284,8 +285,8 @@ namespace AST_Runner {
             switch( left.type ) {
               case Object::Int: left.v_int <<= right.v_int; break;
               case Object::Char: left.v_char <<= right.v_char; break;
-              case Object::Float: Program::Error(*ast->token, "cannot shift float-type object");
-              case Object::Array: Program::Error(*ast->token, "type mismatch");
+              case Object::Float: PrgCtx::Error(*ast->token, "cannot shift float-type object");
+              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
             }
             break;
 
@@ -294,7 +295,7 @@ namespace AST_Runner {
               case Object::Int: left.v_int = left.v_int > right.v_int; break;
               case Object::Char: left.v_int = left.v_char > right.v_char; break;
               case Object::Float: left.v_int = left.v_float > right.v_float; break;
-              case Object::Array: Program::Error(*ast->token, "type mismatch");
+              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
             }
             left.type = Object::Int;
             break;
@@ -304,7 +305,7 @@ namespace AST_Runner {
               case Object::Int: left.v_int = left.v_int >= right.v_int; break;
               case Object::Char: left.v_int = left.v_char >= right.v_char; break;
               case Object::Float: left.v_int = left.v_float >= right.v_float; break;
-              case Object::Array: Program::Error(*ast->token, "type mismatch");
+              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
             }
             left.type = Object::Int;
             break;
@@ -363,21 +364,21 @@ namespace AST_Runner {
 
       case AST::Stmt::Break:
         if( !LoopBreaked )
-          Program::Error(*ast->token, "cannot use 'break' here");
+          PrgCtx::Error(*ast->token, "cannot use 'break' here");
 
         *LoopBreaked = true;
         break;
 
       case AST::Stmt::Continue:
         if( !LoopContinued )
-          Program::Error(*ast->token, "cannot use 'continue' here");
+          PrgCtx::Error(*ast->token, "cannot use 'continue' here");
 
         *LoopContinued = true;
         break;
 
       case AST::Stmt::Return:
         if( !ReturnValue )
-          Program::Error(*ast->token, "cannot use 'return' here");
+          PrgCtx::Error(*ast->token, "cannot use 'return' here");
 
         *ReturnValue = Expr(ast->expr);
         *FuncReturned = true;
@@ -413,10 +414,10 @@ namespace AST_Runner {
         LoopContinued = &flag2;
 
         if( !counter.var_ptr )
-          Program::Error(*(for_ast->counter->token), "not a lvalue");
+          PrgCtx::Error(*(for_ast->counter->token), "not a lvalue");
 
         if( begin.type != Object::Int )
-          Program::Error(*(for_ast->begin->token), "must be a integer");
+          PrgCtx::Error(*(for_ast->begin->token), "must be a integer");
 
         *(counter.var_ptr) = begin;
 
@@ -425,7 +426,7 @@ namespace AST_Runner {
           auto end = Expr(for_ast->end);
 
           if( end.type != Object::Int )
-            Program::Error(*(for_ast->end->token), "must be a integer");
+            PrgCtx::Error(*(for_ast->end->token), "must be a integer");
 
           if( counter.var_ptr->v_int > end.v_int )
             break;
