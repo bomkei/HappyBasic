@@ -181,6 +181,9 @@ AST::Stmt* ParserCore::Statements() {
     auto ast = new AST::Struct;
     ast->name = name_tok->str;
 
+    auto oldptr = cur_struct;
+    cur_struct = ast;
+
     next();
     expect("{");
 
@@ -196,6 +199,7 @@ AST::Stmt* ParserCore::Statements() {
       ast->member_list.emplace_back(member);
     }
 
+    cur_struct = oldptr;
     return ast;
   }
 

@@ -162,6 +162,12 @@ AST::Expr* ParserCore::Primary()
         for( auto&& i : cur_struct->member_list ) {
           if( i->type == AST::Stmt::Var &&
             i->expr->left->token->str == tok->str ) {
+            
+            alart;
+            std::cout
+              << "var '" + tok->str + "' is exists in struct '" + cur_struct->name + "'\n"
+              << "will return this from Primary()\n";
+
             return i->expr->left;
           }
         }
