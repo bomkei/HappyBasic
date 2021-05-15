@@ -8,12 +8,53 @@ void CheckStmt(Stmt* stmt) {
   }
 
   switch( stmt->type ) {
-    case Block:
+    case Stmt::Block:
       for( auto&& i : ((Block*)stmt)->list )
         CheckStmt(i);
       break;
 
-      
+    case Stmt::If: {
+      CheckExpr(((If*)stmt)->cond);
+      CheckStmt(((If*)stmt)->code);
+      CheckStmt(((If*)stmt)->elseCode);
+      break;
+    }
+
+    case Stmt::For: {
+      CheckExpr(((For*)stmt)->counter);
+      CheckExpr(((For*)stmt)->begin);
+      CheckExpr(((For*)stmt)->end);
+      CheckStmt(((For*)stmt)->code);
+      break;
+    }
+
+    case Stmt::While: {
+      CheckExpr(((While*)stmt)->cond);
+      CheckStmt(((While*)stmt)->code);
+      break;
+    }
+
+    case Stmt::Function: {
+      CheckStmt(((Function*)stmt)->code);
+      break;
+    }
+
+    case Stmt::Break:
+    case Stmt::Continue:
+      break;
+    
+    case Stmt::Return:
+      CheckExpr(stmt->expr);
+      break;
+
+    case Stmt::Struct:
+      break;
+
+    case Stmt::Var:
+    default: {
+      CheckExpr(stmt->expr);
+      break;
+    }
   }
 }
 
