@@ -179,6 +179,9 @@ AST::Stmt* ParserCore::Statements() {
     auto ast = new AST::Struct;
     ast->name = name_tok->str;
 
+    alart;
+    debugmsg("%s", ast->name.c_str());
+
     auto oldptr = cur_struct;
     cur_struct = ast;
 

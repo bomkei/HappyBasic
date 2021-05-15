@@ -62,7 +62,7 @@ std::vector<Object>& Program::GetVariables() const {
   return _impl->variables;
 }
 
-std::vector<AST::Struct*> Program::GetStructs() const {
+std::vector<AST::Struct*>& Program::GetStructs() const {
   return _impl->structs;
 }
 

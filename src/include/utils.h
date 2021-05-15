@@ -5,7 +5,13 @@
 #if _DEBUG_BUILD_
 #define  alart               fprintf(stderr,"\t%s:%d\n",get_file_name(__FILE__),__LINE__)
 #define  view_pointer(p)     fprintf(stderr,"\t%s = %p\n", #p, p)
-#define  debugmsg(...)       printf(__VA_ARGS__)
+
+template <class T, class... Args>
+void debugmsg(T&& fmt, Args ...args) {
+  printf(fmt, args...);
+  puts("");
+}
+
 #else
 #define alart
 #define view_pointer(p)   p

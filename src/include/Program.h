@@ -29,7 +29,7 @@ public:
   std::vector<Object>& GetVariables() const;
 
   // 構造体リストへの参照
-  std::vector<AST::Struct*> GetStructs() const;
+  std::vector<AST::Struct*>& GetStructs() const;
 
   // 構造体を探す
   // 無い場合は nullptr
