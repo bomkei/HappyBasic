@@ -1,16 +1,19 @@
-/build
 /.vs
 /.vscode
 /.idea
 
+/HappyBasic_VS/x64
+/x64
+
+*.exe
+*.out
+
 *.lnk
 *.url
-*.exe
 
 *.bat
-*.txt
-LineCount.py
 
-/BASIC_DEBUG
+*.vcxproj
+*.filters
+*.user
 
-HappyBasic

@@ -1,6 +1,10 @@
 #include <memory>
 #include "main.h"
 
+std::string Options::FileName;
+bool Options::ViewNodes;
+bool Options::IsSafety;
+
 std::string readfile(std::string path) {
   static auto is_empty = [] (std::string const& str) {
     for( auto&& c : str )
@@ -78,7 +82,7 @@ int main(int argc, char** argv) {
   context.reset(new ProgramContext);
 
   alart;
-  context->source = readfile("script.txt");
+  context->source = readfile("C:/Users/mrzkr/Desktop/test.txt");
 
   alart;
   context->token = Tokenize(context->source);

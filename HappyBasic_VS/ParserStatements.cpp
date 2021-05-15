@@ -155,7 +155,8 @@ AST::Stmt* ParserCore::Statements() {
 
   if( consume("class") ) {
     // TODO
-    NOT_IMPL("class");
+
+    return nullptr;
   }
 
   if( consume("struct") ) {

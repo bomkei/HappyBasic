@@ -1,3 +1,0 @@
-cls
-make
-pause
