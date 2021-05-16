@@ -14,11 +14,13 @@
 using namespace Global;
 
 namespace AST_Runner {
-  size_t CallCount;
-  bool* LoopBreaked;
-  bool* LoopContinued;
-  bool* FuncReturned;
-  Object* ReturnValue;
+  namespace {
+    size_t CallCount;
+    bool* LoopBreaked;
+    bool* LoopContinued;
+    bool* FuncReturned;
+    Object* ReturnValue;
+  }
 
   void ObjectAdjuster(Object& L, Object& R) {
     if( L.type == Object::Array || R.type == Object::Array )
