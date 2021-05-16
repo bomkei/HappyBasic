@@ -22,12 +22,13 @@ namespace ParserCore {
     bool in_struct;
     AST::Struct* cur_struct;
 
-    //
+    //------------------------------------------------------------
     // 変数の自動配置を制御するフラグです
-    // True になっている場合は、自動配置をしません
+    // true になっている場合は、自動配置をしません
     // これは主にメンバアクセスをパースしてるときに使用します
     // 例: A.b.c という場合、A のみが 確認 & 自動配置 される
-    //     b と c はされない
+    //     b と c はされません
+    //------------------------------------------------------------
     bool DontPlace_v;
 
 
@@ -161,9 +162,15 @@ namespace ParserCore {
           }
 
           if( !consume(")") ) {
+            auto _d = DontPlace_v;
+            DontPlace_v = true;
+
             do {
               ast->args.emplace_back(Expr());
             } while( consume(",") );
+            
+            DontPlace_v = _d;
+
             expect(")");
           }
 
@@ -172,7 +179,7 @@ namespace ParserCore {
 
         // 関数の中にいる場合、引数を探す
         if( in_function ) {
-          for( auto&& i : *func_args )
+          for( auto&& i : cur_func->args )
             if( i->token->str == tok->str ) {
               return i;
             }
@@ -520,6 +527,7 @@ namespace ParserCore {
     if( consume("def") ) {
       auto ast = new AST::Function;
       ast->token = &get_tok();
+      ast->name = ast->token->str;
 
       next();
       expect("(");
@@ -532,7 +540,7 @@ namespace ParserCore {
             Error(tk, "syntax error");
 
           auto prm = new AST::Expr;
-          prm->type = AST::Expr::Param;
+          prm->type = AST::Expr::Lv_obj;
           prm->token = &tk;
           next();
 
@@ -545,15 +553,15 @@ namespace ParserCore {
         expect(")");
       }
 
-      auto ptr = func_args;
+      auto ptr = cur_func;
 
       in_function = true;
-      func_args = &(ast->args);
+      cur_func = ast;
 
       ast->code = Statements();
 
       in_function = false;
-      func_args = ptr;
+      cur_func = ptr;
 
       functions.emplace_back(ast);
 
@@ -631,6 +639,7 @@ namespace ParserCore {
     {
       auto s = new AST::Stmt;
       s->type = AST::Stmt::Return;
+      s->token = csmtok;
 
       if( consume(";") ) {
         return s;

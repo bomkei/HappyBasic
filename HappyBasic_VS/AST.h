@@ -29,7 +29,7 @@ namespace AST
       Callfunc,
       Array,
       IndexRef,
-      Param,
+      //Param,
       Lv_obj,
 
       New,

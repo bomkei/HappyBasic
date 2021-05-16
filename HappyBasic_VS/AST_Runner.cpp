@@ -218,8 +218,48 @@ namespace AST_Runner {
   }
 
   Object UserFunc(AST::Callfunc* fun) {
+    auto find = find_vector(functions, [] (auto x, auto y) { return x->name == y; }, fun->token->str);
 
-    return { };
+    AST::Function* func_ast;
+    std::vector<Object> args_obj;
+    bool returned = false;
+    Object retVal;
+
+    if( find == -1 ) {
+      Error(*fun->token, "undefined function");
+    }
+
+    func_ast = functions[find];
+
+    if( fun->args.size() != func_ast->args.size() ) {
+      Error(*fun->token, "no matching args");
+    }
+
+    for( size_t i = 0; i < fun->args.size(); i++ ) {
+      args_obj.emplace_back(func_ast->args[i]->token->obj);
+      func_ast->args[i]->token->obj = AST_Runner::Expr(fun->args[i]);
+    }
+
+    auto oldptr1 = FuncReturned;
+    auto oldptr2 = ReturnValue;
+
+    FuncReturned = &returned;
+    ReturnValue = &retVal;
+
+    CallCount++;
+
+    AST_Runner::Stmt(func_ast->code);
+
+    CallCount--;
+
+    for( size_t i = 0; i < fun->args.size(); i++ ) {
+      func_ast->args[i]->token->obj = args_obj[i];
+    }
+
+    FuncReturned = oldptr1;
+    ReturnValue = oldptr2;
+
+    return retVal;
   }
 
   Object BuiltInMember(AST::Expr* expr) {
@@ -287,12 +327,12 @@ namespace AST_Runner {
         return obj.list[sub.v_int];
       }
 
-      case AST::Expr::Param:
-      {
-        auto& p = ast->token->obj;
-        p.var_ptr = &p;
-        return p;
-      }
+      //case AST::Expr::Param:
+      //{
+      //  auto& p = ast->token->obj;
+      //  p.var_ptr = &p;
+      //  return p;
+      //}
 
       case AST::Expr::Assign:
       {
