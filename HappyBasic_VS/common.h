@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 #define  SERIOUS_ERROR   "Please tell to developer if you saw this error message!!! :(  "
 
 typedef int8_t i8;

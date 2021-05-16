@@ -1,4 +1,11 @@
-#include "main.h"
+#include <iostream>
+
+#include "Utils.h"
+
+#include "Object.h"
+#include "Token.h"
+#include "AST.h"
+
 
 std::string Object::ToString() const
 {
