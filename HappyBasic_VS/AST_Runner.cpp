@@ -36,7 +36,7 @@ namespace AST_Runner {
         obj->type = Object::Float;
       }
     }
-    else if( L.type != R.type ) {
+    else {
       for( auto&& obj : { &L, &R } ) {
         if( obj->type == Object::Char )
           obj->v_int = obj->v_char;
