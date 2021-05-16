@@ -327,13 +327,6 @@ namespace AST_Runner {
         return obj.list[sub.v_int];
       }
 
-      //case AST::Expr::Param:
-      //{
-      //  auto& p = ast->token->obj;
-      //  p.var_ptr = &p;
-      //  return p;
-      //}
-
       case AST::Expr::Assign:
       {
         auto dest = Expr(ast->left);
