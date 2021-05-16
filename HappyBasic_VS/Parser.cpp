@@ -156,7 +156,7 @@ namespace ParserCore {
           auto ast = new AST::Callfunc;
           ast->token = tok;
 
-          // 不完全である場合、使用不可能
+          // 不完全である場合、使用不可能 //
           if( cur_struct && cur_struct->name == tok->str ) {
             Error(*tok, "cannot use incomplete struct");
           }
