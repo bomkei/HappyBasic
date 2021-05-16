@@ -1,5 +1,11 @@
+#include <iostream>
+#include <fstream>
 #include <memory>
-#include "main.h"
+
+#include "Utils.h"
+
+#include "Options.h"
+#include "Parser.h"
 
 std::string Options::FileName;
 bool Options::ViewNodes;

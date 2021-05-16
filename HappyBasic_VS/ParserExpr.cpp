@@ -1,35 +1,42 @@
-#include "main.h"
+#include <iostream>
+#include <string>
+#include <vector>
 
-ParserCore::ParserCore(
-  Token*& topToken,
-  std::vector<Object>& variables,
-  std::vector<AST::Function*>& functions,
-  std::vector<AST::Struct*>& structs
-)
-  : token(topToken)
-  , variables(variables)
-  , functions(functions)
-  , structs(structs)
-{
+#include "Object.h"
+#include "Token.h"
+#include "Parser.h"
 
+#include "AST.h"
+
+namespace {
+  Token*& token;
+  Token* csmtok = nullptr;
+
+  bool in_function = false;
+  std::vector<AST::Expr*>* func_args = nullptr;
+
+  bool in_struct = false;
+  AST::Struct* cur_struct = nullptr;
+
+  bool DontPlace_v = false;
 }
 
-Token& ParserCore::get_tok()
+Token& get_tok()
 {
   return *token;
 }
 
-bool ParserCore::check()
+bool check()
 {
   return token->type != Token::End;
 }
 
-bool ParserCore::match(std::string const& str)
+bool match(std::string const& str)
 {
   return token->str == str;
 }
 
-bool ParserCore::consume(std::string const& str)
+bool consume(std::string const& str)
 {
   if( token->str == str )
   {
@@ -41,18 +48,18 @@ bool ParserCore::consume(std::string const& str)
   return false;
 }
 
-void ParserCore::expect(std::string const& str)
+void expect(std::string const& str)
 {
   if( !consume(str) )
     PrgCtx::Error(*token, "expect '" + str + "'");
 }
 
-void ParserCore::next()
+void next()
 {
   token = token->next;
 }
 
-int ParserCore::find_var(std::string const& name)
+int find_var(std::string const& name)
 {
   for( int i = 0; i < variables.size(); i++ )
     if( variables[i].name == name )
@@ -61,7 +68,7 @@ int ParserCore::find_var(std::string const& name)
   return -1;
 }
 
-AST::Expr* ParserCore::Primary()
+AST::Expr* Primary()
 {
   if( consume("(") )
   {
@@ -191,7 +198,7 @@ AST::Expr* ParserCore::Primary()
   PrgCtx::Error(*tok, "syntax error");
 }
 
-AST::Expr* ParserCore::IndexRef()
+AST::Expr* IndexRef()
 {
   auto x = Primary();
 
@@ -209,7 +216,7 @@ AST::Expr* ParserCore::IndexRef()
   return x;
 }
 
-AST::Expr* ParserCore::MemberAccess() {
+AST::Expr* MemberAccess() {
   auto x = IndexRef();
 
   DontPlace_v = true;
@@ -225,7 +232,7 @@ AST::Expr* ParserCore::MemberAccess() {
   return x;
 }
 
-AST::Expr* ParserCore::Unary()
+AST::Expr* Unary()
 {
   if( consume("-") )
     return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), MemberAccess(), csmtok);
@@ -242,7 +249,7 @@ AST::Expr* ParserCore::Unary()
   return MemberAccess();
 }
 
-AST::Expr* ParserCore::Mul()
+AST::Expr* Mul()
 {
   auto x = Unary();
 
@@ -261,7 +268,7 @@ AST::Expr* ParserCore::Mul()
   return x;
 }
 
-AST::Expr* ParserCore::Add()
+AST::Expr* Add()
 {
   auto x = Mul();
 
@@ -278,7 +285,7 @@ AST::Expr* ParserCore::Add()
   return x;
 }
 
-AST::Expr* ParserCore::Shift()
+AST::Expr* Shift()
 {
   auto x = Add();
 
@@ -295,7 +302,7 @@ AST::Expr* ParserCore::Shift()
   return x;
 }
 
-AST::Expr* ParserCore::Compare() {
+AST::Expr* Compare() {
   auto x = Shift();
 
   while( check() ) {
@@ -314,7 +321,7 @@ AST::Expr* ParserCore::Compare() {
   return x;
 }
 
-AST::Expr* ParserCore::Equal() {
+AST::Expr* Equal() {
   auto x = Compare();
 
   while( check() ) {
@@ -328,7 +335,7 @@ AST::Expr* ParserCore::Equal() {
   return x;
 }
 
-AST::Expr* ParserCore::LogAND() {
+AST::Expr* LogAND() {
   auto x = Equal();
 
   while( check() ) {
@@ -340,7 +347,7 @@ AST::Expr* ParserCore::LogAND() {
   return x;
 }
 
-AST::Expr* ParserCore::LogOR() {
+AST::Expr* LogOR() {
   auto x = LogAND();
 
   while( check() ) {
@@ -352,7 +359,7 @@ AST::Expr* ParserCore::LogOR() {
   return x;
 }
 
-AST::Expr* ParserCore::Assign() {
+AST::Expr* Assign() {
   auto x = LogOR();
   auto tk = &get_tok();
 
@@ -376,7 +383,7 @@ AST::Expr* ParserCore::Assign() {
 
 void Debug(AST::Expr*);
 
-AST::Expr* ParserCore::Expr()
+AST::Expr* Expr()
 {
   auto expr = Assign();
 
@@ -385,7 +392,7 @@ AST::Expr* ParserCore::Expr()
   return expr;
 }
 
-AST::Block* ParserCore::Parse()
+AST::Block* Parse()
 {
   auto ast = new AST::Block;
 

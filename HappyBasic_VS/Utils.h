@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include "common.h"
 
 #if _DEBUG_BUILD_
 #define  alart               fprintf(stderr,"\t%s:%d\n",get_file_name(__FILE__),__LINE__)
