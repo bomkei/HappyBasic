@@ -13,69 +13,72 @@
 
 using namespace Global;
 
-namespace {
-  Token*& token;
-  Token* csmtok = nullptr;
+namespace ParserCore {
+  namespace {
+    Token* token;
+    Token* csmtok = nullptr;
 
-  bool in_function = false;
-  std::vector<AST::Expr*>* func_args = nullptr;
+    bool in_function = false;
+    std::vector<AST::Expr*>* func_args = nullptr;
 
-  bool in_struct = false;
-  AST::Struct* cur_struct = nullptr;
+    bool in_struct = false;
+    AST::Struct* cur_struct = nullptr;
 
-  bool DontPlace_v = false;
+    bool DontPlace_v = false;
 
 
-  Token& get_tok()
-  {
-    return *token;
-  }
-
-  bool check()
-  {
-    return token->type != Token::End;
-  }
-
-  bool match(std::string const& str)
-  {
-    return token->str == str;
-  }
-
-  bool consume(std::string const& str)
-  {
-    if( token->str == str )
+    Token& get_tok()
     {
-      csmtok = token;
-      next();
-      return true;
+      return *token;
     }
 
-    return false;
+    bool check()
+    {
+      return token->type != Token::End;
+    }
+
+    void next()
+    {
+      token = token->next;
+    }
+
+    bool match(std::string const& str)
+    {
+      return token->str == str;
+    }
+
+    bool consume(std::string const& str)
+    {
+      if( token->str == str )
+      {
+        csmtok = token;
+        next();
+        return true;
+      }
+
+      return false;
+    }
+
+    void expect(std::string const& str)
+    {
+      if( !consume(str) )
+        Error(*token, "expect '" + str + "'");
+    }
+
+    int find_var(std::string const& name)
+    {
+      for( int i = 0; i < variables.size(); i++ )
+        if( variables[i].name == name )
+          return i;
+
+      return -1;
+    }
   }
 
-  void expect(std::string const& str)
-  {
-    if( !consume(str) )
-      Error(*token, "expect '" + str + "'");
+  void Init(Token* tok) {
+    token = tok;
   }
 
-  void next()
-  {
-    token = token->next;
-  }
-
-  int find_var(std::string const& name)
-  {
-    for( int i = 0; i < variables.size(); i++ )
-      if( variables[i].name == name )
-        return i;
-
-    return -1;
-  }
-
-}
-
-namespace ParserCore {
   AST::Expr* Primary()
   {
     if( consume("(") )
@@ -400,7 +403,7 @@ namespace ParserCore {
     return expr;
   }
 
-  AST::Stmt* ParserCore::Statements() {
+  AST::Stmt* Statements() {
     //
     // ƒuƒƒbƒN•¶
     if( consume("{") ) {

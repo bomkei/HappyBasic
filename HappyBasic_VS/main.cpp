@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -9,13 +10,11 @@
 #include "AST.h"
 
 #include "Parser.h"
+#include "AST_Runner.h"
+
 #include "Global.h"
 
 using namespace Global;
-
-std::string Options::FileName;
-bool Options::ViewNodes;
-bool Options::IsSafety;
 
 std::string readfile(std::string path) {
   static auto is_empty = [] (std::string const& str) {
@@ -86,37 +85,9 @@ std::string readfile(std::string path) {
 }
 
 int main(int argc, char** argv) {
-  alart;
   srand((int)time(nullptr));
 
-  alart;
-  std::unique_ptr<ProgramContext> context;
-  context.reset(new ProgramContext);
 
-  alart;
-  context->source = readfile("C:/Users/mrzkr/Desktop/test.txt");
-
-  alart;
-  context->token = Tokenize(context->source);
-
-  alart;
-  auto parser = ParserCore(
-    context->token,
-    context->variables,
-    context->functions,
-    context->structs
-  );
-
-  alart;
-  auto ast = parser.Parse();
-
-  alart;
-  auto obj = AST_Runner::Stmt(ast);
-
-  std::cout << "variables:\n";
-  for( auto&& i : context->variables ) {
-    std::cout << " " << i.name << ": " << i.ToString() << '\n';
-  }
 
 
 }

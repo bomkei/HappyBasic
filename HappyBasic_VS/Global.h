@@ -1,5 +1,10 @@
 #pragma once
 
+namespace AST {
+  class Function;
+  class Struct;
+}
+
 namespace Global {
   extern std::string source;
 
