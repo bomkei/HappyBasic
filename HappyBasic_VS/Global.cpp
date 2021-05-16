@@ -10,11 +10,13 @@
 
 #include "Global.h"
 
-std::string source;
+namespace Global {
+  std::string source;
 
-std::vector<Object> variables;
-std::vector<AST::Function*> functions;
-std::vector<AST::Struct*> structs;
+  std::vector<Object> variables;
+  std::vector<AST::Function*> functions;
+  std::vector<AST::Struct*> structs;
+}
 
 void Error(Token const& tok, std::string const& msg) {
   size_t
