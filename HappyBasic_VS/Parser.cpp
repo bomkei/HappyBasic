@@ -680,4 +680,3 @@ namespace ParserCore {
     return ast;
   }
 }
-

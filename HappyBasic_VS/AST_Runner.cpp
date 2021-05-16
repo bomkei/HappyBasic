@@ -219,10 +219,13 @@ namespace AST_Runner {
 
   Object UserFunc(AST::Callfunc* fun) {
 
+    return { };
   }
 
   Object BuiltInMember(AST::Expr* expr) {
     
+
+    return { };
   }
 
   Object Expr(AST::Expr* ast)

@@ -9,6 +9,7 @@
 #include "Token.h"
 #include "AST.h"
 
+#include "Tokenizer.h"
 #include "Parser.h"
 #include "AST_Runner.h"
 
@@ -87,7 +88,13 @@ std::string readfile(std::string path) {
 int main(int argc, char** argv) {
   srand((int)time(nullptr));
 
+  auto source = readfile("C:/Users/mrzkr/Desktop/test.txt");
 
+  auto token = Tokenize(source);
 
+  ParserCore::Init(token);
+  auto ast = ParserCore::Parse();
+
+  auto obj = AST_Runner::Stmt(ast);
 
 }

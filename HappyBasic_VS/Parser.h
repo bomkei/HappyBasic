@@ -1,6 +1,7 @@
 #pragma once
 
 namespace ParserCore {
+  void Init(Token*);
 
   AST::Expr* Primary();
   AST::Expr* IndexRef();
@@ -18,6 +19,4 @@ namespace ParserCore {
 
   AST::Stmt* Statements();
   AST::Block* Parse();
-
 }
-
