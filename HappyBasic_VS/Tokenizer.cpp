@@ -1,4 +1,12 @@
-#include "main.h"
+#include <string>
+#include <vector>
+
+#include "Utils.h"
+#include "Object.h"
+#include "Token.h"
+#include "Global.h"
+
+using namespace Global;
 
 static auto op_tokens =
 {
@@ -132,7 +140,7 @@ Token* Tokenize(std::string const& source)
 
       next();
       if( peek() != '\'' )
-        PrgCtx::Error(tok, "unclosed char literal");
+        Error(tok, "unclosed char literal");
 
       next();
     }
@@ -181,7 +189,7 @@ Token* Tokenize(std::string const& source)
 
       if( !hit )
       {
-        PrgCtx::Error(tok, "unknown token");
+        Error(tok, "unknown token");
       }
     }
 

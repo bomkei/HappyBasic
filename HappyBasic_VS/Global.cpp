@@ -18,7 +18,15 @@ namespace Global {
   std::vector<AST::Struct*> structs;
 }
 
+namespace Options {
+  std::string FileName;
+  bool ViewNodes;
+  bool IsSafety;
+}
+
 void Error(Token const& tok, std::string const& msg) {
+  using namespace Global;
+
   size_t
     line = 1,
     begin = 0,

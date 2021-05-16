@@ -8,6 +8,12 @@ namespace Global {
   extern std::vector<AST::Struct*> structs;
 }
 
+namespace Options {
+  extern std::string FileName;
+  extern bool ViewNodes;
+  extern bool IsSafety;
+}
+
 [[noreturn]]
 void Error(Token const&, std::string const&);
 

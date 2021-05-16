@@ -1,11 +1,17 @@
 #include <iostream>
-#include <fstream>
-#include <memory>
+#include <string>
+#include <vector>
 
 #include "Utils.h"
 
-#include "Options.h"
+#include "Object.h"
+#include "Token.h"
+#include "AST.h"
+
 #include "Parser.h"
+#include "Global.h"
+
+using namespace Global;
 
 std::string Options::FileName;
 bool Options::ViewNodes;
