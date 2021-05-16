@@ -349,11 +349,13 @@ namespace AST_Runner {
         auto& name = ast->left->token->str;
         auto find = find_vector(structs, [] (auto s, auto n) { return s->name == n; }, name);
 
-        if( find == -1 ) {
+        if( find == -1 && !((AST::Callfunc*)ast->left)->st_ptr ) {
           Error(*ast->left->token, "this is doesnt exists");
         }
 
         auto ptr = structs[find];
+        if( ((AST::Callfunc*)ast->left)->st_ptr )
+          ptr = ((AST::Callfunc*)ast->left)->st_ptr;
 
         Object ret;
         ret.type = Object::StructObj;

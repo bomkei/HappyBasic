@@ -109,6 +109,7 @@ public:
   {
 public:
     std::vector<Expr*> args;
+    AST::Struct* st_ptr = nullptr;
 
     Callfunc()
     {

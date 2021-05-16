@@ -146,18 +146,34 @@ namespace ParserCore {
       // 識別子
       case Token::Ident:
       {
+        AST::Struct* st_ptr = nullptr;
+
+        auto find = find_vector(structs, [] (auto x, auto y) { return x->name == y; }, get_tok().str);
+        if( find != -1 ) st_ptr = structs[find];
+
         next();
+        
+        while( consume("::") ) {
+          if( !st_ptr )
+            Error(get_tok(), "no");
 
-        //
-        // スコープ解決演算子
-        if( consume("::") ) {
+          auto find_s = find_vector(st_ptr->member_list,
+            [] (auto x, auto y) { return x->type == AST::Stmt::Struct && ((AST::Struct*)x)->name == y; }, get_tok().str);
 
+          if( find_s != -1 )
+            st_ptr = (AST::Struct*)st_ptr->member_list[find_s];
+          else
+            Error(get_tok(), "huh");
+
+          next();
         }
+
 
         // 関数呼び出し
         if( consume("(") ) {
           auto ast = new AST::Callfunc;
           ast->token = tok;
+          ast->st_ptr = st_ptr;
 
           // 不完全である場合、使用不可能 //
           if( cur_struct && cur_struct->name == tok->str ) {
@@ -635,6 +651,8 @@ namespace ParserCore {
       cur_struct = oldptr;
       in_struct = oldflag;
       structs.emplace_back(ast);
+
+      printf("  %p: %s\n", ast, ast->name.c_str());
 
       return ast;
     }
