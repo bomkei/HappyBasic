@@ -87,7 +87,13 @@ std::string readfile(std::string path) {
 int main(int argc, char** argv) {
   srand((int)time(nullptr));
 
-  auto source = readfile("C:/Users/mrzkr/Desktop/test.txt");
+  auto source = readfile(
+#ifdef _MSC_VER
+    "C:/Users/mrzkr/Desktop/test.txt"
+#else
+    "test.txt"
+#endif
+  );
 
   auto token = Tokenize(source);
 
