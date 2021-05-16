@@ -87,11 +87,29 @@ std::string readfile(std::string path) {
 int main(int argc, char** argv) {
   srand((int)time(nullptr));
 
+  auto args = Utils::ToVector<std::string>(argc - 1, argv + 1);
+
+  for( auto&& i : args ) {
+    if( i == "-safety" ) {
+      Options::IsSafety = true;
+    }
+    else if( i == "-view_ast" ) {
+      Options::ViewNodes = true;
+    }
+    else if( Options::FileName.empty() ) {
+      Options::FileName = i;
+    }
+    else {
+      std::cout << "unknown arg";
+      return 1;
+    }
+  }
+
   auto source = readfile(
-#ifdef _MSC_VER
-    "C:/Users/mrzkr/Desktop/test.txt"
+#ifndef _MSC_VER
+    Options::FileName
 #else
-    "test.txt"
+    "C:/Users/mrzkr/Desktop/test.txt"
 #endif
   );
 
