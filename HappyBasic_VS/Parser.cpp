@@ -625,8 +625,8 @@ namespace ParserCore {
       auto ast = new AST::Struct;
       ast->name = name_tok->str;
 
-      alart;
-      debugmsg("%s", ast->name.c_str());
+      if( !in_struct )
+        structs.emplace_back(ast);
 
       auto oldptr = cur_struct;
       auto oldflag = in_struct;
@@ -650,9 +650,6 @@ namespace ParserCore {
 
       cur_struct = oldptr;
       in_struct = oldflag;
-      structs.emplace_back(ast);
-
-      printf("  %p: %s\n", ast, ast->name.c_str());
 
       return ast;
     }
@@ -666,6 +663,9 @@ namespace ParserCore {
       auto ast = new AST::Struct;
       ast->name = name_tok->str;
       ast->token = name_tok;
+
+      if( !in_struct )
+        structs.emplace_back(ast);
 
       auto oldptr = cur_struct;
       auto oldflag = in_struct;
@@ -694,7 +694,6 @@ namespace ParserCore {
       cur_struct = oldptr;
       in_struct = oldflag;
       in_class = oldflag2;
-      structs.emplace_back(ast);
 
       return ast;
     }
