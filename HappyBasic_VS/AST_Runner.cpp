@@ -121,7 +121,7 @@ namespace AST_Runner {
 
       case AST::Expr::New: {
         if( ast->left->type != AST::Expr::Callfunc ) {
-          PrgCtx::Error(*ast->token, "9201u20");
+          PrgCtx::Error(*ast->token, "expected call func after this token");
         }
 
         auto& name = ast->left->token->str;
@@ -140,9 +140,6 @@ namespace AST_Runner {
         for( auto&& i : ptr->member_list ) {
           switch( i->type ) {
             case AST::Stmt::Var: {
-              /*auto var = Expr(i->expr->right);
-              var.name = i->expr->left->token->str;
-              ret.list.emplace_back(var);*/
               auto vv = Expr(i->expr);
               vv.name = i->expr->left->token->str;
               ret.list.emplace_back(vv);
@@ -154,7 +151,8 @@ namespace AST_Runner {
         return ret;
       }
 
-      case AST::Expr::MemberAccess: {
+      case AST::Expr::MemberAccess:
+      {
         auto obj = Expr(ast->left);
 
         if( obj.type != Object::StructObj ) {
@@ -173,7 +171,7 @@ namespace AST_Runner {
             return i;
         }
 
-        PrgCtx::Error(*ast->right->token, "");
+        PrgCtx::Error(*ast->right->token, "dont have the member '" + name + "'");
       }
 
       case AST::Expr::MemberVariable: {
