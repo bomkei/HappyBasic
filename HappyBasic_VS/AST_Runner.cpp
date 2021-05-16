@@ -1,4 +1,19 @@
-#include "main.h"
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "Utils.h"
+
+#include "Object.h"
+#include "Token.h"
+#include "AST.h"
+
+#include "Parser.h"
+#include "AST_Runner.h"
+
+#include "Global.h"
+
+using namespace Global;
 
 namespace AST_Runner {
   size_t CallCount;
@@ -31,6 +46,181 @@ namespace AST_Runner {
     }
   }
 
+  Object Function(AST::Callfunc* ast) {
+    auto& name = ast->token->str;
+    std::vector<Object> args;
+    Object ret;
+
+    for( auto&& i : ast->args ) {
+      args.emplace_back(Expr(i));
+    }
+
+    //
+    // print
+    if( name == "print" ) {
+      for( auto&& i : args )
+        std::cout << i.ToString();
+
+      std::cout << '\n';
+    }
+
+    //
+    // range
+    else if( name == "range" ) {
+      ret.type = Object::Array;
+
+      switch( args.size() ) {
+        case 1:
+          if( args[0].type != Object::Int )
+            Error(*(ast->args[0]->token), "must be a integer");
+
+          for( int i = 0; i < args[0].v_int; i++ ) {
+            Object obj;
+            obj.v_int = i;
+            ret.list.emplace_back(obj);
+          }
+
+          break;
+
+        case 2:
+          if( args[0].type != Object::Int )
+            Error(*(ast->args[0]->token), "must be a integer");
+
+          if( args[1].type != Object::Int )
+            Error(*(ast->args[1]->token), "must be a integer");
+
+          for( int i = args[0].v_int; i < args[1].v_int; i++ ) {
+            Object obj;
+            obj.v_int = i;
+            ret.list.emplace_back(obj);
+          }
+
+          break;
+
+        default:
+          Error(*ast->token, "no matching args");
+      }
+    }
+
+    //
+    // length
+    else if( name == "length" ) {
+      if( args.size() != 1 )
+        Error(*ast->token, "no matching args");
+
+      if( args[0].type != Object::Array )
+        Error(*(ast->args[0]->token), "this is not array");
+
+      ret.v_int = args[0].list.size();
+    }
+
+    //
+    // random
+    else if( name == "random" ) {
+      for( auto&& i : args )
+        if( i.type != Object::Int )
+          Error(*ast->token, "only use integer in args of random()");
+
+      auto begin = args.size() > 1 ? args[0].v_int : 0;
+      auto end = args[args.size() > 1].v_int;
+
+      if( begin > end )
+        Error(*ast->args[0]->token, "begin > end");
+
+      if( begin == end )
+        ret.v_int = begin;
+      else
+        ret.v_int = Utils::Random(begin, end);
+    }
+
+    //
+    // randomstr
+    else if( name == "randomstr" ) {
+      if( args.size() > 1 )
+        Error(*ast->token, "no matching args");
+
+      auto len = args.size() ? args[0].v_int : 30;
+
+      auto str = Utils::GetRandomStr<std::string>(len);
+
+      ret.type = Object::Array;
+
+      for( auto&& c : str ) {
+        Object ch;
+        ch.type = Object::Char;
+        ch.v_char = c;
+        ret.list.emplace_back(ch);
+      }
+    }
+
+    //
+    // int
+    else if( name == "int" ) {
+      if( args.size() != 1 )
+        Error(*ast->token, "no matching args");
+
+      switch( args[0].type ) {
+        case Object::Int:
+          break;
+
+        case Object::Float:
+          args[0].v_int = args[0].v_float;
+          break;
+
+        case Object::Char:
+          args[0].v_int = args[0].v_char;
+          break;
+
+        case Object::Array:
+        {
+          try {
+            auto str = args[0].ToString();
+            args[0].v_int = std::stoi(str, nullptr, str.find("0x") == std::string::npos ? 10 : 16);
+          }
+          catch( ... ) {
+            Error(*ast->args[0]->token, "cannot cast to integer");
+          }
+        }
+      }
+
+      args[0].type = Object::Int;
+      ret = args[0];
+    }
+
+    //
+    // to_string
+    else if( name == "to_string" ) {
+      if( args.size() != 1 )
+        Error(*ast->token, "no matching args");
+
+      try {
+        auto str = args[0].ToString();
+
+        ret.type = Object::Array;
+
+        for( auto&& c : str ) {
+          Object ch;
+          ch.type = Object::Char;
+          ch.v_char = c;
+          ret.list.emplace_back(ch);
+        }
+      }
+      catch( ... ) {
+        Error(*ast->args[0]->token, SERIOUS_ERROR);
+      }
+    }
+
+    else {
+      return AST_Runner::UserFunc(ast);
+    }
+
+    return ret;
+  }
+
+  Object UserFunc(AST::Callfunc* fun) {
+
+  }
+
   Object BuiltInMember(AST::Expr* expr) {
     
   }
@@ -53,10 +243,10 @@ namespace AST_Runner {
 
       case AST::Expr::Variable: {
         if( ast->varIndex == -1 ) {
-          PrgCtx::Error(*ast->token, SERIOUS_ERROR);
+          Error(*ast->token, SERIOUS_ERROR);
         }
 
-        auto& var = PrgCtx::Instance->variables[ast->varIndex];
+        auto& var = variables[ast->varIndex];
         var.var_ptr = &var;
         return var;
       }
@@ -83,13 +273,13 @@ namespace AST_Runner {
         auto sub = Expr(ast->right);
 
         if( obj.type != Object::Array )
-          PrgCtx::Error(*ast->left->token, "this is not array");
+          Error(*ast->left->token, "this is not array");
 
         if( sub.type != Object::Int )
-          PrgCtx::Error(*ast->right->token, "subscript type mismatch");
+          Error(*ast->right->token, "subscript type mismatch");
 
         if( sub.v_int < 0 || sub.v_int >= obj.list.size() )
-          PrgCtx::Error(*ast->right->token, "subscript out of range");
+          Error(*ast->right->token, "subscript out of range");
 
         return obj.list[sub.v_int];
       }
@@ -107,7 +297,7 @@ namespace AST_Runner {
         auto src = Expr(ast->right);
 
         if( !dest.var_ptr )
-          PrgCtx::Error(*ast->token, "cannot assign to rvalue");
+          Error(*ast->token, "cannot assign to rvalue");
 
         *dest.var_ptr = src;
         dest.var_ptr->name = dest.name;
@@ -117,17 +307,17 @@ namespace AST_Runner {
 
       case AST::Expr::New: {
         if( ast->left->type != AST::Expr::Callfunc ) {
-          PrgCtx::Error(*ast->token, "expected call func after this token");
+          Error(*ast->token, "expected call func after this token");
         }
 
         auto& name = ast->left->token->str;
-        auto find = find_vector(PrgCtx::Instance->structs, [] (auto s, auto n) { return s->name == n; }, name);
+        auto find = find_vector(structs, [] (auto s, auto n) { return s->name == n; }, name);
 
         if( find == -1 ) {
-          PrgCtx::Error(*ast->left->token, "this is doesnt exists");
+          Error(*ast->left->token, "this is doesnt exists");
         }
 
-        auto ptr = PrgCtx::Instance->structs[find];
+        auto ptr = structs[find];
 
         Object ret;
         ret.type = Object::StructObj;
@@ -153,11 +343,11 @@ namespace AST_Runner {
 
         if( obj.type != Object::StructObj ) {
           // TODO: BuiltInMember
-          PrgCtx::Error(*ast->token, "not struct");
+          Error(*ast->token, "not struct");
         }
 
         if( ast->right->type != AST::Expr::Variable ) {
-          PrgCtx::Error(*ast->right->token, "syntax error");
+          Error(*ast->right->token, "syntax error");
         }
 
         auto& name = ast->right->token->str;
@@ -167,7 +357,7 @@ namespace AST_Runner {
             return i;
         }
 
-        PrgCtx::Error(*ast->right->token, "dont have the member '" + name + "'");
+        Error(*ast->right->token, "dont have the member '" + name + "'");
       }
 
       case AST::Expr::MemberVariable: {
@@ -212,7 +402,7 @@ namespace AST_Runner {
               case Object::Int: left.v_int -= right.v_int; break;
               case Object::Char: left.v_char -= right.v_char; break;
               case Object::Float: left.v_float -= right.v_float; break;
-              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
+              case Object::Array: Error(*ast->token, "type mismatch");
             }
             break;
 
@@ -223,7 +413,7 @@ namespace AST_Runner {
                 std::swap(left, right);
 
               if( right.type != Object::Int )
-                PrgCtx::Error(*ast->token, "type mismatch");
+                Error(*ast->token, "type mismatch");
               
               auto list = left.list;
 
@@ -252,25 +442,25 @@ namespace AST_Runner {
           case AST::Expr::Mod:
             if( !right.Eval() )
             {
-              PrgCtx::Error(*ast->token, "cant division with zero");
+              Error(*ast->token, "cant division with zero");
             }
             else if( !left.Eval() )
               break;
             else if( right.type != Object::Int )
-              PrgCtx::Error(*ast->token, "only can use integer at mod operator");
+              Error(*ast->token, "only can use integer at mod operator");
 
             switch( left.type ) {
               case Object::Int: left.v_int /= right.v_int; break;
               case Object::Char: left.v_char /= right.v_char; break;
-              case Object::Float: PrgCtx::Error(*ast->token, "cannot mod float");
-              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
+              case Object::Float: Error(*ast->token, "cannot mod float");
+              case Object::Array: Error(*ast->token, "type mismatch");
             }
             break;
             
           case AST::Expr::Div:
             if( !right.Eval() )
             {
-              PrgCtx::Error(*ast->token, "cant division with zero");
+              Error(*ast->token, "cant division with zero");
             }
             else if( !left.Eval() )
               break;
@@ -279,7 +469,7 @@ namespace AST_Runner {
               case Object::Int: left.v_int /= right.v_int; break;
               case Object::Char: left.v_char /= right.v_char; break;
               case Object::Float: left.v_float /= right.v_float; break;
-              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
+              case Object::Array: Error(*ast->token, "type mismatch");
             }
             break;
 
@@ -287,8 +477,8 @@ namespace AST_Runner {
             switch( left.type ) {
               case Object::Int: left.v_int <<= right.v_int; break;
               case Object::Char: left.v_char <<= right.v_char; break;
-              case Object::Float: PrgCtx::Error(*ast->token, "cannot shift float-type object");
-              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
+              case Object::Float: Error(*ast->token, "cannot shift float-type object");
+              case Object::Array: Error(*ast->token, "type mismatch");
             }
             break;
 
@@ -297,7 +487,7 @@ namespace AST_Runner {
               case Object::Int: left.v_int = left.v_int > right.v_int; break;
               case Object::Char: left.v_int = left.v_char > right.v_char; break;
               case Object::Float: left.v_int = left.v_float > right.v_float; break;
-              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
+              case Object::Array: Error(*ast->token, "type mismatch");
             }
             left.type = Object::Int;
             break;
@@ -307,7 +497,7 @@ namespace AST_Runner {
               case Object::Int: left.v_int = left.v_int >= right.v_int; break;
               case Object::Char: left.v_int = left.v_char >= right.v_char; break;
               case Object::Float: left.v_int = left.v_float >= right.v_float; break;
-              case Object::Array: PrgCtx::Error(*ast->token, "type mismatch");
+              case Object::Array: Error(*ast->token, "type mismatch");
             }
             left.type = Object::Int;
             break;
@@ -368,21 +558,21 @@ namespace AST_Runner {
 
       case AST::Stmt::Break:
         if( !LoopBreaked )
-          PrgCtx::Error(*ast->token, "cannot use 'break' here");
+          Error(*ast->token, "cannot use 'break' here");
 
         *LoopBreaked = true;
         break;
 
       case AST::Stmt::Continue:
         if( !LoopContinued )
-          PrgCtx::Error(*ast->token, "cannot use 'continue' here");
+          Error(*ast->token, "cannot use 'continue' here");
 
         *LoopContinued = true;
         break;
 
       case AST::Stmt::Return:
         if( !ReturnValue )
-          PrgCtx::Error(*ast->token, "cannot use 'return' here");
+          Error(*ast->token, "cannot use 'return' here");
 
         *FuncReturned = true;
         return *ReturnValue = Expr(ast->expr);
@@ -422,10 +612,10 @@ namespace AST_Runner {
           auto list = Expr(((AST::For*)ast)->list);
 
           if( !it.var_ptr )
-            PrgCtx::Error(*(((AST::For*)ast)->iterator->token), "this isnt a lvalue");
+            Error(*(((AST::For*)ast)->iterator->token), "this isnt a lvalue");
 
           if( list.type != Object::Array )
-            PrgCtx::Error(*ast->token, "cannot iterate in not an array type object");
+            Error(*ast->token, "cannot iterate in not an array type object");
 
           if( index >= list.list.size() )
             break;

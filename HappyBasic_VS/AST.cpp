@@ -1,4 +1,14 @@
-#include "main.h"
+#include <string>
+#include <vector>
+
+#include "Utils.h"
+
+#include "Object.h"
+#include "Token.h"
+#include "AST.h"
+
+#include "Global.h"
+
 
 AST::Expr::Expr(Type type)
   : type(type)
@@ -120,7 +130,7 @@ std::string AST::Expr::ToString() const
     {
       if( !left || !right )
       {
-        PrgCtx::Error(*token, "ERROR");
+        Error(*token, "ERROR");
       }
 
       auto left = this->left->ToString();

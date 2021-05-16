@@ -1,5 +1,13 @@
-#include "main.h"
-#include <ostream>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "Utils.h"
+
+#include "Object.h"
+#include "Token.h"
+#include "AST.h"
+
 
 std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
 {
@@ -12,11 +20,11 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
   {
     ss << "(";
     ss << *expr.left;
-    ss << (expr.type == AST::Expr::Add    ? "+"
-            : expr.type == AST::Expr::Sub ? "-"
-            : expr.type == AST::Expr::Mul ? "*"
-            : expr.type == AST::Expr::Div ? "/"
-                                          : "?");
+    ss << (expr.type == AST::Expr::Add ? "+"
+      : expr.type == AST::Expr::Sub ? "-"
+      : expr.type == AST::Expr::Mul ? "*"
+      : expr.type == AST::Expr::Div ? "/"
+      : "?");
     ss << *expr.right;
     ss << ")";
   }
@@ -32,9 +40,9 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
 
     switch( token->type )
     {
-        //case Token::Operator:
-        //  ss << "{" << token->str << "}";
-        //  break;
+      //case Token::Operator:
+      //  ss << "{" << token->str << "}";
+      //  break;
 
       case Token::Ident:
         ss << token->str << "'";
@@ -71,6 +79,7 @@ std::ostream& operator<<(std::ostream& ss, const AST::Expr& expr)
   }
   return ss;
 }
+
 AST::Expr& AST::Expr::_oprator(Type type, AST::Expr& target)
 {
   if( Add <= this->type and this->type <= Div )
