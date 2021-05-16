@@ -3,6 +3,10 @@
 #include <string>
 #include <vector>
 
+#ifndef _MSC_VER
+#include <cstring>
+#endif
+
 #define _DEBUG_BUILD_ 1
 
 #define  SERIOUS_ERROR   "Please tell to developer if you saw this error message!!! :(  "

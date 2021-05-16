@@ -12,6 +12,7 @@
 *.url
 
 *.bat
+*.py
 
 *.user
 
