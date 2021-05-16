@@ -14,15 +14,21 @@ using namespace Global;
 namespace ParserCore {
   namespace {
     Token* token;
-    Token* csmtok = nullptr;
+    Token* csmtok;
 
-    bool in_function = false;
-    std::vector<AST::Expr*>* func_args = nullptr;
+    bool in_function;
+    AST::Function* cur_func;
 
-    bool in_struct = false;
-    AST::Struct* cur_struct = nullptr;
+    bool in_struct;
+    AST::Struct* cur_struct;
 
-    bool DontPlace_v = false;
+    //
+    // 変数の自動配置を制御するフラグです
+    // True になっている場合は、自動配置をしません
+    // これは主にメンバアクセスをパースしてるときに使用します
+    // 例: A.b.c という場合、A のみが 確認 & 自動配置 される
+    //     b と c はされない
+    bool DontPlace_v;
 
 
     Token& get_tok()
