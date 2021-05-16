@@ -13,7 +13,5 @@
 
 *.bat
 
-*.vcxproj
-*.filters
 *.user
 
