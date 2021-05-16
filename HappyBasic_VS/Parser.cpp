@@ -22,6 +22,9 @@ namespace ParserCore {
     bool in_struct;
     AST::Struct* cur_struct;
 
+    bool in_class;
+    AST::Expr* this_ptr;// first arg of member function
+
     //------------------------------------------------------------
     // 変数の自動配置を制御するフラグです
     // true になっている場合は、自動配置をしません
@@ -185,6 +188,27 @@ namespace ParserCore {
             }
         }
 
+        // クラス
+        if( in_class ) {
+          alart;
+
+          for( auto&& i : cur_struct->member_list ) {
+            if( i->type == AST::Stmt::Var &&
+              i->expr->left->token->str == tok->str ) {
+              
+              auto xx = new AST::Expr;
+              xx->type = AST::Expr::MemberAccess;
+              xx->left = this_ptr;
+              xx->right = i->expr->left;
+
+              std::cout << xx->ToString() << '\n';
+
+              alart;
+              return xx;
+            }
+          }
+        }
+
         // 構造体の中にいる場合、メンバーから探す
         if( in_struct ) {
           for( auto&& i : cur_struct->member_list ) {
@@ -217,7 +241,7 @@ namespace ParserCore {
 
     }
 
-    Error(*tok, "syntax error");
+    Error(*tok, "syntax error ,,,,");
   }
 
   AST::Expr* IndexRef()
@@ -525,9 +549,17 @@ namespace ParserCore {
     // ユーザー定義関数
     // def - end
     if( consume("def") ) {
+      auto oldptr = this_ptr;
+      
       auto ast = new AST::Function;
       ast->token = &get_tok();
       ast->name = ast->token->str;
+
+      if( in_class ) {
+        auto x = AST::Expr::ToLOBJ_FromName("this");
+        ast->args.emplace_back(x);
+        this_ptr = x;
+      }
 
       next();
       expect("(");
@@ -537,7 +569,7 @@ namespace ParserCore {
           auto& tk = get_tok();
 
           if( tk.type != Token::Ident )
-            Error(tk, "syntax error");
+            Error(tk, "syntax error 11");
 
           auto prm = new AST::Expr;
           prm->type = AST::Expr::Lv_obj;
@@ -565,13 +597,9 @@ namespace ParserCore {
 
       functions.emplace_back(ast);
 
+      this_ptr = oldptr;
+
       return ast;
-    }
-
-    if( consume("class") ) {
-      // TODO
-
-      return nullptr;
     }
 
     if( consume("struct") ) {
@@ -606,6 +634,48 @@ namespace ParserCore {
 
       cur_struct = oldptr;
       in_struct = oldflag;
+      structs.emplace_back(ast);
+
+      return ast;
+    }
+
+    //
+    // class
+    if( consume("class") ) {
+      auto tok = csmtok;
+      auto name_tok = &get_tok();
+
+      auto ast = new AST::Struct;
+      ast->name = name_tok->str;
+      ast->token = name_tok;
+
+      auto oldptr = cur_struct;
+      auto oldflag = in_struct;
+      auto oldflag2 = in_class;
+      cur_struct = ast;
+      in_struct = true;
+      in_class = true;
+
+      next();
+      expect("{");
+
+      while( !consume("}") ) {
+        auto tk = &get_tok();
+
+        if( tk->str != "var" &&
+          tk->str != "def" &&
+          tk->str != "struct" &&
+          tk->str != "class" ) {
+          Error(*tk, "dji9042j r9pw4");
+        }
+
+        auto member = Statements();
+        ast->member_list.emplace_back(member);
+      }
+
+      cur_struct = oldptr;
+      in_struct = oldflag;
+      in_class = oldflag2;
       structs.emplace_back(ast);
 
       return ast;

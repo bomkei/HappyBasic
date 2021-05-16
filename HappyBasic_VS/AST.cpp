@@ -81,6 +81,7 @@ std::string AST::Expr::ToString() const
     case Immidiate:
       return token->obj.ToString();
 
+    case Lv_obj:
     case Variable:
       return token->str;
 
@@ -122,6 +123,11 @@ std::string AST::Expr::ToString() const
 
     case Assign:
       return left->ToString() + " = " + right->ToString();
+
+    case MemberAccess:
+    {
+      return left->ToString() + "." + right->ToString();
+    }
 
     default:
     {

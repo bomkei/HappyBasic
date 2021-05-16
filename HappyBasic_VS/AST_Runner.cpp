@@ -382,7 +382,8 @@ namespace AST_Runner {
           Error(*ast->token, "not struct");
         }
 
-        if( ast->right->type != AST::Expr::Variable ) {
+        if( ast->right->type != AST::Expr::Variable &&
+          ast->right->type != AST::Expr::Lv_obj ) {
           Error(*ast->right->token, "syntax error");
         }
 
