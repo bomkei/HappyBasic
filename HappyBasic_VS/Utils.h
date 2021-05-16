@@ -39,7 +39,12 @@ int find_vector(std::vector<T>& vec, F compare, Args ...args) {
 template <class... Args>
 std::string format(std::string const& fmt, Args... args) {
   char buf[1000];
-  sprintf_s(buf, fmt.c_str(), args...);
+  #ifdef _MSC_VER
+    sprintf_s
+  #else
+    sprintf
+  #endif
+   (buf, fmt.c_str(), args...);
   return buf;
 }
 
