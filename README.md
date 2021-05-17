@@ -1,5 +1,6 @@
 # What is this trush?
 Shut up, this isnt a trush. Lol
+
 This is a easy and simple script language.
 Change the world. Rotation the world. *BIG REVOLUTION OF THE PROGRAMMING*. (all lie)
 
