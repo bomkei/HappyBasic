@@ -152,7 +152,8 @@ namespace ParserCore {
         if( find != -1 ) st_ptr = structs[find];
 
         next();
-        
+
+        // スコープ解決演算子
         while( consume("::") ) {
           if( !st_ptr )
             Error(get_tok(), "no");
