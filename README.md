@@ -1,56 +1,53 @@
-Easy and Simple BASIC language.
+# What is this trush?
+Shut up, this isnt a trush. Lol
+This is a easy and simple script language.
+Change the world. Rotation the world. *BIG REVOLUTION OF THE PROGRAMMING*. (all lie)
 
 join developers server !
 https://discord.gg/gjtxXcsFgx
 
-`Warning`
-**Now project is busy very much.
-Cannot use some statements, and master branch is have some debugs.
-Please wait until calm down.**
 
-example:
+**Warning:
+Now this project is very busy.
+Some statements is cannot use or not implemented, and has some debug codes on master branch.
+And, maybe including many bugs. Please wait until calm down.**
+
+
+## example
 ```
 def fibo(n) {
   if( n < 2 )
     return 1;
-  
+    
   return fibo(n - 2) + fibo(n - 1);
 }
 
 print(fibo(10));
 ```
 
-statements:
-```
-if
-for
-while
-switch
-do-while
-break
-continue
-return
-```
+# statements
 
-user-defined function
+### class (not implemented full)
 ```
-def MyFunc(a, b, c) {
-  return [a, b, c] * 2;
+class Yeah {
+  class Sub {
+    var a = 10;
+    var b = 5;
+  }
+  
+  var a = new Sub();
+  
+  def fun() {
+     print(a.a + a.b);
+  }
 }
-
-def AAA(...)
-  print(get_args());
 ```
 
-switch
+### switch
 ```
 switch( 1 + 2 ) {
-  case 0:
-    print("this language is trash");
-    break;
-  
   case 4 to 100:
-    print("Huh!?");
+    print("This language is a trash very much. LMAO");
     break;
   
   case 3:
@@ -59,42 +56,19 @@ switch( 1 + 2 ) {
 }
 ```
 
-struct
+### struct
 ```
 struct People {
   var name = "Steve";
-  var age = 15;
+  var age = 16;
   var width = 1000000;
-  var height = 3.14;
+  var height = 1;
 }
 ```
 
-class
+### statements in to a expression
 ```
-class MyClass {
-  class SubClass {
-    var A = 10;
-    var B = 20;
-    
-    def fun()
-      return A + B;
-  }
-  
-  var a = 0;
-  var b = 0;
-  var c = new SubClass();
-  
-  def yeah()
-    return a + b + c.A;
-}
-
-a = new MyClass();
-print(a.yeah())
+print( ({ for(i in range(10)) i*2; }) );
+ // 18
 ```
-
-statements in to a expression
-```
-print(({ for(i in range(10)) i*2; }));
-```
-this is say `18`
 
