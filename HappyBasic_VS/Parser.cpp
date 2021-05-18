@@ -205,39 +205,23 @@ namespace ParserCore {
             }
         }
 
-        // クラス
-        if( in_class ) {
-          alart;
-
-          for( auto&& i : cur_struct->member_list ) {
-            if( i->type == AST::Stmt::Var &&
-              i->expr->left->token->str == tok->str ) {
-              
-              auto xx = new AST::Expr;
-              xx->type = AST::Expr::MemberAccess;
-              xx->left = this_ptr;
-              xx->right = i->expr->left;
-
-              std::cout << xx->ToString() << '\n';
-
-              alart;
-              return xx;
-            }
-          }
-        }
-
-        // 構造体の中にいる場合、メンバーから探す
+        // クラス / 構造体
         if( in_struct ) {
           for( auto&& i : cur_struct->member_list ) {
             if( i->type == AST::Stmt::Var &&
               i->expr->left->token->str == tok->str ) {
 
-              alart;
-              std::cout
-                << "var '" + tok->str + "' is exists in struct '" + cur_struct->name + "'\n"
-                << "will return this from Primary()\n";
+              if( in_class ) { // クラス
+                auto xx = new AST::Expr;
+                xx->type = AST::Expr::MemberAccess;
+                xx->left = this_ptr;
+                xx->right = i->expr->left;
 
-              return i->expr->left;
+                return xx;
+              }
+              else { // 構造体
+                return i->expr->left;
+              }
             }
           }
         }

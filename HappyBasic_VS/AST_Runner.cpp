@@ -386,6 +386,10 @@ namespace AST_Runner {
 
         if( ast->right->type != AST::Expr::Variable &&
           ast->right->type != AST::Expr::Lv_obj ) {
+
+          //std::cout <<
+          //  ast->left->token->str << '\n';
+
           Error(*ast->right->token, "syntax error");
         }
 
