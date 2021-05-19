@@ -12,14 +12,19 @@
 using namespace Global;
 
 namespace ParserCore {
+
+  //
+  // 構文解析で使用される変数です
   namespace {
-    Token* token;
-    Token* csmtok;
+    Token* token;   // 指しているトークン
+    Token* csmtok;  // consume() が呼ばれた時点でのトークン
 
-    bool in_function;
-    AST::Function* cur_func;
+    // ------------------------------------------------
+    // 関数に関する情報
+    bool in_function;          // 関数を解析中かどうか
+    AST::Function* cur_func;   // 解析中の関数へのポインタ
 
-    // 
+    // ------------------------------------------------
     // 解析中の構造体またはクラスに関する情報です
     bool in_struct;            // 構造体を解析中かどうか
     bool in_class;             // クラスかどうか
