@@ -19,11 +19,14 @@ namespace ParserCore {
     bool in_function;
     AST::Function* cur_func;
 
-    bool in_struct;
-    AST::Struct* cur_struct;
+    // 
+    // 解析中の構造体またはクラスに関する情報です
+    bool in_struct;            // 構造体を解析中かどうか
+    bool in_class;             // クラスかどうか
+    AST::Struct* cur_struct;   // 解析している構造体へのポインタ
+    AST::Expr* this_ptr;       // クラス内で関数の解析を開始するとき、自動で引数として追加される this へのポインタ
+                               // また、パーサがその関数内でメンバ変数の参照に当たった場合、this に対してのメンバアクセスとして解析されます
 
-    bool in_class;
-    AST::Expr* this_ptr;// first arg of member function
 
     //------------------------------------------------------------
     // 変数の自動配置を制御するフラグです
@@ -81,7 +84,8 @@ namespace ParserCore {
 
       return -1;
     }
-  }
+  } // unnamed namespace
+
 
   void Init(Token* tok) {
     token = tok;
