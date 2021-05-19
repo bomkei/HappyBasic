@@ -11,6 +11,7 @@
 #include "Tokenizer.h"
 #include "Parser.h"
 #include "AST_Runner.h"
+#include "Compiler.h"
 
 #include "Global.h"
 

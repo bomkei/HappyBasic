@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClCompile Include="AST.cpp" />
     <ClCompile Include="AST_Runner.cpp" />
+    <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="ExprHelper.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="main.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="AST.h" />
     <ClInclude Include="AST_Runner.h" />
     <ClInclude Include="common.h" />
+    <ClInclude Include="Compiler.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Options.h" />
