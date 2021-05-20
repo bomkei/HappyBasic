@@ -248,6 +248,8 @@ bool AST::Expr::equal(AST::Expr const& ast) const
 }
 
 std::string AST::Stmt::ToString(int tab) const {
+  auto&& space = std::string(tab * 2, ' ');
+
   switch( type ) {
     case Type::If:
     {
@@ -284,8 +286,8 @@ std::string AST::Stmt::ToString(int tab) const {
     case Type::Block:
     {
       std::string s;
-      for( auto&& i : ((AST::Block*)this)->list ) s += i->ToString();
-      return "{" + s + "}";
+      for( auto&& i : ((AST::Block*)this)->list ) s += i->ToString(tab + 1) + "\n";
+      return "{\n" + s + "}";
     }
 
     case Type::Function:
@@ -301,6 +303,27 @@ std::string AST::Stmt::ToString(int tab) const {
       return s + ast->code->ToString();
     }
 
+    case Type::Break:
+    {
+      return "break";
+    }
 
+    case Type::Continue:
+    {
+      return "continue";
+    }
+
+    case Type::Return:
+    {
+      return "return " + (expr ? expr->ToString() : "");
+    }
+
+    case Type::Struct:
+    {
+      return "struct";
+    }
+
+    default:
+      return expr->ToString();
   }
 }
