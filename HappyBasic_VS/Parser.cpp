@@ -33,7 +33,9 @@ namespace ParserCore {
     AST::Struct* cur_struct;   // 解析している構造体へのポインタ
     AST::Expr* this_ptr;       // クラス内で関数の解析を開始するとき、自動で引数として追加される this へのポインタ
                                // また、パーサがその関数内でメンバ変数の参照に当たった場合、this に対してのメンバアクセスとして解析されます
-
+    
+    std::vector<std::string> struct_layer;
+    
 
     //------------------------------------------------------------
     // 変数の自動配置を制御するフラグです
@@ -668,6 +670,8 @@ namespace ParserCore {
       ast->name = name_tok->str;
       ast->token = name_tok;
 
+      struct_layer.emplace_back(ast->name);
+
       if( !in_struct )
         structs.emplace_back(ast);
 
@@ -698,6 +702,8 @@ namespace ParserCore {
       cur_struct = oldptr;
       in_struct = oldflag;
       in_class = oldflag2;
+
+      struct_layer.pop_back();
 
       return ast;
     }
