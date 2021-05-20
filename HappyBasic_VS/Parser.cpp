@@ -278,7 +278,15 @@ namespace ParserCore {
     DontPlace_v = true;
 
     while( check() ) {
-      if( consume(".") ) x = new AST::Expr(AST::Expr::MemberAccess, x, IndexRef(), csmtok);
+      if( consume(".") ) {
+        x = new AST::Expr(AST::Expr::MemberAccess, x, IndexRef(), csmtok);
+
+        if( x->right->type == AST::Expr::Callfunc ) {
+          auto& args = ((AST::Callfunc*)x->right)->args;
+          args.insert(args.begin(), x->left);
+          x = x->right;
+        }
+      }
       else
         break;
     }

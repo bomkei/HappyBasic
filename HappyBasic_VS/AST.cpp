@@ -248,5 +248,59 @@ bool AST::Expr::equal(AST::Expr const& ast) const
 }
 
 std::string AST::Stmt::ToString(int tab) const {
-  return "";
+  switch( type ) {
+    case Type::If:
+    {
+      auto ast = (AST::If*)this;
+
+      return
+        "if( " + ast->cond->ToString() + ")\n" +
+        ast->code->ToString() + "\n" +
+        (ast->elseCode ? "else \n" + ast->elseCode->ToString() : "");
+    }
+
+    case Type::For:
+    {
+      auto ast = (AST::For*)this;
+
+      return
+        "for( " + ast->iterator->ToString() + " in " + ast->list->ToString() + ")\n"
+        + ast->code->ToString();
+    }
+
+    case Type::While:
+    {
+      auto ast = (AST::While*)this;
+
+      return
+        "while( " + ast->cond->ToString() + " )\n" + ast->code->ToString();
+    }
+
+    case Type::Var:
+    {
+      return "var " + expr->ToString();
+    }
+
+    case Type::Block:
+    {
+      std::string s;
+      for( auto&& i : ((AST::Block*)this)->list ) s += i->ToString();
+      return "{" + s + "}";
+    }
+
+    case Type::Function:
+    {
+      auto ast = (AST::Function*)this;
+      auto s = "def " + ast->name + "(";
+
+      for( size_t i = 0; i < ast->args.size(); i++ ) {
+        s += ast->args[i]->token->str;
+        if( i < ast->args.size() - 1 )s += ", ";
+      }
+
+      return s + ast->code->ToString();
+    }
+
+
+  }
 }
