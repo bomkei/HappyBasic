@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
   ParserCore::Init(token);
   auto ast = ParserCore::Parse();
 
-  std::cout << ast->ToString() << '\n';
+  //std::cout << ast->ToString() << '\n';
 
   //auto obj = AST_Runner::Stmt(ast);
 

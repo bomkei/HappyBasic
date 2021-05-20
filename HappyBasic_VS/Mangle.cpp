@@ -13,15 +13,13 @@ using namespace Global;
 
 std::string Mangle(std::string fun_name, std::vector<std::string> class_layers, std::vector<std::string> args) {
 
-  std::string ret = "_?@_";
+  std::string ret = "_?@_" + fun_name;
 
   for( auto&& L : class_layers )
     ret += L + "_";
 
   ret += "?@;" + std::to_string(args.size());
 
-  for( auto&& arg : args )
-    ret += arg + "`";
 
   return ret;
 }
