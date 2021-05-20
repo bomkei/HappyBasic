@@ -256,7 +256,7 @@ std::string AST::Stmt::ToString(int tab) const {
       auto ast = (AST::If*)this;
 
       return
-        "if( " + ast->cond->ToString() + ")\n" +
+        space + "if( " + ast->cond->ToString() + ")\n" +
         ast->code->ToString() + "\n" +
         (ast->elseCode ? "else \n" + ast->elseCode->ToString() : "");
     }
@@ -266,7 +266,7 @@ std::string AST::Stmt::ToString(int tab) const {
       auto ast = (AST::For*)this;
 
       return
-        "for( " + ast->iterator->ToString() + " in " + ast->list->ToString() + ")\n"
+        space + "for( " + ast->iterator->ToString() + " in " + ast->list->ToString() + ")\n"
         + ast->code->ToString();
     }
 
@@ -275,12 +275,12 @@ std::string AST::Stmt::ToString(int tab) const {
       auto ast = (AST::While*)this;
 
       return
-        "while( " + ast->cond->ToString() + " )\n" + ast->code->ToString();
+        space + "while( " + ast->cond->ToString() + " )\n" + ast->code->ToString();
     }
 
     case Type::Var:
     {
-      return "var " + expr->ToString();
+      return space + "var " + expr->ToString();
     }
 
     case Type::Block:
@@ -297,7 +297,7 @@ std::string AST::Stmt::ToString(int tab) const {
 
       for( size_t i = 0; i < ast->args.size(); i++ ) {
         s += ast->args[i]->token->str;
-        if( i < ast->args.size() - 1 )s += ", ";
+        if( i < ast->args.size() - 1 ) s += ", ";
       }
 
       return s + ast->code->ToString();
@@ -305,25 +305,31 @@ std::string AST::Stmt::ToString(int tab) const {
 
     case Type::Break:
     {
-      return "break";
+      return space + "break";
     }
 
     case Type::Continue:
     {
-      return "continue";
+      return space + "continue";
     }
 
     case Type::Return:
     {
-      return "return " + (expr ? expr->ToString() : "");
+      return space + "return " + (expr ? expr->ToString() : "");
     }
 
     case Type::Struct:
     {
-      return "struct";
+      auto ast = (AST::Struct*)this;
+      auto s = "struct " + ast->name + " {\n";
+
+      for( auto&& i : ast->member_list )
+        s += i->ToString(tab + 1) + "\n";
+
+      return s + "}";
     }
 
     default:
-      return expr->ToString();
+      return space + expr->ToString();
   }
 }
