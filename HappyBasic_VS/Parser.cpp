@@ -641,6 +641,8 @@ namespace ParserCore {
       auto ast = new AST::Struct;
       ast->name = name_tok->str;
 
+      struct_layer.emplace_back(ast->name);
+
       if( !in_struct )
         structs.emplace_back(ast);
 
@@ -666,6 +668,8 @@ namespace ParserCore {
 
       cur_struct = oldptr;
       in_struct = oldflag;
+
+      struct_layer.pop_back();
 
       return ast;
     }
