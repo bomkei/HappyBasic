@@ -11,6 +11,8 @@
 
 using namespace Global;
 
+std::string Mangle(std::string fun_name, std::vector<std::string> class_layers, std::vector<std::string> args);
+
 namespace ParserCore {
 
   //
