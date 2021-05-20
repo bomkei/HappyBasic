@@ -146,6 +146,7 @@
     <ClCompile Include="ExprHelper.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mangle.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="OptimizeExpr.cpp" />
     <ClCompile Include="Parser.cpp" />
