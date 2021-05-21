@@ -196,6 +196,7 @@ public:
   {
 public:
     std::string name;
+    std::string not_mangled;
     std::vector<Expr*> args;
     AST::Stmt* code;
 

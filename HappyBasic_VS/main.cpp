@@ -121,7 +121,7 @@ int main(int argc, char** argv) {
 
   //std::cout << ast->ToString() << '\n';
 
-  //auto obj = AST_Runner::Stmt(ast);
+  auto obj = AST_Runner::Stmt(ast);
 
 
 }

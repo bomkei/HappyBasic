@@ -630,6 +630,7 @@ namespace ParserCore {
       {
         std::vector<std::string> _Args;
         for( auto&& i : ast->args ) _Args.emplace_back(i->token->str);
+        ast->not_mangled = ast->name;
         ast->name = Mangle(ast->name, struct_layer, _Args);
 
         alart;

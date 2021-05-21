@@ -387,7 +387,47 @@ namespace AST_Runner {
           if( obj.type != Object::StructObj )
             Error(*ast->token, "aiiodjsoaijfioq");
 
+          alart;
+          auto st_ptr = obj.struct_ptr;
 
+          alart;
+          for( auto&& i : st_ptr->member_list ) {
+            if( i->type == AST::Stmt::Function ) {
+              if( ((AST::Function*)i)->not_mangled == ast->right->token->str ) {
+                alart;
+
+                auto p = (AST::Callfunc*)ast->right;
+                printf("%p\n", p);
+                printf("%p\n", ast->left);
+
+                alart;
+                p->args.insert(p->args.begin(), ast->left);
+                //p->token->str = st_ptr->name;
+
+                alart;
+                //*ast = *ast->right;
+                memcpy(ast, ast->right, sizeof(AST::Expr)); // copy
+                ast->token->str = ((AST::Function*)i)->name;
+
+                alart;
+                printf("%p\n", ast);
+                printf("%p\n", ast->left);
+                printf("%p\n", ast->right);
+                printf("%p\n", ast->token);
+                printf("%p\n", ast->token->str.c_str());
+                printf("%s\n", ast->token->str.c_str());
+
+                alart;
+                //std::cout << ast->ToString() << '\n';
+
+                alart;
+                return Expr(ast);
+              }
+            }
+          }
+
+          alart;
+          exit(5);
         }
 
         if( obj.type != Object::StructObj ) {
