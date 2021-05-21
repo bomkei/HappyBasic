@@ -285,11 +285,16 @@ namespace ParserCore {
       if( consume(".") ) {
         x = new AST::Expr(AST::Expr::MemberAccess, x, IndexRef(), csmtok);
 
-        if( x->right->type == AST::Expr::Callfunc ) {
-          auto& args = ((AST::Callfunc*)x->right)->args;
-          args.insert(args.begin(), x->left);
-          x = x->right;
-        }
+        //if( x->right->type == AST::Expr::Callfunc ) {
+        //  auto& args = ((AST::Callfunc*)x->right)->args;
+        //  args.insert(args.begin(), x->left);
+        //  x = x->right;
+
+        //  //alart;
+        //  //std::cout << ((AST::Callfunc*)x)->st_ptr->name << '\n';
+        //  
+
+        //}
       }
       else
         break;

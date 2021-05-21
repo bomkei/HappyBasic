@@ -263,7 +263,7 @@ namespace AST_Runner {
   }
 
   Object BuiltInMember(AST::Expr* expr) {
-    
+
 
     return { };
   }
@@ -272,10 +272,11 @@ namespace AST_Runner {
   {
     if( !ast )
       return { };
-    
+
     switch( ast->type )
     {
-      case AST::Expr::Lv_obj: {
+      case AST::Expr::Lv_obj:
+      {
         auto& v = ast->token->obj;
         v.var_ptr = &v;
         return v;
@@ -284,7 +285,8 @@ namespace AST_Runner {
       case AST::Expr::Immidiate:
         return ast->token->obj;
 
-      case AST::Expr::Variable: {
+      case AST::Expr::Variable:
+      {
         if( ast->varIndex == -1 ) {
           Error(*ast->token, SERIOUS_ERROR);
         }
@@ -341,7 +343,8 @@ namespace AST_Runner {
         return src;
       }
 
-      case AST::Expr::New: {
+      case AST::Expr::New:
+      {
         if( ast->left->type != AST::Expr::Callfunc ) {
           Error(*ast->token, "expected call func after this token");
         }
@@ -363,7 +366,8 @@ namespace AST_Runner {
 
         for( auto&& i : ptr->member_list ) {
           switch( i->type ) {
-            case AST::Stmt::Var: {
+            case AST::Stmt::Var:
+            {
               auto vv = Expr(i->expr);
               vv.name = i->expr->left->token->str;
               ret.list.emplace_back(vv);
@@ -378,6 +382,13 @@ namespace AST_Runner {
       case AST::Expr::MemberAccess:
       {
         auto obj = Expr(ast->left);
+
+        if( ast->right->type == AST::Expr::Callfunc ) {
+          if( obj.type != Object::StructObj )
+            Error(*ast->token, "aiiodjsoaijfioq");
+
+
+        }
 
         if( obj.type != Object::StructObj ) {
           // TODO: BuiltInMember
@@ -403,12 +414,14 @@ namespace AST_Runner {
         Error(*ast->right->token, "dont have the member '" + name + "'");
       }
 
-      case AST::Expr::MemberVariable: {
+      case AST::Expr::MemberVariable:
+      {
 
         break;
       }
 
-      case AST::Expr::Statements: {
+      case AST::Expr::Statements:
+      {
         return Stmt(ast->stmt);
       }
 
@@ -426,8 +439,9 @@ namespace AST_Runner {
               case Object::Int: left.v_int += right.v_int; break;
               case Object::Char: left.v_char += right.v_char; break;
               case Object::Float: left.v_float += right.v_float; break;
-              
-              case Object::Array: {
+
+              case Object::Array:
+              {
                 if( right.type == Object::Array ) {
                   for( auto&& i : right.list )
                     left.list.emplace_back(i);
@@ -450,6 +464,7 @@ namespace AST_Runner {
             break;
 
           case AST::Expr::Mul:
+          {
             if( (left.type == Object::Array) != (right.type == Object::Array) )
             {
               if( left.type != Object::Array )
@@ -457,7 +472,7 @@ namespace AST_Runner {
 
               if( right.type != Object::Int )
                 Error(*ast->token, "type mismatch");
-              
+
               auto list = left.list;
 
               for( int i = 1; i < right.v_int; i++ )
@@ -468,7 +483,7 @@ namespace AST_Runner {
 
               break;
             }
-            
+
             if( !left.Eval() || !right.Eval() )
             {
               left.v_int = 0;
@@ -481,6 +496,7 @@ namespace AST_Runner {
               case Object::Float: left.v_float *= right.v_float; break;
             }
             break;
+          }
 
           case AST::Expr::Mod:
             if( !right.Eval() )
@@ -499,7 +515,7 @@ namespace AST_Runner {
               case Object::Array: Error(*ast->token, "type mismatch");
             }
             break;
-            
+
           case AST::Expr::Div:
             if( !right.Eval() )
             {
@@ -559,7 +575,7 @@ namespace AST_Runner {
             left.v_int = left.Eval() && right.Eval();
             left.type = Object::Int;
             break;
-            
+
           case AST::Expr::LogOR:
             left.v_int = left.Eval() || right.Eval();
             left.type = Object::Int;
@@ -585,7 +601,8 @@ namespace AST_Runner {
       case AST::Stmt::Function:
         break;
 
-      case AST::Stmt::Block: {
+      case AST::Stmt::Block:
+      {
         Object obj;
 
         for( auto&& i : ((AST::Block*)ast)->list ) {
