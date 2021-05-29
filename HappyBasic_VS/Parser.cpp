@@ -576,178 +576,19 @@ namespace ParserCore {
     // ユーザー定義関数
     // def - end
     if( consume("def") ) {
-      auto oldptr = this_ptr;
       
-      auto ast = new AST::Function;
-      ast->token = &get_tok();
-      ast->name = ast->token->str;
+      // todo
 
-      if( in_class ) {
-        auto x = AST::Expr::ToLOBJ_FromName("this");
-        ast->args.emplace_back(x);
-        this_ptr = x;
-      }
-
-      next();
-      expect("(");
-
-      if( !consume(")") ) {
-        while( check() ) {
-          auto& tk = get_tok();
-
-          if( tk.type != Token::Ident )
-            Error(tk, "syntax error 11");
-
-          auto prm = new AST::Expr;
-          prm->type = AST::Expr::Lv_obj;
-          prm->token = &tk;
-          next();
-
-          ast->args.emplace_back(prm);
-
-          if( !consume(",") )
-            break;
-        }
-
-        expect(")");
-      }
-
-      auto ptr = cur_func;
-
-      in_function = true;
-      cur_func = ast;
-
-      ast->code = Statements();
-
-      in_function = false;
-      cur_func = ptr;
-
-      functions.emplace_back(ast);
-
-      this_ptr = oldptr;
-
-      // mangle
-      {
-        std::vector<std::string> _Args;
-        for( auto&& i : ast->args ) _Args.emplace_back(i->token->str);
-        ast->not_mangled = ast->name;
-        ast->name = Mangle(ast->name, struct_layer, _Args);
-
-        alart;
-        std::cout << ast->name << '\n';
-      }
-
-      return ast;
-    }
-
-    if( consume("struct") ) {
-      auto tok = csmtok;
-      auto name_tok = &get_tok();
-
-      auto ast = new AST::Struct;
-      ast->name = name_tok->str;
-
-      struct_layer.emplace_back(ast->name);
-
-      if( !in_struct )
-        structs.emplace_back(ast);
-
-      auto oldptr = cur_struct;
-      auto oldflag = in_struct;
-      cur_struct = ast;
-      in_struct = true;
-
-      next();
-      expect("{");
-
-      while( !consume("}") ) {
-        auto tk = &get_tok();
-
-        if( tk->str != "var" &&
-          tk->str != "struct" ) {
-          Error(*tk, "002r03u4290tu4930tu");
-        }
-
-        auto member = Statements();
-        ast->member_list.emplace_back(member);
-      }
-
-      cur_struct = oldptr;
-      in_struct = oldflag;
-
-      struct_layer.pop_back();
-
-      return ast;
+      return nullptr;
     }
 
     //
     // class
     if( consume("class") ) {
-      auto tok = csmtok;
-      auto name_tok = &get_tok();
+      
+      // todo
 
-      auto ast = new AST::Struct;
-      ast->name = name_tok->str;
-      ast->token = name_tok;
-
-      struct_layer.emplace_back(ast->name);
-
-      if( !in_struct )
-        structs.emplace_back(ast);
-
-      auto oldptr = cur_struct;
-      auto oldflag = in_struct;
-      auto oldflag2 = in_class;
-      cur_struct = ast;
-      in_struct = true;
-      in_class = true;
-
-      next();
-      expect("{");
-
-      while( !consume("}") ) {
-        auto tk = &get_tok();
-
-        if( tk->str != "var" &&
-          tk->str != "def" &&
-          tk->str != "struct" &&
-          tk->str != "class" ) {
-          Error(*tk, "dji9042j r9pw4");
-        }
-
-        auto member = Statements();
-        ast->member_list.emplace_back(member);
-      }
-
-      cur_struct = oldptr;
-      in_struct = oldflag;
-      in_class = oldflag2;
-
-      struct_layer.pop_back();
-
-      return ast;
-    }
-
-    //
-    // var
-    if( consume("var") ) {
-      auto tok = csmtok;
-      auto var_tok = &get_tok();
-
-      if( var_tok->type != Token::Ident ) {
-        Error(*tok, "expected variable name when after this token");
-      }
-
-      next();
-      expect("=");
-
-      auto ast = new AST::Stmt;
-      ast->type = AST::Stmt::Var;
-      ast->expr = new AST::Expr(AST::Expr::Assign, AST::Expr::ToLOBJ_FromName(var_tok->str), Expr(), tok);
-
-      expect(";");
-
-      return ast;
+      return nullptr;
     }
 
     //
