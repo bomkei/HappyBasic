@@ -245,19 +245,22 @@ namespace AST_Runner {
     return ret;
   }
 
+  // -------------------------------------------------- //
+  //  ユーザー定義関数の呼び出し
+  // -------------------------------------------------- //
   Object UserFunc(AST::Callfunc* fun) {
+    // ユーザー定義関数を探す
     auto find = find_vector(functions, [] (auto x, auto y) { return x->name == y; }, fun->token->str);
 
-    AST::Function* func_ast;
     std::vector<Object> args_obj;
     bool returned = false;
     Object retVal;
 
-    if( find == -1 ) {
+    if( find == -1 ) { // 見つからない場合エラー
       Error(*fun->token, "undefined function");
     }
 
-    func_ast = functions[find];
+    auto func_ast = functions[find];
 
     if( fun->args.size() != func_ast->args.size() ) {
       Error(*fun->token, "no matching args");
@@ -310,9 +313,14 @@ namespace AST_Runner {
       // 変数
       case AST::Expr::Variable:
       {
+        auto ptr = find_var(ast->token->str);
 
+        if( !ptr ) {
+          Error(*ast->token, "cannot use variable before assignment");
+        }
 
-        break;
+        ptr->var_ptr = ptr;
+        return *ptr;
       }
 
       // 関数呼び出し
