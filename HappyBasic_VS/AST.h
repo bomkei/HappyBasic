@@ -36,9 +36,9 @@ namespace AST
     };
 
     Type type;
-    Expr* left;
-    Expr* right;
-    Token* token;
+    Expr* left = nullptr;
+    Expr* right = nullptr;
+    Token* token = nullptr;
 
     Stmt* stmt = nullptr;
 

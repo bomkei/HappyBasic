@@ -275,30 +275,23 @@ namespace AST_Runner {
 
     switch( ast->type )
     {
-      case AST::Expr::Lv_obj:
-      {
-        auto& v = ast->token->obj;
-        v.var_ptr = &v;
-        return v;
-      }
-
+      // 即値
       case AST::Expr::Immidiate:
         return ast->token->obj;
 
+      // 変数
       case AST::Expr::Variable:
       {
-        if( ast->varIndex == -1 ) {
-          Error(*ast->token, SERIOUS_ERROR);
-        }
 
-        auto& var = variables[ast->varIndex];
-        var.var_ptr = &var;
-        return var;
+
+        break;
       }
 
+      // 関数呼び出し
       case AST::Expr::Callfunc:
         return Function((AST::Callfunc*)ast);
 
+      // 配列
       case AST::Expr::Array:
       {
         Object ret;
@@ -312,17 +305,21 @@ namespace AST_Runner {
         return ret;
       }
 
+      // 配列添え字参照
       case AST::Expr::IndexRef:
       {
         auto obj = Expr(ast->left);
         auto sub = Expr(ast->right);
 
+        // 左辺が配列じゃない場合エラー
         if( obj.type != Object::Array )
           Error(*ast->left->token, "this is not array");
 
+        // インデックスは整数のみ
         if( sub.type != Object::Int )
           Error(*ast->right->token, "subscript type mismatch");
 
+        // 範囲外だったらエラー
         if( sub.v_int < 0 || sub.v_int >= obj.list.size() )
           Error(*ast->right->token, "subscript out of range");
 
@@ -331,132 +328,14 @@ namespace AST_Runner {
 
       case AST::Expr::Assign:
       {
-        auto dest = Expr(ast->left);
-        auto src = Expr(ast->right);
+        
 
-        if( !dest.var_ptr )
-          Error(*ast->token, "cannot assign to rvalue");
 
-        *dest.var_ptr = src;
-        dest.var_ptr->name = dest.name;
-
-        return src;
-      }
-
-      case AST::Expr::New:
-      {
-        if( ast->left->type != AST::Expr::Callfunc ) {
-          Error(*ast->token, "expected call func after this token");
-        }
-
-        auto& name = ast->left->token->str;
-        auto find = find_vector(structs, [] (auto s, auto n) { return s->name == n; }, name);
-
-        if( find == -1 && !((AST::Callfunc*)ast->left)->st_ptr ) {
-          Error(*ast->left->token, "this is doesnt exists");
-        }
-
-        auto ptr = structs[find];
-        if( ((AST::Callfunc*)ast->left)->st_ptr )
-          ptr = ((AST::Callfunc*)ast->left)->st_ptr;
-
-        Object ret;
-        ret.type = Object::StructObj;
-        ret.struct_ptr = ptr;
-
-        for( auto&& i : ptr->member_list ) {
-          switch( i->type ) {
-            case AST::Stmt::Var:
-            {
-              auto vv = Expr(i->expr);
-              vv.name = i->expr->left->token->str;
-              ret.list.emplace_back(vv);
-              break;
-            }
-          }
-        }
-
-        return ret;
+        break;
       }
 
       case AST::Expr::MemberAccess:
       {
-        auto obj = Expr(ast->left);
-
-        if( ast->right->type == AST::Expr::Callfunc ) {
-          if( obj.type != Object::StructObj )
-            Error(*ast->token, "aiiodjsoaijfioq");
-
-          alart;
-          auto st_ptr = obj.struct_ptr;
-
-          alart;
-          for( auto&& i : st_ptr->member_list ) {
-            if( i->type == AST::Stmt::Function ) {
-              if( ((AST::Function*)i)->not_mangled == ast->right->token->str ) {
-                alart;
-
-                auto p = (AST::Callfunc*)ast->right;
-                printf("%p\n", p);
-                printf("%p\n", ast->left);
-
-                alart;
-                p->args.insert(p->args.begin(), ast->left);
-                //p->token->str = st_ptr->name;
-
-                alart;
-                //*ast = *ast->right;
-                memcpy(ast, ast->right, sizeof(AST::Expr)); // copy
-                ast->token->str = ((AST::Function*)i)->name;
-
-                alart;
-                printf("%p\n", ast);
-                printf("%p\n", ast->left);
-                printf("%p\n", ast->right);
-                printf("%p\n", ast->token);
-                printf("%p\n", ast->token->str.c_str());
-                printf("%s\n", ast->token->str.c_str());
-
-                alart;
-                //std::cout << ast->ToString() << '\n';
-
-                alart;
-                return Expr(ast);
-              }
-            }
-          }
-
-          alart;
-          exit(5);
-        }
-
-        if( obj.type != Object::StructObj ) {
-          // TODO: BuiltInMember
-          Error(*ast->token, "not struct");
-        }
-
-        if( ast->right->type != AST::Expr::Variable &&
-          ast->right->type != AST::Expr::Lv_obj ) {
-
-          //std::cout <<
-          //  ast->left->token->str << '\n';
-
-          Error(*ast->right->token, "syntax error");
-        }
-
-        auto& name = ast->right->token->str;
-
-        for( auto&& i : obj.list ) {
-          if( i.name == name )
-            return i;
-        }
-
-        Error(*ast->right->token, "dont have the member '" + name + "'");
-      }
-
-      case AST::Expr::MemberVariable:
-      {
-
         break;
       }
 

@@ -81,7 +81,6 @@ std::string AST::Expr::ToString() const
     case Immidiate:
       return token->obj.ToString();
 
-    case Lv_obj:
     case Variable:
       return token->str;
 
