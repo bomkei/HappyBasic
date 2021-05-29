@@ -592,12 +592,16 @@ namespace ParserCore {
           param->type = AST::Expr::Variable;
           param->token = token;
           ast->args.emplace_back(param);
+          
+          next();
 
         } while( consume(",") );
         expect(")");
       }
 
       ast->code = Statements();
+
+      functions.emplace_back(ast);
 
       return ast;
     }
