@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
 #ifndef _MSC_VER
     Options::FileName
 #else
-    "C:/Users/mrzkr/Desktop/test.txt"
+    "C:/Users/mrzkr/Desktop/HappyBasic_dev/test.txt"
 #endif
   );
 

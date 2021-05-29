@@ -29,12 +29,8 @@ namespace AST
       Callfunc,
       Array,
       IndexRef,
-      //Param,
-      Lv_obj,
 
-      New,
       MemberAccess,
-      MemberVariable,
 
       Statements
     };
@@ -73,12 +69,6 @@ namespace AST
       x->token = new Token;
       x->token->str = name;
       x->token->obj.name = name;
-      return x;
-    }
-
-    static Expr* ToLOBJ_FromName(std::string const& name) {
-      auto x = FromName(name);
-      x->type = Type::Lv_obj;
       return x;
     }
 
