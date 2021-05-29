@@ -310,14 +310,14 @@ namespace ParserCore {
     if( consume("-") )
       return new AST::Expr(AST::Expr::Sub, AST::Expr::FromInt(0), MemberAccess(), csmtok);
 
-    if( consume("new") ) {
-      DontPlace_v = true;
+    //if( consume("new") ) {
+    //  DontPlace_v = true;
 
-      auto x = new AST::Expr(AST::Expr::New, MemberAccess(), nullptr, csmtok);
-      DontPlace_v = false;
+    //  auto x = new AST::Expr(AST::Expr::New, MemberAccess(), nullptr, csmtok);
+    //  DontPlace_v = false;
 
-      return x;
-    }
+    //  return x;
+    //}
 
     return MemberAccess();
   }
