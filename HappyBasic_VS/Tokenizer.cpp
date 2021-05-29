@@ -58,7 +58,7 @@ Token* Tokenize(std::string const& source)
 
   static auto check = [&] {return position < source.length(); };
   static auto peek = [&] () -> char& {return const_cast<char&>(source[position]); };
-  static auto match = [&] (std::string str) { return position + str.length() <= source.length() && source.substr(position, str.length()) == str; };
+  static auto match = [&] (std::string const& str) { return position + str.length() <= source.length() && source.substr(position, str.length()) == str; };
   static auto next = [&] (int n = 1) {position += n; };
   static auto pass_space = [&] { while( check() && peek() <= ' ' )next(); };
 
