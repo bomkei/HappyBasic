@@ -22,6 +22,18 @@ namespace AST_Runner {
     Object* ReturnValue;
   }
 
+  // グローバル変数オブジェクトを variables に追加します
+  // 同じ名前の物が存在する場合、追加しません
+  void make_var(AST::Expr* var) {
+    // var->type == AST::Expr::Variable
+
+    auto find = find_vector(variables, [] (auto x, auto y) { return x.name == y; }, var->token->str);
+    
+    if( find == -1 ) {
+      variables.emplace_back(var->token->obj);
+    }
+  }
+
   void ObjectAdjuster(Object& L, Object& R) {
     if( L.type == Object::Array || R.type == Object::Array )
       return;
@@ -326,9 +338,12 @@ namespace AST_Runner {
         return obj.list[sub.v_int];
       }
 
+      // 代入
       case AST::Expr::Assign:
       {
-        
+        if( ast->left->type == AST::Expr::Variable ) {
+          make_var(ast->left);
+        }
 
 
         break;
