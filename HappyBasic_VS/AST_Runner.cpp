@@ -40,6 +40,14 @@ namespace AST_Runner {
   // 見つからない場合 nullptr です
   Object* find_var(std::string const& name) {
 
+    // 関数の引数
+    if( cur_func_ast ) {
+      for( auto&& i : cur_func_ast->args ) {
+        if( i->token->str == name ) {
+          return &i->token->obj;
+        }
+      }
+    }
 
     // グローバル変数
     for( auto&& x : variables ) {
@@ -274,6 +282,9 @@ namespace AST_Runner {
     auto oldptr1 = FuncReturned;
     auto oldptr2 = ReturnValue;
 
+    auto oldptr = cur_func_ast;
+    cur_func_ast = func_ast;
+
     FuncReturned = &returned;
     ReturnValue = &retVal;
 
@@ -289,6 +300,8 @@ namespace AST_Runner {
 
     FuncReturned = oldptr1;
     ReturnValue = oldptr2;
+
+    cur_func_ast = oldptr;
 
     return retVal;
   }
@@ -365,12 +378,19 @@ namespace AST_Runner {
       // 代入
       case AST::Expr::Assign:
       {
+        // 左辺が変数の場合、自動作成
         if( ast->left->type == AST::Expr::Variable ) {
           make_var(ast->left);
         }
 
+        auto dest = Expr(ast->left);
+        auto src = Expr(ast->right);
 
+        if( !dest.var_ptr )
+          Error(*ast->token, "cannot assignment");
 
+        *dest.var_ptr = src;
+        dest.var_ptr->name = dest.name;
 
         break;
       }
