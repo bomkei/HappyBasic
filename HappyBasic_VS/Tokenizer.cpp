@@ -57,7 +57,7 @@ Token* Tokenize(std::string const& source)
   auto cur = &top;
 
   static auto check = [&] {return position < source.length(); };
-  static auto peek = [&] {return source[position]; };
+  static auto peek = [&] () -> char& {return const_cast<char&>(source[position]); };
   static auto match = [&] (std::string str) { return position + str.length() <= source.length() && source.substr(position, str.length()) == str; };
   static auto next = [&] (int n = 1) {position += n; };
   static auto pass_space = [&] { while( check() && peek() <= ' ' )next(); };
@@ -165,6 +165,34 @@ Token* Tokenize(std::string const& source)
 
       next();
       tok.str += '"';
+    }
+
+    // 行コメント
+    else if( match("//") ) {
+      while( peek() != '\n' ) {
+        peek() = ' ';
+        next();
+      }
+    }
+
+    // ブロックコメント
+    else if( match("/*") ) {
+      for( char i = 0; i < 2; i++ ) {
+        peek() = ' ';
+        next();
+      }
+
+      while( 1 ) {
+        if( match("*/") ) {
+          for( char i = 0; i < 2; i++ )
+            peek() = ' ', next();
+
+          break;
+        }
+        
+        peek() = ' ';
+        next();
+      }
     }
 
     // 演算子 / 記号
