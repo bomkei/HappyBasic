@@ -243,12 +243,12 @@ namespace ParserCore {
         ast->type = AST::Expr::Variable;
         ast->token = tok;
 
-        if( !DontPlace_v ) {
-          if( (ast->varIndex = find_var(tok->str)) == -1 ) {
-            ast->varIndex = variables.size();
-            variables.emplace_back(tok->obj);
-          }
-        }
+        //if( !DontPlace_v ) {
+        //  if( (ast->varIndex = find_var(tok->str)) == -1 ) {
+        //    ast->varIndex = variables.size();
+        //    variables.emplace_back(tok->obj);
+        //  }
+        //}
 
         return ast;
       }
