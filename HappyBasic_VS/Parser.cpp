@@ -210,34 +210,34 @@ namespace ParserCore {
           return ast;
         }
 
-        // 関数の中にいる場合、引数を探す
-        if( in_function ) {
-          for( auto&& i : cur_func->args )
-            if( i->token->str == tok->str ) {
-              return i;
-            }
-        }
+        //// 関数の中にいる場合、引数を探す
+        //if( in_function ) {
+        //  for( auto&& i : cur_func->args )
+        //    if( i->token->str == tok->str ) {
+        //      return i;
+        //    }
+        //}
 
-        // クラス / 構造体
-        if( in_struct ) {
-          for( auto&& i : cur_struct->member_list ) {
-            if( i->type == AST::Stmt::Var &&
-              i->expr->left->token->str == tok->str ) {
+        //// クラス / 構造体
+        //if( in_struct ) {
+        //  for( auto&& i : cur_struct->member_list ) {
+        //    if( i->type == AST::Stmt::Var &&
+        //      i->expr->left->token->str == tok->str ) {
 
-              if( in_class ) { // クラス
-                auto xx = new AST::Expr;
-                xx->type = AST::Expr::MemberAccess;
-                xx->left = this_ptr;
-                xx->right = i->expr->left;
+        //      if( in_class ) { // クラス
+        //        auto xx = new AST::Expr;
+        //        xx->type = AST::Expr::MemberAccess;
+        //        xx->left = this_ptr;
+        //        xx->right = i->expr->left;
 
-                return xx;
-              }
-              else { // 構造体
-                return i->expr->left;
-              }
-            }
-          }
-        }
+        //        return xx;
+        //      }
+        //      else { // 構造体
+        //        return i->expr->left;
+        //      }
+        //    }
+        //  }
+        //}
 
         auto ast = new AST::Expr;
         ast->type = AST::Expr::Variable;
@@ -577,9 +577,29 @@ namespace ParserCore {
     // def - end
     if( consume("def") ) {
       
-      // todo
+      auto ast = new AST::Function;
 
-      return nullptr;
+      // TODO: check if it identifier
+      ast->name = token->str;
+      next();
+
+      expect("(");
+      if( !consume(")") ) {
+        do {
+          // TODO: check if it identifier
+          
+          auto param = new AST::Expr;
+          param->type = AST::Expr::Variable;
+          param->token = token;
+          ast->args.emplace_back(param);
+
+        } while( consume(",") );
+        expect(")");
+      }
+
+      ast->code = Statements();
+
+      return ast;
     }
 
     //
