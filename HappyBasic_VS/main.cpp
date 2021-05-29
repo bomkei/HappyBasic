@@ -49,39 +49,6 @@ std::string readfile(std::string path) {
     exit(1);
   }
 
-  for( size_t i = 0; i < src.length(); ) {
-    if( src[i] == '"' ) {
-      for( ++i; src[i] != '"'; i++ );
-      i++;
-    }
-    else if( i + 2 <= src.length() && src.substr(i, 2) == "//" ) {
-      src[i] = src[i + 1] = ' ';
-      i += 2;
-
-      while( src[i] != '\n' ) {
-        src[i] = ' ';
-        i++;
-      }
-    }
-    else if( i + 2 <= src.length() && src.substr(i, 2) == "/*" ) {
-      src[i] = src[i + 1] = ' ';
-      i += 2;
-
-      while( i < src.length() ) {
-        if( i + 2 <= src.length() && src.substr(i, 2) == "*/" ) {
-          src[i] = src[i + 1] = ' ';
-          i += 2;
-          break;
-        }
-        else {
-          src[i] = ' ';
-          i++;
-        }
-      }
-    }
-    else i++;
-  }
-
   return src;
 }
 
