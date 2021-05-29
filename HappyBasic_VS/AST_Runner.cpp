@@ -20,6 +20,8 @@ namespace AST_Runner {
     bool* LoopContinued;
     bool* FuncReturned;
     Object* ReturnValue;
+
+    AST::Function* cur_func_ast; // 実行中の関数
   }
 
   // グローバル変数オブジェクトを variables に追加します
@@ -32,6 +34,20 @@ namespace AST_Runner {
     if( find == -1 ) {
       variables.emplace_back(var->token->obj);
     }
+  }
+
+  // 変数を探して、見つかった場合それへのポインタを返す
+  // 見つからない場合 nullptr です
+  Object* find_var(std::string const& name) {
+
+
+    // グローバル変数
+    for( auto&& x : variables ) {
+      if( x.name == name )
+        return &x;
+    }
+
+    return nullptr;
   }
 
   void ObjectAdjuster(Object& L, Object& R) {
@@ -344,6 +360,8 @@ namespace AST_Runner {
         if( ast->left->type == AST::Expr::Variable ) {
           make_var(ast->left);
         }
+
+
 
 
         break;
